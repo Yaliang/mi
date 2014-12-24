@@ -212,7 +212,7 @@ function pullUserEvent(){
 			}
 		};
 	};
-	ParsePullEvent(null, limitNumber, descendingOrderKey, displayFunction);
+	ParsePullEvent(null, limitNumber, descendingOrderKey, "public", displayFunction);
 }
 
 
@@ -486,7 +486,7 @@ function pullMyEvent(){
 			}
 		};
 	};
-	ParsePullEvent(owner, null, descendingOrderKey, displayFunction);
+	ParsePullEvent(owner, null, descendingOrderKey, null, displayFunction);
 }
 
 function addInterestEvent(eventId){
