@@ -345,4 +345,10 @@ function ParsePullUserByGeolocation(latitude,longitude,latitudeLimit,longitudeLi
 	query.greaterThan("longitude",(longitude-longitudeLimit/2.0));
 	query.lessThan("longitude",(longitude+longitudeLimit/2.0));
 	query.descending(descendingOrderKey);
+	query.find({
+		success: function(users){
+			console.log("get user nearby: "+users.length)
+			displayFunction(latitude,longitude,users);
+		}
+	});
 }
