@@ -297,9 +297,10 @@ function ParseGetProfile(owner, id, displayFunction){
 	});
 }
 
-function ParseSaveProfile(id, photo, name, gender, birthdate, motto, major, school, interest, location, displayFunction) {
+function ParseSaveProfile(id, photo, photo50, name, gender, birthdate, motto, major, school, interest, location, displayFunction) {
 	var currentUser = Parse.User.current();
 	if (photo != null) {
+		currentUser.set("photo50",photo50);
 		var parseFile = new Parse.File(photo.name, photo);
 		parseFile.save().then(function(object) {
 			currentUser.set("photo",object.url());
@@ -312,7 +313,6 @@ function ParseSaveProfile(id, photo, name, gender, birthdate, motto, major, scho
 			$("#upload-error").html("Error: " + error.code + " " + error.message);
 		});
 	}
-
 	currentUser.set("name",name);
 	currentUser.set("gender",gender);
 	currentUser.set("birthdate",birthdate);

@@ -130,7 +130,7 @@ function pullUserEvent(){
 					var name = object[0].get("name");
 					var gender = object[0].get("gender");
 					var photo
-					photo = object[0].get("photo");
+					photo = object[0].get("photo50");
 					$("#"+eventId+"-owner-name").html(name);
 					if (typeof(gender) == 'undefined') {
 						//$("#"+eventId+"-owner-denger").html(gender.toString());
@@ -174,13 +174,41 @@ function pullUserEvent(){
 			} else {
 				var commentNumber = objects[i].get("commentNumber");
 				var interestNumber = objects[i].get("interestNumber");
+				var holder = objects[i].get("owner");
 				var id = objects[i].id;
 				$("#comment-statistics-"+id).html(commentNumber.toString()+" Comments");
 				$("#interest-statistics-"+id).html(interestNumber.toString()+" Interests");
-				pullLastItem = pullLastItem - 2;
+				pullLastItem = pullLastItem - 1;
 				if (pullLastItem == 0) {
 					$("#event-content").removeClass("ui-hidden-accessible");
 				}
+				// display event holder's name | not the email one
+				var displayFunction = function(eventId, object) {
+					var name = object[0].get("name");
+					var gender = object[0].get("gender");
+					var photo
+					photo = object[0].get("photo50");
+					$("#"+eventId+"-owner-name").html(name);
+					if (typeof(gender) == 'undefined') {
+						//$("#"+eventId+"-owner-denger").html(gender.toString());
+					} else if (gender) {
+						$("#"+eventId+"-owner-denger").css("backgroundImage","url('./content/customicondesign-line-user-black/png/male-white-20.png')");
+						$("#"+eventId+"-owner-denger").css("backgroundColor","#8970f1");
+					} else {
+						$("#"+eventId+"-owner-denger").css("backgroundImage","url('./content/customicondesign-line-user-black/png/female1-white-20.png')");
+						$("#"+eventId+"-owner-denger").css("backgroundColor","#f46f75");
+					};
+					if (typeof(photo) == "undefined") {
+						photo = "./content/png/Taylor-Swift.png";
+					}
+					$("#"+eventId+" > .custom-corners").css("backgroundImage","url('"+photo+"')");
+					pullLastItem = pullLastItem - 1;
+					if (pullLastItem == 0) {
+						$("#event-content").removeClass("ui-hidden-accessible");
+					}
+
+				};
+				ParseGetProfile(holder, id, displayFunction);
 			}
 		};
 	};
@@ -554,15 +582,18 @@ function getMyProfile(){
 	ParseGetProfile(owner, null, displayFunction);
 }
 
-function saveprofile(){
+function saveProfile(){
 	var currentUser = Parse.User.current();
 	var owner = currentUser.getUsername();
 	var id = $("#saveprofile-id").html();
 	var fileUploadControl = $("#profile-edit-photo")[0];
 	if (fileUploadControl.files.length > 0) {
+		var canvas = document.getElementById('canvas-photo');
+		var photo50 = canvas.toDataURL();
 		var photo = fileUploadControl.files[0];
 	}
 	else {
+		var photo50 = null;
 		var photo = null;
 	};
 	var name = $("#profile-edit-name").val();
@@ -576,5 +607,38 @@ function saveprofile(){
 	var displayFunction = function(){
 		ParseUpdateCurrentUser(function(){}, function(){});
 	}
-	ParseSaveProfile(id, photo, name, gender, birthdate, motto, major, school, interest, location, displayFunction);
+	ParseSaveProfile(id, photo, photo50, name, gender, birthdate, motto, major, school, interest, location, displayFunction);
+}
+
+function profilePhotoCrop(){
+	var fileUploadControl = $("#profile-edit-photo")[0];
+	var file = fileUploadControl.files[0];
+	if (typeof(file) == "undefined")
+		return;
+	var reader = new FileReader();
+	reader.onload = function(e) {
+		var image = new Image();
+		var canvas = document.getElementById('canvas-photo');
+		var context = canvas.getContext('2d');
+		image.src = e.target.result;
+		console.log(image.width);
+		console.log(image.height);
+		var sourceX=0;
+		var sourceY=0;
+		var sourceWidth = image.width;
+		var sourceHeight = image.height;
+		var destWidth = 50;
+		var destHeight = 50;
+		var destX=0;
+		var destY=0;
+		if (sourceHeight < sourceWidth) {
+			destWidth = sourceWidth*(50/sourceHeight);
+			destX = (canvas.width - destWidth)/2;
+		} else if (sourceHeight > sourceWidth) {
+			destHeight = sourceHeight*(50/sourceWidth);
+			destY = (canvas.height - destHeight)/2;
+		}
+		context.drawImage(image, sourceX, sourceY, sourceWidth, sourceHeight, destX, destY, destWidth, destHeight);
+	}
+	reader.readAsDataURL(file);
 }

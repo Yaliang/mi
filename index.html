@@ -23,7 +23,7 @@
 </head>
 
 <body>
-	<!-- Page for signup -->
+	<!-- Page for loading -->
 	<div data-role="page" id="page-loading" data-title="觅校缘">
 
 		<div data-role="header">
@@ -47,7 +47,7 @@
 		</div><!-- header -->
 
 		<div role="main" class="ui-content">
-			<form>
+			<form style='padding: 1em '>
 				<label for="username">Name:</label>
 				<input type="text" data-clear-btn="true" name="username" id="signup-name" value="">
 				<label for="useremail">Email:</label>
@@ -72,7 +72,7 @@
 		</div><!-- header -->
 
 		<div role="main" class="ui-content">
-			<form>
+			<form style='padding: 1em '>
 				<label for="useremail">Email:</label>
 				<input type="email" data-clear-btn="true" name="useremail" id="login-email" value="">
 				<label for="userpassword">Password:</label>
@@ -266,12 +266,13 @@
 			<h1>My Profile</h1>
 			<a data-rel="back" href="#page-event" class="ui-btn-left ui-btn ui-btn-inline ui-corner-all">Back</a>
 			<label id="saveprofile-id" class="ui-hidden-accessible"></label>
-			<a data-rel="back" href="#page-event" class="ui-btn-right ui-btn ui-btn-inline ui-corner-all" onclick="saveprofile();">Save</a>
+			<a data-rel="back" href="#page-event" class="ui-btn-right ui-btn ui-btn-inline ui-corner-all" onclick="saveProfile();">Save</a>
 		</div><!-- /header -->
 
 		<div role="main" class="ui-content" id="my-profile">
-			<div> 
-				<input type="file" data-clear-btn="false" name="profilephoto" id="profile-edit-photo" value="">
+			<div>
+				<input type="file" data-clear-btn="false" name="profilephoto" id="profile-edit-photo" onchange="profilePhotoCrop()" value="">
+				<canvas class="ui-hidden-accessible" id="canvas-photo" width="50px" height="50px" style="border-width:1px; border-style: solid"></canvas>
 			</div>
 			<form style='padding: 1em;'>
 				<label for="profileusername">Name:</label>
