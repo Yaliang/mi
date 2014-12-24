@@ -601,10 +601,10 @@ function profilePhotoCrop(){
 		var destHeight = 50;
 		var destX=0;
 		var destY=0;
-		if (sourceHeight > sourceWidth) {
+		if (sourceHeight < sourceWidth) {
 			destWidth = sourceWidth*(50/sourceHeight);
 			destX = (canvas.width - destWidth)/2;
-		} else if (sourceHeight < sourceWidth) {
+		} else if (sourceHeight > sourceWidth) {
 			destHeight = sourceHeight*(50/sourceWidth);
 			destY = (canvas.height - destHeight)/2;
 		}
