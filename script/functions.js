@@ -729,7 +729,9 @@ function showPeopleNearByList(position){
 				newElement = newElement + "</div></li>";
 				$("#people-near-by-list").prepend(newElement);
 			} else {
-
+				var latitude = objects[i].get('latitude');
+				var longitude = objects[i].get('longitude');
+				$("#near-by-"+objects[i].id+" > .custom-corners-people-near-by > .ui-bar-a > .people-near-by-list-distance").html(getDistance(latitude, longitude, lat, lng) + "km, "+convertTime(objects[i].updatedAt));
 			}
 		}
 	}
