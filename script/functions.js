@@ -554,7 +554,9 @@ var refreshPreviewPhoto = false;
 function refreshPreviewCanvas(){
 	profilePhotoCrop();
 	if (refreshPreviewPhoto) {
-		setTimeout(refreshPreviewCanvas(),2000);
+		setTimeout(function(){
+			refreshPreviewCanvas();
+		},2000);
 	}
 }
 
@@ -599,7 +601,7 @@ function getMyProfile(){
 }
 
 function saveProfile(){
-	refreshPreviewPhoto = true;
+	refreshPreviewPhoto = false;
 	var currentUser = Parse.User.current();
 	var owner = currentUser.getUsername();
 	var id = $("#saveprofile-id").html();
