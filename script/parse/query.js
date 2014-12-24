@@ -300,19 +300,8 @@ function ParseGetProfile(owner, id, displayFunction){
 function ParseSaveProfile(id, photo, name, gender, birthdate, motto, major, school, interest, location, displayFunction) {
 	var currentUser = Parse.User.current();
 	if (photo != null) {
-		var parseFile = new Parse.File(photo.name, photo);
-		parseFile.save().then(function(object) {
-			currentUser.set("photo",object.url());
-			currentUser.save(null,{
-				success: function(userProfile){
-					displayFunction();
-				}
-			});
-		}, function(error) {
-			$("#upload-error").html("Error: " + error.code + " " + error.message);
-		});
+		currentUser.set("photo50",photo);
 	}
-
 	currentUser.set("name",name);
 	currentUser.set("gender",gender);
 	currentUser.set("birthdate",birthdate);

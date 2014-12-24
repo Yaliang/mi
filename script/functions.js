@@ -130,7 +130,7 @@ function pullUserEvent(){
 					var name = object[0].get("name");
 					var gender = object[0].get("gender");
 					var photo
-					photo = object[0].get("photo");
+					photo = object[0].get("photo50");
 					$("#"+eventId+"-owner-name").html(name);
 					if (typeof(gender) == 'undefined') {
 						//$("#"+eventId+"-owner-denger").html(gender.toString());
@@ -554,13 +554,14 @@ function getMyProfile(){
 	ParseGetProfile(owner, null, displayFunction);
 }
 
-function saveprofile(){
+function saveProfile(){
 	var currentUser = Parse.User.current();
 	var owner = currentUser.getUsername();
 	var id = $("#saveprofile-id").html();
 	var fileUploadControl = $("#profile-edit-photo")[0];
 	if (fileUploadControl.files.length > 0) {
-		var photo = fileUploadControl.files[0];
+		var canvas = document.getElementById('canvas-photo');
+		var photo = canvas.toDataURL();
 	}
 	else {
 		var photo = null;
@@ -577,4 +578,37 @@ function saveprofile(){
 		ParseUpdateCurrentUser(function(){}, function(){});
 	}
 	ParseSaveProfile(id, photo, name, gender, birthdate, motto, major, school, interest, location, displayFunction);
+}
+
+function profilePhotoCrop(){
+	var fileUploadControl = $("#profile-edit-photo")[0];
+	var file = fileUploadControl.files[0];
+	if (typeof(file) == "undefined")
+		return;
+	var reader = new FileReader();
+	reader.onload = function(e) {
+		var image = new Image();
+		var canvas = document.getElementById('canvas-photo');
+		var context = canvas.getContext('2d');
+		image.src = e.target.result;
+		console.log(image.width);
+		console.log(image.height);
+		var sourceX=0;
+		var sourceY=0;
+		var sourceWidth = image.width;
+		var sourceHeight = image.height;
+		var destWidth = 50;
+		var destHeight = 50;
+		var destX=0;
+		var destY=0;
+		if (sourceHeight > sourceWidth) {
+			destWidth = sourceWidth*(50/sourceHeight);
+			destX = (canvas.width - destWidth)/2;
+		} else if (sourceHeight < sourceWidth) {
+			destHeight = sourceHeight*(50/sourceWidth);
+			destY = (canvas.height - destHeight)/2;
+		}
+		context.drawImage(image, sourceX, sourceY, sourceWidth, sourceHeight, destX, destY, destWidth, destHeight);
+	}
+	reader.readAsDataURL(file);
 }
