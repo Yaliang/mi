@@ -703,13 +703,13 @@ function showPeopleNearByList(position){
 		$("#page-people-near-by > .ui-content").html("<ul id='people-near-by-list' data-role='listview' data-inset='true' class='ui-listview ui-listview-inset ui-corner-all ui-shadow'></ul>");
 	}
 	var displayFunction = function(lat,lng,objects){
-		for (var i = 0; i < objects.length; i++) {
+		for (var i = objects.length-1; i >= 0; i--) {
 			if ($("#people-near-by-list > #near-by-"+objects[i].id).length == 0) {
 				var name = objects[i].get('name');
 				var latitude = objects[i].get('latitude');
 				var longitude = objects[i].get('longitude');
 				var newElement = "<li id='near-by-"+objects[i].id+"'>";
-				newElement = newElement + "<a href='#' class='ui-btn'>"
+				newElement = newElement + "<a href='#' class='ui-btn custom-corners-public' style='background-image: url("+objects[i].get("photo50")+")'>"
 				newElement = newElement + "<p><strong>"+name+": </strong></p>";
 				newElement = newElement + "<p>"+getDistance(latitude, longitude, lat, lng)+" km</p>";
 				newElement = newElement + "<p>"+convertTime(objects[i].updatedAt)+"</p>";

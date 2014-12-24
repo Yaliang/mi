@@ -340,6 +340,7 @@ function ParsePullUserByGeolocation(latitude,longitude,latitudeLimit,longitudeLi
 	currentUser.save();
 
 	var query = new Parse.Query(Parse.User);
+	query.notEqualTo("username", currentUser.getUsername());
 	query.greaterThan("latitude",(latitude-latitudeLimit/2.0));
 	query.lessThan("latitude",(latitude+latitudeLimit/2.0));
 	query.greaterThan("longitude",(longitude-longitudeLimit/2.0));
