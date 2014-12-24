@@ -551,6 +551,7 @@ function deleteMyEvent(eventId){
 }
 
 function getMyProfile(){
+	$("#profile-edit-photo").addClass("profile-photo-input");
 	var currentUser = Parse.User.current();
 	var owner = currentUser.getUsername();
 	var displayFunction = function(objects){
@@ -562,7 +563,13 @@ function getMyProfile(){
 		var school = objects[0].get("school");
 		var interest = objects[0].get("interest");
 		var location = objects[0].get("location");
+		var photo50 = objects[0].get("photo50");
 
+		var canvas = document.getElementById('canvas-photo');
+		var context = canvas.getContext('2d');
+		var image = new Image();
+		image.src = photo50;
+		context.drawImage(image, 0, 0);
 		$("#profile-edit-name").val(objects[0].get("name"));
 		$("#profile-edit-gender").val(objects[0].get("gender") ? "on" : "off");
 		if (!objects[0].get("gender")) {
@@ -627,15 +634,15 @@ function profilePhotoCrop(){
 		var sourceY=0;
 		var sourceWidth = image.width;
 		var sourceHeight = image.height;
-		var destWidth = 50;
-		var destHeight = 50;
+		var destWidth = canvas.width;
+		var destHeight = canvas.height;
 		var destX=0;
 		var destY=0;
 		if (sourceHeight < sourceWidth) {
-			destWidth = sourceWidth*(50/sourceHeight);
+			destWidth = sourceWidth*(destHeight/sourceHeight);
 			destX = (canvas.width - destWidth)/2;
 		} else if (sourceHeight > sourceWidth) {
-			destHeight = sourceHeight*(50/sourceWidth);
+			destHeight = sourceHeight*(destWidth/sourceWidth);
 			destY = (canvas.height - destHeight)/2;
 		}
 		context.drawImage(image, sourceX, sourceY, sourceWidth, sourceHeight, destX, destY, destWidth, destHeight);
