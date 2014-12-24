@@ -71,7 +71,7 @@ function ParseEventCreate(owner, title, location, time, visibility, description,
 	});
 }
 
-function ParsePullEvent(owner, limitNumber, descendingOrderKey, displayFunction) {
+function ParsePullEvent(owner, limitNumber, descendingOrderKey, accessibility, displayFunction) {
 	var UserEvent = Parse.Object.extend("UserEvent");
 	var query = new Parse.Query(UserEvent);
 	if (owner != null) {
@@ -79,6 +79,11 @@ function ParsePullEvent(owner, limitNumber, descendingOrderKey, displayFunction)
 	}
 	if (limitNumber != null) {
 		query.limit(limitNumber);
+	}
+	if (accessibility != null) {
+		if (accessibility == "public") {
+			query.equalTo("visibility",true);
+		}
 	}
 	query.descending(descendingOrderKey);
 	query.find({
