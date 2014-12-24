@@ -713,9 +713,7 @@ function showPeopleNearByList(position){
 				newElement = newElement + "<div class='ui-bar ui-bar-a'>";
 				newElement = newElement + "<div><strong id='"+id+"-owner-name'></strong></div>";
 				newElement = newElement + "<div id='"+id+"-owner-denger' class='ui-icon-custom-gender'></div>";
-				newElement = newElement + "</div>";
-				newElement = newElement + "<div class='ui-body ui-body-a'>";
-				newElement = newElement + "<p class='ui-custom-event-title'>" + getDistance(latitude, longitude, lat, lng) + "km, convertTime(objects[i].updatedAt)</p>";
+				newElement = newElement + "<div>" + getDistance(latitude, longitude, lat, lng) + "km, "+convertTime(objects[i].updatedAt)+"</div>";
 				newElement = newElement + "</div>";
 				newElement = newElement + "</div></li>";
 				$("#people-near-by-list").prepend(newElement);
