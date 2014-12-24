@@ -342,6 +342,23 @@ textarea {
 	height: 120px;
 }
 
+.people-near-by-list-distance {
+	clear: both;
+	font-size: .75em;
+	font-weight: 400;
+	display: block;
+	margin: .6em 0;
+	text-overflow: ellipsis;
+	overflow: hidden;
+	white-space: nowrap;
+	margin-top: 30px;
+}
+.custom-corners-people-near-by {
+	padding-left: 5em;
+	background: 0.8em 0.4em no-repeat;
+	background-size: 70px 70px;
+}
+
 //custom grid
 
 .rwd-example {
