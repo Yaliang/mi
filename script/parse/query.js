@@ -347,7 +347,6 @@ function ParsePullUserByGeolocation(latitude,longitude,latitudeLimit,longitudeLi
 	query.descending(descendingOrderKey);
 	query.find({
 		success: function(users){
-			console.log("get user nearby: "+users.length)
 			displayFunction(latitude,longitude,users);
 		}
 	});
