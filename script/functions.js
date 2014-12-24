@@ -661,3 +661,68 @@ function profilePhotoCrop(){
 	}
 	reader.readAsDataURL(file);
 }
+
+function listFriendNearBy(){
+	if (navigator.geolocation){
+		navigator.geolocation.watchPosition(showPeopleNearByList,showPeopleNearByListError);
+	} else {
+		$("#page-people-near-by > .ui-content").html("<p style='padding: 1em'>Geolocation is not supported by this browser.</p>");
+	}
+}
+
+function getDistance(lat1, lng1, lat2, lng2){
+	var radLat1 = lat1 * Math.PI / 180.0;
+	var radLat2 = lat2 * Math.PI / 180.0;
+	var radLng1 = lng1 * Math.PI / 180.0;
+	var radLng2 = lng2 * Math.PI / 180.0;
+	var a = radLat1 - radLat2;
+	var b = radLng1 - radLng2;
+	var s = 2 * Math.asin(Math.sqrt(Math.pow(Math.sin(a/2),2) + Math.cos(radLat1)*Math.cos(radLat2)*Math.pow(Math.sin(b/2),2)));
+	s = s * 6378.137;
+	s = Math.round(s * 100) / 100;
+	return s.toString();
+}
+
+function showPeopleNearByList(position){
+	var latitudeLimit = 1;
+	var longitudeLimit = 1;
+	var descendingOrderKey = "updatedAt";
+	if ($("#people-near-by-list").length == 0) {
+		$("#page-people-near-by > .ui-content").html("<ul id='people-near-by-list' data-role='listview' data-inset='true' class='ui-listview ui-listview-inset ui-corner-all ui-shadow'></ul>");
+	}
+	var displayFunction = function(lat,lng,objects){
+		for (var i = 0; i < objects.length; i++) {
+			if ($("#people-near-by-list > #near-by-"+objects[i].id).length == 0) {
+				var name = objects[i].get('name');
+				var latitude = objects[i].get('latitude');
+				var longitude = objects[i].get('longitude');
+				var newElement = "<li id='#near-by-"+objects[i].id+"'>";
+				newElement = newElement + "<a href='#' class='ui-btn'>"
+				newElement = newElement + "<p><strong>"+name+": </strong></p>";
+				newElement = newElement + "<p>"+getDistance(latitude, longitude, lat, lng)+"</p>";
+				newElement = newElement + "</a></li>";
+				$("#people-near-by-list").prepend(newElement);
+			} else {
+
+			}
+		}
+	}
+	ParsePullUserByGeolocation(position.coords.latitude,position.coords.longitude,latitudeLimit,longitudeLimit,descendingOrderKey,displayFunction);
+}
+
+function showPeopleNearByListError(error){
+	switch(error.code) {
+		case error.PERMISSION_DENIED:
+		$("#page-people-near-by > .ui-content").html("<p style='padding: 1em'>User denied the request for Geolocation.</p>");
+		break;
+		case error.POSITION_UNAVAILABLE:
+		$("#page-people-near-by > .ui-content").html("<p style='padding: 1em'>Location information is unavailable.</p>");
+		break;
+		case error.TIMEOUT:
+		$("#page-people-near-by > .ui-content").html("<p style='padding: 1em'>The request to get user location timed out.</p>");
+		break;
+		case error.UNKNOWN_ERROR:
+		$("#page-people-near-by > .ui-content").html("<p style='padding: 1em'>An unknown error occurred.</p>");
+		break;
+	}
+}

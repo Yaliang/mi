@@ -332,3 +332,17 @@ function ParseSaveProfile(id, photo, photo50, name, gender, birthdate, motto, ma
 		}
 	});
 }
+
+function ParsePullUserByGeolocation(latitude,longitude,latitudeLimit,longitudeLimit,descendingOrderKey,displayFunction){
+	var currentUser = Parse.User.current();
+	currentUser.set("latitude",latitude);
+	currentUser.set("longitude",longitude);
+	currentUser.save();
+
+	var query = new Parse.Query(Parse.User);
+	query.greaterThan("latitude",(latitude-latitudeLimit/2.0));
+	query.lessThan("latitude",(latitude+latitudeLimit/2.0));
+	query.greaterThan("longitude",(longitude-longitudeLimit/2.0));
+	query.lessThan("longitude",(longitude+longitudeLimit/2.0));
+	query.descending(descendingOrderKey);
+}
