@@ -216,6 +216,11 @@ function pullUserEvent(){
 }
 
 function convertTime(rawTime){
+	var minutes = 1000 * 60;
+	var hours = minutes * 60;
+	var days = hours * 24;
+	var years = days * 365;
+	var currentTime = new Date();
 	var time = currentTime.getTime()-Date.parse(rawTime.toString());
 	if (time < 0) {
 		time = 0;
@@ -287,11 +292,7 @@ function updateEventDetail(id){
 	ParseSelectEvent(id, displayFunction);
 	displayFunction = function(objects){
 		$("#event-detail-content").append("<ul id='event-commnets-list' data-role='listview' data-inset='true' class='ui-listview ui-listview-inset ui-corner-all ui-shadow'></ul>")
-		var minutes = 1000 * 60;
-		var hours = minutes * 60;
-		var days = hours * 24;
-		var years = days * 365;
-		var currentTime = new Date();
+		
 		for (var i=objects.length-1; i>=0; i--) {
 			var ownerName = objects[i].get("ownerName");
 			var content = objects[i].get("content");
