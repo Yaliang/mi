@@ -698,7 +698,7 @@ function showPeopleNearByList(position){
 				var name = objects[i].get('name');
 				var latitude = objects[i].get('latitude');
 				var longitude = objects[i].get('longitude');
-				var newElement = "<li id='#near-by-"+objects[i].id+"'>";
+				var newElement = "<li id='near-by-"+objects[i].id+"'>";
 				newElement = newElement + "<a href='#' class='ui-btn'>"
 				newElement = newElement + "<p><strong>"+name+": </strong></p>";
 				newElement = newElement + "<p>"+getDistance(latitude, longitude, lat, lng)+"</p>";
