@@ -215,6 +215,41 @@ function pullUserEvent(){
 	ParsePullEvent(null, limitNumber, descendingOrderKey, "public", displayFunction);
 }
 
+function convertTime(rawTime){
+	var time = currentTime.getTime()-Date.parse(rawTime.toString());
+	if (time < 0) {
+		time = 0;
+	}
+	var y = Math.floor(time / years);
+	time = time - years * y;
+	var d = Math.floor(time / days);
+	time = time - days * d;
+	var h = Math.floor(time / hours);
+	time = time - hours * h;
+	var m = Math.floor(time / minutes);
+	var showtime;
+	if (y > 1) {
+		showtime = y.toString()+" years ago";
+	} else if (y > 0) {
+		showtime = y.toString()+" year ago";
+	} else if (d > 1) {
+		showtime = d.toString()+" days ago";
+	} else if (d > 0) {
+		showtime = d.toString()+" day ago";
+	} else if (h > 1) {
+		showtime = h.toString()+" hours ago";
+	} else if (h > 0) {
+		showtime = h.toString()+" hour ago";
+	} else if (m > 1) {
+		showtime = m.toString()+" minutes ago";
+	} else if (m > 0) {
+		showtime = m.toString()+" minute ago";
+	} else {
+		showtime = "just now";
+	}
+	return showtime
+}
+
 
 // update the detail of event when the user clicked to the page-event-detail
 function updateEventDetail(id){
@@ -260,41 +295,10 @@ function updateEventDetail(id){
 		for (var i=objects.length-1; i>=0; i--) {
 			var ownerName = objects[i].get("ownerName");
 			var content = objects[i].get("content");
-			var time = currentTime.getTime()-Date.parse(objects[i].createdAt.toString());
-			if (time < 0) {
-				time = 0;
-			}
-			var y = Math.floor(time / years);
-			time = time - years * y;
-			var d = Math.floor(time / days);
-			time = time - days * d;
-			var h = Math.floor(time / hours);
-			time = time - hours * h;
-			var m = Math.floor(time / minutes);
-			var showtime;
-			if (y > 1) {
-				showtime = y.toString()+" years ago";
-			} else if (y > 0) {
-				showtime = y.toString()+" year ago";
-			} else if (d > 1) {
-				showtime = d.toString()+" days ago";
-			} else if (d > 0) {
-				showtime = d.toString()+" day ago";
-			} else if (h > 1) {
-				showtime = h.toString()+" hours ago";
-			} else if (h > 0) {
-				showtime = h.toString()+" hour ago";
-			} else if (m > 1) {
-				showtime = m.toString()+" minutes ago";
-			} else if (m > 0) {
-				showtime = m.toString()+" minute ago";
-			} else {
-				showtime = "just now";
-			}
 			var newElement = "<li>";
 			newElement = newElement + "<a href='#' class='ui-btn'>"
 			newElement = newElement + "<p><strong>"+ownerName+": </strong>"+content+"</p>";
-			newElement = newElement + "<p><strong>"+showtime+"</strong></p>"
+			newElement = newElement + "<p><strong>"+convertTime(objects[i].createdAt)+"</strong></p>"
 			newElement = newElement + "</a></li>";
 			$("#event-commnets-list").prepend(newElement);
 		}
@@ -662,12 +666,19 @@ function profilePhotoCrop(){
 	reader.readAsDataURL(file);
 }
 
+
+var geoWatchId;
 function listFriendNearBy(){
 	if (navigator.geolocation){
-		navigator.geolocation.watchPosition(showPeopleNearByList,showPeopleNearByListError);
+		var geoWatchId = navigator.geolocation.watchPosition(showPeopleNearByList,showPeopleNearByListError);
 	} else {
 		$("#page-people-near-by > .ui-content").html("<p style='padding: 1em'>Geolocation is not supported by this browser.</p>");
 	}
+}
+
+function stopGeoWatch(){
+	navigator.geolocation.clearWatch(watchID);
+	$("#page-people-near-by > .ui-content").html("");
 }
 
 function getDistance(lat1, lng1, lat2, lng2){
@@ -687,8 +698,6 @@ function showPeopleNearByList(position){
 	var latitudeLimit = 1;
 	var longitudeLimit = 1;
 	var descendingOrderKey = "updatedAt";
-	console.log("latitude:"+position.coords.latitude);
-	console.log("longitude:"+position.coords.longitude);
 	if ($("#people-near-by-list").length == 0) {
 		$("#page-people-near-by > .ui-content").html("<ul id='people-near-by-list' data-role='listview' data-inset='true' class='ui-listview ui-listview-inset ui-corner-all ui-shadow'></ul>");
 	}
@@ -701,7 +710,8 @@ function showPeopleNearByList(position){
 				var newElement = "<li id='near-by-"+objects[i].id+"'>";
 				newElement = newElement + "<a href='#' class='ui-btn'>"
 				newElement = newElement + "<p><strong>"+name+": </strong></p>";
-				newElement = newElement + "<p>"+getDistance(latitude, longitude, lat, lng)+"</p>";
+				newElement = newElement + "<p>"+getDistance(latitude, longitude, lat, lng)+" km</p>";
+				newElement = newElement + "<p>"+convertTime(objects[i].createdAt)+"</p>";
 				newElement = newElement + "</a></li>";
 				$("#people-near-by-list").prepend(newElement);
 			} else {
