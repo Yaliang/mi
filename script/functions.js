@@ -709,11 +709,13 @@ function showPeopleNearByList(position){
 				var latitude = objects[i].get('latitude');
 				var longitude = objects[i].get('longitude');
 				var newElement = "<li id='near-by-"+objects[i].id+"'>";
-				newElement = newElement + "<a href='#' class='ui-btn custom-corners-public' style='background-image: url("+objects[i].get("photo50")+")'>"
-				newElement = newElement + "<p><strong>"+name+": </strong></p>";
-				newElement = newElement + "<p>"+getDistance(latitude, longitude, lat, lng)+" km</p>";
-				newElement = newElement + "<p>"+convertTime(objects[i].updatedAt)+"</p>";
-				newElement = newElement + "</a></li>";
+				newElement = newElement + "<div class='custom-corners-public custom-corners' style='background-image: url("+objects[i].get("photo50")+")'>"
+				newElement = newElement + "<div class='ui-bar ui-bar-a'>";
+				newElement = newElement + "<div><strong id='"+id+"-owner-name'></strong></div>";
+				newElement = newElement + "<div id='"+id+"-owner-denger' class='ui-icon-custom-gender'></div>";
+				newElement = newElement + "<div>" + getDistance(latitude, longitude, lat, lng) + "km, "+convertTime(objects[i].updatedAt)+"</div>";
+				newElement = newElement + "</div>";
+				newElement = newElement + "</div></li>";
 				$("#people-near-by-list").prepend(newElement);
 			} else {
 
