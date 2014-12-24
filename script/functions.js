@@ -550,8 +550,17 @@ function deleteMyEvent(eventId){
 	ParseDeleteEvent(eventId, displayFunction);
 }
 
+var refreshPreviewPhoto = false;
+function refreshPreviewCanvas(){
+	profilePhotoCrop();
+	if (refreshPreviewPhoto) {
+		setTimeout(refreshPreviewCanvas(),2000);
+	}
+}
+
 function getMyProfile(){
-	$("#profile-edit-photo").addClass("profile-photo-input");
+	refreshPreviewPhoto = true;
+	refreshPreviewCanvas();
 	var currentUser = Parse.User.current();
 	var owner = currentUser.getUsername();
 	var displayFunction = function(objects){
@@ -590,6 +599,7 @@ function getMyProfile(){
 }
 
 function saveProfile(){
+	refreshPreviewPhoto = true;
 	var currentUser = Parse.User.current();
 	var owner = currentUser.getUsername();
 	var id = $("#saveprofile-id").html();
