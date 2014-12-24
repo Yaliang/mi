@@ -174,13 +174,41 @@ function pullUserEvent(){
 			} else {
 				var commentNumber = objects[i].get("commentNumber");
 				var interestNumber = objects[i].get("interestNumber");
+				var holder = objects[i].get("owner");
 				var id = objects[i].id;
 				$("#comment-statistics-"+id).html(commentNumber.toString()+" Comments");
 				$("#interest-statistics-"+id).html(interestNumber.toString()+" Interests");
-				pullLastItem = pullLastItem - 2;
+				pullLastItem = pullLastItem - 1;
 				if (pullLastItem == 0) {
 					$("#event-content").removeClass("ui-hidden-accessible");
 				}
+				// display event holder's name | not the email one
+				var displayFunction = function(eventId, object) {
+					var name = object[0].get("name");
+					var gender = object[0].get("gender");
+					var photo
+					photo = object[0].get("photo50");
+					$("#"+eventId+"-owner-name").html(name);
+					if (typeof(gender) == 'undefined') {
+						//$("#"+eventId+"-owner-denger").html(gender.toString());
+					} else if (gender) {
+						$("#"+eventId+"-owner-denger").css("backgroundImage","url('./content/customicondesign-line-user-black/png/male-white-20.png')");
+						$("#"+eventId+"-owner-denger").css("backgroundColor","#8970f1");
+					} else {
+						$("#"+eventId+"-owner-denger").css("backgroundImage","url('./content/customicondesign-line-user-black/png/female1-white-20.png')");
+						$("#"+eventId+"-owner-denger").css("backgroundColor","#f46f75");
+					};
+					if (typeof(photo) == "undefined") {
+						photo = "./content/png/Taylor-Swift.png";
+					}
+					$("#"+eventId+" > .custom-corners").css("backgroundImage","url('"+photo+"')");
+					pullLastItem = pullLastItem - 1;
+					if (pullLastItem == 0) {
+						$("#event-content").removeClass("ui-hidden-accessible");
+					}
+
+				};
+				ParseGetProfile(holder, id, displayFunction);
 			}
 		};
 	};
@@ -561,9 +589,11 @@ function saveProfile(){
 	var fileUploadControl = $("#profile-edit-photo")[0];
 	if (fileUploadControl.files.length > 0) {
 		var canvas = document.getElementById('canvas-photo');
-		var photo = canvas.toDataURL();
+		var photo50 = canvas.toDataURL();
+		var photo = fileUploadControl.files[0];
 	}
 	else {
+		var photo50 = null;
 		var photo = null;
 	};
 	var name = $("#profile-edit-name").val();
@@ -577,7 +607,7 @@ function saveProfile(){
 	var displayFunction = function(){
 		ParseUpdateCurrentUser(function(){}, function(){});
 	}
-	ParseSaveProfile(id, photo, name, gender, birthdate, motto, major, school, interest, location, displayFunction);
+	ParseSaveProfile(id, photo, photo50, name, gender, birthdate, motto, major, school, interest, location, displayFunction);
 }
 
 function profilePhotoCrop(){
