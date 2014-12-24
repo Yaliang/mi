@@ -310,6 +310,38 @@ textarea {
 	padding-right: 1em;
 }
 
+.profile-photo-preview {
+	-webkit-border-radius: .2125em;
+	border-radius: .2125em;
+	margin-left: 1em;
+	margin-top: 10px;
+	display: block;
+}
+
+.profile-photo-bar {
+	height: 120px;
+	padding-top: 10px;
+	padding-bottom: 40px;
+	border-bottom: 1px solid;
+	border-color: #bbb;
+}
+
+.profile-photo-bar > .ui-input-text {
+	opacity: 0;
+	margin: 0;
+	position: relative;
+	width: 120px;
+	height: 120px;
+	top: -120px;
+	margin-bottom: -120px;
+	margin-left: 1em;
+}
+
+#profile-edit-photo{
+	width: 120px;
+	height: 120px;
+}
+
 //custom grid
 
 .rwd-example {
