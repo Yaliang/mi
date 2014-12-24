@@ -687,6 +687,8 @@ function showPeopleNearByList(position){
 	var latitudeLimit = 1;
 	var longitudeLimit = 1;
 	var descendingOrderKey = "updatedAt";
+	console.log("latitude:"+position.coords.latitude);
+	console.log("longitude:"+position.coords.longitude);
 	if ($("#people-near-by-list").length == 0) {
 		$("#page-people-near-by > .ui-content").html("<ul id='people-near-by-list' data-role='listview' data-inset='true' class='ui-listview ui-listview-inset ui-corner-all ui-shadow'></ul>");
 	}
