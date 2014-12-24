@@ -709,12 +709,12 @@ function showPeopleNearByList(position){
 				var gender = objects[i].get('gender');
 				var latitude = objects[i].get('latitude');
 				var longitude = objects[i].get('longitude');
+				var photo50 = objects[i].get("photo50");
 				var newElement = "<li id='near-by-"+objects[i].id+"'>";
-				if (typeof(gender) == 'undefined') {
-					newElement = newElement + "<div class='custom-corners-people-near-by custom-corners' style='background-image: url("+"./content/png/Taylor-Swift.png"+")'>"
-				} else {
-					newElement = newElement + "<div class='custom-corners-people-near-by custom-corners' style='background-image: url("+objects[i].get("photo50")+")'>"
+				if (typeof(photo50) == 'undefined') {
+					photo50 = "./content/png/Taylor-Swift.png";
 				}
+				newElement = newElement + "<div class='custom-corners-people-near-by custom-corners' style='background-image: url("+photo50+")'>"
 				newElement = newElement + "<div class='ui-bar ui-bar-a'>";
 				newElement = newElement + "<div><strong>"+name+"</strong></div>";
 				newElement = newElement + "<div class='ui-icon-custom-gender' style='";
