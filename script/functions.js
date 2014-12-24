@@ -706,13 +706,24 @@ function showPeopleNearByList(position){
 		for (var i = objects.length-1; i >= 0; i--) {
 			if ($("#people-near-by-list > #near-by-"+objects[i].id).length == 0) {
 				var name = objects[i].get('name');
+				var gender = objects[i].get('gender');
 				var latitude = objects[i].get('latitude');
 				var longitude = objects[i].get('longitude');
 				var newElement = "<li id='near-by-"+objects[i].id+"'>";
 				newElement = newElement + "<div class='custom-corners-public custom-corners' style='background-image: url("+objects[i].get("photo50")+")'>"
 				newElement = newElement + "<div class='ui-bar ui-bar-a'>";
-				newElement = newElement + "<div><strong id='"+id+"-owner-name'></strong></div>";
-				newElement = newElement + "<div id='"+id+"-owner-denger' class='ui-icon-custom-gender'></div>";
+				newElement = newElement + "<div><strong>"+name+"</strong></div>";
+				newElement = newElement + "<div class='ui-icon-custom-gender' style='";
+				if (typeof(gender) == 'undefined') {
+					//$("#"+eventId+"-owner-denger").html(gender.toString());
+				} else if (gender) {
+					newElement = newElement + "background-image:url("+"./content/customicondesign-line-user-black/png/male-white-20.png"+");";
+					newElement = newElement + "background-color:"+"#8970f1"+";";
+				} else {
+					newElement = newElement + "background-image:url("+"./content/customicondesign-line-user-black/png/female1-white-20.png"+");";
+					newElement = newElement + "background-color:"+"#f46f75"+";";
+				};
+				newElement = newElement + "'></div>";
 				newElement = newElement + "<div>" + getDistance(latitude, longitude, lat, lng) + "km, "+convertTime(objects[i].updatedAt)+"</div>";
 				newElement = newElement + "</div>";
 				newElement = newElement + "</div></li>";
