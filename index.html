@@ -91,8 +91,11 @@
 
 		<div data-role="header" data-position="fixed" data-tap-toggle="false">
 			<h1>Events</h1>
-			<a href="#page-event-create" class="ui-btn-right ui-btn ui-btn-inline ui-corner-all" onclick="$('#event-create-button').bind('click',function(){createUserEvent();});">Create</a>
-			<a href="#page-event-my-event" class="ui-btn-left ui-btn ui-btn-inline ui-corner-all" onclick="pullMyEvent();">My Event</a>
+			<a href="#" class="ui-btn-right ui-btn ui-btn-inline ui-corner-all" id="ui-icon-custom-right-top-more" onclick="displayEventMoreOption();"></a>
+			<!--
+				<a href="#page-event-create" class="ui-btn-right ui-btn ui-btn-inline ui-corner-all" onclick="$('#event-create-button').bind('click',function(){createUserEvent();});">Create</a>
+				<a href="#page-event-my-event" class="ui-btn-left ui-btn ui-btn-inline ui-corner-all" onclick="pullMyEvent();">My Event</a>
+			-->
 		</div><!-- /header -->
 
 		<div role="main" class="ui-content" id="event-content">

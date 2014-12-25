@@ -758,3 +758,36 @@ function showPeopleNearByListError(error){
 		break;
 	}
 }
+
+function displayEventMoreOption(){
+	var newElement = "";
+	newElement = newElement + "<ul class='event-page-right-top-options' style='display: none;'>";
+	newElement = newElement + "<li><a href='#page-event-create' id='event-page-right-top-option-1'>Create</a></li>";
+	newElement = newElement + "<li><a href='#page-event-my-event' id='event-page-right-top-option-2' onclick='pullMyEvent();'>My Events</a></li>";
+	newElement = newElement + "</ul>";
+	newElement = newElement + "<div class='options-hidden-cover-layer'></div>";
+	$('#page-event').append(newElement);
+	$('#event-page-right-top-option-1').on('click',function(){
+		$('#event-create-button').bind('click',function(){
+			createUserEvent();
+		});
+		hiddenEventMoreOption();
+	})
+	$('#event-page-right-top-option-2').on('click',function(){
+		pullMyEvent();
+		hiddenEventMoreOption();
+	})
+	$('.event-page-right-top-options').slideDown();
+	$('.options-hidden-cover-layer').on('click',hiddenEventMoreOption);
+	$('.options-hidden-cover-layer').on('swipeleft',hiddenEventMoreOption)
+	$('.options-hidden-cover-layer').on('swiperight',hiddenEventMoreOption)
+	$(window).scroll(hiddenEventMoreOption)
+}
+
+function hiddenEventMoreOption(){
+	$('.event-page-right-top-options').slideUp('noraml',function() {
+		$('.event-page-right-top-options').remove();
+		$('.options-hidden-cover-layer').remove();
+		$(window).unbind("scroll");
+	});
+}
