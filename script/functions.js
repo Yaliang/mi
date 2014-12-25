@@ -760,13 +760,9 @@ function showPeopleNearByListError(error){
 }
 
 function displayEventMoreOption(){
-	var newElement = "";
-	newElement = newElement + "<ul class='event-page-right-top-options' style='display: none;'>";
-	newElement = newElement + "<li><a href='#page-event-create' id='event-page-right-top-option-1'>Create</a></li>";
-	newElement = newElement + "<li><a href='#page-event-my-event' id='event-page-right-top-option-2' onclick='pullMyEvent();'>My Events</a></li>";
-	newElement = newElement + "</ul>";
-	newElement = newElement + "<div class='options-hidden-cover-layer'></div>";
-	$('#page-event').append(newElement);
+	$('#event-page-right-top-option-1').unbind("click");
+	$('#event-page-right-top-option-2').unbind("click");
+	$(window).unbind("scroll");
 	$('#event-page-right-top-option-1').on('click',function(){
 		$('#event-create-button').bind('click',function(){
 			createUserEvent();
@@ -777,6 +773,7 @@ function displayEventMoreOption(){
 		pullMyEvent();
 		hiddenEventMoreOption();
 	})
+	$('.options-hidden-cover-layer').show();
 	$('.event-page-right-top-options').slideDown();
 	$('.options-hidden-cover-layer').on('click',hiddenEventMoreOption);
 	$('.options-hidden-cover-layer').on('swipeleft',hiddenEventMoreOption)
@@ -785,9 +782,9 @@ function displayEventMoreOption(){
 }
 
 function hiddenEventMoreOption(){
-	$('.event-page-right-top-options').slideUp('noraml',function() {
-		$('.event-page-right-top-options').remove();
-		$('.options-hidden-cover-layer').remove();
-		$(window).unbind("scroll");
-	});
+	$('#event-page-right-top-option-1').unbind("click");
+	$('#event-page-right-top-option-2').unbind("click");
+	$(window).unbind("scroll");
+	$('.options-hidden-cover-layer').hide();
+	$('.event-page-right-top-options').slideUp();
 }
