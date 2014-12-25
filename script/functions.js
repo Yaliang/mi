@@ -58,7 +58,11 @@ function createUserEvent(){
 	$('#event-create-button').unbind("click");
 	var title = $("#event-create-title").val();
 	var location = $("#event-create-location").val();
-	var time = $("#event-create-time").val();
+	var time = $("#event-create-start-time").val().replace('T',' ');
+	if (($("#event-create-start-time").val().toString().length > 0) && ($("#event-create-end-time").val().toString().length > 0)) {
+		time = time + ' -- ';
+	}
+	time = time + $("#event-create-end-time").val().replace('T', ' ');
 	var visibility = $("#event-create-visibility").val()=="on" ? true : false ;
 	var description = $("#event-create-description").val();
 	var errorObject = $("#event-error");
@@ -66,7 +70,8 @@ function createUserEvent(){
 	var clearFunction = function(){
 		$("#event-create-title").val("");
 		$("#event-create-location").val("");
-		$("#event-create-time").val("");
+		$("#event-create-start-time").val("");
+		$("#event-create-end-time").val("");
 		$("#event-create-description").val("");
 		$("#event-create-visibility").val("on").flipswitch('refresh');
 		$("#event-create-error").html("");
