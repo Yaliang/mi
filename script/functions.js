@@ -774,7 +774,7 @@ function displayEventMoreOption(){
 		hiddenEventMoreOption();
 	})
 	$('.options-hidden-cover-layer').show();
-	$('.event-page-right-top-options').slideDown();
+	$('.event-page-right-top-options').fadeIn('fast');
 	$('.options-hidden-cover-layer').on('click',hiddenEventMoreOption);
 	$('.options-hidden-cover-layer').on('swipeleft',hiddenEventMoreOption)
 	$('.options-hidden-cover-layer').on('swiperight',hiddenEventMoreOption)
@@ -786,5 +786,5 @@ function hiddenEventMoreOption(){
 	$('#event-page-right-top-option-2').unbind("click");
 	$(window).unbind("scroll");
 	$('.options-hidden-cover-layer').hide();
-	$('.event-page-right-top-options').slideUp();
+	$('.event-page-right-top-options').fadeOut('fast');
 }
