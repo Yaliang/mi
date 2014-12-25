@@ -236,27 +236,27 @@ a {
 
 #ui-icon-custom-right-top-more {
 	height: 16px;
-	width: 16px;
-	background: url("./content/material-design/png/ellipsis1-pink-36.png") 50% 50% no-repeat!important;
+	width: 32px;
+	background: url("./content/material-design/png/ellipsis1-pink-72.png") 50% 50% no-repeat!important;
 	background-size: 36px 36px!important;
 }
 
 .event-page-right-top-options {
 	position: fixed;
-	right: 1.2em;
+	right: 2em;
 	top: 0.3em;
 	font-family: "Open Sans";
 	font-weight: 300;
 	list-style-type: none;
-	padding: 1.7em 0em 0em 0ex;
+	padding: 2em 0em 0em 0ex;
 	background: url("./content/material-design/png/black400-pink-128.png") 50% 0 no-repeat;
-	background-size: 128px 108px;
+	background-size: 148px 130px;
 	text-shadow: 0 0 0;
 	z-index: 1002;
 }
 
 .event-page-right-top-options > li {
-	padding: 0.5em 1.1em 0.5em 1.1em;
+	padding: 0.8em 1.1em 0.8em 1.1em;
 	font-size: 15px;
 	border-bottom: 1px solid #AEADAD;
 
@@ -279,6 +279,8 @@ a {
 	-ms-user-select: none;
 	user-select: none;
 	text-decoration: none!important;
+	margin-left: 10px;
+	margin-right: 10px;  
 }
 
 .options-hidden-cover-layer {
