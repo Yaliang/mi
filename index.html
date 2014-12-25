@@ -91,8 +91,11 @@
 
 		<div data-role="header" data-position="fixed" data-tap-toggle="false">
 			<h1>Events</h1>
-			<a href="#page-event-create" class="ui-btn-right ui-btn ui-btn-inline ui-corner-all" onclick="$('#event-create-button').bind('click',function(){createUserEvent();});">Create</a>
-			<a href="#page-event-my-event" class="ui-btn-left ui-btn ui-btn-inline ui-corner-all" onclick="pullMyEvent();">My Event</a>
+			<a href="#" class="ui-btn-right ui-btn ui-btn-inline ui-corner-all" id="ui-icon-custom-right-top-more" onclick="displayEventMoreOption();"></a>
+			<!--
+				<a href="#page-event-create" class="ui-btn-right ui-btn ui-btn-inline ui-corner-all" onclick="$('#event-create-button').bind('click',function(){createUserEvent();});">Create</a>
+				<a href="#page-event-my-event" class="ui-btn-left ui-btn ui-btn-inline ui-corner-all" onclick="pullMyEvent();">My Event</a>
+			-->
 		</div><!-- /header -->
 
 		<div role="main" class="ui-content" id="event-content">
@@ -108,6 +111,11 @@
 			</ul>
 			</div>
 		</div><!-- /footer -->
+		<ul class='event-page-right-top-options' style='display: none;'>
+			<li><a href='#page-event-create' id='event-page-right-top-option-1'>Create</a></li>
+			<li><a href='#page-event-my-event' id='event-page-right-top-option-2' onclick='pullMyEvent();'>My Events</a></li>
+		</ul>
+		<div class='options-hidden-cover-layer' style='display: none;'></div>
 	</div><!-- /page -->
 
 	<!-- Page for displaying the list of my events -->

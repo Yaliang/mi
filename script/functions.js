@@ -758,3 +758,33 @@ function showPeopleNearByListError(error){
 		break;
 	}
 }
+
+function displayEventMoreOption(){
+	$('#event-page-right-top-option-1').unbind("click");
+	$('#event-page-right-top-option-2').unbind("click");
+	$(window).unbind("scroll");
+	$('#event-page-right-top-option-1').on('click',function(){
+		$('#event-create-button').bind('click',function(){
+			createUserEvent();
+		});
+		hiddenEventMoreOption();
+	})
+	$('#event-page-right-top-option-2').on('click',function(){
+		pullMyEvent();
+		hiddenEventMoreOption();
+	})
+	$('.options-hidden-cover-layer').show();
+	$('.event-page-right-top-options').slideDown();
+	$('.options-hidden-cover-layer').on('click',hiddenEventMoreOption);
+	$('.options-hidden-cover-layer').on('swipeleft',hiddenEventMoreOption)
+	$('.options-hidden-cover-layer').on('swiperight',hiddenEventMoreOption)
+	$(window).scroll(hiddenEventMoreOption)
+}
+
+function hiddenEventMoreOption(){
+	$('#event-page-right-top-option-1').unbind("click");
+	$('#event-page-right-top-option-2').unbind("click");
+	$(window).unbind("scroll");
+	$('.options-hidden-cover-layer').hide();
+	$('.event-page-right-top-options').slideUp();
+}

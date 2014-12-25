@@ -234,6 +234,63 @@ a {
 	background-size: 40px 40px;
 }
 
+#ui-icon-custom-right-top-more {
+	height: 16px;
+	width: 16px;
+	background: url("./content/material-design/png/ellipsis1-pink-36.png") 50% 50% no-repeat!important;
+	background-size: 36px 36px!important;
+}
+
+.event-page-right-top-options {
+	position: fixed;
+	right: 1.2em;
+	top: 0.3em;
+	font-family: "Open Sans";
+	font-weight: 300;
+	list-style-type: none;
+	padding: 1.7em 0em 0em 0ex;
+	background: url("./content/material-design/png/black400-pink-128.png") 50% 0 no-repeat;
+	background-size: 128px 108px;
+	text-shadow: 0 0 0;
+	z-index: 1002;
+}
+
+.event-page-right-top-options > li {
+	padding: 0.5em 1.1em 0.5em 1.1em;
+	font-size: 15px;
+	border-bottom: 1px solid #AEADAD;
+
+}
+
+.event-page-right-top-options > li:last-child {
+	border-bottom: 0px solid #AEADAD;
+}
+
+.event-page-right-top-options > li > a {
+	color: #333!important;
+	font-weight: 300!important;
+	text-shadow: 0 1px 0 #f3f3f3;
+	text-overflow: ellipsis;
+	overflow: hidden;
+	white-space: nowrap;
+	cursor: pointer;
+	-webkit-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
+	text-decoration: none!important;
+}
+
+.options-hidden-cover-layer {
+	opacity: 0;
+	z-index: 1001;
+	position: fixed;
+	top: 0;
+	left: 0;
+	height: 100vh;
+	width: 100vw;
+}
+
 .ui-icon-custom-gender {
 	margin-top: 0.4em;
 	margin-bottom: 0.1em;
@@ -281,6 +338,8 @@ a {
 	height: 15px;
 	margin: 0 15px 0 0;
 }
+
+
 
 textarea {
 	resize: none!important;
@@ -358,6 +417,8 @@ textarea {
 	background: 0.8em 0.4em no-repeat;
 	background-size: 70px 70px;
 }
+
+
 
 //custom grid
 
