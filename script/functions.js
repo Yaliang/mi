@@ -25,12 +25,13 @@ function pullNotification(){
 		if ((typeof(objects)!="undefined")&&(objects.length > 0)) {
 			jQuery("[id=friend]") .each(function(){
 				$(this).addClass("friend-notification-custom");
-			})
-			$('#new-friend-requests-number').html(objects.length.toString());
+			});
+			$('#new-friend-requests-btn').html("<span>New Friend Requests</span><span id='new-friend-requests-number' class='ui-li-count'>"+objects.length.toString()+"</span>");
 		} else {
 			jQuery("[id=friend]") .each(function(){
 				$(this).removeClass("friend-notification-custom");
-			})
+			});
+			$('#new-friend-requests-btn').html("<span>New Friend Requests</span>");
 		}
 	}
 	ParsePullUnreadFriendRequest(currentUser.id, displayFunction);
