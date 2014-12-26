@@ -709,6 +709,7 @@ function buildUserListElement(object, liIdPrefix, lat, lng) {
 	var latitude = object.get('latitude');
 	var longitude = object.get('longitude');
 	var userId = object.id;
+	var updatedAt = objects[i].updatedAt;
 	var newElement = "<li id='"+liIdPrefix+userId+"'>";
 	newElement = newElement + "<div class='custom-corners-people-near-by custom-corners'>"
 	newElement = newElement + "<div class='ui-bar ui-bar-a'>";
@@ -725,7 +726,7 @@ function buildUserListElement(object, liIdPrefix, lat, lng) {
 	};
 	newElement = newElement + "'></div>";
 	if ((lat != null) && (lng != null)) {
-		newElement = newElement + "<div class='people-near-by-list-distance'>" + getDistance(latitude, longitude, lat, lng) + "km, "+convertTime(objects[i].updatedAt)+"</div>";
+		newElement = newElement + "<div class='people-near-by-list-distance'>" + getDistance(latitude, longitude, lat, lng) + "km, "+convertTime(updatedAt)+"</div>";
 	}
 	newElement = newElement + "</div>";
 	newElement = newElement + "</div></li>";
