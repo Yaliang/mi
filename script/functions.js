@@ -23,8 +23,9 @@ function signup(){
 	var password = $("#signup-password").val();
 	var errorObject = $("#signup-error");
 	var destID = "page-event";
-	var customFunction = function(){
+	var customFunction = function(object){
 		pullUserEvent();
+		ParseCreateProfilePhotoObject(object.id);
 	};
 	ParseSignup(email, password, email, name, errorObject, destID, customFunction);
 	$("#signup-password").val("");
@@ -685,7 +686,7 @@ function listFriendNearBy(){
 }
 
 function stopGeoWatch(){
-	navigator.geolocation.clearWatch(watchID);
+	navigator.geolocation.clearWatch(geoWatchId);
 	$("#page-people-near-by > .ui-content").html("");
 }
 
@@ -774,6 +775,7 @@ function showPeopleNearByListError(error){
 function displayEventMoreOption(){
 	$('#event-page-right-top-option-1').unbind("click");
 	$('#event-page-right-top-option-2').unbind("click");
+	$('#ui-icon-custom-right-top-more').attr("id","ui-icon-custom-right-top-more-active");
 	$(window).unbind("scroll");
 	$('#event-page-right-top-option-1').on('click',function(){
 		$('#event-create-button').bind('click',function(){
@@ -796,7 +798,40 @@ function displayEventMoreOption(){
 function hiddenEventMoreOption(){
 	$('#event-page-right-top-option-1').unbind("click");
 	$('#event-page-right-top-option-2').unbind("click");
+	$('#ui-icon-custom-right-top-more-active').attr("id","ui-icon-custom-right-top-more");
 	$(window).unbind("scroll");
 	$('.options-hidden-cover-layer').hide();
 	$('.event-page-right-top-options').fadeOut('fast');
+}
+
+function bindSearchAutocomplete(){
+	$( "#user-autocomplete-list" ).on( "filterablebeforefilter", function ( e, data ) {
+		var $ul = $( this );
+		var $input = $( data.input );
+		var value = $input.val();
+		console.log(value);
+		$ul.html( "" );
+		if ( value && value.length > 1 ) {
+			$ul.html( "<li><div class='ui-loader'><span class='ui-icon ui-icon-loading'></span></div></li>" );
+			$ul.listview( "refresh" );
+			$ul.trigger("updatelayout");
+			var displayFunction = function(objects){
+				console.log("search success: "+objects.length);
+				var html = "";
+				for (var i=0; i<objects.length; i++) {
+					html += "<li>"+objects[i].get("username")+":"+objects[i].get('name')+"</li>";
+				}
+				$( "#user-autocomplete-list" ).html(html);
+				$( "#user-autocomplete-list" ).listview("refresh");
+				$( "#user-autocomplete-list" ).trigger("updatelayout");
+			}
+			ParseUserByEmailAndName(value, "updatedAt", displayFunction);
+		}
+	});
+}
+
+function unbindSearchAutocomplete(){
+	$( "#user-autocomplete-list" ).unbind( "filterablebeforefilter" );
+	$( "#user-autocomplete-list" ).html("");
+	$( "user-autocomplete-input" ).val("");
 }

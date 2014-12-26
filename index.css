@@ -139,6 +139,13 @@
 	box-shadow: 0 0 0!important;
 }
 
+.ui-input-search {
+	text-shadow: 0 0 0!important;
+	-webkit-box-shadow: 0 0 0!important;
+	-moz-box-shadow: 0 0 0!important;
+	box-shadow: 0 0 0!important;
+}
+
 a {
 	text-shadow: 0 0 0!important;
 	-webkit-box-shadow: 0 0 0!important;
@@ -236,14 +243,21 @@ a {
 
 #ui-icon-custom-right-top-more {
 	height: 16px;
-	width: 32px;
-	background: url("./content/material-design/png/ellipsis1-pink-72.png") 50% 50% no-repeat!important;
+	width: 28px;
+	background: url('./content/material-design/png/ellipsis1-blank-pink-72.png') 50% 50% no-repeat!important;
+	background-size: 36px 36px!important;
+}
+
+#ui-icon-custom-right-top-more-active {
+	height: 16px;
+	width: 28px;
+	background: url('./content/material-design/png/ellipsis1-pink-72.png') 50% 50% no-repeat!important;
 	background-size: 36px 36px!important;
 }
 
 .event-page-right-top-options {
 	position: fixed;
-	right: 2em;
+	right: 1.3em;
 	top: 0.3em;
 	font-family: "Open Sans";
 	font-weight: 300;
