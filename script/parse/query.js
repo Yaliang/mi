@@ -10,12 +10,21 @@ function ParseSignup(username, password, email, name, errorObject, destID, custo
 	user.signUp(null, {
 		success: function(user) {
 			window.location.hash = destID;
-			customFunction();
+			customFunction(user);
 		},
 		error: function(user,error) {
 			errorObject.html("Error: " + error.code + " " + error.message);
 		}
 	});
+
+}
+
+function ParseCreateProfilePhotoObject(userId){
+	var Photo = Parse.Object.extend("Photo");
+	var photo = new Photo;
+
+	photo.set("userId",userId);
+	photo.save();
 }
 
 function ParseLogin(username, password, errorObject, destID, customFunction) {
@@ -337,6 +346,70 @@ function ParsePullUserByGeolocation(latitude,longitude,latitudeLimit,longitudeLi
 			displayFunction(latitude,longitude,users);
 		}
 	});
+}
+
+function ParseSendFriendRequest(ownerId, friendId, successFunction){
+	var Friend = Parse.Object.extend("Friend");
+	var friend = new Friend;
+
+	friend.set('owner', ownerId);
+	friend.set('friend', friendId);
+	friend.set('valid',false);
+	friend.save(null, {
+		success: function(friend){
+			successFunction(friend);
+		}
+	})
+}
+
+function ParseAcceptFriendRequest(objectId, ownerId, friendId, successFunction){
+	var Friend = Parse.Object.extend("Friend");
+	var query = new Parse.Query(Friend);
+
+	if (objectId != null) {
+		query.equalTo("object",objectId);
+	} else {
+		query.equalTo("owner",ownerId);
+		query.equalTo("friend",friendId);
+	}
+	query.first({
+		success:function(object){
+			object.set('valid',true);
+			object.save(null, {
+				success: function(object){
+					var friend = new Friend;
+
+					friend.set('owner',object.get('friend'));
+					friend.set('friend',object.get('owner'));
+					friend.set('valid',true);
+					friend.save(null, {
+						success: function(){
+							successFunction();
+						}
+					})
+				}
+			});
+			
+		}
+	})
+}
+
+function ParseUserByEmailAndName(string, descendingOrderKey, displayFunction){
+	var queryByEmail = new Parse.Query(Parse.User);
+	var queryByName = new Parse.Query(Parse.User);
+	var currentUser = Parse.User.current();
+
+	queryByEmail.startsWith("username",string);
+	queryByName.startsWith("name",string);
+
+	var query = Parse.Query.or(queryByEmail, queryByName);
+	query.notEqualTo("username", currentUser.getUsername());
+	query.descending(descendingOrderKey);
+	query.find({
+		success: function(objects){
+			displayFunction(objects);
+		}
+	})
 }
 
 
