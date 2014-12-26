@@ -469,7 +469,7 @@ function ParseCheckFriend(ownerId, friendId, displayFunction) {
 
 	query.first({
 		success: function(object){
-			displayFunction(friendId, object);
+			displayFunction(ownerId, friendId, object);
 		}
 	})
 
