@@ -243,16 +243,31 @@ function ParseDeleteEvent(eventId, displayFunction){
 	});
 }
 
-function ParseGetProfile(owner, eventId, displayFunction){
+function ParseGetProfile(owner, displayFunction, data){
 	var query = new Parse.Query(Parse.User);
 
 	query.equalTo("username", owner);
 	query.find({
 		success: function(user) {
-			if (eventId == null) {
+			if (data == null) {
 				displayFunction(user);
 			} else {
-				displayFunction(eventId, user);
+				displayFunction(data, user);
+			}
+		}
+	});
+}
+
+function ParseGetProfileById(ownerId, displayFunction, data){
+	var query = new Parse.Query(Parse.User);
+
+	query.equalTo("objectId", ownerId);
+	query.first({
+		success: function(user) {
+			if (data == null) {
+				displayFunction(user);
+			} else {
+				displayFunction(data, user);
 			}
 		}
 	});
@@ -316,14 +331,14 @@ function ParseSaveProfilePhoto(id, photo, photo120, displayFunction) {
 	})
 }
 
-function ParseGetProfilePhoto(eventId, userId, displayFunction) {
+function ParseGetProfilePhoto(data, userId, displayFunction) {
 	var Photo = Parse.Object.extend("Photo");
 	var query = new Parse.Query(Photo);
 
 	query.equalTo("userId",userId);
 	query.find({
 		success: function(object){
-			displayFunction(eventId, object);
+			displayFunction(data, object);
 		}
 	})
 }
@@ -367,7 +382,7 @@ function ParseAcceptFriendRequest(objectId, ownerId, friendId, successFunction){
 	var query = new Parse.Query(Friend);
 
 	if (objectId != null) {
-		query.equalTo("object",objectId);
+		query.equalTo("objectId",objectId);
 	} else {
 		query.equalTo("owner",ownerId);
 		query.equalTo("friend",friendId);
@@ -383,8 +398,8 @@ function ParseAcceptFriendRequest(objectId, ownerId, friendId, successFunction){
 					friend.set('friend',object.get('owner'));
 					friend.set('valid',true);
 					friend.save(null, {
-						success: function(){
-							successFunction();
+						success: function(object){
+							successFunction(object);
 						}
 					})
 				}
@@ -394,13 +409,65 @@ function ParseAcceptFriendRequest(objectId, ownerId, friendId, successFunction){
 	})
 }
 
+function ParseRejectFriendRequest(objectId, ownerId, friendId, successFunction){
+	var Friend = Parse.Object.extend("Friend");
+	var query = new Parse.Query(Friend);
+
+	if (objectId != null) {
+		query.equalTo("objectId",objectId);
+	} else {
+		query.equalTo("owner",ownerId);
+		query.equalTo("friend",friendId);
+	}
+
+	query.first({
+		success:function(object){
+			object.destroy({
+				success: function(object){
+					successFunction(friendId);
+				}
+			});
+		}
+	})
+}
+
+function ParsePullNewFriendRequest(userId, descendingOrderKey, displayFunction) {
+	var Friend = Parse.Object.extend("Friend");
+	var query = new Parse.Query(Friend);
+
+	query.equalTo("friend",userId);
+	query.equalTo("valid",false);
+	query.descending(descendingOrderKey);
+	query.find({
+		success: function(objects){
+			displayFunction(objects);
+		}
+	})
+}
+
+
+function ParseCheckFriend(ownerId, friendId, displayFunction) {
+	var Friend = Parse.Object.extend("Friend");
+	var query = new Parse.Query(Friend);
+
+	query.equalTo('owner',ownerId);
+	query.equalTo('friend',friendId);
+
+	query.first({
+		success: function(object){
+			displayFunction(friendId, object);
+		}
+	})
+
+}
+
 function ParseUserByEmailAndName(string, descendingOrderKey, displayFunction){
 	var queryByEmail = new Parse.Query(Parse.User);
 	var queryByName = new Parse.Query(Parse.User);
 	var currentUser = Parse.User.current();
 
-	queryByEmail.startsWith("username",string);
-	queryByName.startsWith("name",string);
+	queryByEmail.matches("username",".*"+string+".*");
+	queryByName.matches("name",".*"+string+".*");
 
 	var query = Parse.Query.or(queryByEmail, queryByName);
 	query.notEqualTo("username", currentUser.getUsername());
