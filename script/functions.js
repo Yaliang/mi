@@ -833,5 +833,5 @@ function bindSearchAutocomplete(){
 function unbindSearchAutocomplete(){
 	$( "#user-autocomplete-list" ).unbind( "filterablebeforefilter" );
 	$( "#user-autocomplete-list" ).html("");
-	$( "user-autocomplete-input" ).val("");
+	$( "#user-autocomplete-input" ).val("");
 }

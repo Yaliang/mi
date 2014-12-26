@@ -399,8 +399,8 @@ function ParseUserByEmailAndName(string, descendingOrderKey, displayFunction){
 	var queryByName = new Parse.Query(Parse.User);
 	var currentUser = Parse.User.current();
 
-	queryByEmail.startsWith("username",string);
-	queryByName.startsWith("name",string);
+	queryByEmail.matches("username",".*"+string+".*");
+	queryByName.matches("name",".*"+string+".*");
 
 	var query = Parse.Query.or(queryByEmail, queryByName);
 	query.notEqualTo("username", currentUser.getUsername());
