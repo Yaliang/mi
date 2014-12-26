@@ -81,12 +81,51 @@ function createUserEvent(){
 }
 
 var pullLastItem=0;
+
+function pullUserEventHolderInfo(holder, eventId){
+	var displayFunction = function(eventId, object) {
+		var name = object[0].get("name");
+		var gender = object[0].get("gender");
+		var userId = object[0].id;
+
+		$("#"+eventId+"-owner-name").html(name);
+		if (typeof(gender) == 'undefined') {
+			//$("#"+eventId+"-owner-denger").html(gender.toString());
+		} else if (gender) {
+			$("#"+eventId+"-owner-denger").css("backgroundImage","url('./content/customicondesign-line-user-black/png/male-white-20.png')");
+			$("#"+eventId+"-owner-denger").css("backgroundColor","#8970f1");
+		} else {
+			$("#"+eventId+"-owner-denger").css("backgroundImage","url('./content/customicondesign-line-user-black/png/female1-white-20.png')");
+			$("#"+eventId+"-owner-denger").css("backgroundColor","#f46f75");
+		};
+		
+		pullLastItem = pullLastItem - 1;
+		if (pullLastItem == 0) {
+			$("#event-content").removeClass("ui-hidden-accessible");
+		}
+
+		var displayFunction = function(eventId, object){
+			var photo120 = object[0].get("profilePhoto120");
+			if (typeof(photo120) == "undefined") {
+				photo120 = "./content/png/Taylor-Swift.png";
+			}
+			$("#"+eventId+" > .custom-corners").css("backgroundImage","url('"+photo120+"')");
+			pullLastItem = pullLastItem - 1;
+			if (pullLastItem == 0) {
+				$("#event-content").removeClass("ui-hidden-accessible");
+			}
+		}
+		ParseGetProfilePhoto(eventId, userId, displayFunction);
+	};
+	ParseGetProfile(holder, eventId, displayFunction);
+}
+
 function pullUserEvent(){
 	var limitNumber = 15;
 	var descendingOrderKey = "createdAt";
 	var ascendingOrderKey = "createdAt";
 	$("#event-content").addClass("ui-hidden-accessible");
-	pullLastItem=2*limitNumber;
+	pullLastItem=3*limitNumber;
 	var displayFunction = function(objects){
 		var currentUser = Parse.User.current();
 		var owner = currentUser.getUsername();
@@ -131,33 +170,8 @@ function pullUserEvent(){
 				newElement = newElement + "</div>";
 				$("#event-content").prepend(newElement);
 				// display event holder's name | not the email one
-				var displayFunction = function(eventId, object) {
-					var name = object[0].get("name");
-					var gender = object[0].get("gender");
-					var photo
-					photo = object[0].get("photo50");
-					$("#"+eventId+"-owner-name").html(name);
-					if (typeof(gender) == 'undefined') {
-						//$("#"+eventId+"-owner-denger").html(gender.toString());
-					} else if (gender) {
-						$("#"+eventId+"-owner-denger").css("backgroundImage","url('./content/customicondesign-line-user-black/png/male-white-20.png')");
-						$("#"+eventId+"-owner-denger").css("backgroundColor","#8970f1");
-					} else {
-						$("#"+eventId+"-owner-denger").css("backgroundImage","url('./content/customicondesign-line-user-black/png/female1-white-20.png')");
-						$("#"+eventId+"-owner-denger").css("backgroundColor","#f46f75");
-					};
-					if (typeof(photo) == "undefined") {
-						photo = "./content/png/Taylor-Swift.png";
-					}
-					$("#"+eventId+" > .custom-corners").css("backgroundImage","url('"+photo+"')");
-					pullLastItem = pullLastItem - 1;
-					if (pullLastItem == 0) {
-						$("#event-content").removeClass("ui-hidden-accessible");
-					}
-
-				};
-				ParseGetProfile(holder, id, displayFunction);
-				// display if owner has interest this event
+				pullUserEventHolderInfo(holder, id);
+				// check if owner has interested this event
 				var successFunction = function(eventId, interest){
 					if (interest.length == 0){
 						$("#interest-button-"+eventId).bind("click", function() {
@@ -188,32 +202,7 @@ function pullUserEvent(){
 					$("#event-content").removeClass("ui-hidden-accessible");
 				}
 				// display event holder's name | not the email one
-				var displayFunction = function(eventId, object) {
-					var name = object[0].get("name");
-					var gender = object[0].get("gender");
-					var photo
-					photo = object[0].get("photo50");
-					$("#"+eventId+"-owner-name").html(name);
-					if (typeof(gender) == 'undefined') {
-						//$("#"+eventId+"-owner-denger").html(gender.toString());
-					} else if (gender) {
-						$("#"+eventId+"-owner-denger").css("backgroundImage","url('./content/customicondesign-line-user-black/png/male-white-20.png')");
-						$("#"+eventId+"-owner-denger").css("backgroundColor","#8970f1");
-					} else {
-						$("#"+eventId+"-owner-denger").css("backgroundImage","url('./content/customicondesign-line-user-black/png/female1-white-20.png')");
-						$("#"+eventId+"-owner-denger").css("backgroundColor","#f46f75");
-					};
-					if (typeof(photo) == "undefined") {
-						photo = "./content/png/Taylor-Swift.png";
-					}
-					$("#"+eventId+" > .custom-corners").css("backgroundImage","url('"+photo+"')");
-					pullLastItem = pullLastItem - 1;
-					if (pullLastItem == 0) {
-						$("#event-content").removeClass("ui-hidden-accessible");
-					}
-
-				};
-				ParseGetProfile(holder, id, displayFunction);
+				pullUserEventHolderInfo(holder, id);
 			}
 		};
 	};
@@ -385,6 +374,8 @@ function pullMyEvent(){
 				newElement = newElement + "<div class='ui-custom-delete-btn' onclick=\"deleteMyEvent('"+id+"')\"></div>"
 				newElement = newElement + "</div>";
 				$("#my-event-content").prepend(newElement);
+
+
 				$("#my-"+id).on("swipeleft", function (){
 					var id= $(this)[0].id;
 					if (selectedElement == id) {
@@ -487,6 +478,8 @@ function pullMyEvent(){
 					$(window).unbind("scroll");
 					selectedElement = "";
 				});
+
+
 			} else {
 				var commentNumber = objects[i].get("commentNumber");
 				var interestNumber = objects[i].get("interestNumber");
@@ -575,6 +568,7 @@ function getMyProfile(){
 	refreshPreviewCanvas();
 	var currentUser = Parse.User.current();
 	var owner = currentUser.getUsername();
+	var userId = currentUser.id;
 	var displayFunction = function(objects){
 		var name = objects[0].get("name");
 		var gender = objects[0].get("gender");
@@ -584,13 +578,7 @@ function getMyProfile(){
 		var school = objects[0].get("school");
 		var interest = objects[0].get("interest");
 		var location = objects[0].get("location");
-		var photo50 = objects[0].get("photo50");
 
-		var canvas = document.getElementById('canvas-photo');
-		var context = canvas.getContext('2d');
-		var image = new Image();
-		image.src = photo50;
-		context.drawImage(image, 0, 0);
 		$("#profile-edit-name").val(objects[0].get("name"));
 		$("#profile-edit-gender").val(objects[0].get("gender") ? "on" : "off");
 		if (!objects[0].get("gender")) {
@@ -608,6 +596,19 @@ function getMyProfile(){
 		
 	} 
 	ParseGetProfile(owner, null, displayFunction);
+	displayFunction = function(eventId, object){
+		var photo120 = object[0].get('profilePhoto120');
+		if (typeof(photo120) == "undefined") {
+			photo120 = "./content/png/Taylor-Swift.png";
+		}
+		var canvas = document.getElementById('canvas-photo');
+		var context = canvas.getContext('2d');
+		var image = new Image();
+		image.src = photo120;
+		context.drawImage(image, 0, 0);
+		console.log("pull profile photo");
+	}
+	ParseGetProfilePhoto(null, userId, displayFunction);
 }
 
 function saveProfile(){
@@ -618,11 +619,11 @@ function saveProfile(){
 	var fileUploadControl = $("#profile-edit-photo")[0];
 	if (fileUploadControl.files.length > 0) {
 		var canvas = document.getElementById('canvas-photo');
-		var photo50 = canvas.toDataURL();
+		var photo120 = canvas.toDataURL();
 		var photo = fileUploadControl.files[0];
 	}
 	else {
-		var photo50 = null;
+		var photo120 = null;
 		var photo = null;
 	};
 	var name = $("#profile-edit-name").val();
@@ -636,7 +637,8 @@ function saveProfile(){
 	var displayFunction = function(){
 		ParseUpdateCurrentUser(function(){}, function(){});
 	}
-	ParseSaveProfile(id, photo, photo50, name, gender, birthdate, motto, major, school, interest, location, displayFunction);
+	ParseSaveProfile(id, null, null, name, gender, birthdate, motto, major, school, interest, location, displayFunction);
+	ParseSaveProfilePhoto(id, photo, photo120, function(object){});
 }
 
 function profilePhotoCrop(){
@@ -714,12 +716,8 @@ function showPeopleNearByList(position){
 				var gender = objects[i].get('gender');
 				var latitude = objects[i].get('latitude');
 				var longitude = objects[i].get('longitude');
-				var photo50 = objects[i].get("photo50");
 				var newElement = "<li id='near-by-"+objects[i].id+"'>";
-				if (typeof(photo50) == 'undefined') {
-					photo50 = "./content/png/Taylor-Swift.png";
-				}
-				newElement = newElement + "<div class='custom-corners-people-near-by custom-corners' style='background-image: url("+photo50+")'>"
+				newElement = newElement + "<div class='custom-corners-people-near-by custom-corners'>"
 				newElement = newElement + "<div class='ui-bar ui-bar-a'>";
 				newElement = newElement + "<div><strong>"+name+"</strong></div>";
 				newElement = newElement + "<div class='ui-icon-custom-gender' style='";
@@ -737,6 +735,14 @@ function showPeopleNearByList(position){
 				newElement = newElement + "</div>";
 				newElement = newElement + "</div></li>";
 				$("#people-near-by-list").prepend(newElement);
+				var displayFunction = function(eventId, object){
+					var photo120 = object[0].get("profilePhoto120");
+					if (typeof(photo120) == "undefined") {
+						photo120 = "./content/png/Taylor-Swift.png";
+					}
+					$("#near-by-"+objects[i].id+" > .custom-corners-people-near-by").css("backgroundImage","url('"+photo120+"')");
+				}
+				ParseGetProfilePhoto(null, userId, displayFunction);
 			} else {
 				var latitude = objects[i].get('latitude');
 				var longitude = objects[i].get('longitude');

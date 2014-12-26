@@ -234,6 +234,115 @@ function ParseDeleteEvent(eventId, displayFunction){
 	});
 }
 
+function ParseGetProfile(owner, eventId, displayFunction){
+	var query = new Parse.Query(Parse.User);
+
+	query.equalTo("username", owner);
+	query.find({
+		success: function(user) {
+			if (eventId == null) {
+				displayFunction(user);
+			} else {
+				displayFunction(eventId, user);
+			}
+		}
+	});
+}
+
+function ParseSaveProfile(id, photo, photo50, name, gender, birthdate, motto, major, school, interest, location, displayFunction) {
+	var currentUser = Parse.User.current();
+	if (photo != null) {
+		currentUser.set("photo50",photo50);
+		var parseFile = new Parse.File(photo.name, photo);
+		parseFile.save().then(function(object) {
+			currentUser.set("photo",object.url());
+			currentUser.save(null,{
+				success: function(userProfile){
+					displayFunction();
+				}
+			});
+		}, function(error) {
+			$("#upload-error").html("Error: " + error.code + " " + error.message);
+		});
+	}
+	currentUser.set("name",name);
+	currentUser.set("gender",gender);
+	currentUser.set("birthdate",birthdate);
+	currentUser.set("motto",motto);
+	currentUser.set("major",major);
+	currentUser.set("school",school);
+	currentUser.set("interest",interest);
+	currentUser.set("location",location);
+	currentUser.save(null,{
+		success: function(userProfile){
+			displayFunction();
+		}
+	});
+}
+
+function ParseSaveProfilePhoto(id, photo, photo120, displayFunction) {
+	var Photo = Parse.Object.extend("Photo");
+	var query = new Parse.Query(Photo);
+
+	console.log(photo);
+	console.log(photo120);
+	if (photo == null)
+		return;
+	query.equalTo("userId",id);
+	query.first({
+		success: function(photoObject) {
+			photoObject.set('profilePhoto120',photo120);
+			var parseFile = new Parse.File(photo.name, photo);
+			parseFile.save().then(function(object) {
+				photoObject.set("photo",object.url());
+				photoObject.save(null,{
+					success: function(photo){
+						displayFunction(photo);
+					}
+				});
+			}, function(error) {
+				
+			});
+		}
+	})
+}
+
+function ParseGetProfilePhoto(eventId, userId, displayFunction) {
+	var Photo = Parse.Object.extend("Photo");
+	var query = new Parse.Query(Photo);
+
+	query.equalTo("userId",userId);
+	query.find({
+		success: function(object){
+			displayFunction(eventId, object);
+		}
+	})
+}
+
+function ParsePullUserByGeolocation(latitude,longitude,latitudeLimit,longitudeLimit,descendingOrderKey,displayFunction){
+	var currentUser = Parse.User.current();
+	currentUser.set("latitude",latitude);
+	currentUser.set("longitude",longitude);
+	currentUser.save();
+
+	var query = new Parse.Query(Parse.User);
+	query.notEqualTo("username", currentUser.getUsername());
+	query.greaterThan("latitude",(latitude-latitudeLimit/2.0));
+	query.lessThan("latitude",(latitude+latitudeLimit/2.0));
+	query.greaterThan("longitude",(longitude-longitudeLimit/2.0));
+	query.lessThan("longitude",(longitude+longitudeLimit/2.0));
+	query.descending(descendingOrderKey);
+	query.find({
+		success: function(users){
+			displayFunction(latitude,longitude,users);
+		}
+	});
+}
+
+
+// functions for database maintaining /never used in front-end script.
+
+
 function ParseUserNameFieldUpdate(i){
 	console.log(i);
 	var Comment = Parse.Object.extend("Comment");
@@ -287,68 +396,39 @@ function ParseRefreshComment(){
 	}, 5000);
 }
 
-function ParseGetProfile(owner, id, displayFunction){
+function ParsePhotoClassCreateBaseUserObject(i){
 	var query = new Parse.Query(Parse.User);
-
-	query.equalTo("username", owner);
+	query.descending("createdAt");
 	query.find({
 		success: function(user) {
-			if (id == null) {
-				displayFunction(user);
-			} else {
-				displayFunction(id, user);
-			}
-		}
-	});
-}
+			console.log(i);
+			var userId = user[i].id;
+			var profilePhoto = user[i].get("photo");
+			var profilePhoto120 = user[i].get("photo50");
+			console.log(userId);
+			console.log(profilePhoto);
+			console.log(profilePhoto120);
+			var Photo = Parse.Object.extend("Photo");
+			var photo = new Photo;
 
-function ParseSaveProfile(id, photo, photo50, name, gender, birthdate, motto, major, school, interest, location, displayFunction) {
-	var currentUser = Parse.User.current();
-	if (photo != null) {
-		currentUser.set("photo50",photo50);
-		var parseFile = new Parse.File(photo.name, photo);
-		parseFile.save().then(function(object) {
-			currentUser.set("photo",object.url());
-			currentUser.save(null,{
-				success: function(userProfile){
-					displayFunction();
+			photo.set('userId',userId);
+			photo.set('profilePhoto',profilePhoto);
+			photo.set('profilePhoto120',profilePhoto120);
+			photo.save(null,{
+				success: function() {
+					console.log('success');
 				}
-			});
-		}, function(error) {
-			$("#upload-error").html("Error: " + error.code + " " + error.message);
-		});
-	}
-	currentUser.set("name",name);
-	currentUser.set("gender",gender);
-	currentUser.set("birthdate",birthdate);
-	currentUser.set("motto",motto);
-	currentUser.set("major",major);
-	currentUser.set("school",school);
-	currentUser.set("interest",interest);
-	currentUser.set("location",location);
-	currentUser.save(null,{
-		success: function(userProfile){
-			displayFunction();
+			})
 		}
-	});
+	})
 }
 
-function ParsePullUserByGeolocation(latitude,longitude,latitudeLimit,longitudeLimit,descendingOrderKey,displayFunction){
-	var currentUser = Parse.User.current();
-	currentUser.set("latitude",latitude);
-	currentUser.set("longitude",longitude);
-	currentUser.save();
-
-	var query = new Parse.Query(Parse.User);
-	query.notEqualTo("username", currentUser.getUsername());
-	query.greaterThan("latitude",(latitude-latitudeLimit/2.0));
-	query.lessThan("latitude",(latitude+latitudeLimit/2.0));
-	query.greaterThan("longitude",(longitude-longitudeLimit/2.0));
-	query.lessThan("longitude",(longitude+longitudeLimit/2.0));
-	query.descending(descendingOrderKey);
-	query.find({
-		success: function(users){
-			displayFunction(latitude,longitude,users);
-		}
-	});
+function ParseRefreshUserProfilePhoto() {
+	ParsePhotoClassCreateBaseUserObject(refreshNumber);
+	refreshNumber = refreshNumber + 1;
+	if (refreshNumber == 16)
+		return
+	setTimeout(function(){
+		ParseRefreshUserProfilePhoto();
+	}, 5000);
 }
