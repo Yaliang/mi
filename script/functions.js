@@ -716,6 +716,7 @@ function showPeopleNearByList(position){
 				var gender = objects[i].get('gender');
 				var latitude = objects[i].get('latitude');
 				var longitude = objects[i].get('longitude');
+				var userId = objects[i].id;
 				var newElement = "<li id='near-by-"+objects[i].id+"'>";
 				newElement = newElement + "<div class='custom-corners-people-near-by custom-corners'>"
 				newElement = newElement + "<div class='ui-bar ui-bar-a'>";
