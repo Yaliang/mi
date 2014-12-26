@@ -434,6 +434,40 @@ textarea {
 	background-size: 70px 70px;
 }
 
+.send-friend-request {
+	clear: both;
+	font-size: .75em;
+	font-weight: 400;
+	display: block;
+	text-overflow: ellipsis;
+	overflow: hidden;
+	white-space: nowrap;
+	margin-top: 5px;
+	border: 1px solid #9C94FF;
+	padding: 0.5em;
+	float: left;
+	-webkit-border-radius: .3125em;
+	border-radius: .3125em;
+	cursor: pointer;
+}
+
+.reject-friend-request {
+	font-size: .75em;
+	font-weight: 400;
+	display: block;
+	text-overflow: ellipsis;
+	overflow: hidden;
+	white-space: nowrap;
+	margin-top: 5px;
+	margin-left: 10px;
+	border: 1px solid #9C94FF;
+	padding: 0.5em;
+	float: left;
+	-webkit-border-radius: .3125em;
+	border-radius: .3125em;
+	cursor: pointer;
+}
+
 
 
 //custom grid

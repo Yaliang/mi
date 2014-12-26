@@ -205,10 +205,11 @@
 		<div data-role="header">
 			<h1>Friends</h1>
 			<a href="#page-people-near-by" class="ui-btn-left ui-btn ui-btn-inline ui-corner-all" onclick="listFriendNearBy()">Near By</a>
-			<a href="#page-people-search" class="ui-btn-right ui-btn ui-btn-inline ui-corner-all" onclick="bindSearchAutocomplete()">Add</a>
+			<a href="#page-people-search" class="ui-btn-right ui-btn ui-btn-inline ui-corner-all" onclick="bindSearchAutocomplete()">Search</a>
 		</div><!-- /header -->
 
 		<div role="main" class="ui-content">
+			<a href="#page-my-friend-requests" class="ui-btn" onclick="getMyFriendRequests();">New Friend Requests</a>
 		</div><!-- /content -->
 
 		<div data-role="footer" class="nav-glyphish-example" data-position="fixed" data-tap-toggle="false">
@@ -251,6 +252,21 @@
 				<input id="user-autocomplete-input" data-type="search" placeholder="Email/Name">
 			</form>
 			<ul id="user-autocomplete-list" data-role="listview" data-inset="true" data-filter="true" data-input="#user-autocomplete-input"></ul>
+		</div><!-- /content -->
+
+		<div data-role="footer" data-position="fixed" data-tap-toggle="false">
+		</div><!-- /footer -->
+	</div><!-- /page -->
+
+	<!-- Page for displaying all new friend requests -->
+	<div data-role="page" id="page-my-friend-requests" data-title="觅校缘">
+
+		<div data-role="header">
+			<h1>People</h1>
+			<a data-rel="back" href="#page-friend" class="ui-btn-left ui-btn ui-btn-inline ui-corner-all" onclick="">Back</a>
+		</div><!-- /header -->
+
+		<div role="main" class="ui-content">
 		</div><!-- /content -->
 
 		<div data-role="footer" data-position="fixed" data-tap-toggle="false">
