@@ -780,6 +780,8 @@ function showPeopleNearByList(position){
 					$("#near-by-"+object[0].get('userId')+" > .custom-corners-people-near-by").css("backgroundImage","url('"+photo120+"')");
 				}
 				ParseGetProfilePhoto(null, userId, displayFunction);
+				prefixForGetFriendOptionsButton="near-by-";
+				getFriendOptionsButton(userId);
 			} else {
 				var latitude = objects[i].get('latitude');
 				var longitude = objects[i].get('longitude');
@@ -839,6 +841,59 @@ function hiddenEventMoreOption(){
 	$('.event-page-right-top-options').fadeOut('fast');
 }
 
+var prefixForGetFriendOptionsButton="";
+function getFriendOptionsButton(userId){
+	var displayFunction = function(ownerId, friendId, object){
+		if (typeof(object)=="undefined") {
+			var displayFunction = function(ownerId, friendId, object){
+				if (typeof(object)=="undefined") {
+					var sendFriendRequestButton = "<div class='send-friend-request'>Send Friend Request</div>";
+					$("#"+prefixForGetFriendOptionsButton+ownerId+" > .custom-corners-people-near-by > .ui-bar").append(sendFriendRequestButton);
+					$("#"+prefixForGetFriendOptionsButton+ownerId+" > .custom-corners-people-near-by > .ui-bar > .send-friend-request").on("click",function(){
+						sendFriendRequest(ownerId);
+					})
+				} else {
+					var objectId = object.id;
+					var acceptFriendRequestButton = "<div class='send-friend-request accept-friend-request'>Accept Request</div>";
+					var rejectFriendRequestButton = "<div class='reject-friend-request'>Reject Request</div>";
+					$("#"+prefixForGetFriendOptionsButton+ownerId+" > .custom-corners-people-near-by > .ui-bar").append(acceptFriendRequestButton+rejectFriendRequestButton);
+					$("#"+prefixForGetFriendOptionsButton+ownerId+" > .custom-corners-people-near-by > .ui-bar > .accept-friend-request").on("click",function(){
+						var successFunction = function(object){
+							var objectId = object.id;
+							var ownerId = object.get('owner');
+							$("#"+prefixForGetFriendOptionsButton+ownerId+" > .custom-corners-people-near-by > .ui-bar > .accept-friend-request").remove();
+							$("#"+prefixForGetFriendOptionsButton+ownerId+" > .custom-corners-people-near-by > .ui-bar > .reject-friend-request").remove();
+							var startChatButton = "<div class='send-friend-request chat-friend'>Start Chat</div>";
+							$("#"+prefixForGetFriendOptionsButton+ownerId+" > .custom-corners-people-near-by > .ui-bar").append(startChatButton);
+						}
+						ParseAcceptFriendRequest(objectId, null, ownerId, successFunction);
+					});
+
+					$("#"+prefixForGetFriendOptionsButton+ownerId+" > .custom-corners-people-near-by > .ui-bar > .reject-friend-request").on("click",function(){
+						var successFunction = function(friendId){
+							$("#"+prefixForGetFriendOptionsButton+friendId).slideUp("fast", function(){
+								$("#"+prefixForGetFriendOptionsButton+friendId).remove();
+							});
+						}
+						ParseRejectFriendRequest(objectId, null, ownerId, successFunction);
+					});
+				}
+			}
+			ParseCheckFriend(friendId, ownerId, displayFunction);
+		} else {
+			var valid = object.get('valid');
+			if (valid) {
+				var startChatButton = "<div class='send-friend-request chat-friend'>Start Chat</div>";
+				$("#"+prefixForGetFriendOptionsButton+friendId+" > .custom-corners-people-near-by > .ui-bar").append(startChatButton);
+			} else {
+				var sendFriendRequestButton = "<div class='send-friend-request'>Request Sent</div>";
+				$("#"+prefixForGetFriendOptionsButton+friendId+" > .custom-corners-people-near-by > .ui-bar").append(sendFriendRequestButton);
+			}
+		}
+	}
+	ParseCheckFriend(Parse.User.current().id, userId, displayFunction);
+}
+
 function bindSearchAutocomplete(){
 	$( "#user-autocomplete-list" ).on( "filterablebeforefilter", function ( e, data ) {
 		var $ul = $( this );
@@ -860,55 +915,8 @@ function bindSearchAutocomplete(){
 						$("#people-search-"+object[0].get('userId')+" > .custom-corners-people-near-by").css("backgroundImage","url('"+photo120+"')");
 					}
 					ParseGetProfilePhoto(null, userId, displayFunction);
-					var displayFunction = function(ownerId, friendId, object){
-						if (typeof(object)=="undefined") {
-							var displayFunction = function(ownerId, friendId, object){
-								if (typeof(object)=="undefined") {
-									var sendFriendRequestButton = "<div class='send-friend-request'>Send Friend Request</div>";
-									$("#people-search-"+ownerId+" > .custom-corners-people-near-by > .ui-bar").append(sendFriendRequestButton);
-									$("#people-search-"+ownerId+" > .custom-corners-people-near-by > .ui-bar > .send-friend-request").on("click",function(){
-										sendFriendRequest(ownerId);
-									})
-								} else {
-									var objectId = object.id;
-									var acceptFriendRequestButton = "<div class='send-friend-request accept-friend-request'>Accept Request</div>";
-									var rejectFriendRequestButton = "<div class='reject-friend-request'>Reject Request</div>";
-									$("#people-search-"+ownerId+" > .custom-corners-people-near-by > .ui-bar").append(acceptFriendRequestButton+rejectFriendRequestButton);
-									$("#people-search-"+ownerId+" > .custom-corners-people-near-by > .ui-bar > .accept-friend-request").on("click",function(){
-										var successFunction = function(object){
-											var objectId = object.id;
-											var ownerId = object.get('owner');
-											$("#people-search-"+ownerId+" > .custom-corners-people-near-by > .ui-bar > .accept-friend-request").remove();
-											$("#people-search-"+ownerId+" > .custom-corners-people-near-by > .ui-bar > .reject-friend-request").remove();
-											var startChatButton = "<div class='send-friend-request chat-friend'>Start Chat</div>";
-											$("#people-search-"+ownerId+" > .custom-corners-people-near-by > .ui-bar").append(startChatButton);
-										}
-										ParseAcceptFriendRequest(objectId, null, ownerId, successFunction);
-									});
-
-									$("#people-search-"+ownerId+" > .custom-corners-people-near-by > .ui-bar > .reject-friend-request").on("click",function(){
-										var successFunction = function(friendId){
-											$("#people-search-"+friendId).slideUp("fast", function(){
-												$("#people-search-"+friendId).remove();
-											});
-										}
-										ParseRejectFriendRequest(objectId, null, ownerId, successFunction);
-									});
-								}
-							}
-							ParseCheckFriend(friendId, ownerId, displayFunction);
-						} else {
-							var valid = object.get('valid');
-							if (valid) {
-								var startChatButton = "<div class='send-friend-request chat-friend'>Start Chat</div>";
-								$("#people-search-"+friendId+" > .custom-corners-people-near-by > .ui-bar").append(startChatButton);
-							} else {
-								var sendFriendRequestButton = "<div class='send-friend-request'>Request Sent</div>";
-								$("#people-search-"+friendId+" > .custom-corners-people-near-by > .ui-bar").append(sendFriendRequestButton);
-							}
-						}
-					}
-					ParseCheckFriend(Parse.User.current().id, userId, displayFunction);
+					prefixForGetFriendOptionsButton="people-search-";
+					getFriendOptionsButton(userId);
 				}
 			}
 			ParseUserByEmailAndName(value, "updatedAt", displayFunction);

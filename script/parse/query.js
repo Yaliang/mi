@@ -398,6 +398,7 @@ function ParseAcceptFriendRequest(objectId, ownerId, friendId, successFunction){
 					friend.set('owner',object.get('friend'));
 					friend.set('friend',object.get('owner'));
 					friend.set('valid',true);
+					friend.set('read',true);
 					friend.save(null, {
 						success: function(object){
 							successFunction(object);
