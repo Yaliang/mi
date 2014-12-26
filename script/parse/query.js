@@ -370,6 +370,7 @@ function ParseSendFriendRequest(ownerId, friendId, successFunction){
 	friend.set('owner', ownerId);
 	friend.set('friend', friendId);
 	friend.set('valid',false);
+	friend.set('read',false);
 	friend.save(null, {
 		success: function(friend){
 			successFunction(friend);
@@ -445,6 +446,19 @@ function ParsePullNewFriendRequest(userId, descendingOrderKey, displayFunction) 
 	})
 }
 
+function ParsePullUnreadFriendRequest(userId, displayFunction) {
+	var Friend = Parse.Object.extend("Friend");
+	var query = new Parse.Query(Friend);
+
+	query.equalTo("friend",userId);
+	query.equalTo("read",false);
+	query.find({
+		success: function(objects){
+			displayFunction(objects);
+		}
+	})
+}
+
 
 function ParseCheckFriend(ownerId, friendId, displayFunction) {
 	var Friend = Parse.Object.extend("Friend");
@@ -455,7 +469,7 @@ function ParseCheckFriend(ownerId, friendId, displayFunction) {
 
 	query.first({
 		success: function(object){
-			displayFunction(friendId, object);
+			displayFunction(ownerId, friendId, object);
 		}
 	})
 
@@ -479,6 +493,17 @@ function ParseUserByEmailAndName(string, descendingOrderKey, displayFunction){
 	})
 }
 
+function ParseSetRequestRead(objectId){
+	var Friend = Parse.Object.extend("Friend");
+	var query = new Parse.Query(Friend);
+
+	query.get(objectId,{
+		success:function(object){
+			object.set("read",true);
+			object.save();
+		}
+	})
+}
 
 // functions for database maintaining /never used in front-end script.
 

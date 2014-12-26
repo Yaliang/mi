@@ -7,6 +7,7 @@ $(document).ready(function (){
 		var successFunction = function() {
 			window.location.hash = "page-event";
 			pullUserEvent();
+			pullNotification();
 		};
 		var errorFunction = function() {
 			window.location.hash = "page-login";
@@ -17,6 +18,28 @@ $(document).ready(function (){
 	}
 });
 
+function pullNotification(){
+	var currentUser = Parse.User.current();
+	// check new friend request
+	var displayFunction = function(objects){
+		if ((typeof(objects)!="undefined")&&(objects.length > 0)) {
+			jQuery("[id=friend]") .each(function(){
+				$(this).addClass("friend-notification-custom");
+			});
+			$('#new-friend-requests-btn').html("<span>New Friend Requests</span><span id='new-friend-requests-number' class='ui-li-count'>"+objects.length.toString()+"</span>");
+		} else {
+			jQuery("[id=friend]") .each(function(){
+				$(this).removeClass("friend-notification-custom");
+			});
+			$('#new-friend-requests-btn').html("<span>New Friend Requests</span>");
+		}
+	}
+	ParsePullUnreadFriendRequest(currentUser.id, displayFunction);
+	setTimeout(function(){
+		pullNotification();
+	}, 2000)
+}
+
 function signup(){
 	var name = $("#signup-name").val();
 	var email = $("#signup-email").val();
@@ -25,6 +48,7 @@ function signup(){
 	var destID = "page-event";
 	var customFunction = function(object){
 		pullUserEvent();
+		pullNotification();
 		ParseCreateProfilePhotoObject(object.id);
 	};
 	ParseSignup(email, password, email, name, errorObject, destID, customFunction);
@@ -38,6 +62,7 @@ function login(){
 	var destID = "page-event";
 	var customFunction = function(){
 		pullUserEvent();
+		pullNotification();
 	};
 	ParseLogin(email, password, errorObject, destID, customFunction);
 	$("#login-password").val("");
@@ -679,7 +704,7 @@ function profilePhotoCrop(){
 var geoWatchId;
 function listFriendNearBy(){
 	if (navigator.geolocation){
-		var geoWatchId = navigator.geolocation.watchPosition(showPeopleNearByList,showPeopleNearByListError);
+		geoWatchId = navigator.geolocation.watchPosition(showPeopleNearByList,showPeopleNearByListError);
 	} else {
 		$("#page-people-near-by > .ui-content").html("<p style='padding: 1em'>Geolocation is not supported by this browser.</p>");
 	}
@@ -709,6 +734,7 @@ function buildUserListElement(object, liIdPrefix, lat, lng) {
 	var latitude = object.get('latitude');
 	var longitude = object.get('longitude');
 	var userId = object.id;
+	var updatedAt = object.updatedAt;
 	var newElement = "<li id='"+liIdPrefix+userId+"'>";
 	newElement = newElement + "<div class='custom-corners-people-near-by custom-corners'>"
 	newElement = newElement + "<div class='ui-bar ui-bar-a'>";
@@ -725,7 +751,7 @@ function buildUserListElement(object, liIdPrefix, lat, lng) {
 	};
 	newElement = newElement + "'></div>";
 	if ((lat != null) && (lng != null)) {
-		newElement = newElement + "<div class='people-near-by-list-distance'>" + getDistance(latitude, longitude, lat, lng) + "km, "+convertTime(objects[i].updatedAt)+"</div>";
+		newElement = newElement + "<div class='people-near-by-list-distance'>" + getDistance(latitude, longitude, lat, lng) + "km, "+convertTime(updatedAt)+"</div>";
 	}
 	newElement = newElement + "</div>";
 	newElement = newElement + "</div></li>";
@@ -834,13 +860,43 @@ function bindSearchAutocomplete(){
 						$("#people-search-"+object[0].get('userId')+" > .custom-corners-people-near-by").css("backgroundImage","url('"+photo120+"')");
 					}
 					ParseGetProfilePhoto(null, userId, displayFunction);
-					var displayFunction = function(friendId, object){
+					var displayFunction = function(ownerId, friendId, object){
 						if (typeof(object)=="undefined") {
-							var sendFriendRequestButton = "<div class='send-friend-request'>Send Friend Request</div>";
-							$("#people-search-"+friendId+" > .custom-corners-people-near-by > .ui-bar").append(sendFriendRequestButton);
-							$("#people-search-"+friendId+" > .custom-corners-people-near-by > .ui-bar > .send-friend-request").on("click",function(){
-								sendFriendRequest(friendId);
-							})
+							var displayFunction = function(ownerId, friendId, object){
+								if (typeof(object)=="undefined") {
+									var sendFriendRequestButton = "<div class='send-friend-request'>Send Friend Request</div>";
+									$("#people-search-"+ownerId+" > .custom-corners-people-near-by > .ui-bar").append(sendFriendRequestButton);
+									$("#people-search-"+ownerId+" > .custom-corners-people-near-by > .ui-bar > .send-friend-request").on("click",function(){
+										sendFriendRequest(ownerId);
+									})
+								} else {
+									var objectId = object.id;
+									var acceptFriendRequestButton = "<div class='send-friend-request accept-friend-request'>Accept Request</div>";
+									var rejectFriendRequestButton = "<div class='reject-friend-request'>Reject Request</div>";
+									$("#people-search-"+ownerId+" > .custom-corners-people-near-by > .ui-bar").append(acceptFriendRequestButton+rejectFriendRequestButton);
+									$("#people-search-"+ownerId+" > .custom-corners-people-near-by > .ui-bar > .accept-friend-request").on("click",function(){
+										var successFunction = function(object){
+											var objectId = object.id;
+											var ownerId = object.get('owner');
+											$("#people-search-"+ownerId+" > .custom-corners-people-near-by > .ui-bar > .accept-friend-request").remove();
+											$("#people-search-"+ownerId+" > .custom-corners-people-near-by > .ui-bar > .reject-friend-request").remove();
+											var startChatButton = "<div class='send-friend-request chat-friend'>Start Chat</div>";
+											$("#people-search-"+ownerId+" > .custom-corners-people-near-by > .ui-bar").append(startChatButton);
+										}
+										ParseAcceptFriendRequest(objectId, null, ownerId, successFunction);
+									});
+
+									$("#people-search-"+ownerId+" > .custom-corners-people-near-by > .ui-bar > .reject-friend-request").on("click",function(){
+										var successFunction = function(friendId){
+											$("#people-search-"+friendId).slideUp("fast", function(){
+												$("#people-search-"+friendId).remove();
+											});
+										}
+										ParseRejectFriendRequest(objectId, null, ownerId, successFunction);
+									});
+								}
+							}
+							ParseCheckFriend(friendId, ownerId, displayFunction);
 						} else {
 							var valid = object.get('valid');
 							if (valid) {
@@ -882,6 +938,7 @@ function getMyFriendRequests() {
 	var displayFunction = function(objects){
 		for (var i=0; i<objects.length; i++) {
 			var friendId = objects[i].get("owner");
+			var objectId = objects[i].id;
 			var displayFunction = function(friendObject, userObject) {
 				var newElement = buildUserListElement(userObject, "new-friend-request-", null, null);
 				var objectId = friendObject.id;
@@ -919,8 +976,8 @@ function getMyFriendRequests() {
 					ParseRejectFriendRequest(objectId, null, friendId, successFunction);
 				});
 			}
-			console.log(friendId);
 			ParseGetProfileById(friendId, displayFunction, objects[i]);
+			ParseSetRequestRead(objectId);
 		}
 	}
 	ParsePullNewFriendRequest(Parse.User.current().id, descendingOrderKey, displayFunction);
