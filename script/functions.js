@@ -679,7 +679,7 @@ function profilePhotoCrop(){
 var geoWatchId;
 function listFriendNearBy(){
 	if (navigator.geolocation){
-		var geoWatchId = navigator.geolocation.watchPosition(showPeopleNearByList,showPeopleNearByListError);
+		geoWatchId = navigator.geolocation.watchPosition(showPeopleNearByList,showPeopleNearByListError);
 	} else {
 		$("#page-people-near-by > .ui-content").html("<p style='padding: 1em'>Geolocation is not supported by this browser.</p>");
 	}
