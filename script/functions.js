@@ -894,6 +894,16 @@ function getFriendOptionsButton(userId){
 	ParseCheckFriend(Parse.User.current().id, userId, displayFunction);
 }
 
+function sendFriendRequest(friendId) {
+	var currentUser = Parse.User.current();
+	$("#"+prefixForGetFriendOptionsButton+friendId+" > .custom-corners-people-near-by > .ui-bar > .send-friend-request").unbind("click");
+	var successFunction = function(object){
+		var friendId = object.get('friend');
+		$("#"+prefixForGetFriendOptionsButton+friendId+" > .custom-corners-people-near-by > .ui-bar > .send-friend-request").html("Request Sent");
+	}
+	ParseSendFriendRequest(currentUser.id, friendId, successFunction);
+}
+
 function bindSearchAutocomplete(){
 	$( "#user-autocomplete-list" ).on( "filterablebeforefilter", function ( e, data ) {
 		var $ul = $( this );
@@ -928,16 +938,6 @@ function unbindSearchAutocomplete(){
 	$( "#user-autocomplete-list" ).unbind( "filterablebeforefilter" );
 	$( "#user-autocomplete-list" ).html("");
 	$( "#user-autocomplete-input" ).val("");
-}
-
-function sendFriendRequest(friendId) {
-	var currentUser = Parse.User.current();
-	$("#people-search-"+friendId+" > .custom-corners-people-near-by > .ui-bar > .send-friend-request").unbind("click");
-	var successFunction = function(object){
-		var friendId = object.get('friend');
-		$("#people-search-"+friendId+" > .custom-corners-people-near-by > .ui-bar > .send-friend-request").html("Request Sent");
-	}
-	ParseSendFriendRequest(currentUser.id, friendId, successFunction);
 }
 
 function getMyFriendRequests() {
