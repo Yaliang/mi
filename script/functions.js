@@ -741,7 +741,7 @@ function showPeopleNearByList(position){
 					if (typeof(photo120) == "undefined") {
 						photo120 = "./content/png/Taylor-Swift.png";
 					}
-					$("#near-by-"+object[i].get('userId')+" > .custom-corners-people-near-by").css("backgroundImage","url('"+photo120+"')");
+					$("#near-by-"+object[0].get('userId')+" > .custom-corners-people-near-by").css("backgroundImage","url('"+photo120+"')");
 				}
 				ParseGetProfilePhoto(null, userId, displayFunction);
 			} else {
