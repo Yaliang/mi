@@ -14,6 +14,12 @@
 	width: 1.875em;
 }
 
+.ui-li-count {
+	background-color: #f46f75;
+	border-color: #f46f75;
+	color: white;
+}
+
 .ui-content {
 	padding: 0!important;
 }
@@ -179,6 +185,10 @@ a {
 #friend {
 	background: url("./content/material-design/png/user157-blank-pink-192.png") 50% 30% no-repeat;
 	background-size: 32px 32px;
+}
+
+.friend-notification-custom {
+	background-image: url("./content/material-design/png/user157-blank-with-point-pink-192.png")!important;
 }
 
 .friend-active-custom {

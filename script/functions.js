@@ -7,6 +7,7 @@ $(document).ready(function (){
 		var successFunction = function() {
 			window.location.hash = "page-event";
 			pullUserEvent();
+			pullNotification();
 		};
 		var errorFunction = function() {
 			window.location.hash = "page-login";
@@ -17,6 +18,27 @@ $(document).ready(function (){
 	}
 });
 
+function pullNotification(){
+	var currentUser = Parse.User.current();
+	// check new friend request
+	var displayFunction = function(objects){
+		if ((typeof(objects)!="undefined")&&(objects.length > 0)) {
+			jQuery("[id=friend]") .each(function(){
+				$(this).addClass("friend-notification-custom");
+			})
+			$('#new-friend-requests-number').html(objects.length.toString());
+		} else {
+			jQuery("[id=friend]") .each(function(){
+				$(this).removeClass("friend-notification-custom");
+			})
+		}
+	}
+	ParsePullUnreadFriendRequest(currentUser.id, displayFunction);
+	setTimeout(function(){
+		pullNotification();
+	}, 2000)
+}
+
 function signup(){
 	var name = $("#signup-name").val();
 	var email = $("#signup-email").val();
@@ -25,6 +47,7 @@ function signup(){
 	var destID = "page-event";
 	var customFunction = function(object){
 		pullUserEvent();
+		pullNotification();
 		ParseCreateProfilePhotoObject(object.id);
 	};
 	ParseSignup(email, password, email, name, errorObject, destID, customFunction);
@@ -38,6 +61,7 @@ function login(){
 	var destID = "page-event";
 	var customFunction = function(){
 		pullUserEvent();
+		pullNotification();
 	};
 	ParseLogin(email, password, errorObject, destID, customFunction);
 	$("#login-password").val("");
@@ -709,7 +733,7 @@ function buildUserListElement(object, liIdPrefix, lat, lng) {
 	var latitude = object.get('latitude');
 	var longitude = object.get('longitude');
 	var userId = object.id;
-	var updatedAt = objects[i].updatedAt;
+	var updatedAt = object.updatedAt;
 	var newElement = "<li id='"+liIdPrefix+userId+"'>";
 	newElement = newElement + "<div class='custom-corners-people-near-by custom-corners'>"
 	newElement = newElement + "<div class='ui-bar ui-bar-a'>";
@@ -883,6 +907,7 @@ function getMyFriendRequests() {
 	var displayFunction = function(objects){
 		for (var i=0; i<objects.length; i++) {
 			var friendId = objects[i].get("owner");
+			var objectId = objects[i].id;
 			var displayFunction = function(friendObject, userObject) {
 				var newElement = buildUserListElement(userObject, "new-friend-request-", null, null);
 				var objectId = friendObject.id;
@@ -920,8 +945,8 @@ function getMyFriendRequests() {
 					ParseRejectFriendRequest(objectId, null, friendId, successFunction);
 				});
 			}
-			console.log(friendId);
 			ParseGetProfileById(friendId, displayFunction, objects[i]);
+			ParseSetRequestRead(objectId);
 		}
 	}
 	ParsePullNewFriendRequest(Parse.User.current().id, descendingOrderKey, displayFunction);
