@@ -1,4 +1,5 @@
 $(document).ready(function (){
+	
 	var currentUser = Parse.User.current();
 	$('#comment-content').on("blur",function(){
 		$('#comment-content').textinput('disable');
@@ -34,6 +35,7 @@ $(document).ready(function (){
 function checkBridgeitEnable(){
 	var currentBridgeitId = Parse.User.current().get("bridgeitId");
 	if (typeof(currentBridgeitId) == "undefined" && bridgeit.isIPhone() && !bridgeit.isRegistered()) {
+		bridgeit.usePushService( window.pushHub, window.apiKey);
 		bridgeit.register('_reg', 'handlePushRegistration');
 	}
 }
