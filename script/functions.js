@@ -559,12 +559,12 @@ function removeInterestEvent(eventId){
 	ParseRemoveInterest(null, owner, eventId, displayFunction);
 }
 
-function sendToolbarActiveKeyboard(){
+function sendToolbarActiveKeyboard(id){
 	$("html body").animate({ scrollTop: $(document).height().toString()+"px" }, {
 		duration: 150,
         complete : function(){
-            $('#comment-content').textinput('enable');
-			$('#comment-content').focus();
+            $('#'+id).textinput('enable');
+			$('#'+id).focus();
         }
     });
 }
@@ -865,7 +865,7 @@ function getFriendOptionsButton(userId){
 						var successFunction = function(object){
 							var objectId = object.id;
 							var friendId = object.get('friend');
-							var startChatButton = "<div class='send-friend-request chat-friend'>Start Chat</div>";
+							var startChatButton = "<div class='send-friend-request chat-friend' onclick=\"startPrivateChat('"+friendId+"');\">Start Chat</div>";
 							$("#"+prefixForGetFriendOptionsButton+friendId+" > .custom-corners-people-near-by > .ui-bar").append(startChatButton);
 						}
 						ParseAcceptFriendRequest(objectId, null, null, successFunction);
@@ -886,7 +886,7 @@ function getFriendOptionsButton(userId){
 		} else {
 			var valid = object.get('valid');
 			if (valid) {
-				var startChatButton = "<div class='send-friend-request chat-friend'>Start Chat</div>";
+				var startChatButton = "<div class='send-friend-request chat-friend' onclick=\"startPrivateChat('"+friendId+"');\">Start Chat</div>";
 				$("#"+prefixForGetFriendOptionsButton+friendId+" > .custom-corners-people-near-by > .ui-bar").append(startChatButton);
 			} else {
 				var sendFriendRequestButton = "<div class='send-friend-request'>Request Sent</div>";
@@ -1026,4 +1026,68 @@ function pullMyFriendList() {
 		}
 	}
 	ParsePullMyFriend(Parse.User.current().id, descendingOrderKey, displayFunction);
+}
+
+function buildElementInChatMessagesPage(object){
+	var messageId = object.id;
+	var senderId = object.get("senderId");
+	var currentId = Parse.User.current().id;
+	var text = object.get('text');
+	var elementClass;
+
+	var newElement = "";
+	if (currentId == senderId) {
+		elementClass = "message-right";
+	} else {
+		elementClass = "message-left";
+	}
+	newElement += "<div id='message-"+messageId+"' class='"+elementClass+"'>";
+	newElement += "<p>"+senderId+"</p>";
+	newElement += "<p>"+text+"</p>";
+	newElement += "</div>";
+
+	return newElement;
+}
+
+function sendMessage(){
+	var groupId = $("#group-id-label").html();
+	var senderId = Parse.User.current().id;
+	var text = $("#message-content").val();
+	var displayFunction= function(object){
+		var senderId = object.get("senderId");
+		var groupId = object.get("groupId");
+		var newElement = buildElementInChatMessagesPage(object);
+		$("#page-chat-messages > .ui-content").append(newElement);
+		ParseSetGroupMemberChatObjectReadFalse(senderId, groupId);
+	}
+
+	ParseAddChatMessage(senderId, groupId, text, displayFunction);
+}
+
+function startPrivateChat(friendId){
+	$("#page-chat-messages > .ui-content").html("");
+	$("#message-content").val("");
+	var memberId = new Array;
+	memberId.push(friendId);
+	memberId.push(Parse.User.current().id);
+	var successFunction = function(object){
+		var groupId = object.id;
+		var currentId = Parse.User.current().id;
+		$("#group-id-label").html(groupId);
+		var successFunction = function(object){
+			var groupId = object.get("groupId");
+			var limitNum = 15;
+			var descendingOrderKey = "createdAt";
+			var displayFunction = function(objects){
+				for (var i=0; i<objects.length; i++) {
+					var newElement = buildElementInChatMessagesPage(objects[i]);
+					$("#page-chat-messages > .ui-content").append(newElement);
+				}
+				location.hash="page-chat-messages";
+			}
+			ParsePullChatMessage(groupId, limitNum, descendingOrderKey, null, displayFunction)
+		}
+		ParseSetChatObjectAsRead(currentId, groupId, successFunction);
+	}
+	ParseGetGroupId(memberId,successFunction);
 }

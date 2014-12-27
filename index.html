@@ -188,7 +188,7 @@
 		<div data-role="footer" data-position="fixed" data-tap-toggle="false" >
 			<div class="rwd-example">
 				<label id="event-id-label" class="ui-hidden-accessible"></label>
-				<div class="custom-block-a" onclick="sendToolbarActiveKeyboard()">
+				<div class="custom-block-a" onclick="sendToolbarActiveKeyboard('comment-content')">
 					<input disabled="disabled" type="text" name="commentcontent" id="comment-content" value="">
 				</div>
 				<div class="custom-block-b">
@@ -283,7 +283,6 @@
 		</div><!-- /header -->
 
 		<div role="main" class="ui-content">
-			<p>Page content goes here.</p>
 		</div><!-- /content -->
 
 		<div data-role="footer" class="nav-glyphish-example" data-position="fixed" data-tap-toggle="false">
@@ -296,6 +295,31 @@
 			</ul>
 			</div>
 		</div><!-- /footer -->
+	</div><!-- /page -->
+
+	<!-- Page for displaying the messages of a chat -->
+	<div data-role="page" id="page-chat-messages" data-title="觅校缘" data-add-back-btn="true">
+
+		<div data-role="header">
+			<h1 id='chat-messages-title'></h1>
+			<a data-rel="back" href="#page-event" class="ui-btn-left ui-btn ui-btn-inline ui-corner-all">Back</a>
+		</div><!-- /header -->
+
+		<div role="main" class="ui-content">
+		</div><!-- /content -->
+
+		<div data-role="footer" data-position="fixed" data-tap-toggle="false" >
+			<div class="rwd-example">
+				<label id="group-id-label" class="ui-hidden-accessible"></label>
+				<div class="custom-block-a" onclick="sendToolbarActiveKeyboard('message-content')">
+					<input disabled="disabled" type="text" name="messagecontent" id="message-content" value="">
+				</div>
+				<div class="custom-block-b">
+					<button id="send-message-button" class="ui-btn ui-corner-all custom-send-button" onclick="sendMessage();">Send</button>
+				</div>
+			</div>
+		</div><!-- /footer -->
+
 	</div><!-- /page -->
 
 	<!-- Page for displaying setting options -->

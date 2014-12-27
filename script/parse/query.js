@@ -524,6 +524,135 @@ function ParseSetRequestRead(objectId){
 	})
 }
 
+function ParseGetGroupId(memberId, successFunction){
+	var Group = Parse.Object.extend("Group");
+	var query = new Parse.Query(Group);
+
+	query.containsAll("memberId",memberId);
+	query.equalTo("memberNum",memberId.length);
+	query.first({
+		success: function(object){
+			if (typeof(object) == "undefined") {
+				var group = new Group;
+				group.set("memberId",memberId);
+				group.set("memberNum",memberId.length);
+				group.save(null,{
+					success: function(object){
+						successFunction(object);
+					}
+				})
+			} else {
+				successFunction(object);
+			}
+		}
+	})
+}
+
+function ParseSetChatObjectAsRead(ownerId, groupId, successFunction){
+	var Chat = Parse.Object.extend("Chat");
+	var query = new Parse.Query(Chat);
+
+	query.equalTo('ownerId',ownerId);
+	query.equalTo('groupId',groupId);
+	query.first({
+		success: function(object){
+			if (typeof(object) == "undefined") {
+				var chat = new Chat;
+				chat.set("ownerId",ownerId);
+				chat.set("groupId",groupId);
+				chat.set("hidden",false);
+				chat.set("read",true);
+				chat.save(null, {
+					success: function(object){
+						successFunction(object);
+					}
+				});
+			} else {
+				object.set("read",true);
+				object.save(null,{
+					success: function(object){
+						successFunction(object);
+					}
+				});
+			}
+		}
+	})
+}
+
+function ParsePullChatMessage(groupId, limitNum, descendingOrderKey, beforeAt, displayFunction) {
+	var Message = Parse.Object.extend("Message");
+	var query = new Parse.Query(Message);
+
+	query.equalTo('groupId',groupId);
+	query.descending(descendingOrderKey);
+	if (beforeAt != null) {
+		query.lessThan("createdAt", beforeAt);
+	}
+	query.limit(limitNum);
+	query.find({
+		success: function(objects){
+			displayFunction(objects);
+		}
+	})
+}
+
+function ParseAddChatMessage(senderId, groupId, text, displayFunction){
+	var Message = Parse.Object.extend("Message");
+	var message = new Message;
+
+	message.set("senderId",senderId);
+	message.set("groupId", groupId);
+	message.set("text", text);
+	message.save(null, {
+		success: function(object){
+			displayFunction(object);
+		}
+	})
+}
+
+function ParseSetGroupMemberChatObjectReadFalse(senderId, groupId) {
+	var Group = Parse.Object.extend("Group");
+	var query = new Parse.Query(Group);
+
+	query.equalTo("objectId",groupId);
+	query.first({
+		success: function(object){
+			// get the group members' id
+			var memberId = object.get("memberId");
+			for (var i=0; i<memberId.length; i++) {
+				if (senderId != memberId[i]) {
+					// if the member of group isn't the sender
+					console.log(memberId[i]);
+					var Chat = Parse.Object.extend("Chat");
+					var query = new Parse.Query(Chat);
+					var ownerId = memberId[i];
+					query.equalTo("ownerId", memberId[i]);
+					query.equalTo("groupId", groupId);
+					query.first({
+						success:function(object){
+							if (typeof(object) == "undefined") {
+								// create new chat object for members of group
+								console.log(ownerId);
+								var chat = new Chat;
+								chat.set("ownerId", ownerId);
+								chat.set("groupId", groupId);
+								chat.set("hidden", false);
+								chat.set("read", false);
+								chat.save();
+							} else {
+								// set read as false for chat object
+								object.set("read", false);
+								object.save();
+							}
+						}
+					})
+
+				}
+			}
+		}
+	})
+}
+
 // functions for database maintaining /never used in front-end script.
 
 
