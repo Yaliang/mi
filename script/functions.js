@@ -1086,6 +1086,9 @@ function updateCashedPhoto120(userId){
 	var successFunction = function(data, object){
 		var userId = object[0].get("userId");
 		var photo120Data = object[0].get("profilePhoto120");
+		if (typeof(photo120Data)=="undefined") {
+			photo120Data = "./content/png/Taylor-Swift.png";
+		}
 		var newCashed = {id: userId, photo120: photo120Data};
 		cashedPhoto120.push(newCashed);
 	};
@@ -1223,10 +1226,13 @@ function getChatItemPhotoByCache(data) {
 	if (photo120 == null) {
 		var displayFunction = function(data, object){
 			var userId = object[0].get("userId");
-			var photo120 = object[0].get("profilePhoto120");
-			var newCashed = {id: userId, photo120: photo120};
+			var photo120Data = object[0].get("profilePhoto120");
+			if (typeof(photo120Data)=="undefined") {
+				photo120Data = "./content/png/Taylor-Swift.png";
+			}
+			var newCashed = {id: userId, photo120: photo120Data};
 			cashedPhoto120.push(newCashed);
-			$("#chat-"+data.chatId).css("backgroundImage","url("+photo120+")");
+			$("#chat-"+data.chatId).css("backgroundImage","url("+photo120Data+")");
 			$("#chat-"+data.chatId).unbind("click");
 			$("#chat-"+data.chatId).on("click",function(){
 				startPrivateChat(data.friendId);
