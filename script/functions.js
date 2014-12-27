@@ -1,5 +1,4 @@
 $(document).ready(function (){
-	
 	var currentUser = Parse.User.current();
 	$('#comment-content').on("blur",function(){
 		$('#comment-content').textinput('disable');
@@ -21,7 +20,7 @@ $(document).ready(function (){
 			pullUserEvent();
 			pullNotification();
 			updateCashedPhoto120(Parse.User.current().id);
-			checkBridgeitEnable();
+			//checkBridgeitEnable();
 		};
 		var errorFunction = function() {
 			window.location.hash = "page-login";
@@ -35,7 +34,7 @@ $(document).ready(function (){
 function checkBridgeitEnable(){
 	var currentBridgeitId = Parse.User.current().get("bridgeitId");
 	if (typeof(currentBridgeitId) == "undefined" && bridgeit.isIPhone() && !bridgeit.isRegistered()) {
-		bridgeit.usePushService( window.pushHub, window.apiKey);
+		//bridgeit.usePushService( window.pushHub, window.apiKey);
 		bridgeit.register('_reg', 'handlePushRegistration');
 	}
 }
