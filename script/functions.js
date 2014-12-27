@@ -8,12 +8,10 @@ $(document).ready(function (){
 	});
 	$('#message-chat-form').submit(function(event){
 		$('#message-content').trigger('blur');
-		$('#message-content').trigger('click');
 		event.preventDefault();
 	});
 	$('#comment-form').submit(function(event){
 		$('#comment-content').trigger('blur');
-		$('#comment-content').trigger('click');
 		event.preventDefault();
 	});
 	if (currentUser) {
