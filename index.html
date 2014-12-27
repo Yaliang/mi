@@ -54,9 +54,9 @@
 				<input type="email" data-clear-btn="true" name="useremail" id="signup-email" value="">
 				<label for="userpassword">Password:</label>
 				<input type="password" data-clear-btn="ture" name="userpassword" id="signup-password" value="" autocomplete="off">
+				<div id="signup-error"></div>
+				<button class="ui-btn" onclick="signup();">Sign Up</button>
 			</form>
-			<div id="signup-error"></div>
-			<button class="ui-btn" onclick="signup();">Sign Up</button>
 		</div><!-- /content -->
 
 		<div data-role="footer" data-position="fixed" data-tap-toggle="false">
@@ -77,9 +77,9 @@
 				<input type="email" data-clear-btn="true" name="useremail" id="login-email" value="">
 				<label for="userpassword">Password:</label>
 				<input type="password" data-clear-btn="ture" name="userpassword" id="login-password" value="" autocomplete="off">
+				<div id="login-error"></div>
+				<button class="ui-btn" onclick="login();">Log In</button>
 			</form>
-			<div id="login-error"></div>
-			<button class="ui-btn" onclick="login();">Log In</button>
 		</div><!-- /content -->
 
 		<div data-role="footer" data-position="fixed" data-tap-toggle="false">
@@ -106,7 +106,7 @@
 			<ul>
 				<li><a href="#page-event" data-transition="none" class="event-active-custom" id="event" onclick="pullUserEvent();">Event</a></li>
 				<li><a href="#page-friend" data-transition="none" id="friend" onclick="pullMyFriendList();">Friend</a></li>
-				<li><a href="#page-chat" data-transition="none" id="chat" >Chat</a></li>
+				<li><a href="#page-chat" data-transition="none" id="chat" onclick="pullMyChat();">Chat</a></li>
 				<li><a href="#page-setting" data-transition="none" id="setting">Setting</a></li>
 			</ul>
 			</div>
@@ -187,13 +187,15 @@
 
 		<div data-role="footer" data-position="fixed" data-tap-toggle="false" >
 			<div class="rwd-example">
-				<label id="event-id-label" class="ui-hidden-accessible"></label>
-				<div class="custom-block-a" onclick="sendToolbarActiveKeyboard('comment-content')">
-					<input disabled="disabled" type="text" name="commentcontent" id="comment-content" value="">
-				</div>
-				<div class="custom-block-b">
-					<button id="send-comment-button" class="ui-btn ui-corner-all custom-send-button" onclick="sendCommnet();">Send</button>
-				</div>
+				<form id="comment-form">
+					<label id="event-id-label" class="ui-hidden-accessible"></label>
+					<div class="custom-block-a" onclick="sendToolbarActiveKeyboard('comment-content')">
+						<input disabled="disabled" type="text" name="commentcontent" id="comment-content" value="">
+					</div>
+					<div class="custom-block-b">
+						<button id="send-comment-button" class="ui-btn ui-corner-all custom-send-button" onclick="sendCommnet();">Send</button>
+					</div>
+				</form>
 			</div>
 		</div><!-- /footer -->
 
@@ -219,7 +221,7 @@
 			<ul>
 				<li><a href="#page-event" data-transition="none" id="event" onclick="pullUserEvent();">Event</a></li>
 				<li><a href="#page-friend" data-transition="none" class="friend-active-custom" id="friend" onclick="pullMyFriendList();">Friend</a></li>
-				<li><a href="#page-chat" data-transition="none" id="chat" >Chat</a></li>
+				<li><a href="#page-chat" data-transition="none" id="chat" onclick="pullMyChat();">Chat</a></li>
 				<li><a href="#page-setting" data-transition="none" id="setting">Setting</a></li>
 			</ul>
 			</div>
@@ -290,7 +292,7 @@
 			<ul>
 				<li><a href="#page-event" data-transition="none" id="event" onclick="pullUserEvent();">Event</a></li>
 				<li><a href="#page-friend" data-transition="none" id="friend" onclick="pullMyFriendList();">Friend</a></li>
-				<li><a href="#page-chat" data-transition="none" class="chat-active-custom" id="chat" >Chat</a></li>
+				<li><a href="#page-chat" data-transition="none" class="chat-active-custom" id="chat" onclick="pullMyChat();">Chat</a></li>
 				<li><a href="#page-setting" data-transition="none" id="setting">Setting</a></li>
 			</ul>
 			</div>
@@ -310,13 +312,15 @@
 
 		<div data-role="footer" data-position="fixed" data-tap-toggle="false" >
 			<div class="rwd-example">
-				<label id="group-id-label" class="ui-hidden-accessible"></label>
-				<div class="custom-block-a" onclick="sendToolbarActiveKeyboard('message-content')">
-					<input disabled="disabled" type="text" name="messagecontent" id="message-content" value="">
-				</div>
-				<div class="custom-block-b">
-					<button id="send-message-button" class="ui-btn ui-corner-all custom-send-button" onclick="sendMessage();">Send</button>
-				</div>
+				<form id='message-chat-form'>
+					<label id="group-id-label" class="ui-hidden-accessible"></label>
+					<div class="custom-block-a" onclick="sendToolbarActiveKeyboard('message-content')">
+						<input disabled="disabled" type="text" name="messagecontent" id="message-content" value="">
+					</div>
+					<div class="custom-block-b">
+						<button id="send-message-button" class="ui-btn ui-corner-all custom-send-button" onclick="sendMessage();">Send</button>
+					</div>
+				</form>
 			</div>
 		</div><!-- /footer -->
 
@@ -339,7 +343,7 @@
 			<ul>
 				<li><a href="#page-event" data-transition="none" id="event" onclick="pullUserEvent();">Event</a></li>
 				<li><a href="#page-friend" data-transition="none" id="friend" onclick="pullMyFriendList();">Friend</a></li>
-				<li><a href="#page-chat" data-transition="none" id="chat" >Chat</a></li>
+				<li><a href="#page-chat" data-transition="none" id="chat" onclick="pullMyChat();">Chat</a></li>
 				<li><a href="#page-setting" data-transition="none" class="setting-active-custom" id="setting">Setting</a></li>
 			</ul>
 			</div>

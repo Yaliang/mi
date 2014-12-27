@@ -6,6 +6,12 @@ $(document).ready(function (){
 	$('#message-content').on("blur",function(){
 		$('#message-content').textinput('disable');
 	});
+	$('#message-chat-form').submit(function(event){
+		event.preventDefault();
+	});
+	$('#comment-form').submit(function(event){
+		event.preventDefault();
+	});
 	if (currentUser) {
 		var successFunction = function() {
 			window.location.hash = "page-event";
@@ -367,6 +373,8 @@ function sendCommnet(){
 	var currentUser = Parse.User.current();
 	var owner = currentUser.getUsername();
 	var content = $("#comment-content").val();
+	if (content == "")
+		return;
 	$("#comment-content").val("");
 	if (content.length==0)
 		return
@@ -1086,6 +1094,8 @@ function sendMessage(){
 	var groupId = $("#group-id-label").html();
 	var senderId = Parse.User.current().id;
 	var text = $("#message-content").val();
+	if (text == "") 
+		return;
 	$("#message-content").val("");
 	var displayFunction= function(object){
 		var messageId = object.id;
@@ -1169,18 +1179,18 @@ function startPrivateChat(friendId){
 
 function updateChatMessage(object){
 	var groupId = object.get('groupId');
-	var currentId = Parse.User.current().id;
 	var beforeAt = object.updatedAt;
 	var limitNum = object.get("unreadNum");
 	var descendingOrderKey = "createdAt";
-	console.log(groupId);
-	console.log(beforeAt);
-	console.log(limitNum);
 	var displayFunction = function(objects) {
-		console.log("get new message:"+objects.length.toString());
+		var currentId = Parse.User.current().id;
 		for (var i=objects.length-1; i>=0; i--) {
-			var newElement = buildElementInChatMessagesPage(objects[i]);
-			$("#page-chat-messages > .ui-content").append(newElement);
+			if ($("#message-"+objects[i].id).length == 0) {
+				var newElement = buildElementInChatMessagesPage(objects[i]);
+				$("#page-chat-messages > .ui-content").append(newElement);
+				var groupId = objects[i].get('groupId');
+				ParseSetChatObjectAsRead(currentId, groupId, 1, function(){});
+			}
 		}
 		$("html body").animate({ scrollTop: $(document).height().toString()+"px" }, {
 			duration: 150,
@@ -1188,7 +1198,7 @@ function updateChatMessage(object){
 		});
 	}
 	ParsePullChatMessage(groupId, limitNum, descendingOrderKey, beforeAt, displayFunction);
-	ParseSetChatObjectAsRead(currentId, groupId, limitNum, function(){});
+
 }
 
 function buildElementInChatListPage(object){
