@@ -583,11 +583,13 @@ function ParseSetChatObjectAsRead(ownerId, groupId, count, successFunction){
 					count = object.get("unreadNum");
 				}
 				object.increment("unreadNum",-count);
-				object.save(null,{
-					success: function(object){
-						successFunction(object);
-					}
-				});
+				if (count != 0) {
+					object.save(null,{
+						success: function(object){
+							successFunction(object);
+						}
+					});
+				}
 			}
 		}
 	})
