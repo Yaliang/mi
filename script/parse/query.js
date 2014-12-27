@@ -622,7 +622,6 @@ function ParseSetGroupMemberChatObjectReadFalse(senderId, groupId) {
 			for (var i=0; i<memberId.length; i++) {
 				if (senderId != memberId[i]) {
 					// if the member of group isn't the sender
-					console.log(memberId[i]);
 					var Chat = Parse.Object.extend("Chat");
 					var query = new Parse.Query(Chat);
 					var ownerId = memberId[i];
@@ -632,7 +631,6 @@ function ParseSetGroupMemberChatObjectReadFalse(senderId, groupId) {
 						success:function(object){
 							if (typeof(object) == "undefined") {
 								// create new chat object for members of group
-								console.log(ownerId);
 								var chat = new Chat;
 								chat.set("ownerId", ownerId);
 								chat.set("groupId", groupId);

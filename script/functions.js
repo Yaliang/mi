@@ -1037,28 +1037,49 @@ function buildElementInChatMessagesPage(object){
 
 	var newElement = "";
 	if (currentId == senderId) {
-		elementClass = "message-right";
+		elementClass = "ui-custom-message-right";
 	} else {
-		elementClass = "message-left";
+		elementClass = "ui-custom-message-left";
 	}
-	newElement += "<div id='message-"+messageId+"' class='"+elementClass+"'>";
-	newElement += "<p>"+senderId+"</p>";
+	newElement += "<div id='message-"+messageId+"' class='"+elementClass+"' style='background-image:url("+getCashedPhoto120(senderId)+")'>";
 	newElement += "<p>"+text+"</p>";
 	newElement += "</div>";
 
 	return newElement;
 }
 
+var cashedPhoto120 = new Array
+function getCashedPhoto120(userId){
+	for (var i = cashedPhoto120.length-1; i >= 0; i--){
+		if (cashedPhoto120[i].id == userId) {
+			return cashedPhoto120[i].photo120;
+		}
+	}
+	return null;
+}
+
+function updateCashedPhoto120(userId){
+	var successFunction = function(data, object){
+		var userId = object[0].get("userId");
+		var photo120Data = object[0].get("profilePhoto120");
+		var newCashed = {id: userId, photo120: photo120Data};
+		cashedPhoto120.push(newCashed);
+	};
+	ParseGetProfilePhoto(null, userId, successFunction);
+}
+
 function sendMessage(){
 	var groupId = $("#group-id-label").html();
 	var senderId = Parse.User.current().id;
 	var text = $("#message-content").val();
+	$("#message-content").val("");
 	var displayFunction= function(object){
+		var messageId = object.id;
 		var senderId = object.get("senderId");
 		var groupId = object.get("groupId");
+		ParseSetGroupMemberChatObjectReadFalse(senderId, groupId);
 		var newElement = buildElementInChatMessagesPage(object);
 		$("#page-chat-messages > .ui-content").append(newElement);
-		ParseSetGroupMemberChatObjectReadFalse(senderId, groupId);
 	}
 
 	ParseAddChatMessage(senderId, groupId, text, displayFunction);
@@ -1079,7 +1100,7 @@ function startPrivateChat(friendId){
 			var limitNum = 15;
 			var descendingOrderKey = "createdAt";
 			var displayFunction = function(objects){
-				for (var i=0; i<objects.length; i++) {
+				for (var i=objects.length-1; i>=0; i--) {
 					var newElement = buildElementInChatMessagesPage(objects[i]);
 					$("#page-chat-messages > .ui-content").append(newElement);
 				}
@@ -1090,4 +1111,7 @@ function startPrivateChat(friendId){
 		ParseSetChatObjectAsRead(currentId, groupId, successFunction);
 	}
 	ParseGetGroupId(memberId,successFunction);
+	updateCashedPhoto120(friendId);
+	updateCashedPhoto120(Parse.User.current().id);
 }
+
