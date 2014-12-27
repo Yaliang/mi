@@ -106,7 +106,7 @@
 			<ul>
 				<li><a href="#page-event" data-transition="none" class="event-active-custom" id="event" onclick="pullUserEvent();">Event</a></li>
 				<li><a href="#page-friend" data-transition="none" id="friend" onclick="pullMyFriendList();">Friend</a></li>
-				<li><a href="#page-chat" data-transition="none" id="chat">Chat</a></li>
+				<li><a href="#page-chat" data-transition="none" id="chat" onclick="pullMyChat()">Chat</a></li>
 				<li><a href="#page-setting" data-transition="none" id="setting">Setting</a></li>
 			</ul>
 			</div>
@@ -188,7 +188,7 @@
 		<div data-role="footer" data-position="fixed" data-tap-toggle="false" >
 			<div class="rwd-example">
 				<label id="event-id-label" class="ui-hidden-accessible"></label>
-				<div class="custom-block-a" onclick="sendToolbarActiveKeyboard()">
+				<div class="custom-block-a" onclick="sendToolbarActiveKeyboard('comment-content')">
 					<input disabled="disabled" type="text" name="commentcontent" id="comment-content" value="">
 				</div>
 				<div class="custom-block-b">
@@ -219,7 +219,7 @@
 			<ul>
 				<li><a href="#page-event" data-transition="none" id="event" onclick="pullUserEvent();">Event</a></li>
 				<li><a href="#page-friend" data-transition="none" class="friend-active-custom" id="friend" onclick="pullMyFriendList();">Friend</a></li>
-				<li><a href="#page-chat" data-transition="none" id="chat">Chat</a></li>
+				<li><a href="#page-chat" data-transition="none" id="chat" onclick="pullMyChat()">Chat</a></li>
 				<li><a href="#page-setting" data-transition="none" id="setting">Setting</a></li>
 			</ul>
 			</div>
@@ -283,7 +283,6 @@
 		</div><!-- /header -->
 
 		<div role="main" class="ui-content">
-			<p>Page content goes here.</p>
 		</div><!-- /content -->
 
 		<div data-role="footer" class="nav-glyphish-example" data-position="fixed" data-tap-toggle="false">
@@ -291,11 +290,36 @@
 			<ul>
 				<li><a href="#page-event" data-transition="none" id="event" onclick="pullUserEvent();">Event</a></li>
 				<li><a href="#page-friend" data-transition="none" id="friend" onclick="pullMyFriendList();">Friend</a></li>
-				<li><a href="#page-chat" data-transition="none" class="chat-active-custom" id="chat">Chat</a></li>
+				<li><a href="#page-chat" data-transition="none" class="chat-active-custom" id="chat" onclick="pullMyChat()">Chat</a></li>
 				<li><a href="#page-setting" data-transition="none" id="setting">Setting</a></li>
 			</ul>
 			</div>
 		</div><!-- /footer -->
+	</div><!-- /page -->
+
+	<!-- Page for displaying the messages of a chat -->
+	<div data-role="page" id="page-chat-messages" data-transition="none" data-title="觅校缘" data-add-back-btn="true">
+
+		<div data-role="header" data-position="fixed" data-tap-toggle="false" >
+			<h1 id='chat-messages-title'></h1>
+			<a data-rel="back" href="#page-event" class="ui-btn-left ui-btn ui-btn-inline ui-corner-all">Back</a>
+		</div><!-- /header -->
+
+		<div role="main" class="ui-content" style="margin-bottom:15vh">
+		</div><!-- /content -->
+
+		<div data-role="footer" data-position="fixed" data-tap-toggle="false" >
+			<div class="rwd-example">
+				<label id="group-id-label" class="ui-hidden-accessible"></label>
+				<div class="custom-block-a" onclick="sendToolbarActiveKeyboard('message-content')">
+					<input disabled="disabled" type="text" name="messagecontent" id="message-content" value="">
+				</div>
+				<div class="custom-block-b">
+					<button id="send-message-button" class="ui-btn ui-corner-all custom-send-button" onclick="sendMessage();">Send</button>
+				</div>
+			</div>
+		</div><!-- /footer -->
+
 	</div><!-- /page -->
 
 	<!-- Page for displaying setting options -->
@@ -315,7 +339,7 @@
 			<ul>
 				<li><a href="#page-event" data-transition="none" id="event" onclick="pullUserEvent();">Event</a></li>
 				<li><a href="#page-friend" data-transition="none" id="friend" onclick="pullMyFriendList();">Friend</a></li>
-				<li><a href="#page-chat" data-transition="none" id="chat">Chat</a></li>
+				<li><a href="#page-chat" data-transition="none" id="chat" onclick="pullMyChat()">Chat</a></li>
 				<li><a href="#page-setting" data-transition="none" class="setting-active-custom" id="setting">Setting</a></li>
 			</ul>
 			</div>

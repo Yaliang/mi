@@ -8,6 +8,7 @@ $(document).ready(function (){
 			window.location.hash = "page-event";
 			pullUserEvent();
 			pullNotification();
+			updateCashedPhoto120(Parse.User.current().id);
 		};
 		var errorFunction = function() {
 			window.location.hash = "page-login";
@@ -50,6 +51,7 @@ function signup(){
 		pullUserEvent();
 		pullNotification();
 		ParseCreateProfilePhotoObject(object.id);
+		updateCashedPhoto120(Parse.User.current().id);
 	};
 	ParseSignup(email, password, email, name, errorObject, destID, customFunction);
 	$("#signup-password").val("");
@@ -63,6 +65,7 @@ function login(){
 	var customFunction = function(){
 		pullUserEvent();
 		pullNotification();
+		updateCashedPhoto120(Parse.User.current().id);
 	};
 	ParseLogin(email, password, errorObject, destID, customFunction);
 	$("#login-password").val("");
@@ -559,12 +562,12 @@ function removeInterestEvent(eventId){
 	ParseRemoveInterest(null, owner, eventId, displayFunction);
 }
 
-function sendToolbarActiveKeyboard(){
+function sendToolbarActiveKeyboard(id){
 	$("html body").animate({ scrollTop: $(document).height().toString()+"px" }, {
 		duration: 150,
         complete : function(){
-            $('#comment-content').textinput('enable');
-			$('#comment-content').focus();
+            $('#'+id).textinput('enable');
+			$('#'+id).focus();
         }
     });
 }
@@ -842,7 +845,12 @@ function hiddenEventMoreOption(){
 }
 
 var prefixForGetFriendOptionsButton="";
-function getFriendOptionsButton(userId){
+function getFriendOptionsButton(userId, option){
+	if ((option)&&(option = 3)) {
+		var startChatButton = "<div class='send-friend-request chat-friend' onclick=\"startPrivateChat('"+userId+"');\">Start Chat</div>";
+		$("#"+prefixForGetFriendOptionsButton+userId+" > .custom-corners-people-near-by > .ui-bar").append(startChatButton);
+		return;
+	}
 	var displayFunction = function(ownerId, friendId, object){
 		if (typeof(object)=="undefined") {
 			var displayFunction = function(ownerId, friendId, object){
@@ -865,7 +873,7 @@ function getFriendOptionsButton(userId){
 						var successFunction = function(object){
 							var objectId = object.id;
 							var friendId = object.get('friend');
-							var startChatButton = "<div class='send-friend-request chat-friend'>Start Chat</div>";
+							var startChatButton = "<div class='send-friend-request chat-friend' onclick=\"startPrivateChat('"+friendId+"');\">Start Chat</div>";
 							$("#"+prefixForGetFriendOptionsButton+friendId+" > .custom-corners-people-near-by > .ui-bar").append(startChatButton);
 						}
 						ParseAcceptFriendRequest(objectId, null, null, successFunction);
@@ -886,7 +894,7 @@ function getFriendOptionsButton(userId){
 		} else {
 			var valid = object.get('valid');
 			if (valid) {
-				var startChatButton = "<div class='send-friend-request chat-friend'>Start Chat</div>";
+				var startChatButton = "<div class='send-friend-request chat-friend' onclick=\"startPrivateChat('"+friendId+"');\">Start Chat</div>";
 				$("#"+prefixForGetFriendOptionsButton+friendId+" > .custom-corners-people-near-by > .ui-bar").append(startChatButton);
 			} else {
 				var sendFriendRequestButton = "<div class='send-friend-request'>Request Sent</div>";
@@ -1020,10 +1028,172 @@ function pullMyFriendList() {
 				}
 				ParseGetProfilePhoto(friendId, friendId, displayFunction);
 				prefixForGetFriendOptionsButton="friend-list-";
-				getFriendOptionsButton(friendId);
+				getFriendOptionsButton(friendId, 3);
 			}
 			ParseGetProfileById(friendId, displayFunction, objects[i]);
 		}
 	}
 	ParsePullMyFriend(Parse.User.current().id, descendingOrderKey, displayFunction);
+}
+
+function buildElementInChatMessagesPage(object){
+	var messageId = object.id;
+	var senderId = object.get("senderId");
+	var currentId = Parse.User.current().id;
+	var text = object.get('text');
+	var elementClass;
+
+	var newElement = "";
+	if (currentId == senderId) {
+		elementClass = "ui-custom-message-right";
+	} else {
+		elementClass = "ui-custom-message-left";
+	}
+	newElement += "<div id='message-"+messageId+"' class='"+elementClass+"' style='background-image:url("+getCashedPhoto120(senderId)+")'>";
+	newElement += "<p>"+text+"</p>";
+	newElement += "</div>";
+
+	return newElement;
+}
+
+var cashedPhoto120 = new Array
+function getCashedPhoto120(userId){
+	for (var i = cashedPhoto120.length-1; i >= 0; i--){
+		if (cashedPhoto120[i].id == userId) {
+			return cashedPhoto120[i].photo120;
+		}
+	}
+	return null;
+}
+
+function updateCashedPhoto120(userId){
+	var successFunction = function(data, object){
+		var userId = object[0].get("userId");
+		var photo120Data = object[0].get("profilePhoto120");
+		var newCashed = {id: userId, photo120: photo120Data};
+		cashedPhoto120.push(newCashed);
+	};
+	ParseGetProfilePhoto(null, userId, successFunction);
+}
+
+function sendMessage(){
+	var groupId = $("#group-id-label").html();
+	var senderId = Parse.User.current().id;
+	var text = $("#message-content").val();
+	$("#message-content").val("");
+	var displayFunction= function(object){
+		var messageId = object.id;
+		var senderId = object.get("senderId");
+		var groupId = object.get("groupId");
+		ParseSetGroupMemberChatObjectReadFalse(senderId, groupId);
+		var newElement = buildElementInChatMessagesPage(object);
+		$("#page-chat-messages > .ui-content").append(newElement);
+	}
+
+	ParseAddChatMessage(senderId, groupId, text, displayFunction);
+}
+
+function updateChatTitle(friendId, id){
+	var displayFunction= function(ownerId, friendId, object) {
+		var alias = object.get('alias');
+		if (typeof(alias) == "undefined") {
+			var displayFunction = function(user){
+				$('#'+id).append(user.get("name"));
+			};
+			ParseGetProfileById(friendId, displayFunction)
+		} else {
+			$('#'+id).append(alias);
+		}
+	}
+	ParseCheckFriend(Parse.User.current().id, friendId, displayFunction);
+}
+
+function startPrivateChat(friendId){
+	$("#page-chat-messages > .ui-content").html("");
+	$("#chat-messages-title").html("");
+	$("#message-content").val("");
+	var memberId = new Array;
+	memberId.push(friendId);
+	memberId.push(Parse.User.current().id);
+	var successFunction = function(object){
+		var groupId = object.id;
+		var currentId = Parse.User.current().id;
+		$("#group-id-label").html(groupId);
+		var successFunction = function(object){
+			var groupId = object.get("groupId");
+			var limitNum = 15;
+			var descendingOrderKey = "createdAt";
+			var displayFunction = function(objects){
+				for (var i=objects.length-1; i>=0; i--) {
+					var newElement = buildElementInChatMessagesPage(objects[i]);
+					$("#page-chat-messages > .ui-content").append(newElement);
+				}
+				$.mobile.changePage( "#page-chat-messages", { transition: "slide"});
+				setTimeout(function(){
+					$("html body").animate({ scrollTop: $(document).height().toString()+"px" }, {
+						duration: 100,
+						complete : function(){}
+					});
+				},350);
+			}
+			ParsePullChatMessage(groupId, limitNum, descendingOrderKey, null, displayFunction)
+		}
+		ParseSetChatObjectAsRead(currentId, groupId, successFunction);
+	}
+	ParseGetGroupId(memberId,successFunction);
+	updateCashedPhoto120(friendId);
+	updateChatTitle(friendId, "chat-messages-title");
+}
+
+function buildElementInChatListPage(object){
+	var chatId = object.id;
+	var groupId = object.get('groupId');
+	var unreadNum = object.get("unreadNum");
+	var newElement = "";
+	newElement += "<div id='chat-"+chatId+"' class='chat-list'>";
+	newElement += "<div class='chat-list-title'></div>";
+	if (unreadNum > 0) {
+		newElement += "<span class='ui-li-count'>"+unreadNum+"</span>";
+	}
+	newElement += "</div>";
+
+	return newElement;
+}
+
+function pullMyChat(){
+	$("#page-chat > .ui-content").html("");
+	var ownerId = Parse.User.current().id;
+	var descendingOrderKey = "updatedAt";
+	var displayFunction = function(objects){
+		for (var i=0; i<objects.length; i++) {
+			var newElement = buildElementInChatListPage(objects[i]);
+			$("#page-chat > .ui-content").append(newElement);
+			var chatId = objects[i].id;
+			var data = {chatId: chatId};
+			var groupId = objects[i].get('groupId');
+			var successFunction = function(object, data){
+				var memberId = object.get("memberId");
+				for (var i=0; i<memberId.length; i++) {
+					if (memberId[i] != Parse.User.current().id) {
+						updateChatTitle(memberId[i], "chat-"+data.chatId);
+						data['friendId'] = memberId[i];
+						var displayFunction = function(data, object){
+							var userId = object[0].get("userId");
+							var photo120 = object[0].get("profilePhoto120");
+							var newCashed = {id: userId, photo120: photo120};
+							cashedPhoto120.push(newCashed);
+							$("#chat-"+data.chatId).css("backgroundImage","url("+photo120+")");
+							$("#chat-"+data.chatId).on("click",function(){
+								startPrivateChat(data.friendId);
+							});
+						}
+						ParseGetProfilePhoto(data, memberId[i], displayFunction);
+					}
+				}
+			}
+			ParseGetGroupMember(groupId, successFunction, data);
+
+		}
+	}
+	ParsePullMyChat(ownerId,descendingOrderKey,displayFunction);
 }
