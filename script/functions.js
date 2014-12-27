@@ -1136,3 +1136,7 @@ function startPrivateChat(friendId){
 	updateChatTitle(friendId);
 }
 
+function pullExistingChat(){
+	$("#page-chat > .ui-content").html("");
+	
+}

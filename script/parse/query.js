@@ -561,14 +561,14 @@ function ParseSetChatObjectAsRead(ownerId, groupId, successFunction){
 				chat.set("ownerId",ownerId);
 				chat.set("groupId",groupId);
 				chat.set("hidden",false);
-				chat.set("read",true);
+				chat.set("unreadNum",0);
 				chat.save(null, {
 					success: function(object){
 						successFunction(object);
 					}
 				});
 			} else {
-				object.set("read",true);
+				object.set("unreadNum",0);
 				object.save(null,{
 					success: function(object){
 						successFunction(object);
@@ -635,11 +635,11 @@ function ParseSetGroupMemberChatObjectReadFalse(senderId, groupId) {
 								chat.set("ownerId", ownerId);
 								chat.set("groupId", groupId);
 								chat.set("hidden", false);
-								chat.set("read", false);
+								chat.set("unreadNum", 1);
 								chat.save();
 							} else {
-								// set read as false for chat object
-								object.set("read", false);
+								// set unread number plus 1 for chat object
+								object.increment("unreadNum", 1);
 								object.save();
 							}
 						}
@@ -647,6 +647,20 @@ function ParseSetGroupMemberChatObjectReadFalse(senderId, groupId) {
 
 				}
 			}
+		}
+	})
+}
+
+function ParsePullMyChat(ownerId,descendingOrderKey,displayFunction){
+	var Chat = Parse.Object.extend("Chat");
+	var query = Parse.Query(Chat);
+
+	query.equalTo("ownerId",ownerId);
+	query.equalTo("hidden",false);
+	query.descending(descendingOrderKey);
+	query.find({
+		success: function(objects){
+			displayFunction(objects);
 		}
 	})
 }
