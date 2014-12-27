@@ -476,7 +476,22 @@ function ParseCheckFriend(ownerId, friendId, displayFunction) {
 
 }
 
-function ParseUserByEmailAndName(string, descendingOrderKey, displayFunction){
+function ParsePullMyFriend(ownerId, descendingOrderKey, displayFunction) {
+	var Friend = Parse.Object.extend("Friend");
+	var query = new Parse.Query(Friend);
+
+	query.equalTo('owner',ownerId);
+	query.equalTo('valid',true);
+	query.descending(descendingOrderKey);
+
+	query.find({
+		success: function(objects){
+			displayFunction(objects);
+		}
+	})
+}
+
+function ParseSearchUserByEmailAndName(string, limitNumber, descendingOrderKey, displayFunction){
 	var queryByEmail = new Parse.Query(Parse.User);
 	var queryByName = new Parse.Query(Parse.User);
 	var currentUser = Parse.User.current();
@@ -487,6 +502,9 @@ function ParseUserByEmailAndName(string, descendingOrderKey, displayFunction){
 	var query = Parse.Query.or(queryByEmail, queryByName);
 	query.notEqualTo("username", currentUser.getUsername());
 	query.descending(descendingOrderKey);
+	if (limitNumber != null) {
+		query.limit(limitNumber);
+	}
 	query.find({
 		success: function(objects){
 			displayFunction(objects);
