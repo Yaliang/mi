@@ -8,6 +8,7 @@ $(document).ready(function (){
 			window.location.hash = "page-event";
 			pullUserEvent();
 			pullNotification();
+			updateCashedPhoto120(Parse.User.current().id);
 		};
 		var errorFunction = function() {
 			window.location.hash = "page-login";
@@ -50,6 +51,7 @@ function signup(){
 		pullUserEvent();
 		pullNotification();
 		ParseCreateProfilePhotoObject(object.id);
+		updateCashedPhoto120(Parse.User.current().id);
 	};
 	ParseSignup(email, password, email, name, errorObject, destID, customFunction);
 	$("#signup-password").val("");
@@ -63,6 +65,7 @@ function login(){
 	var customFunction = function(){
 		pullUserEvent();
 		pullNotification();
+		updateCashedPhoto120(Parse.User.current().id);
 	};
 	ParseLogin(email, password, errorObject, destID, customFunction);
 	$("#login-password").val("");
@@ -1132,11 +1135,31 @@ function startPrivateChat(friendId){
 	}
 	ParseGetGroupId(memberId,successFunction);
 	updateCashedPhoto120(friendId);
-	updateCashedPhoto120(Parse.User.current().id);
 	updateChatTitle(friendId);
 }
 
-function pullExistingChat(){
+function buildElementInChatListPage(object){
+	var chatId = object.id;
+	var groupId = object.get('groupId');
+	var unreadNum = object.get("unreadNum");
+	var newElement = "";
+	newElement += "<div id='chat-"+chatId+"' class='chat-list'>";
+	newElement += "<div class='chat-list-title'>"+groupId+"</div>";
+	newElement += "<span class='ui-li-count'>"+unreadNum+"</span>";
+	newElement += "</div>";
+
+	return newElement;
+}
+
+function pullMyChat(){
 	$("#page-chat > .ui-content").html("");
-	
+	var ownerId = Parse.User.current().id;
+	var descendingOrderKey = "updatedAt";
+	var displayFunction = function(objects){
+		for (var i=0; i<objects.length; i++) {
+			var newElement = buildElementInChatListPage(objects[i]);
+			$("#page-chat > .ui-content").append(newElement);
+		}
+	}
+	ParsePullMyChat(ownerId,descendingOrderKey,displayFunction);
 }

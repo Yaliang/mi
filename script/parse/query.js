@@ -653,7 +653,7 @@ function ParseSetGroupMemberChatObjectReadFalse(senderId, groupId) {
 
 function ParsePullMyChat(ownerId,descendingOrderKey,displayFunction){
 	var Chat = Parse.Object.extend("Chat");
-	var query = Parse.Query(Chat);
+	var query = new Parse.Query(Chat);
 
 	query.equalTo("ownerId",ownerId);
 	query.equalTo("hidden",false);

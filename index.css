@@ -425,6 +425,22 @@ a {
 	text-shadow: 0 0 0;
 }
 
+.chat-list {
+	position: relative;
+	height: 83px;
+	font-family: 'Open Sans';
+	font-weight: 300!important;
+	padding-left: 95px;
+	border-bottom: 1px solid #ddd;
+	cursor: pointer;
+	background: 0.8em 0.4em no-repeat;
+	background-size: 70px 70px;
+}
+
+.chat-list-title {
+	padding-top: 10px;
+}
+
 
 
 textarea {
