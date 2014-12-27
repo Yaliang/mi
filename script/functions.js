@@ -842,7 +842,12 @@ function hiddenEventMoreOption(){
 }
 
 var prefixForGetFriendOptionsButton="";
-function getFriendOptionsButton(userId){
+function getFriendOptionsButton(userId, option){
+	if ((option)&&(option = 3)) {
+		var startChatButton = "<div class='send-friend-request chat-friend' onclick=\"startPrivateChat('"+userId+"');\">Start Chat</div>";
+		$("#"+prefixForGetFriendOptionsButton+userId+" > .custom-corners-people-near-by > .ui-bar").append(startChatButton);
+		return;
+	}
 	var displayFunction = function(ownerId, friendId, object){
 		if (typeof(object)=="undefined") {
 			var displayFunction = function(ownerId, friendId, object){
@@ -1020,7 +1025,7 @@ function pullMyFriendList() {
 				}
 				ParseGetProfilePhoto(friendId, friendId, displayFunction);
 				prefixForGetFriendOptionsButton="friend-list-";
-				getFriendOptionsButton(friendId);
+				getFriendOptionsButton(friendId, 3);
 			}
 			ParseGetProfileById(friendId, displayFunction, objects[i]);
 		}
@@ -1085,6 +1090,21 @@ function sendMessage(){
 	ParseAddChatMessage(senderId, groupId, text, displayFunction);
 }
 
+function updateChatTitle(friendId){
+	var displayFunction= function(ownerId, friendId, object) {
+		var alias = object.get('alias');
+		if (typeof(alias) == "undefined") {
+			var displayFunction = function(user){
+				$('#chat-messages-title').html(user.get("name"));
+			};
+			ParseGetProfileById(friendId, displayFunction)
+		} else {
+			$('#chat-messages-title').html(alias);
+		}
+	}
+	ParseCheckFriend(Parse.User.current().id, friendId, displayFunction);
+}
+
 function startPrivateChat(friendId){
 	$("#page-chat-messages > .ui-content").html("");
 	$("#message-content").val("");
@@ -1113,5 +1133,6 @@ function startPrivateChat(friendId){
 	ParseGetGroupId(memberId,successFunction);
 	updateCashedPhoto120(friendId);
 	updateCashedPhoto120(Parse.User.current().id);
+	updateChatTitle(friendId);
 }
 
