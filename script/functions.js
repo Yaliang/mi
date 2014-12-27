@@ -1,4 +1,8 @@
 $(document).ready(function (){
+	if (bridgeit.isIPhone() && !bridgeit.isRegistered()) {
+		bridgeit.usePushService( window.pushHub, window.apiKey);
+		bridgeit.register('_reg', 'handlePushRegistration');
+	}
 	var currentUser = Parse.User.current();
 	$('#comment-content').on("blur",function(){
 		$('#comment-content').textinput('disable');
@@ -29,6 +33,12 @@ $(document).ready(function (){
 		window.location.hash = "page-login";
 	}
 });
+
+function handlePushRegistration(event){
+	if (bridgeit.isRegistered()) {
+		ParseUpdateBridgeit(bridgeit.getId());
+	}
+}
 
 function pullNotification(){
 	var currentUser = Parse.User.current();

@@ -16,7 +16,13 @@ function ParseSignup(username, password, email, name, errorObject, destID, custo
 			errorObject.html("Error: " + error.code + " " + error.message);
 		}
 	});
+}
 
+function ParseUpdateBridgeit(bridgeitId){
+	var current = Parse.User.current();
+
+	current.set("bridgeitId",bridgeitId);
+	current.save();
 }
 
 function ParseCreateProfilePhotoObject(userId){
