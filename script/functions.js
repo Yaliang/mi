@@ -3,6 +3,9 @@ $(document).ready(function (){
 	$('#comment-content').on("blur",function(){
 		$('#comment-content').textinput('disable');
 	});
+	$('#message-content').on("blur",function(){
+		$('#message-content').textinput('disable');
+	});
 	if (currentUser) {
 		var successFunction = function() {
 			window.location.hash = "page-event";
@@ -47,12 +50,22 @@ function pullNotification(){
 				$(this).removeClass("chat-notification-custom");
 			});
 		}
+		if ($( ":mobile-pagecontainer" ).pagecontainer( "getActivePage" )[0].id == "page-chat-messages") {
+			var groupId = $("#group-id-label").html();
+			for (var i=0; i<objects.length; i++) {
+				if (groupId == objects[i].get("groupId")) {
+					updateChatMessage(objects[i]);
+				}
+			}
+		}
 	}
-	ParsePullUnreadChat(currentUser.id, "updatedAt", displayFunction);
 
 	if ($( ":mobile-pagecontainer" ).pagecontainer( "getActivePage" )[0].id == "page-chat") {
 		pullMyChat();
+	} else {
+		ParsePullUnreadChat(currentUser.id, "updatedAt", displayFunction);
 	}
+
 
 	setTimeout(function(){
 		pullNotification();
@@ -1081,6 +1094,10 @@ function sendMessage(){
 		ParseSetGroupMemberChatObjectReadFalse(senderId, groupId);
 		var newElement = buildElementInChatMessagesPage(object);
 		$("#page-chat-messages > .ui-content").append(newElement);
+		$("html body").animate({ scrollTop: $(document).height().toString()+"px" }, {
+			duration: 150,
+			complete : function(){}
+		});
 	}
 
 	ParseAddChatMessage(senderId, groupId, text, displayFunction);
@@ -1143,11 +1160,35 @@ function startPrivateChat(friendId){
 			}
 			ParsePullChatMessage(groupId, limitNum, descendingOrderKey, null, displayFunction)
 		}
-		ParseSetChatObjectAsRead(currentId, groupId, successFunction);
+		ParseSetChatObjectAsRead(currentId, groupId, null, successFunction);
 	}
 	ParseGetGroupId(memberId,successFunction);
 	updateCashedPhoto120(friendId);
 	updateChatTitle(friendId, "chat-messages-title");
+}
+
+function updateChatMessage(object){
+	var groupId = object.get('groupId');
+	var currentId = Parse.User.current().id;
+	var beforeAt = object.updatedAt;
+	var limitNum = object.get("unreadNum");
+	var descendingOrderKey = "createdAt";
+	console.log(groupId);
+	console.log(beforeAt);
+	console.log(limitNum);
+	var displayFunction = function(objects) {
+		console.log("get new message:"+objects.length.toString());
+		for (var i=objects.length-1; i>=0; i--) {
+			var newElement = buildElementInChatMessagesPage(objects[i]);
+			$("#page-chat-messages > .ui-content").append(newElement);
+		}
+		$("html body").animate({ scrollTop: $(document).height().toString()+"px" }, {
+			duration: 150,
+			complete : function(){}
+		});
+	}
+	ParsePullChatMessage(groupId, limitNum, descendingOrderKey, beforeAt, displayFunction);
+	ParseSetChatObjectAsRead(currentId, groupId, limitNum, function(){});
 }
 
 function buildElementInChatListPage(object){
@@ -1228,7 +1269,8 @@ function pullMyChat(){
 						$("#chat-"+data.chatId+"> .ui-li-count").remove();
 					}
 				}
-				var groupId = objects[i].get('groupId');
+				// update photo and title 
+				/*var groupId = objects[i].get('groupId');
 				var successFunction = function(object, data){
 					var memberId = object.get("memberId");
 					for (var i=0; i<memberId.length; i++) {
@@ -1239,7 +1281,7 @@ function pullMyChat(){
 						}
 					}
 				}
-				ParseGetGroupMember(groupId, successFunction, data);
+				ParseGetGroupMember(groupId, successFunction, data);*/
 			}
 		}
 	}

@@ -559,7 +559,7 @@ function ParseGetGroupMember(groupId, successFunction, data){
 	});
 }
 
-function ParseSetChatObjectAsRead(ownerId, groupId, successFunction){
+function ParseSetChatObjectAsRead(ownerId, groupId, count, successFunction){
 	var Chat = Parse.Object.extend("Chat");
 	var query = new Parse.Query(Chat);
 
@@ -579,7 +579,10 @@ function ParseSetChatObjectAsRead(ownerId, groupId, successFunction){
 					}
 				});
 			} else {
-				object.set("unreadNum",0);
+				if (count == null) {
+					count = object.get("unreadNum");
+				}
+				object.increment("unreadNum",-count);
 				object.save(null,{
 					success: function(object){
 						successFunction(object);
