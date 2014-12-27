@@ -1110,6 +1110,7 @@ function updateChatTitle(friendId, id){
 
 function startPrivateChat(friendId){
 	$("#page-chat-messages > .ui-content").html("");
+	$("#chat-messages-title").html("");
 	$("#message-content").val("");
 	var memberId = new Array;
 	memberId.push(friendId);
@@ -1128,6 +1129,12 @@ function startPrivateChat(friendId){
 					$("#page-chat-messages > .ui-content").append(newElement);
 				}
 				$.mobile.changePage( "#page-chat-messages", { transition: "slide"});
+				setTimeout(function(){
+					$("html body").animate({ scrollTop: $(document).height().toString()+"px" }, {
+						duration: 100,
+						complete : function(){}
+					});
+				},350);
 			}
 			ParsePullChatMessage(groupId, limitNum, descendingOrderKey, null, displayFunction)
 		}
