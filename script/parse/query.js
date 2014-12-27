@@ -676,6 +676,21 @@ function ParsePullMyChat(ownerId,descendingOrderKey,displayFunction){
 	})
 }
 
+function ParsePullUnreadChat(ownerId, descendingOrderKey, displayFunction){
+	var Chat = Parse.Object.extend("Chat");
+	var query = new Parse.Query(Chat);
+
+	query.equalTo("ownerId",ownerId);
+	query.equalTo("hidden",false);
+	query.descending(descendingOrderKey);
+	query.greaterThan("unreadNum",0);
+	query.find({
+		success: function(objects){
+			displayFunction(objects);
+		}
+	})
+}
+
 // functions for database maintaining /never used in front-end script.
 
 

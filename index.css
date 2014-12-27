@@ -200,6 +200,10 @@ a {
 	background-size: 32px 32px;
 }
 
+.chat-notification-custom {
+	background-image: url("./content/material-design/png/sms5-blank-with-point-pink-192.png")!important;
+}
+
 .chat-active-custom {
 	background-image: url("./content/material-design/png/sms5-solid-pink-192.png")!important;
 }
