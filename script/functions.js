@@ -1,8 +1,4 @@
 $(document).ready(function (){
-	if (bridgeit.isIPhone() && !bridgeit.isRegistered()) {
-		bridgeit.usePushService( window.pushHub, window.apiKey);
-		bridgeit.register('_reg', 'handlePushRegistration');
-	}
 	var currentUser = Parse.User.current();
 	$('#comment-content').on("blur",function(){
 		$('#comment-content').textinput('disable');
@@ -24,6 +20,7 @@ $(document).ready(function (){
 			pullUserEvent();
 			pullNotification();
 			updateCashedPhoto120(Parse.User.current().id);
+			checkBridgeitEnable();
 		};
 		var errorFunction = function() {
 			window.location.hash = "page-login";
@@ -33,6 +30,13 @@ $(document).ready(function (){
 		window.location.hash = "page-login";
 	}
 });
+
+function checkBridgeitEnable(){
+	var currentBridgeitId = Parse.User.current().get("bridgeitId");
+	if (typeof(currentBridgeitId) == "undefined" && bridgeit.isIPhone() && !bridgeit.isRegistered()) {
+		bridgeit.register('_reg', 'handlePushRegistration');
+	}
+}
 
 function handlePushRegistration(event){
 	if (bridgeit.isRegistered()) {
@@ -101,6 +105,7 @@ function signup(){
 		pullNotification();
 		ParseCreateProfilePhotoObject(object.id);
 		updateCashedPhoto120(Parse.User.current().id);
+		checkBridgeitEnable();
 	};
 	ParseSignup(email, password, email, name, errorObject, destID, customFunction);
 	$("#signup-password").val("");
@@ -115,6 +120,7 @@ function login(){
 		pullUserEvent();
 		pullNotification();
 		updateCashedPhoto120(Parse.User.current().id);
+		checkBridgeitEnable();
 	};
 	ParseLogin(email, password, errorObject, destID, customFunction);
 	$("#login-password").val("");
@@ -123,11 +129,13 @@ function login(){
 function logout(){
 	var currentUser = Parse.User.current();
 	var email = currentUser.getUsername();
+	ParseRemoveCurrentBridgeitId();
 	$("#login-email").val(email);
 	$("#login-error").html("");
 	$("#signup-error").html("");
 	var destID = "page-login";
 	ParseLogout(destID);
+
 }
 
 function createUserEvent(){
@@ -1116,7 +1124,20 @@ function sendMessage(){
 		var messageId = object.id;
 		var senderId = object.get("senderId");
 		var groupId = object.get("groupId");
-		ParseSetGroupMemberChatObjectReadFalse(senderId, groupId);
+		var text = object.get('text');
+		var notificationFunction = function(text, object){
+			var subject = $("#chat-messages-title").html+": "+text;
+			var data = {subject: subject};
+			var ownerId = object.get('ownerId');
+			var displayFunction = function(data,user){
+				var bridgeitId = user.get("bridgeitId");
+				bridgeit.push(bridgeitId, {
+					subject: data.subject
+				});
+			}
+			ParseGetProfileById(ownerId, displayFunction, data);
+		}
+		ParseSetGroupMemberChatObjectReadFalse(senderId, groupId, text, notificationFunction);
 		var newElement = buildElementInChatMessagesPage(object);
 		$("#page-chat-messages > .ui-content").append(newElement);
 		$("html body").animate({ scrollTop: $(document).height().toString()+"px" }, {

@@ -45,6 +45,14 @@ function ParseLogin(username, password, errorObject, destID, customFunction) {
 	});
 }
 
+function ParseRemoveCurrentBridgeitId() {
+	var current = Parse.User.current();
+	var empty;
+
+	current.set("bridgeitId",empty);
+	current.save();
+}
+
 function ParseLogout(destID) {
 	Parse.User.logOut();
 	window.location.hash = destID;
@@ -634,7 +642,7 @@ function ParseAddChatMessage(senderId, groupId, text, displayFunction){
 	})
 }
 
-function ParseSetGroupMemberChatObjectReadFalse(senderId, groupId) {
+function ParseSetGroupMemberChatObjectReadFalse(senderId, groupId, text, notificationFunction) {
 	var Group = Parse.Object.extend("Group");
 	var query = new Parse.Query(Group);
 
@@ -660,11 +668,19 @@ function ParseSetGroupMemberChatObjectReadFalse(senderId, groupId) {
 								chat.set("groupId", groupId);
 								chat.set("hidden", false);
 								chat.set("unreadNum", 1);
-								chat.save();
+								chat.save(null,{
+									success: function(object) {
+										notificationFunction(text,object);
+									}
+								});
 							} else {
 								// set unread number plus 1 for chat object
 								object.increment("unreadNum", 1);
-								object.save();
+								object.save(null, {
+									success: function(object) {
+										notificationFunction(text,object);
+									}
+								});
 							}
 						}
 					})
