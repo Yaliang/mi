@@ -548,6 +548,17 @@ function ParseGetGroupId(memberId, successFunction){
 	})
 }
 
+function ParseGetGroupMember(groupId, successFunction, data){
+	var Group = Parse.Object.extend("Group");
+	var query = new Parse.Query(Group);
+
+	query.get(groupId,{
+		success: function(object){
+			successFunction(object, data);
+		}
+	});
+}
+
 function ParseSetChatObjectAsRead(ownerId, groupId, successFunction){
 	var Chat = Parse.Object.extend("Chat");
 	var query = new Parse.Query(Chat);

@@ -1093,16 +1093,16 @@ function sendMessage(){
 	ParseAddChatMessage(senderId, groupId, text, displayFunction);
 }
 
-function updateChatTitle(friendId){
+function updateChatTitle(friendId, id){
 	var displayFunction= function(ownerId, friendId, object) {
 		var alias = object.get('alias');
 		if (typeof(alias) == "undefined") {
 			var displayFunction = function(user){
-				$('#chat-messages-title').html(user.get("name"));
+				$('#'+id).append(user.get("name"));
 			};
 			ParseGetProfileById(friendId, displayFunction)
 		} else {
-			$('#chat-messages-title').html(alias);
+			$('#'+id).append(alias);
 		}
 	}
 	ParseCheckFriend(Parse.User.current().id, friendId, displayFunction);
@@ -1127,7 +1127,7 @@ function startPrivateChat(friendId){
 					var newElement = buildElementInChatMessagesPage(objects[i]);
 					$("#page-chat-messages > .ui-content").append(newElement);
 				}
-				location.hash="page-chat-messages";
+				$.mobile.changePage( "#page-chat-messages", { transition: "slide"});
 			}
 			ParsePullChatMessage(groupId, limitNum, descendingOrderKey, null, displayFunction)
 		}
@@ -1135,7 +1135,7 @@ function startPrivateChat(friendId){
 	}
 	ParseGetGroupId(memberId,successFunction);
 	updateCashedPhoto120(friendId);
-	updateChatTitle(friendId);
+	updateChatTitle(friendId, "chat-messages-title");
 }
 
 function buildElementInChatListPage(object){
@@ -1144,8 +1144,10 @@ function buildElementInChatListPage(object){
 	var unreadNum = object.get("unreadNum");
 	var newElement = "";
 	newElement += "<div id='chat-"+chatId+"' class='chat-list'>";
-	newElement += "<div class='chat-list-title'>"+groupId+"</div>";
-	newElement += "<span class='ui-li-count'>"+unreadNum+"</span>";
+	newElement += "<div class='chat-list-title'></div>";
+	if (unreadNum > 0) {
+		newElement += "<span class='ui-li-count'>"+unreadNum+"</span>";
+	}
 	newElement += "</div>";
 
 	return newElement;
@@ -1159,6 +1161,31 @@ function pullMyChat(){
 		for (var i=0; i<objects.length; i++) {
 			var newElement = buildElementInChatListPage(objects[i]);
 			$("#page-chat > .ui-content").append(newElement);
+			var chatId = objects[i].id;
+			var data = {chatId: chatId};
+			var groupId = objects[i].get('groupId');
+			var successFunction = function(object, data){
+				var memberId = object.get("memberId");
+				for (var i=0; i<memberId.length; i++) {
+					if (memberId[i] != Parse.User.current().id) {
+						updateChatTitle(memberId[i], "chat-"+data.chatId);
+						data['friendId'] = memberId[i];
+						var displayFunction = function(data, object){
+							var userId = object[0].get("userId");
+							var photo120 = object[0].get("profilePhoto120");
+							var newCashed = {id: userId, photo120: photo120};
+							cashedPhoto120.push(newCashed);
+							$("#chat-"+data.chatId).css("backgroundImage","url("+photo120+")");
+							$("#chat-"+data.chatId).on("click",function(){
+								startPrivateChat(data.friendId);
+							});
+						}
+						ParseGetProfilePhoto(data, memberId[i], displayFunction);
+					}
+				}
+			}
+			ParseGetGroupMember(groupId, successFunction, data);
+
 		}
 	}
 	ParsePullMyChat(ownerId,descendingOrderKey,displayFunction);
