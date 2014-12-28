@@ -379,17 +379,31 @@ function ParsePullUserByGeolocation(latitude,longitude,latitudeLimit,longitudeLi
 
 function ParseSendFriendRequest(ownerId, friendId, successFunction){
 	var Friend = Parse.Object.extend("Friend");
-	var friend = new Friend;
+	var query = new Parse.Query(Friend);
 
-	friend.set('owner', ownerId);
-	friend.set('friend', friendId);
-	friend.set('valid',false);
-	friend.set('read',false);
-	friend.save(null, {
-		success: function(friend){
-			successFunction(friend);
+	query.equalTo('owner', ownerId);
+	query.equalTo('friend',friendId);
+	query.first({
+		success: function(object){
+			if (typeof(object)=="undefined") {
+				var friend = new Friend;
+
+				friend.set('owner', ownerId);
+				friend.set('friend', friendId);
+				friend.set('valid',false);
+				friend.set('read',false);
+				friend.save(null, {
+					success: function(friend){
+						successFunction(friend);
+					}
+				})
+			} else {
+				successFunction(object);
+			}
 		}
 	})
+
+	
 }
 
 function ParseAcceptFriendRequest(objectId, ownerId, friendId, successFunction){
@@ -404,19 +418,43 @@ function ParseAcceptFriendRequest(objectId, ownerId, friendId, successFunction){
 	}
 	query.first({
 		success:function(object){
+			// update current user's friend data
 			object.set('valid',true);
 			object.set('read',true);
 			object.save(null, {
 				success: function(object){
-					var friend = new Friend;
+					// try to update frient's data
+					var ownerId = object.get('friend');
+					var friendId = object.get('owner');
+					var query = new Parse.Query(Friend);
 
-					friend.set('owner',object.get('friend'));
-					friend.set('friend',object.get('owner'));
-					friend.set('valid',true);
-					friend.set('read',true);
-					friend.save(null, {
+					query.equalTo('owner',ownerId);
+					query.equalTo('friend',friendId);
+					query.first({
 						success: function(object){
-							successFunction(object);
+							if (typeof(object) == "undefined") {
+								// if friend's data doesn't exist
+								var friend = new Friend;
+
+								friend.set('owner',ownerId);
+								friend.set('friend',friendId);
+								friend.set('valid',true);
+								friend.set('read',true);
+								friend.save(null, {
+									success: function(object){
+										successFunction(object);
+									}
+								})
+							} else {
+								// if existed
+								object.set('valid',true);
+								object.set('read',true);
+								object.save(null,{
+									success: function(object){
+										successFunction(object);
+									}
+								})
+							}
 						}
 					})
 				}
