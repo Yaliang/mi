@@ -405,6 +405,7 @@ function ParseAcceptFriendRequest(objectId, ownerId, friendId, successFunction){
 	query.first({
 		success:function(object){
 			object.set('valid',true);
+			object.set('read',true);
 			object.save(null, {
 				success: function(object){
 					var friend = new Friend;
