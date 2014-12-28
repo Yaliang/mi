@@ -20,7 +20,6 @@ $(document).ready(function (){
 			pullUserEvent();
 			pullNotification();
 			updateCashedPhoto120(Parse.User.current().id);
-			//checkBridgeitEnable();
 		};
 		var errorFunction = function() {
 			window.location.hash = "page-login";
@@ -106,7 +105,6 @@ function signup(){
 		pullNotification();
 		ParseCreateProfilePhotoObject(object.id);
 		updateCashedPhoto120(Parse.User.current().id);
-		checkBridgeitEnable();
 	};
 	ParseSignup(email, password, email, name, errorObject, destID, customFunction);
 	$("#signup-password").val("");
@@ -121,7 +119,6 @@ function login(){
 		pullUserEvent();
 		pullNotification();
 		updateCashedPhoto120(Parse.User.current().id);
-		checkBridgeitEnable();
 	};
 	ParseLogin(email, password, errorObject, destID, customFunction);
 	$("#login-password").val("");
@@ -1132,9 +1129,9 @@ function sendMessage(){
 			var ownerId = object.get('ownerId');
 			var displayFunction = function(data,user){
 				var bridgeitId = user.get("bridgeitId");
-				bridgeit.push(bridgeitId, {
+				/*bridgeit.push(bridgeitId, {
 					subject: data.subject
-				});
+				});*/
 			}
 			ParseGetProfileById(ownerId, displayFunction, data);
 		}
