@@ -334,8 +334,9 @@ function ParseSaveProfilePhoto(id, photo, photo120, displayFunction) {
 			parseFile.save().then(function(object) {
 				photoObject.set("photo",object.url());
 				photoObject.save(null,{
-					success: function(photo){
-						displayFunction(photo);
+					success: function(object){
+						displayFunction(object);
+						CacheUpdateProfilePhoto(object);
 					}
 				});
 			}, function(error) {
@@ -345,14 +346,15 @@ function ParseSaveProfilePhoto(id, photo, photo120, displayFunction) {
 	})
 }
 
-function ParseGetProfilePhoto(data, userId, displayFunction) {
+function ParseGetProfilePhoto(userId, displayFunction, data) {
 	var Photo = Parse.Object.extend("Photo");
 	var query = new Parse.Query(Photo);
 
 	query.equalTo("userId",userId);
-	query.find({
+	query.first({
 		success: function(object){
-			displayFunction(data, object);
+			displayFunction(object, data);
+			CacheAddProfilePhoto(object);
 		}
 	})
 }
