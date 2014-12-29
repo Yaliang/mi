@@ -38,6 +38,7 @@ function ParseLogin(username, password, errorObject, destID, customFunction) {
 		success: function(user){
 			window.location.hash = destID;
 			customFunction();
+			CacheUpdateUser(user);
 		},
 		error: function(user, error){
 			errorObject.html("Error: " + error.code + " " + error.message);
@@ -61,10 +62,11 @@ function ParseLogout(destID) {
 function ParseUpdateCurrentUser(successFunction, errorFunction) {
 	var currentUser = Parse.User.current();
 	currentUser.fetch({
-		success: function(currentUser) {
+		success: function(object) {
 			successFunction();
+			CacheUpdateUser(object);
 		},
-		error: function(currentUser,error){
+		error: function(object,error){
 			errorFunction();
 		}
 	});
@@ -257,52 +259,33 @@ function ParseDeleteEvent(eventId, displayFunction){
 	});
 }
 
-function ParseGetProfile(owner, displayFunction, data){
+function ParseGetProfileByUsername(username, displayFunction, data){
 	var query = new Parse.Query(Parse.User);
 
-	query.equalTo("username", owner);
-	query.find({
-		success: function(user) {
-			if (data == null) {
-				displayFunction(user);
-			} else {
-				displayFunction(data, user);
-			}
-		}
-	});
-}
-
-function ParseGetProfileById(ownerId, displayFunction, data){
-	var query = new Parse.Query(Parse.User);
-
-	query.equalTo("objectId", ownerId);
+	query.equalTo("username", username);
 	query.first({
 		success: function(user) {
-			if (data == null) {
-				displayFunction(user);
-			} else {
-				displayFunction(data, user);
-			}
+			displayFunction(user, data);
+			CacheUpdateUser(user);
 		}
 	});
 }
 
-function ParseSaveProfile(id, photo, photo50, name, gender, birthdate, motto, major, school, interest, location, displayFunction) {
+function ParseGetProfileByUserId(userId, displayFunction, data){
+	var query = new Parse.Query(Parse.User);
+
+	query.equalTo("objectId", userId);
+	query.first({
+		success: function(user) {
+			displayFunction(user, data);
+			CacheUpdateUser(user);
+		}
+	});
+}
+
+function ParseSaveProfile(name, gender, birthdate, motto, major, school, interest, location, displayFunction) {
 	var currentUser = Parse.User.current();
-	if (photo != null) {
-		currentUser.set("photo50",photo50);
-		var parseFile = new Parse.File(photo.name, photo);
-		parseFile.save().then(function(object) {
-			currentUser.set("photo",object.url());
-			currentUser.save(null,{
-				success: function(userProfile){
-					displayFunction();
-				}
-			});
-		}, function(error) {
-			$("#upload-error").html("Error: " + error.code + " " + error.message);
-		});
-	}
+	
 	currentUser.set("name",name);
 	currentUser.set("gender",gender);
 	currentUser.set("birthdate",birthdate);
@@ -312,8 +295,9 @@ function ParseSaveProfile(id, photo, photo50, name, gender, birthdate, motto, ma
 	currentUser.set("interest",interest);
 	currentUser.set("location",location);
 	currentUser.save(null,{
-		success: function(userProfile){
+		success: function(object){
 			displayFunction();
+			CacheUpdateUser(object);
 		}
 	});
 }
@@ -322,8 +306,6 @@ function ParseSaveProfilePhoto(id, photo, photo120, displayFunction) {
 	var Photo = Parse.Object.extend("Photo");
 	var query = new Parse.Query(Photo);
 
-	console.log(photo);
-	console.log(photo120);
 	if (photo == null)
 		return;
 	query.equalTo("userId",id);
@@ -334,8 +316,9 @@ function ParseSaveProfilePhoto(id, photo, photo120, displayFunction) {
 			parseFile.save().then(function(object) {
 				photoObject.set("photo",object.url());
 				photoObject.save(null,{
-					success: function(photo){
-						displayFunction(photo);
+					success: function(object){
+						displayFunction(object);
+						CacheUpdatePhoto(object);
 					}
 				});
 			}, function(error) {
@@ -345,14 +328,15 @@ function ParseSaveProfilePhoto(id, photo, photo120, displayFunction) {
 	})
 }
 
-function ParseGetProfilePhoto(data, userId, displayFunction) {
+function ParseGetProfilePhoto(userId, displayFunction, data) {
 	var Photo = Parse.Object.extend("Photo");
 	var query = new Parse.Query(Photo);
 
 	query.equalTo("userId",userId);
-	query.find({
+	query.first({
 		success: function(object){
-			displayFunction(data, object);
+			displayFunction(object, data);
+			CacheAddPhoto(object);
 		}
 	})
 }
