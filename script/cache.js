@@ -39,7 +39,6 @@ function CacheGetProfileByUsername(username, displayFunction, data){
 		if (cacheUser[i].getUsername() == username) {
 			displayFunction(cacheUser[i], data);
 			cached = true;
-			console.log("hit:"+username);
 			break;
 		}
 	}
@@ -54,7 +53,6 @@ function CacheGetProfileByUserId(userId, displayFunction, data){
 		if (cacheUser[i].id == userId) {
 			displayFunction(cacheUser[i], data);
 			cached = true;
-			console.log("hit:"+userId);
 			break;
 		}
 	}

@@ -740,8 +740,6 @@ function profilePhotoCrop(){
 		var canvas = document.getElementById('canvas-photo');
 		var context = canvas.getContext('2d');
 		image.src = e.target.result;
-		console.log(image.width);
-		console.log(image.height);
 		var sourceX=0;
 		var sourceY=0;
 		var sourceWidth = image.width;

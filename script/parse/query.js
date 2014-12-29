@@ -267,7 +267,6 @@ function ParseGetProfileByUsername(username, displayFunction, data){
 		success: function(user) {
 			displayFunction(user, data);
 			CacheUpdateUser(user);
-			console.log("update:"+user.getUsername());
 		}
 	});
 }
@@ -280,7 +279,6 @@ function ParseGetProfileByUserId(userId, displayFunction, data){
 		success: function(user) {
 			displayFunction(user, data);
 			CacheUpdateUser(user);
-			console.log("update:"+user.id);
 		}
 	});
 }
@@ -308,8 +306,6 @@ function ParseSaveProfilePhoto(id, photo, photo120, displayFunction) {
 	var Photo = Parse.Object.extend("Photo");
 	var query = new Parse.Query(Photo);
 
-	console.log(photo);
-	console.log(photo120);
 	if (photo == null)
 		return;
 	query.equalTo("userId",id);
