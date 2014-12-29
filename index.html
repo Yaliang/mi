@@ -335,7 +335,7 @@
 		</div><!-- /header -->
 
 		<div role="main" class="ui-content">
-			<a href="#page-edit-my-profile" class="ui-btn" onclick="getMyProfile();">Edit My Profile</a>
+			<a href="#page-edit-my-profile" class="ui-btn" onclick="getMyProfile(); $('#profile-save-btn').on('click', function(){saveProfile()});">Edit My Profile</a>
 			<button class="ui-btn ui-custom-log-out" onclick="logout();">Logout</button>
 		</div><!-- /content -->
 
@@ -358,7 +358,7 @@
 			<h1>My Profile</h1>
 			<a data-rel="back" href="#page-event" class="ui-btn-left ui-btn ui-btn-inline ui-corner-all" onclick="refreshPreviewPhoto = false;">Back</a>
 			<label id="saveprofile-id" class="ui-hidden-accessible"></label>
-			<a data-rel="back" href="#page-event" class="ui-btn-right ui-btn ui-btn-inline ui-corner-all" onclick="saveProfile();">Save</a>
+			<a data-rel="back" href="#page-event" class="ui-btn-right ui-btn ui-btn-inline ui-corner-all" id="profile-save-btn">Save</a>
 		</div><!-- /header -->
 
 		<div role="main" class="ui-content" id="my-profile">

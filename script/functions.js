@@ -167,10 +167,11 @@ function createUserEvent(){
 var pullLastItem=0;
 
 function pullUserEventHolderInfo(holder, eventId){
-	var displayFunction = function(eventId, object) {
-		var name = object[0].get("name");
-		var gender = object[0].get("gender");
-		var userId = object[0].id;
+	var displayFunction = function(object, data) {
+		var name = object.get("name");
+		var gender = object.get("gender");
+		var userId = object.id;
+		var eventId = data.eventId;
 
 		$("#"+eventId+"-owner-name").html(name);
 		if (typeof(gender) == 'undefined') {
@@ -199,10 +200,10 @@ function pullUserEventHolderInfo(holder, eventId){
 				$("#event-content").removeClass("ui-hidden-accessible");
 			}
 		}
-		var data = {eventId: eventId};
 		CacheGetProfilePhoto(userId, displayFunction, data);
 	};
-	ParseGetProfile(holder, displayFunction, eventId);
+	CacheGetProfileByUsername(holder, displayFunction, {eventId : eventId})
+	//ParseGetProfile(holder, displayFunction, eventId);
 }
 
 function pullUserEvent(){
@@ -657,33 +658,32 @@ function getMyProfile(){
 	var currentUser = Parse.User.current();
 	var owner = currentUser.getUsername();
 	var userId = currentUser.id;
-	var displayFunction = function(objects){
-		var name = objects[0].get("name");
-		var gender = objects[0].get("gender");
-		var birthdate = objects[0].get("birthdate");
-		var motto = objects[0].get("motto");
-		var major = objects[0].get("major");
-		var school = objects[0].get("school");
-		var interest = objects[0].get("interest");
-		var location = objects[0].get("location");
+	var displayFunction = function(){
+		var currentUser = Parse.User.current();
+		var name = currentUser.get("name");
+		var gender = currentUser.get("gender");
+		var birthdate = currentUser.get("birthdate");
+		var motto = currentUser.get("motto");
+		var major = currentUser.get("major");
+		var school = currentUser.get("school");
+		var interest = currentUser.get("interest");
+		var location = currentUser.get("location");
 
-		$("#profile-edit-name").val(objects[0].get("name"));
-		$("#profile-edit-gender").val(objects[0].get("gender") ? "on" : "off");
-		if (!objects[0].get("gender")) {
+		$("#profile-edit-name").val(name);
+		$("#profile-edit-gender").val(gender ? "on" : "off");
+		if (!gender) {
 			$("#profile-edit-gender").parent().removeClass("ui-flipswitch-active");
 		} else {
 			$("#profile-edit-gender").parent().addClass("ui-flipswitch-active");
 		}
-		$("#profile-edit-birthdate").val(objects[0].get("birthdate"));
-		$("#profile-edit-motto").val(objects[0].get("motto"));
-		$("#profile-edit-major").val(objects[0].get("major"));
-		$("#profile-edit-school").val(objects[0].get("school"));
-		$("#profile-edit-interest").val(objects[0].get("interest"));
-		$("#profile-edit-location").val(objects[0].get("location"));
-		$("#saveprofile-id").html(objects[0].id);
-		
+		$("#profile-edit-birthdate").val(birthdate);
+		$("#profile-edit-motto").val(motto);
+		$("#profile-edit-major").val(major);
+		$("#profile-edit-school").val(school);
+		$("#profile-edit-interest").val(interest);
+		$("#profile-edit-location").val(location);
 	} 
-	ParseGetProfile(owner, displayFunction, null);
+	ParseUpdateCurrentUser(displayFunction, function(){});
 	displayFunction = function(object){
 		var photo120 = object.get('profilePhoto120');
 		if (typeof(photo120) == "undefined") {
@@ -700,6 +700,7 @@ function getMyProfile(){
 
 function saveProfile(){
 	refreshPreviewPhoto = false;
+	$("#profile-save-btn").unbind("click");
 	var currentUser = Parse.User.current();
 	var owner = currentUser.getUsername();
 	var id = $("#saveprofile-id").html();
@@ -724,7 +725,7 @@ function saveProfile(){
 	var displayFunction = function(){
 		ParseUpdateCurrentUser(function(){}, function(){});
 	}
-	ParseSaveProfile(id, null, null, name, gender, birthdate, motto, major, school, interest, location, displayFunction);
+	ParseSaveProfile(name, gender, birthdate, motto, major, school, interest, location, displayFunction);
 	ParseSaveProfilePhoto(id, photo, photo120, function(object){});
 }
 
@@ -1022,10 +1023,10 @@ function pullMyFriendRequests() {
 		for (var i=0; i<objects.length; i++) {
 			var friendId = objects[i].get("owner");
 			var objectId = objects[i].id;
-			var displayFunction = function(friendObject, userObject) {
+			var displayFunction = function(userObject, data) {
 				var newElement = buildUserListElement(userObject, "new-friend-request-", null, null);
-				var objectId = friendObject.id;
-				var friendId = friendObject.get('owner');
+				var objectId = data.friendObject.id;
+				var friendId = data.friendObject.get('owner');
 				$( "#friend-requests-list" ).append(newElement);
 				var displayFunction = function(object, data){
 					var photo120 = object.get("profilePhoto120");
@@ -1034,12 +1035,11 @@ function pullMyFriendRequests() {
 					}
 					$("#new-friend-request-"+data.friendId+" > .custom-corners-people-near-by").css("backgroundImage","url('"+photo120+"')");
 				}
-				var data = {friendId: friendId};
-				ParseGetProfilePhoto(friendId, friendId, displayFunction, data);
+				CacheGetProfilePhoto(friendId, displayFunction, {friendId: friendId});
 				prefixForGetFriendOptionsButton="new-friend-request-";
 				getFriendOptionsButton(friendId);
 			}
-			ParseGetProfileById(friendId, displayFunction, objects[i]);
+			CacheGetProfileByUserId(friendId, displayFunction, {friendObject:objects[i]});
 			ParseSetRequestRead(objectId);
 		}
 	}
@@ -1053,10 +1053,10 @@ function pullMyFriendList() {
 		for (var i=0; i<objects.length; i++) {
 			var friendId = objects[i].get("friend");
 			var objectId = objects[i].id;
-			var displayFunction = function(friendObject, userObject) {
+			var displayFunction = function(userObject, data) {
 				var newElement = buildUserListElement(userObject, "friend-list-", null, null);
-				var objectId = friendObject.id;
-				var friendId = friendObject.get('friend');
+				var objectId = data.friendObject.id;
+				var friendId = data.friendObject.get('friend');
 				$( "#friend-list" ).append(newElement);
 				var displayFunction = function(object, data){
 					var photo120 = object.get("profilePhoto120");
@@ -1065,12 +1065,11 @@ function pullMyFriendList() {
 					}
 					$("#friend-list-"+data.friendId+" > .custom-corners-people-near-by").css("backgroundImage","url('"+photo120+"')");
 				}
-				var data = {friendId : friendId};
-				CacheGetProfilePhoto(friendId, displayFunction, data);
+				CacheGetProfilePhoto(friendId, displayFunction, {friendId : friendId});
 				prefixForGetFriendOptionsButton="friend-list-";
 				getFriendOptionsButton(friendId, 3);
 			}
-			ParseGetProfileById(friendId, displayFunction, objects[i]);
+			CacheGetProfileByUserId(friendId, displayFunction, {friendObject:objects[i]});
 		}
 	}
 	ParsePullMyFriend(Parse.User.current().id, descendingOrderKey, displayFunction);
@@ -1154,13 +1153,13 @@ function sendMessage(){
 			var subject = $("#chat-messages-title").html+": "+text;
 			var data = {subject: subject};
 			var ownerId = object.get('ownerId');
-			var displayFunction = function(data,user){
+			var displayFunction = function(user){
 				var bridgeitId = user.get("bridgeitId");
 				/*bridgeit.push(bridgeitId, {
 					subject: data.subject
 				});*/
 			}
-			ParseGetProfileById(ownerId, displayFunction, data);
+			CacheGetProfileByUserId(ownerId, displayFunction);
 		}
 		ParseSetGroupMemberChatObjectReadFalse(senderId, groupId, text, notificationFunction);
 		var newElement = buildElementInChatMessagesPage(object);
@@ -1186,7 +1185,7 @@ function updateChatTitle(friendId, id, option){
 					$('#'+id).append(user.get("name"));
 				}
 			};
-			ParseGetProfileById(friendId, displayFunction)
+			CacheGetProfileByUserId(friendId, displayFunction)
 		} else {
 			if ((option)&&(option == 2)) {
 				$('#'+id).html(alias);
