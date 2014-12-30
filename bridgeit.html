@@ -43,6 +43,7 @@
 
 	if (!cloudPushReady)  {
 	    bridgeit.usePushService( window.pushHub, window.apiKey);
+	    document.getElementById('regResult').innerText = window.pushHub + window.apiKey;
 	    bridgeit.addPushListener(bridgeit.getId(), 'handlePush');
 	    cloudPushReady = true;
 	    bridgeit.register('_reg', 'handlePushRegistration');
