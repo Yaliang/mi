@@ -52,10 +52,8 @@
 
 	function performPush()  {
 		document.getElementById('regResult').innerText = window.pushHub + window.apiKey;
-	    bridgeit.push( bridgeit.getId(),
-	        {subject:'BridgeIt Cloud Push',
-	        detail:'You have been notified.',
-	        url: bridgeit.cloudPushReturnURL()} );
+	    bridgeit.push({
+	    	"subject":"BridgeIt Cloud Push","detail":"You have been notified.","delay":10000,"url":"http://bridgeit.mobi/demo/cloud-push.html"} );
 	}
 	</script>
 
