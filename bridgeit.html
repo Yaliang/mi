@@ -20,7 +20,7 @@
 
 		<div role="main" class="ui-content">
 			<div id="pushResult"></div>
-			<a id="pushBtn" type="button" onclick="performPush();">Push</a>
+			<a id="pushBtn" type="button" class="ui-btn" onclick="performPush();">Push</a>
 		</div><!-- /content -->
 
 		<div data-role="footer" data-position="fixed" data-tap-toggle="false">
@@ -30,15 +30,15 @@
 	<script type="text/javascript">
 	var cloudPushReady;
 
+	function handlePush()  {
+	    document.getElementById('pushResult').innerText = 'Push Received';
+	}
+
 	if (!cloudPushReady)  {
 	    bridgeit.usePushService( window.pushHub, window.apiKey);
 	    bridgeit.addPushListener(bridgeit.getId(), 'handlePush');
 	    cloudPushReady = true;
 	    bridgeit.register('_reg', 'handlePushRegistration');
-	}
-
-	function handlePush()  {
-	    document.getElementById('pushResult').innerText = 'Push Received';
 	}
 
 	function performPush()  {
