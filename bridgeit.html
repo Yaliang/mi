@@ -42,6 +42,8 @@
 	}
 
 	if (!cloudPushReady)  {
+		window.pushHub = 'http://api.bridgeit.mobi/push/';
+		window.apiKey = '197EBF31-40CD-444F-826F-10158A0F3581';
 	    bridgeit.usePushService( window.pushHub, window.apiKey);
 	    bridgeit.addPushListener(bridgeit.getId(), 'handlePush');
 	    cloudPushReady = true;
