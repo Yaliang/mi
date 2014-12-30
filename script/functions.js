@@ -1162,7 +1162,14 @@ function sendMessage(){
 		ParseSetGroupMemberChatObjectReadFalse(senderId, groupId, text, notificationFunction);
 		var newElement = buildElementInChatMessagesPage(object);
 		$("#page-chat-messages > .ui-content").append(newElement);
-		getCashedPhoto120(senderId,"#message-"+messageId)
+		var displayFunction = function(object, data){
+			var photo120 = object.get("profilePhoto120");
+			if (typeof(photo120) == "undefined") {
+				photo120 = "./content/png/Taylor-Swift.png";
+			}
+			$("#message-"+data.messageId).css("backgroundImage","url('"+photo120+"')");
+		}
+		CacheGetProfilePhoto(senderId, displayFunction, {messageId : messageId});
 		$("html body").animate({ scrollTop: $(document).height().toString()+"px" }, {
 			duration: 150,
 			complete : function(){}
