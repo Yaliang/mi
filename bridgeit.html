@@ -1,0 +1,53 @@
+<!DOCTYPE html> 
+<html>
+<head>
+	<link rel="stylesheet" href="./script/jquery/mobile/jquery.mobile-1.4.5.min.css" />
+	<link rel="stylesheet" href="index.css" />
+	<script type="application/x-javascript" src="http://api.bridgeit.mobi/bridgeit/bridgeit.js"></script>
+	<script src="./script/jquery/jquery-1.11.1.min.js"></script>
+	<script src="./script/jquery/mobile/jquery.mobile-1.4.5.min.js"></script>
+	<script src="./script/parse/parse-1.3.2.min.js"></script>
+	<script src="./script/parse/query.js"></script>
+</head>
+
+<body>
+	<!-- Page for loading -->
+	<div data-role="page" id="page-loading" data-title="觅校缘">
+
+		<div data-role="header">
+			<h1>觅校缘</h1>
+		</div><!-- header -->
+
+		<div role="main" class="ui-content">
+			<div id="pushResult"></div>
+			<a id="pushBtn" type="button" onclick="performPush();">Push</a>
+		</div><!-- /content -->
+
+		<div data-role="footer" data-position="fixed" data-tap-toggle="false">
+		</div><!-- /footer -->
+	</div><!-- /page -->
+
+	<script type="text/javascript">
+	var cloudPushReady;
+
+	if (!cloudPushReady)  {
+	    bridgeit.usePushService( window.pushHub, window.apiKey);
+	    bridgeit.addPushListener(bridgeit.getId(), 'handlePush');
+	    cloudPushReady = true;
+	    bridgeit.register('_reg', 'handlePushRegistration');
+	}
+
+	function handlePush()  {
+	    document.getElementById('pushResult').innerText = 'Push Received';
+	}
+
+	function performPush()  {
+	    bridgeit.push( bridgeit.getId(),
+	        {subject:'BridgeIt Cloud Push',
+	        detail:'You have been notified.',
+	        url: bridgeit.cloudPushReturnURL()} );
+	}
+	</script>
+
+</body>
+</html>
