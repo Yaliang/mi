@@ -46,10 +46,10 @@
 	    bridgeit.addPushListener(bridgeit.getId(), 'handlePush');
 	    cloudPushReady = true;
 	    bridgeit.register('_reg', 'handlePushRegistration');
-	    document.getElementById('regResult').innerText = window.pushHub + window.apiKey;
 	}
 
 	function performPush()  {
+		document.getElementById('regResult').innerText = window.pushHub + window.apiKey;
 	    bridgeit.push( bridgeit.getId(),
 	        {subject:'BridgeIt Cloud Push',
 	        detail:'You have been notified.',
