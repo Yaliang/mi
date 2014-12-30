@@ -20,6 +20,7 @@
 
 		<div role="main" class="ui-content">
 			<div id="pushResult"></div>
+			<div id="regResult"></div>
 			<a id="pushBtn" type="button" class="ui-btn" onclick="performPush();">Push</a>
 		</div><!-- /content -->
 
@@ -32,6 +33,12 @@
 
 	function handlePush()  {
 	    document.getElementById('pushResult').innerText = 'Push Received';
+	}
+
+	function handlePushRegistration(event)  {
+	    if (bridgeit.isRegistered())  {
+	        document.getElementById('regResult').innerText = 'Register Success';
+	    }
 	}
 
 	if (!cloudPushReady)  {
