@@ -1,3 +1,20 @@
+.in {
+	-webkit-animation-timing-function: ease-out;
+	-webkit-animation-duration: 10ms!important;
+	-moz-animation-timing-function: ease-out;
+	-moz-animation-duration: 10ms!important;
+	animation-timing-function: ease-out;
+	animation-duration: 10ms!important;
+}
+.out {
+	-webkit-animation-timing-function: ease-in;
+	-webkit-animation-duration: 10ms!important;
+	-moz-animation-timing-function: ease-in;
+	-moz-animation-duration: 10ms!important;
+	animation-timing-function: ease-in;
+	animation-duration: 10ms!important;
+}
+
 .custom-size-flipswitch-event-create-visibility.ui-flipswitch .ui-btn.ui-flipswitch-on {
 	text-indent: -3.8em;
 }
