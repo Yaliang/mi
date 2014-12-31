@@ -1,19 +1,19 @@
-.in {
+/*.in {
 	-webkit-animation-timing-function: ease-out;
-	-webkit-animation-duration: 10ms!important;
+	-webkit-animation-duration: 0ms;
 	-moz-animation-timing-function: ease-out;
-	-moz-animation-duration: 10ms!important;
+	-moz-animation-duration: 0ms;
 	animation-timing-function: ease-out;
-	animation-duration: 10ms!important;
+	animation-duration: 0ms;
 }
 .out {
 	-webkit-animation-timing-function: ease-in;
-	-webkit-animation-duration: 10ms!important;
+	-webkit-animation-duration: 0ms;
 	-moz-animation-timing-function: ease-in;
-	-moz-animation-duration: 10ms!important;
+	-moz-animation-duration: 0ms;
 	animation-timing-function: ease-in;
-	animation-duration: 10ms!important;
-}
+	animation-duration: 0ms;
+}*/
 
 .custom-size-flipswitch-event-create-visibility.ui-flipswitch .ui-btn.ui-flipswitch-on {
 	text-indent: -3.8em;
