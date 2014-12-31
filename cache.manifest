@@ -21,7 +21,8 @@ NETWORK:
 # are whitelisted.
 # http://example.com/examplepath/
 # http://www.example.org/otherexamplepath/
-*
+
+http://fonts.googleapis.com/
  
 CACHE:
 # Additional items to cache.
