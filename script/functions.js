@@ -230,9 +230,9 @@ function pullUserEvent(){
 					newElement = newElement + "<p class='ui-custom-event-time'>" + time + "</p>";
 				}
 				if ((location.length == 0) && (time.length == 0)) {
-					newElement = newElement + "<p class='ui-custom-event-description-less-margin'>" + description.replace("\n","</br>") + "</p>";
+					newElement = newElement + "<p class='ui-custom-event-description-less-margin'>" + ((description.length == 0) ? "</br>" : description.replace("\n","</br>")) + "</p>";
 				} else {
-					newElement = newElement + "<p class='ui-custom-event-description'>" + description.replace("\n","</br>") + "</p>";
+					newElement = newElement + "<p class='ui-custom-event-description'>" + ((description.length == 0) ? "</br>" : description.replace("\n","</br>")) + "</p>";
 				}
 				newElement = newElement + "<div id='comment-statistics-"+id+"' class='event-statistics'>" + commentNumber + " Comments</div><div id='interest-statistics-"+id+"' class='event-statistics'>" + interestNumber + " Interests</div>";
 				newElement = newElement + "</div>";
@@ -897,7 +897,6 @@ function getFriendOptionsButton(userId, option){
 		return;
 	}
 	var displayFunction = function(ownerId, friendId, object){
-		console.log(object);
 		if (typeof(object)=="undefined") {
 			var displayFunction = function(ownerId, friendId, object){
 				if (typeof(object)=="undefined") {
@@ -944,7 +943,6 @@ function getFriendOptionsButton(userId, option){
 			CacheCheckFriend(ownerId, friendId, displayFunction);
 		} else {
 			var valid = object.get('valid');
-			console.log("#"+prefixForGetFriendOptionsButton+friendId+" > .custom-corners-people-near-by > .ui-bar");
 			if (valid) {
 				var startChatButton = "<div class='send-friend-request chat-friend' onclick=\"startPrivateChat('"+friendId+"');\">Start Chat</div>";
 				$("#"+prefixForGetFriendOptionsButton+friendId+" > .custom-corners-people-near-by > .ui-bar").append(startChatButton);
