@@ -1,5 +1,6 @@
 function updateSite(event) {
     window.applicationCache.swapCache();
+    console.log("updateSite");
 }
 
 window.applicationCache.addEventListener('updateready',
