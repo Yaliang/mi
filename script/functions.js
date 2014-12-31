@@ -783,26 +783,32 @@ function buildUserListElement(object, liIdPrefix, lat, lng) {
 	var longitude = object.get('longitude');
 	var userId = object.id;
 	var updatedAt = object.updatedAt;
-	var newElement = "<li id='"+liIdPrefix+userId+"'>";
-	newElement = newElement + "<div class='custom-corners-people-near-by custom-corners'>"
-	newElement = newElement + "<div class='ui-bar ui-bar-a'>";
-	newElement = newElement + "<div><strong>"+name+"</strong></div>";
-	newElement = newElement + "<div class='ui-icon-custom-gender' style='";
+	var newElement = "";
+	if (liIdPrefix != null) {
+		newElement += "<li id='"+liIdPrefix+userId+"'>";
+	}
+	newElement += "<div class='custom-corners-people-near-by custom-corners'>"
+	newElement += "<div class='ui-bar ui-bar-a'>";
+	newElement += "<div><strong>"+name+"</strong></div>";
+	newElement += "<div class='ui-icon-custom-gender' style='";
 	if (typeof(gender) == 'undefined') {
 		//$("#"+eventId+"-owner-denger").html(gender.toString());
 	} else if (gender) {
-		newElement = newElement + "background-image:url("+"./content/customicondesign-line-user-black/png/male-white-20.png"+");";
-		newElement = newElement + "background-color:"+"#8970f1"+";";
+		newElement += "background-image:url("+"./content/customicondesign-line-user-black/png/male-white-20.png"+");";
+		newElement += "background-color:"+"#8970f1"+";";
 	} else {
-		newElement = newElement + "background-image:url("+"./content/customicondesign-line-user-black/png/female1-white-20.png"+");";
-		newElement = newElement + "background-color:"+"#f46f75"+";";
+		newElement += "background-image:url("+"./content/customicondesign-line-user-black/png/female1-white-20.png"+");";
+		newElement += "background-color:"+"#f46f75"+";";
 	};
-	newElement = newElement + "'></div>";
+	newElement += "'></div>";
 	if ((lat != null) && (lng != null)) {
-		newElement = newElement + "<div class='people-near-by-list-distance'>" + getDistance(latitude, longitude, lat, lng) + "km, "+convertTime(updatedAt)+"</div>";
+		newElement += "<div class='people-near-by-list-distance'>" + getDistance(latitude, longitude, lat, lng) + "km, "+convertTime(updatedAt)+"</div>";
 	}
-	newElement = newElement + "</div>";
-	newElement = newElement + "</div></li>";
+	newElement += "</div>";
+	newElement += "</div>";
+	if (liIdPrefix != null) {
+		newElement += "</li>";
+	}
 
 	return newElement;
 }
@@ -1041,6 +1047,7 @@ function pullMyFriendRequests() {
 
 function pullMyFriendList() {
 	$( "#friend-list" ).html("");
+	// check if there is new friend requests. If none, hide the button to transfer request list page
 	var displayFunction = function(objects){
 		if (objects.length == 0) {
 			$("#page-my-friend-requests > .ui-content").addClass("ui-hidden-accessible");
@@ -1051,16 +1058,21 @@ function pullMyFriendList() {
 		}
 	}
 	CachePullNewFriendRequest(Parse.User.current().id, "updatedAt", displayFunction);
-	var descendingOrderKey = "updatedAt";
+
+	var descendingOrderKey = "createdAt";
 	var displayFunction = function(objects){
+		// sort user list
+
+		// display them
 		for (var i=0; i<objects.length; i++) {
 			var friendId = objects[i].get("friend");
 			var objectId = objects[i].id;
+			$( "#friend-list" ).append("<li id='friend-list-"+friendId+"'></li>");
 			var displayFunction = function(userObject, data) {
-				var newElement = buildUserListElement(userObject, "friend-list-", null, null);
+				var newElement = buildUserListElement(userObject, null, null, null);
 				var objectId = data.friendObject.id;
 				var friendId = data.friendObject.get('friend');
-				$( "#friend-list" ).append(newElement);
+				$( "#friend-list-"+userObject.id ).append(newElement);
 				var displayFunction = function(object, data){
 					var photo120 = object.get("profilePhoto120");
 					if (typeof(photo120) == "undefined") {
@@ -1190,9 +1202,10 @@ function startPrivateChat(friendId){
 				$.mobile.changePage( "#page-chat-messages", { transition: "slide"});
 				setTimeout(function(){
 					$("html body").animate({ scrollTop: $(document).height().toString()+"px" }, {
-						duration: 150,
-						complete : function(){}
-					});
+						duration: 0,
+				        complete : function(){
+				        }
+				    });
 				},575);
 			}
 			ParsePullChatMessage(groupId, limitNum, descendingOrderKey, null, displayFunction)
@@ -1228,9 +1241,10 @@ function updateChatMessage(object){
 			}
 		}
 		$("html body").animate({ scrollTop: $(document).height().toString()+"px" }, {
-			duration: 150,
-			complete : function(){}
-		});
+			duration: 0,
+	        complete : function(){
+	        }
+	    });
 	}
 	ParsePullChatMessage(groupId, limitNum, descendingOrderKey, beforeAt, displayFunction);
 
