@@ -546,6 +546,24 @@ function ParsePullMyFriend(ownerId, descendingOrderKey, displayFunction) {
 	})
 }
 
+function ParsePullAllFriendObjectById(ownerId){
+	var Friend = Parse.Object.extend("Friend");
+	var queryAsOwner = new Parse.Query(Friend);
+	queryAsOwner.equalTo("owner",ownerId);
+	var queryAsFriend = new Parse.Query(Friend);
+	queryAsFriend.equalTo("friend",ownerId);
+	var query = Parse.Query.or(queryAsOwner,queryAsFriend);
+
+	query.find({
+		success: function(objects){
+			for (var i = 0; i < objects.length; i++) {
+				CacheUpdateFriend(objects[i]);
+			}
+		}
+	})
+
+}
+
 function ParseSearchUserByEmailAndName(string, limitNumber, descendingOrderKey, displayFunction){
 	var queryByEmail = new Parse.Query(Parse.User);
 	var queryByName = new Parse.Query(Parse.User);

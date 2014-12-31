@@ -19,8 +19,7 @@ $(document).ready(function (){
 			window.location.hash = "page-event";
 			pullUserEvent();
 			pullNotification();
-			ParsePullNewFriendRequest(Parse.User.current().id, "updatedAt", function(){});
-			ParsePullMyFriend(Parse.User.current().id, "updatedAt", function(){});
+			ParsePullAllFriendObjectById(Parse.User.current().id);
 		};
 		var errorFunction = function() {
 			window.location.hash = "page-login";
@@ -107,8 +106,7 @@ function login(){
 	var customFunction = function(){
 		pullUserEvent();
 		pullNotification();
-		ParsePullNewFriendRequest(Parse.User.current().id, "updatedAt", function(){});
-		ParsePullMyFriend(Parse.User.current().id, "updatedAt", function(){});
+		ParsePullAllFriendObjectById(Parse.User.current().id);
 	};
 	ParseLogin(email, password, errorObject, destID, customFunction);
 	$("#login-password").val("");
@@ -232,9 +230,9 @@ function pullUserEvent(){
 					newElement = newElement + "<p class='ui-custom-event-time'>" + time + "</p>";
 				}
 				if ((location.length == 0) && (time.length == 0)) {
-					newElement = newElement + "<p class='ui-custom-event-description-less-margin'>" + description.replace("\n","</br>") + "</p>";
+					newElement = newElement + "<p class='ui-custom-event-description-less-margin'>" + ((description.length == 0) ? "</br>" : description.replace("\n","</br>")) + "</p>";
 				} else {
-					newElement = newElement + "<p class='ui-custom-event-description'>" + description.replace("\n","</br>") + "</p>";
+					newElement = newElement + "<p class='ui-custom-event-description'>" + ((description.length == 0) ? "</br>" : description.replace("\n","</br>")) + "</p>";
 				}
 				newElement = newElement + "<div id='comment-statistics-"+id+"' class='event-statistics'>" + commentNumber + " Comments</div><div id='interest-statistics-"+id+"' class='event-statistics'>" + interestNumber + " Interests</div>";
 				newElement = newElement + "</div>";
@@ -899,7 +897,6 @@ function getFriendOptionsButton(userId, option){
 		return;
 	}
 	var displayFunction = function(ownerId, friendId, object){
-		console.log(object);
 		if (typeof(object)=="undefined") {
 			var displayFunction = function(ownerId, friendId, object){
 				if (typeof(object)=="undefined") {
@@ -946,7 +943,6 @@ function getFriendOptionsButton(userId, option){
 			CacheCheckFriend(ownerId, friendId, displayFunction);
 		} else {
 			var valid = object.get('valid');
-			console.log("#"+prefixForGetFriendOptionsButton+friendId+" > .custom-corners-people-near-by > .ui-bar");
 			if (valid) {
 				var startChatButton = "<div class='send-friend-request chat-friend' onclick=\"startPrivateChat('"+friendId+"');\">Start Chat</div>";
 				$("#"+prefixForGetFriendOptionsButton+friendId+" > .custom-corners-people-near-by > .ui-bar").append(startChatButton);
@@ -1010,8 +1006,13 @@ function pullMyFriendRequests() {
 	$("#page-my-friend-requests > .ui-content").html("<ul id='friend-requests-list' class='ui-listview ui-listview-inset ui-corner-all ui-shadow'></ul>");
 	var descendingOrderKey = "createdAt";
 	var displayFunction = function(objects){
-		console.log("requests:");
-		console.log(objects);
+		if (objects.length == 0) {
+			$("#page-my-friend-requests > .ui-content").addClass("ui-hidden-accessible");
+			$("#new-friend-requests-btn").addClass("ui-hidden-accessible");
+		} else {
+			$("#page-my-friend-requests > .ui-content").removeClass("ui-hidden-accessible");
+			$("#new-friend-requests-btn").removeClass("ui-hidden-accessible");
+		}
 		for (var i=0; i<objects.length; i++) {
 			var friendId = objects[i].get("owner");
 			var objectId = objects[i].id;
@@ -1040,9 +1041,18 @@ function pullMyFriendRequests() {
 
 function pullMyFriendList() {
 	$( "#friend-list" ).html("");
+	var displayFunction = function(objects){
+		if (objects.length == 0) {
+			$("#page-my-friend-requests > .ui-content").addClass("ui-hidden-accessible");
+			$("#new-friend-requests-btn").addClass("ui-hidden-accessible");
+		} else {
+			$("#page-my-friend-requests > .ui-content").removeClass("ui-hidden-accessible");
+			$("#new-friend-requests-btn").removeClass("ui-hidden-accessible");
+		}
+	}
+	CachePullNewFriendRequest(Parse.User.current().id, "updatedAt", displayFunction);
 	var descendingOrderKey = "updatedAt";
 	var displayFunction = function(objects){
-		console.log(objects);
 		for (var i=0; i<objects.length; i++) {
 			var friendId = objects[i].get("friend");
 			var objectId = objects[i].id;
