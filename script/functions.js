@@ -19,6 +19,8 @@ $(document).ready(function (){
 			window.location.hash = "page-event";
 			pullUserEvent();
 			pullNotification();
+			ParsePullNewFriendRequest(Parse.User.current().id, "updatedAt", function(){});
+			ParsePullMyFriend(Parse.User.current().id, "updatedAt", function(){});
 		};
 		var errorFunction = function() {
 			window.location.hash = "page-login";
@@ -28,20 +30,6 @@ $(document).ready(function (){
 		window.location.hash = "page-login";
 	}
 });
-
-function checkBridgeitEnable(){
-	var currentBridgeitId = Parse.User.current().get("bridgeitId");
-	if (typeof(currentBridgeitId) == "undefined" && bridgeit.isIPhone() && !bridgeit.isRegistered()) {
-		//bridgeit.usePushService( window.pushHub, window.apiKey);
-		bridgeit.register('_reg', 'handlePushRegistration');
-	}
-}
-
-function handlePushRegistration(event){
-	if (bridgeit.isRegistered()) {
-		ParseUpdateBridgeit(bridgeit.getId());
-	}
-}
 
 function pullNotification(){
 	var currentUser = Parse.User.current();
@@ -119,6 +107,8 @@ function login(){
 	var customFunction = function(){
 		pullUserEvent();
 		pullNotification();
+		ParsePullNewFriendRequest(Parse.User.current().id, "updatedAt", function(){});
+		ParsePullMyFriend(Parse.User.current().id, "updatedAt", function(){});
 	};
 	ParseLogin(email, password, errorObject, destID, customFunction);
 	$("#login-password").val("");
@@ -909,6 +899,7 @@ function getFriendOptionsButton(userId, option){
 		return;
 	}
 	var displayFunction = function(ownerId, friendId, object){
+		console.log(object);
 		if (typeof(object)=="undefined") {
 			var displayFunction = function(ownerId, friendId, object){
 				if (typeof(object)=="undefined") {
@@ -952,9 +943,10 @@ function getFriendOptionsButton(userId, option){
 					});
 				}
 			}
-			ParseCheckFriend(friendId, ownerId, displayFunction);
+			CacheCheckFriend(ownerId, friendId, displayFunction);
 		} else {
 			var valid = object.get('valid');
+			console.log("#"+prefixForGetFriendOptionsButton+friendId+" > .custom-corners-people-near-by > .ui-bar");
 			if (valid) {
 				var startChatButton = "<div class='send-friend-request chat-friend' onclick=\"startPrivateChat('"+friendId+"');\">Start Chat</div>";
 				$("#"+prefixForGetFriendOptionsButton+friendId+" > .custom-corners-people-near-by > .ui-bar").append(startChatButton);
@@ -964,7 +956,7 @@ function getFriendOptionsButton(userId, option){
 			}
 		}
 	}
-	ParseCheckFriend(Parse.User.current().id, userId, displayFunction);
+	CacheCheckFriend(userId, Parse.User.current().id, displayFunction);
 }
 
 function sendFriendRequest(friendId) {
@@ -1015,9 +1007,11 @@ function unbindSearchAutocomplete(){
 }
 
 function pullMyFriendRequests() {
-	$("#page-my-friend-requests > .ui-content").html("<ul id='friend-requests-list' data-role='listview' data-inset='true' class='ui-listview ui-listview-inset ui-corner-all ui-shadow'></ul>");
+	$("#page-my-friend-requests > .ui-content").html("<ul id='friend-requests-list' class='ui-listview ui-listview-inset ui-corner-all ui-shadow'></ul>");
 	var descendingOrderKey = "createdAt";
 	var displayFunction = function(objects){
+		console.log("requests:");
+		console.log(objects);
 		for (var i=0; i<objects.length; i++) {
 			var friendId = objects[i].get("owner");
 			var objectId = objects[i].id;
@@ -1041,13 +1035,14 @@ function pullMyFriendRequests() {
 			ParseSetRequestRead(objectId);
 		}
 	}
-	ParsePullNewFriendRequest(Parse.User.current().id, descendingOrderKey, displayFunction);
+	CachePullNewFriendRequest(Parse.User.current().id, descendingOrderKey, displayFunction);
 }
 
 function pullMyFriendList() {
 	$( "#friend-list" ).html("");
 	var descendingOrderKey = "updatedAt";
 	var displayFunction = function(objects){
+		console.log(objects);
 		for (var i=0; i<objects.length; i++) {
 			var friendId = objects[i].get("friend");
 			var objectId = objects[i].id;
@@ -1070,7 +1065,7 @@ function pullMyFriendList() {
 			CacheGetProfileByUserId(friendId, displayFunction, {friendObject:objects[i]});
 		}
 	}
-	ParsePullMyFriend(Parse.User.current().id, descendingOrderKey, displayFunction);
+	CachePullMyFriend(Parse.User.current().id, descendingOrderKey, displayFunction);
 }
 
 function buildElementInChatMessagesPage(object){
@@ -1093,48 +1088,6 @@ function buildElementInChatMessagesPage(object){
 	return newElement;
 }
 
-/*var cashedPhoto120 = new Array;
-function getCashedPhoto120(userId, destSelector){
-	for (var i = cashedPhoto120.length-1; i >= 0; i--){
-		if (cashedPhoto120[i].id == userId) {
-			if (typeof(destSelector) != "undefined") {
-				$(destSelector).css("backgroundImage","url("+cashedPhoto120[i].photo120+")");
-				return;
-			} else {
-				return cashedPhoto120[i].photo120;
-			}
-		}
-	}
-	updateCashedPhoto120(userId, destSelector);
-	return "";
-}
-
-function updateCashedPhoto120(userId, destSelector){
-	var successFunction = function(data, object){
-		var userId = object[0].get("userId");
-		var photo120Data = object[0].get("profilePhoto120");
-		if (typeof(photo120Data)=="undefined") {
-			photo120Data = "./content/png/Taylor-Swift.png";
-		}
-		var existFlag = false;
-		for (var i = cashedPhoto120.length-1; i >=0; i--){
-			if (userId == cashedPhoto120[i].id) {
-				cashedPhoto120[i].photo120 = photo120Data;
-				existFlag = true;
-				break;
-			}
-		}
-		if (!existFlag) {
-			var newCashed = {id: userId, photo120: photo120Data};
-			cashedPhoto120.push(newCashed);
-		}
-		if (typeof(destSelector) != "undefined") {
-			$(destSelector).css("backgroundImage", "url("+photo120Data+")");
-		}
-	};
-	ParseGetProfilePhoto(null, userId, successFunction);
-}*/
-
 function sendMessage(){
 	var groupId = $("#group-id-label").html();
 	var senderId = Parse.User.current().id;
@@ -1151,13 +1104,6 @@ function sendMessage(){
 			var subject = $("#chat-messages-title").html+": "+text;
 			var data = {subject: subject};
 			var ownerId = object.get('ownerId');
-			var displayFunction = function(user){
-				var bridgeitId = user.get("bridgeitId");
-				/*bridgeit.push(bridgeitId, {
-					subject: data.subject
-				});*/
-			}
-			CacheGetProfileByUserId(ownerId, displayFunction);
 		}
 		ParseSetGroupMemberChatObjectReadFalse(senderId, groupId, text, notificationFunction);
 		var newElement = buildElementInChatMessagesPage(object);
@@ -1200,7 +1146,7 @@ function updateChatTitle(friendId, id, option){
 		}
 	}
 	// get the Friend object, in order to get alias of friend.
-	ParseCheckFriend(Parse.User.current().id, friendId, displayFunction);
+	CacheCheckFriend(friendId, Parse.User.current().id, displayFunction);
 }
 
 function startPrivateChat(friendId){

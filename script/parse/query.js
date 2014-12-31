@@ -379,13 +379,17 @@ function ParseSendFriendRequest(ownerId, friendId, successFunction){
 				friend.save(null, {
 					success: function(friend){
 						successFunction(friend);
+						CacheUpdateFriend(friend);
 					}
 				})
 			} else {
 				successFunction(object);
+				CacheUpdateFriend(object);
 			}
 		}
 	})
+
+	
 
 	
 }
@@ -407,6 +411,7 @@ function ParseAcceptFriendRequest(objectId, ownerId, friendId, successFunction){
 			object.set('read',true);
 			object.save(null, {
 				success: function(object){
+					CacheUpdateFriend(object);
 					// try to update frient's data
 					var ownerId = object.get('friend');
 					var friendId = object.get('owner');
@@ -427,6 +432,7 @@ function ParseAcceptFriendRequest(objectId, ownerId, friendId, successFunction){
 								friend.save(null, {
 									success: function(object){
 										successFunction(object);
+										CacheUpdateFriend(object);
 									}
 								})
 							} else {
@@ -436,6 +442,7 @@ function ParseAcceptFriendRequest(objectId, ownerId, friendId, successFunction){
 								object.save(null,{
 									success: function(object){
 										successFunction(object);
+										CacheUpdateFriend(object);
 									}
 								})
 							}
@@ -461,6 +468,7 @@ function ParseRejectFriendRequest(objectId, ownerId, friendId, successFunction){
 
 	query.first({
 		success:function(object){
+			CacheRemoveFriend(object);
 			object.destroy({
 				success: function(object){
 					successFunction(friendId);
@@ -480,6 +488,9 @@ function ParsePullNewFriendRequest(userId, descendingOrderKey, displayFunction) 
 	query.find({
 		success: function(objects){
 			displayFunction(objects);
+			for (var i = 0; i < objects.length; i++) {
+				CacheUpdateFriend(objects[i]);
+			}
 		}
 	})
 }
@@ -493,6 +504,9 @@ function ParsePullUnreadFriendRequest(userId, displayFunction) {
 	query.find({
 		success: function(objects){
 			displayFunction(objects);
+			for (var i = 0; i < objects.length; i++) {
+				CacheUpdateFriend(objects[i]);
+			}
 		}
 	})
 }
@@ -508,6 +522,7 @@ function ParseCheckFriend(ownerId, friendId, displayFunction) {
 	query.first({
 		success: function(object){
 			displayFunction(ownerId, friendId, object);
+			CacheUpdateFriend(object);
 		}
 	})
 
@@ -524,6 +539,9 @@ function ParsePullMyFriend(ownerId, descendingOrderKey, displayFunction) {
 	query.find({
 		success: function(objects){
 			displayFunction(objects);
+			for (var i = 0; i < objects.length; i++) {
+				CacheUpdateFriend(objects[i]);
+			}
 		}
 	})
 }
