@@ -1,0 +1,53 @@
+CACHE MANIFEST
+# Cache manifest version 1.0.0
+# If you change the version number in this comment,
+# the cache manifest is no longer byte-for-byte
+# identical.
+ 
+http://fonts.googleapis.com/css?family=Open+Sans:400,300
+./script/jquery/mobile/jquery.mobile-1.4.5.min.css
+index.css
+./script/jquery/jquery-1.11.1.min.js
+./script/jquery/mobile/jquery.mobile-1.4.5.min.js
+./script/parse/parse-1.3.2.min.js
+./script/parse/query.js
+./script/cache.js
+./script/functions.js
+
+# image
+./content/png/Taylor-Swift.png
+./content/customicondesign-line-user-black/png/male-white-20.png
+./content/customicondesign-line-user-black/png/female1-white-20.png
+./content/material-design/png/list88-blank-pink-192.png
+./content/material-design/png/list88-solid-pink-192.png
+./content/material-design/png/user157-blank-pink-192.png
+./content/material-design/png/user157-blank-with-big-dot-pink-192.png
+./content/material-design/png/user157-solid-pink-192.png
+./content/material-design/png/sms5-blank-pink-192.png
+./content/material-design/png/sms5-blank-with-big-dot-pink-192.png
+./content/material-design/png/sms5-solid-pink-192.png
+./content/material-design/png/settings49-blank-pink-192.png
+./content/material-design/png/settings49-solid-pink-192.png
+./content/material-design/png/favorite22-red-36.png
+./content/material-design/png/favorite21-red-36.png
+./content/material-design/png/show5-red-36.png
+./content/material-design/png/three170.png
+./content/material-design/png/ellipsis1-blank-pink-72.png
+./content/material-design/png/ellipsis1-pink-72.png
+./content/material-design/png/black400-pink-128.png
+./content/material-design/png/compass106-solid-pink-20.png
+./content/material-design/png/clock100-solid-pink-20.png
+./content/material-design/png/rubbish-black-36.png
+ 
+NETWORK:
+# All URLs that start with the following lines
+# are whitelisted.
+# http://example.com/examplepath/
+# http://www.example.org/otherexamplepath/
+ 
+CACHE:
+# Additional items to cache.
+# demoimages/stonessmall.jpg
+ 
+FALLBACK:
+# demoimages/currentImg.jpg images/stockImage.jpg

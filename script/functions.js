@@ -1,3 +1,10 @@
+function updateSite(event) {
+    window.applicationCache.swapCache();
+}
+
+window.applicationCache.addEventListener('updateready',
+    updateSite, false);
+
 $(document).ready(function (){
 	var currentUser = Parse.User.current();
 	$('#comment-content').on("blur",function(){
