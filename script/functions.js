@@ -699,7 +699,7 @@ function saveProfile(){
 	$("#profile-save-btn").unbind("click");
 	var currentUser = Parse.User.current();
 	var owner = currentUser.getUsername();
-	var id = $("#saveprofile-id").html();
+	var id = currentUser.id;
 	var fileUploadControl = $("#profile-edit-photo")[0];
 	if (fileUploadControl.files.length > 0) {
 		var canvas = document.getElementById('canvas-photo');
