@@ -314,7 +314,7 @@ function ParseSaveProfilePhoto(id, photo, photo120, displayFunction) {
 			photoObject.set('profilePhoto120',photo120);
 			var parseFile = new Parse.File(photo.name, photo);
 			parseFile.save().then(function(object) {
-				photoObject.set("photo",object.url());
+				photoObject.set("profilePhoto",object.url());
 				photoObject.save(null,{
 					success: function(object){
 						displayFunction(object);
@@ -336,7 +336,7 @@ function ParseGetProfilePhoto(userId, displayFunction, data) {
 	query.first({
 		success: function(object){
 			displayFunction(object, data);
-			CacheAddPhoto(object);
+			CacheUpdatePhoto(object);
 		}
 	})
 }
@@ -775,6 +775,35 @@ function ParsePullUnreadChat(ownerId, descendingOrderKey, displayFunction){
 	query.find({
 		success: function(objects){
 			displayFunction(objects);
+		}
+	})
+}
+
+// maintain cached array
+
+function ParseUpdateCache(className, updateIdList,lastUpdate){
+	var ClassObject = Parse.Object.extend(className);
+	var query = new Parse.Query(ClassObject);
+
+	query.containedIn("objectId",updateIdList);
+	query.greaterThan("updatedAt",lastUpdate);
+	query.find({
+		success: function(objects){
+			console.log(className+": "+lastUpdate.toJSON()+" "+objects.length);
+			for (var i = 0; i < objects.length; i++) {
+				switch(className) {
+					case "Photo":
+						CacheUpdatePhoto(objects[i]);
+						break;
+					case "User":
+						CacheUpdateUser(objects[i]);
+						break;
+					case "Friend":
+						CacheUpdateFriend(objects[i]);
+						break;
+					default:
+				}
+			}
 		}
 	})
 }
