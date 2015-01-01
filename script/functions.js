@@ -34,6 +34,7 @@ function loginByLocalStorage(){
 				pullNotification();
 			}
 			ParsePullAllFriendObjectById(Parse.User.current().id);
+			ParsePullMyChat(Parse.User.current().id,"updatedAt",function(){});
 		};
 		var errorFunction = function() {
 			window.location.hash = "page-login";
@@ -74,6 +75,9 @@ function pullNotification(){
 			jQuery("[id=chat]") .each(function(){
 				$(this).addClass("chat-notification-custom");
 			});
+			if ($( ":mobile-pagecontainer" ).pagecontainer( "getActivePage" )[0].id == "page-chat") {
+				pullMyChat();
+			}
 		} else {
 			jQuery("[id=chat]") .each(function(){
 				$(this).removeClass("chat-notification-custom");
@@ -87,14 +91,16 @@ function pullNotification(){
 				}
 			}
 		}
+
 	}
 
-	if ($( ":mobile-pagecontainer" ).pagecontainer( "getActivePage" )[0].id == "page-chat") {
-		pullMyChat();
-	} else {
-		ParsePullUnreadChat(currentUser.id, "updatedAt", displayFunction);
-	}
+	// if ($( ":mobile-pagecontainer" ).pagecontainer( "getActivePage" )[0].id == "page-chat") {
+	// 	pullMyChat();
+	// } else {
+	ParsePullUnreadChat(currentUser.id, "updatedAt", displayFunction);
+	// }
 
+	// auto redirect if stop at loading page
 	if ($( ":mobile-pagecontainer" ).pagecontainer( "getActivePage" )[0].id == "page-loading") {
 		loginByLocalStorage();
 	}	
@@ -132,6 +138,7 @@ function login(){
 			pullNotification();
 		}
 		ParsePullAllFriendObjectById(Parse.User.current().id);
+		ParsePullMyChat(Parse.User.current().id,"updatedAt",function(){});
 	};
 	ParseLogin(email, password, errorObject, destID, customFunction);
 	$("#login-password").val("");
@@ -1292,7 +1299,6 @@ function buildElementInChatListPage(object){
 
 function pullMyChat(){
 	var ownerId = Parse.User.current().id;
-	var descendingOrderKey = "updatedAt";
 	var displayFunction = function(objects){
 		for (var i=objects.length-1; i>=0; i--) {
 			if ($("#chat-"+objects[i].id).length == 0) {
@@ -1324,14 +1330,15 @@ function pullMyChat(){
 				}
 				ParseGetGroupMember(groupId, successFunction, data);
 			} else {
+				
 				var chatId = objects[i].id;
 				var data = {chatId: chatId};
 				var unreadNum = objects[i].get('unreadNum');
+				// move the element to top of the list
+				var element = $("#chat-"+data.chatId);
+				$("#page-chat > .ui-content").prepend(element);
 				// update unread number label
 				if (unreadNum > 0){
-					// when unread number positive, move the element to top of the list
-					var element = $("#chat-"+data.chatId);
-					$("#page-chat > .ui-content").prepend(element);
 					if ($("#chat-"+data.chatId+"> .ui-li-count").length > 0) {
 						$("#chat-"+data.chatId+"> .ui-li-count").html(unreadNum.toString());
 					} else {
@@ -1362,6 +1369,6 @@ function pullMyChat(){
 			}
 		}
 	}
-	ParsePullMyChat(ownerId,descendingOrderKey,displayFunction);
+	CachePullMyChat(ownerId,displayFunction);
 	
 }

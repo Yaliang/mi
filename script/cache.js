@@ -1,6 +1,7 @@
 var cachePhoto = new Array;
 var cacheUser = new Array;
 var cacheFriend = new Array;
+var cacheChat = new Array;
 function rawLocalToCache(object) {
 	var item = {
 		id: object.objectId, 
@@ -63,6 +64,21 @@ if (typeof(localStorage.cacheFriend)!="undefined") {
 	lastUpdate = new Date(lastUpdate);
 	console.log(lastUpdate.toJSON());
 	ParseUpdateCache("Friend", updateIdList,lastUpdate);
+}
+if (typeof(localStorage.cacheChat)!="undefined") {
+	var rawData = JSON.parse(localStorage.cacheChat);
+	var lastUpdate = 0;
+	var updateIdList = new Array;
+	for (var i=0; i < rawData.length; i++) {
+		var rawObject = rawData[i];
+		cacheChat.push(rawLocalToCache(rawObject));
+		updateIdList.push(rawData[i].objectId);
+		if (Date.parse(rawObject.updatedAt) > lastUpdate)
+			lastUpdate = Date.parse(rawObject.updatedAt);
+	}
+	lastUpdate = new Date(lastUpdate);
+	console.log(lastUpdate.toJSON());
+	ParseUpdateCache("Chat", updateIdList,lastUpdate);
 }
 
 function CacheGetProfilePhoto(userId, displayFunction, data) {
@@ -210,4 +226,34 @@ function CacheRemoveFriend(object) {
 		}
 	}
 	localStorage.cacheFriend = JSON.stringify(cacheFriend);
+}
+
+function CachePullMyChat(ownerId,displayFunction) {
+	var chats = new Array;
+	for (var i = 0;  i<cacheChat.length; i++) {
+		if ((cacheChat[i].get("ownerId") == ownerId) && (cacheChat[i].get("hidden") == false)) {
+			chats.push(cacheChat[i]);
+		}
+	}
+	chats.sort(function(a,b){return Date.parse(b.updatedAt) - Date.parse(a.updatedAt)});
+
+	displayFunction(chats);
+}
+
+function CacheUpdateChat(object){
+	if (typeof(object) == "undefined")
+		return
+	object = rawLocalToCache(JSON.parse(JSON.stringify(object)));
+	var cached = false;
+	for (var i = 0; i < cacheChat.length; i++) {
+		if (cacheChat[i].id == object.id) {
+			cacheChat.splice(i, 1, object);
+			cached = true;
+			break;
+		}
+	}
+	if (!cached) {
+		cacheChat.push(object);
+	}
+	localStorage.cacheChat = JSON.stringify(cacheChat);
 }
