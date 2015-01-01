@@ -7,7 +7,6 @@ window.applicationCache.addEventListener('updateready',
     updateSite, false);
 
 $(document).ready(function (){
-	var currentUser = Parse.User.current();
 	$('#comment-content').on("blur",function(){
 		$('#comment-content').textinput('disable');
 	});
@@ -22,11 +21,18 @@ $(document).ready(function (){
 		$('#comment-content').trigger('blur');
 		event.preventDefault();
 	});
+	loginByLocalStorage();
+});
+
+function loginByLocalStorage(){
+	var currentUser = Parse.User.current();
 	if (currentUser) {
 		var successFunction = function() {
 			window.location.hash = "page-event";
 			pullUserEvent();
-			pullNotification();
+			if (!pullNotificationRunning) {
+				pullNotification();
+			}
 			ParsePullAllFriendObjectById(Parse.User.current().id);
 		};
 		var errorFunction = function() {
@@ -36,13 +42,17 @@ $(document).ready(function (){
 	} else {
 		window.location.hash = "page-login";
 	}
-});
+}
 
+var pullNotificationRunning = false;
 function pullNotification(){
 	var currentUser = Parse.User.current();
+	pullNotificationRunning = true;
 
-	if (currentUser == null)
+	if (currentUser == null){
+		pullNotificationRunning = false
 		return
+	}
 	// check new friend request
 	var displayFunction = function(objects){
 		if ((typeof(objects)!="undefined")&&(objects.length > 0)) {
@@ -85,6 +95,9 @@ function pullNotification(){
 		ParsePullUnreadChat(currentUser.id, "updatedAt", displayFunction);
 	}
 
+	if ($( ":mobile-pagecontainer" ).pagecontainer( "getActivePage" )[0].id == "page-loading") {
+		loginByLocalStorage();
+	}	
 
 	setTimeout(function(){
 		pullNotification();
@@ -99,7 +112,9 @@ function signup(){
 	var destID = "page-event";
 	var customFunction = function(object){
 		pullUserEvent();
-		pullNotification();
+		if (!pullNotificationRunning) {
+			pullNotification();
+		}
 		ParseCreateProfilePhotoObject(object.id);
 	};
 	ParseSignup(email, password, email, name, errorObject, destID, customFunction);
@@ -113,7 +128,9 @@ function login(){
 	var destID = "page-event";
 	var customFunction = function(){
 		pullUserEvent();
-		pullNotification();
+		if (!pullNotificationRunning) {
+			pullNotification();
+		}
 		ParsePullAllFriendObjectById(Parse.User.current().id);
 	};
 	ParseLogin(email, password, errorObject, destID, customFunction);
