@@ -15,6 +15,46 @@
 	animation-duration: 0ms;
 }*/
 
+@media only screen 
+and (min-device-width : 768px) 
+and (max-device-width : 1024px)  { 
+.ui-header {padding-top:21px;}
+.ui-header .ui-btn-right {margin-top: 21px;}
+.ui-header .ui-btn-left {margin-top: 21px;}
+}
+
+@media only screen 
+and (min-device-width : 320px) 
+and (max-device-width : 480px)  { 
+.ui-header {padding-top:21px;}
+.ui-header .ui-btn-right {margin-top: 21px;}
+.ui-header .ui-btn-left {margin-top: 21px;}
+}
+
+@media only screen 
+and (min-device-width : 320px) 
+and (max-device-width : 568px)  { 
+.ui-header {padding-top:21px;}
+.ui-header .ui-btn-right {margin-top: 21px;}
+.ui-header .ui-btn-left {margin-top: 21px;}
+}
+
+@media only screen 
+and (min-device-width : 375px) 
+and (max-device-width : 667px)  { 
+.ui-header {padding-top:21px;}
+.ui-header .ui-btn-right {margin-top: 21px;}
+.ui-header .ui-btn-left {margin-top: 21px;}
+}
+
+@media only screen 
+and (min-device-width : 540px) 
+and (max-device-width : 960px)  { 
+.ui-header {padding-top:21px;}
+.ui-header .ui-btn-right {margin-top: 21px;}
+.ui-header .ui-btn-left {margin-top: 21px;}
+}
+
 .custom-size-flipswitch-event-create-visibility.ui-flipswitch .ui-btn.ui-flipswitch-on {
 	text-indent: -3.8em;
 }
