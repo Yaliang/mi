@@ -151,6 +151,7 @@ function logout(){
 	$("#login-email").val(email);
 	$("#login-error").html("");
 	$("#signup-error").html("");
+	localStorage.clear();
 	var destID = "page-login";
 	ParseLogout(destID);
 
