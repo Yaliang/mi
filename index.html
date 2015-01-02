@@ -180,24 +180,13 @@
 
 		<div data-role="header">
 			<h1>Activity Detail</h1>
-			<a data-rel="back" href="#page-event" class="ui-btn-left ui-btn ui-btn-inline ui-corner-all">Back</a>
+			<a data-rel="back" href="#page-event" class="ui-btn-left ui-btn ui-btn-inline ui-corner-all" onclick="$('#send-comment-bar').fadeOut()">Back</a>
 		</div><!-- /header -->
 
 		<div role="main" class="ui-content" id="event-detail-content">
 		</div><!-- /content -->
 
 		<div data-role="footer" data-position="fixed" data-tap-toggle="false" >
-			<div class="rwd-example">
-				<form id="comment-form">
-					<label id="event-id-label" class="ui-hidden-accessible"></label>
-					<div class="custom-block-a" onclick="sendToolbarActiveKeyboard('comment-content')">
-						<input disabled="disabled" type="text" name="commentcontent" id="comment-content" value="">
-					</div>
-					<div class="custom-block-b">
-						<button id="send-comment-button" class="ui-btn ui-corner-all custom-send-button" onclick="sendCommnet();">Send</button>
-					</div>
-				</form>
-			</div>
 		</div><!-- /footer -->
 
 	</div><!-- /page -->
@@ -305,24 +294,13 @@
 
 		<div data-role="header" data-position="fixed" data-tap-toggle="false" >
 			<h1 id='chat-messages-title'></h1>
-			<a data-rel="back" href="#page-event" class="ui-btn-left ui-btn ui-btn-inline ui-corner-all" onclick="pullMyChat();">Back</a>
+			<a data-rel="back" href="#page-event" class="ui-btn-left ui-btn ui-btn-inline ui-corner-all" onclick="pullMyChat(); $('#send-message-bar').fadeOut()">Back</a>
 		</div><!-- /header -->
 
-		<div role="main" class="ui-content" style="margin-bottom:20px">
+		<div role="main" class="ui-content" style="margin-bottom:100px">
 		</div><!-- /content -->
 
 		<div data-role="footer" data-position="fixed" data-tap-toggle="false" >
-			<div class="rwd-example">
-				<form id='message-chat-form'>
-					<label id="group-id-label" class="ui-hidden-accessible"></label>
-					<div class="custom-block-a" onclick="sendToolbarActiveKeyboard('message-content')">
-						<input disabled="disabled" type="text" name="messagecontent" id="message-content" value="">
-					</div>
-					<div class="custom-block-b">
-						<button id="send-message-button" class="ui-btn ui-corner-all custom-send-button" onclick="sendMessage();">Send</button>
-					</div>
-				</form>
-			</div>
 		</div><!-- /footer -->
 
 	</div><!-- /page -->
@@ -392,6 +370,40 @@
 		<div data-role="footer" data-position="fixed" data-tap-toggle="false">
 		</div><!-- /footer -->
 	</div><!-- /page -->
+
+
+
+		<div id="send-comment-bar" class="ui-footer ui-bar-inherit ui-footer-fixed slideup ui-page-theme-a" style="z-index:2; display:none">
+			<div class="rwd-example ui-footer ui-bar-inherit ui-footer-fixed slideup" style="position:fixed; bottom:0px">
+				<form id="comment-form">
+					<label id="event-id-label" class="ui-hidden-accessible"></label>
+					<div class="custom-block-a" onclick="sendToolbarActiveKeyboard('comment-content')">
+						<div class="ui-input-text ui-shadow-inset ui-focus ui-body-inherit ui-corner-all">
+							<input type="text" name="commentcontent" id="comment-content" value="">
+						</div>
+					</div>
+					<div class="custom-block-b">
+						<button id="send-comment-button" class="ui-btn ui-corner-all custom-send-button" onclick="sendCommnet();">Send</button>
+					</div>
+				</form>
+			</div>
+		</div>
+
+		<div id="send-message-bar" class="ui-footer ui-bar-inherit ui-footer-fixed slideup ui-page-theme-a" style="z-index:3; display:none">
+			<div class="rwd-example ui-footer ui-bar-inherit ui-footer-fixed slideup" style="position:fixed; bottom:0px">
+				<form id='message-chat-form'>
+					<label id="group-id-label" class="ui-hidden-accessible"></label>
+					<div class="custom-block-a" onclick="sendToolbarActiveKeyboard('message-content')">
+						<div class="ui-input-text ui-shadow-inset ui-focus ui-body-inherit ui-corner-all">
+							<input type="text" name="messagecontent" id="message-content" value="">
+						</div>
+					</div>
+					<div class="custom-block-b">
+						<button id="send-message-button" class="ui-btn ui-corner-all custom-send-button" onclick="sendMessage();">Send</button>
+					</div>
+				</form>
+			</div>
+		</div>
 
 </body>
 </html>

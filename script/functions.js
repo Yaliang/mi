@@ -7,18 +7,12 @@ window.applicationCache.addEventListener('updateready',
     updateSite, false);
 
 $(document).ready(function (){
-	$('#comment-content').on("blur",function(){
-		$('#comment-content').textinput('disable');
-	});
-	$('#message-content').on("blur",function(){
-		$('#message-content').textinput('disable');
-	});
 	$('#message-chat-form').submit(function(event){
-		$('#message-content').trigger('blur');
+		sendToolbarActiveKeyboard('message-content');
 		event.preventDefault();
 	});
 	$('#comment-form').submit(function(event){
-		$('#comment-content').trigger('blur');
+		sendToolbarActiveKeyboard('comment-content');
 		event.preventDefault();
 	});
 	loginByLocalStorage();
@@ -362,6 +356,7 @@ function convertTime(rawTime){
 function updateEventDetail(id){
 	$("#event-detail-content").html("");
 	$("#event-id-label").html(id);
+	$("#send-comment-bar").fadeIn();
 	var descendingOrderKey = "createdAt";
 	var displayFunction = function(object){
 		var title = object[0].get("title");
@@ -645,10 +640,10 @@ function removeInterestEvent(eventId){
 
 function sendToolbarActiveKeyboard(id){
 	$("html body").animate({ scrollTop: $(document).height().toString()+"px" }, {
-		duration: 150,
+		duration: 300,
         complete : function(){
-            $('#'+id).textinput('enable');
-			$('#'+id).focus();
+            //$('#'+id).textinput('enable');
+			//$('#'+id).focus();
         }
     });
 }
@@ -1209,6 +1204,7 @@ function startPrivateChat(friendId){
 	$("#chat-messages-title").html("");
 	$("#message-content").val("");
 	$.mobile.changePage( "#page-chat-messages", { transition: "slide"});
+	$('#send-message-bar').fadeIn();
 	var memberId = new Array;
 	memberId.push(friendId);
 	memberId.push(Parse.User.current().id);
