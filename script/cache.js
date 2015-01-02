@@ -268,7 +268,7 @@ function CacheGetGroupId(memberId, successFunction){
 		if (cacheGroup[i].get("memberNum") == memberId.length) {
 			cached = true;
 			var GroupMemberId = cacheGroup[i].get("memberId");
-			for (var j = 0; i < memberId.length; i++) {
+			for (var j = 0; j < memberId.length; j++) {
 				if (GroupMemberId.indexOf(memberId[j]) == -1) {
 					cached = false;
 					break;
