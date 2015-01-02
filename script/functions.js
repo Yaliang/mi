@@ -1245,7 +1245,7 @@ function startPrivateChat(friendId){
 		}
 		ParseSetChatObjectAsRead(currentId, groupId, null, successFunction);
 	}
-	ParseGetGroupId(memberId,successFunction);
+	CacheGetGroupId(memberId,successFunction);
 	//updateCashedPhoto120(friendId);
 	updateChatTitle(friendId, "chat-messages-title");
 }
@@ -1329,7 +1329,7 @@ function pullMyChat(){
 						}
 					}
 				}
-				ParseGetGroupMember(groupId, successFunction, data);
+				CacheGetGroupMember(groupId, successFunction, data);
 			} else {
 				
 				var chatId = objects[i].id;
@@ -1366,7 +1366,7 @@ function pullMyChat(){
 						}
 					}
 				}
-				ParseGetGroupMember(groupId, successFunction, data);*/
+				CacheGetGroupMember(groupId, successFunction, data);*/
 			}
 		}
 	}
