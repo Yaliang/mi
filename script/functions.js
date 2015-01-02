@@ -18,9 +18,10 @@ $(document).ready(function (){
 		$('#message-content').prop('disabled', true);
 	}
 	$('#message-chat-form').submit(function(event){
-		sendToolbarActiveKeyboard('message-content');
 		if (window.navigator.standalone == true) {
 			$('#message-content').trigger('blur');
+		} else {
+			sendToolbarActiveKeyboard('message-content');
 		}
 		event.preventDefault();
 	});
@@ -28,6 +29,8 @@ $(document).ready(function (){
 		sendToolbarActiveKeyboard('comment-content');
 		if (window.navigator.standalone == true) {
 			$('#comment-content').trigger('blur');
+		} else {
+			sendToolbarActiveKeyboard('message-content');
 		}
 		event.preventDefault();
 	});
