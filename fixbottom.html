@@ -1,0 +1,26 @@
+<!DOCTYPE html> 
+<html>
+<head>
+	<meta charset="utf-8">
+	<link rel="stylesheet" href="index.css" />
+	<script src="./script/jquery/jquery-1.11.1.min.js"></script>
+</head>
+
+<body>
+	<input type="text" name="lname" style="width:100%; position: fixed; bottom:0; height:20px; margin-bottom:4px">
+	<script type="text/javascript">
+		function repeatAdd(){
+			$("html body").prepend("<div style='width:50%; height:30px; border:1px solid;'>hello</div>");
+			$("html body").animate({ scrollTop: $(document).height().toString()+"px" }, {
+				duration: 300,
+		        complete : function(){
+		        }
+		    });
+			setTimeout(function(){
+				repeatAdd();
+			},2000);
+		}
+		repeatAdd();
+	</script>
+</body>
+</html>

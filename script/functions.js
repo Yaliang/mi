@@ -1208,6 +1208,7 @@ function startPrivateChat(friendId){
 	$("#page-chat-messages > .ui-content").html("");
 	$("#chat-messages-title").html("");
 	$("#message-content").val("");
+	$.mobile.changePage( "#page-chat-messages", { transition: "slide"});
 	var memberId = new Array;
 	memberId.push(friendId);
 	memberId.push(Parse.User.current().id);
@@ -1232,20 +1233,20 @@ function startPrivateChat(friendId){
 					}
 					CacheGetProfilePhoto(objects[i].get('senderId'), displayFunction, {messageId: objects[i].id});
 				}
-				$.mobile.changePage( "#page-chat-messages", { transition: "slide"});
 				setTimeout(function(){
 					$("html body").animate({ scrollTop: $(document).height().toString()+"px" }, {
-						duration: 0,
+						duration: 300,
 				        complete : function(){
 				        }
 				    });
-				},575);
+				},1);
 			}
+			//CachePullChatMessage(groupId, limitNum, null, displayFunction);
 			ParsePullChatMessage(groupId, limitNum, descendingOrderKey, null, displayFunction)
 		}
 		ParseSetChatObjectAsRead(currentId, groupId, null, successFunction);
 	}
-	ParseGetGroupId(memberId,successFunction);
+	CacheGetGroupId(memberId,successFunction);
 	//updateCashedPhoto120(friendId);
 	updateChatTitle(friendId, "chat-messages-title");
 }
@@ -1329,7 +1330,7 @@ function pullMyChat(){
 						}
 					}
 				}
-				ParseGetGroupMember(groupId, successFunction, data);
+				CacheGetGroupMember(groupId, successFunction, data);
 			} else {
 				
 				var chatId = objects[i].id;
@@ -1366,7 +1367,7 @@ function pullMyChat(){
 						}
 					}
 				}
-				ParseGetGroupMember(groupId, successFunction, data);*/
+				CacheGetGroupMember(groupId, successFunction, data);*/
 			}
 		}
 	}
