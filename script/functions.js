@@ -7,12 +7,28 @@ window.applicationCache.addEventListener('updateready',
     updateSite, false);
 
 $(document).ready(function (){
+	if (window.navigator.standalone == true) {
+		$('#comment-content').on("blur",function(){
+			$('#comment-content').prop('disabled', true);
+		});
+		$('#message-content').on("blur",function(){
+			$('#message-content').prop('disabled', true);
+		});
+		$('#comment-content').prop('disabled', true);
+		$('#message-content').prop('disabled', true);
+	}
 	$('#message-chat-form').submit(function(event){
 		sendToolbarActiveKeyboard('message-content');
+		if (window.navigator.standalone == true) {
+			$('#message-content').trigger('blur');
+		}
 		event.preventDefault();
 	});
 	$('#comment-form').submit(function(event){
 		sendToolbarActiveKeyboard('comment-content');
+		if (window.navigator.standalone == true) {
+			$('#comment-content').trigger('blur');
+		}
 		event.preventDefault();
 	});
 	loginByLocalStorage();
@@ -642,8 +658,10 @@ function sendToolbarActiveKeyboard(id){
 	$("html body").animate({ scrollTop: $(document).height().toString()+"px" }, {
 		duration: 300,
         complete : function(){
-            //$('#'+id).textinput('enable');
-			//$('#'+id).focus();
+        	if (window.navigator.standalone == true) {
+        		$('#'+id).prop('disabled', false);
+				$('#'+id).focus();
+        	}
         }
     });
 }
