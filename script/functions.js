@@ -1241,6 +1241,7 @@ function startPrivateChat(friendId){
 				    });
 				},1);
 			}
+			//CachePullChatMessage(groupId, limitNum, null, displayFunction);
 			ParsePullChatMessage(groupId, limitNum, descendingOrderKey, null, displayFunction)
 		}
 		ParseSetChatObjectAsRead(currentId, groupId, null, successFunction);

@@ -3,7 +3,8 @@ var cacheUser = new Array;
 var cacheFriend = new Array;
 var cacheChat = new Array;
 var cacheGroup = new Array;
-var cachedList = ["Photo", "User", "Friend", "Chat", "Group"];
+var cacheMessage = new Array;
+var cachedList = ["Photo", "User", "Friend", "Chat", "Group", "Message"];
 function rawLocalToCache(object) {
 	var item = {
 		id: object.objectId, 
@@ -32,11 +33,12 @@ for (var n = 0; n< cachedList.length; n++) {
 	objectList = [];
 	updateIdList = [];
 	switch (cachedList[n]){
-		case "Photo":  if (typeof(localStorage.cachePhoto) == "undefined")  {break;} rawData = JSON.parse(localStorage.cachePhoto);  break;
-		case "User":   if (typeof(localStorage.cacheUser) == "undefined")   {break;} rawData = JSON.parse(localStorage.cacheUser);   break;
-		case "Friend": if (typeof(localStorage.cacheFriend) == "undefined") {break;} rawData = JSON.parse(localStorage.cacheFriend); break;
-		case "Chat":   if (typeof(localStorage.cacheChat) == "undefined")   {break;} rawData = JSON.parse(localStorage.cacheChat);   break;
-		case "Group":  if (typeof(localStorage.cacheGroup) == "undefined")  {break;} rawData = JSON.parse(localStorage.cacheGroup);  break;
+		case "Photo":   if (typeof(localStorage.cachePhoto) == "undefined")   {break;} rawData = JSON.parse(localStorage.cachePhoto);   break;
+		case "User":    if (typeof(localStorage.cacheUser) == "undefined")    {break;} rawData = JSON.parse(localStorage.cacheUser);    break;
+		case "Friend":  if (typeof(localStorage.cacheFriend) == "undefined")  {break;} rawData = JSON.parse(localStorage.cacheFriend);  break;
+		case "Chat":    if (typeof(localStorage.cacheChat) == "undefined")    {break;} rawData = JSON.parse(localStorage.cacheChat);    break;
+		case "Group":   if (typeof(localStorage.cacheGroup) == "undefined")   {break;} rawData = JSON.parse(localStorage.cacheGroup);   break;
+		case "Message": if (typeof(localStorage.cacheMessage) == "undefined") {break;} rawData = JSON.parse(localStorage.cacheMessage); break;
 		default:
 	}
 	if (rawData.length == 0)  {
@@ -53,11 +55,12 @@ for (var n = 0; n< cachedList.length; n++) {
 	lastUpdate = new Date(lastUpdate);
 	console.log(lastUpdate.toJSON());
 	switch (cachedList[n]){
-		case "Photo":  cachePhoto = objectList;  break;
-		case "User":   cacheUser = objectList;   break;
-		case "Friend": cacheFriend = objectList; break;
-		case "Chat":   cacheChat = objectList;   break;
-		case "Group":  cacheGroup = objectList;  break;
+		case "Photo":   cachePhoto = objectList;   break;
+		case "User":    cacheUser = objectList;    break;
+		case "Friend":  cacheFriend = objectList;  break;
+		case "Chat":    cacheChat = objectList;    break;
+		case "Group":   cacheGroup = objectList;   break;
+		case "Message": cacheMessage = objectList; break;
 		default:
 	}
 	ParseUpdateCache(cachedList[n], updateIdList, lastUpdate);
@@ -319,4 +322,44 @@ function CacheUpdateGroup(object){
 		cacheGroup.push(object);
 	}
 	localStorage.cacheGroup = JSON.stringify(cacheGroup);
+}
+
+// functions for Message
+function CachePullChatMessage(groupId, limitNum, beforeAt, displayFunction){
+	var messages = new Array;
+	for (var i = 0; i < cacheMessage.length; i++) {
+		if ((cacheMessage[i].get("groupId") == groupId) && ((beforeAt == null) || (Date.parse(cacheMessage[i].get("createdAt")) < Date.parse(beforeAt)))) {
+			messages.push(cacheMessage[i]);
+		}
+	}
+
+	messages.sort(function(a,b){return Date.parse(b.createdAt) - Date.parse(a.createdAt)});
+	if (messages.length > limitNum) {
+		var cutLen = messages.length - limitNum;
+		messages.splice(limitNum, cutLen);
+	}
+	if (messages.length == 0) {
+		ParsePullAllMessageByGroupIdForCache(groupId, limitNum, beforeAt, displayFunction);
+	} else {
+		displayFunction(messages);
+	}
+	
+}
+
+function CacheUpdateMessage(object){
+	if (typeof(object) == "undefined")
+		return
+	object = rawLocalToCache(JSON.parse(JSON.stringify(object)));
+	var cached = false;
+	for (var i = 0; i < cacheMessage.length; i++) {
+		if (cacheMessage[i].id == object.id) {
+			cacheMessage.splice(i, 1, object);
+			cached = true;
+			break;
+		}
+	}
+	if (!cached) {
+		cacheMessage.push(object);
+	}
+	localStorage.cacheMessage = JSON.stringify(cacheMessage);
 }

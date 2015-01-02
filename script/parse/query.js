@@ -689,6 +689,24 @@ function ParsePullChatMessage(groupId, limitNum, descendingOrderKey, beforeAt, d
 	query.find({
 		success: function(objects){
 			displayFunction(objects);
+			for (var i = 0; i < objects.length; i++) {
+				CacheUpdateMessage(objects[i]);
+			}
+		}
+	})
+}
+
+function ParsePullAllMessageByGroupIdForCache(groupId, limitNum, beforeAt, displayFunction){
+	var Message = Parse.Object.extend("Message");
+	var query = new Parse.Query(Message);
+
+	query.equalTo('groupId',groupId);
+	query.find({
+		success: function(objects){
+			for (var i = 0; i < objects.length; i++) {
+				CacheUpdateMessage(objects[i]);
+			}
+			CachePullChatMessage(groupId, limitNum, beforeAt, displayFunction);
 		}
 	})
 }
@@ -703,6 +721,7 @@ function ParseAddChatMessage(senderId, groupId, text, displayFunction){
 	message.save(null, {
 		success: function(object){
 			displayFunction(object);
+			CacheUpdateMessage(object)
 		}
 	})
 }
@@ -878,6 +897,9 @@ function ParseUpdateCache(className, updateIdList,lastUpdate){
 						break;
 					case "Group":
 						CacheUpdateGroup(objects[i]);
+						break;
+					case "Message":
+						CacheUpdateMessage(objects[i]);
 						break;
 					default:
 				}
