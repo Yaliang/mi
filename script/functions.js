@@ -1178,7 +1178,7 @@ function sendMessage(){
 			var data = {subject: subject};
 			var ownerId = object.get('ownerId');
 		}
-		ParseSetGroupMemberChatObjectReadFalse(senderId, groupId, text, notificationFunction);
+		CacheSetGroupMemberChatObjectReadFalse(senderId, groupId, text, notificationFunction);
 		var newElement = buildElementInChatMessagesPage(object);
 		$("#page-chat-messages > .ui-content").append(newElement);
 		var displayFunction = function(object, data){
@@ -1254,7 +1254,7 @@ function startPrivateChat(friendId){
 				}
 				setTimeout(function(){
 					$("html body").animate({ scrollTop: $(document).height().toString()+"px" }, {
-						duration: 300,
+						duration: 500,
 				        complete : function(){
 				        }
 				    });
@@ -1294,7 +1294,7 @@ function updateChatMessage(object){
 			}
 		}
 		$("html body").animate({ scrollTop: $(document).height().toString()+"px" }, {
-			duration: 0,
+			duration: 750,
 	        complete : function(){
 	        }
 	    });
