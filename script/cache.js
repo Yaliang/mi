@@ -4,7 +4,7 @@ var cacheFriend = new Array;
 var cacheChat = new Array;
 var cacheGroup = new Array;
 var cacheMessage = new Array;
-var cachedList = ["Photo", "User", "Friend", "Chat", "Group", "Message"];
+
 function rawLocalToCache(object) {
 	var item = {
 		id: object.objectId, 
@@ -23,47 +23,56 @@ function rawLocalToCache(object) {
 }
 
 // reload from localStorage and update
-var rawData;
-var lastUpdate;
-var objectList;
-var updateIdList;
-for (var n = 0; n< cachedList.length; n++) {
-	rawData = [];
-	lastUpdate = 0;
-	objectList = [];
-	updateIdList = [];
-	switch (cachedList[n]){
-		case "Photo":   if (typeof(localStorage.cachePhoto) == "undefined")   {break;} rawData = JSON.parse(localStorage.cachePhoto);   break;
-		case "User":    if (typeof(localStorage.cacheUser) == "undefined")    {break;} rawData = JSON.parse(localStorage.cacheUser);    break;
-		case "Friend":  if (typeof(localStorage.cacheFriend) == "undefined")  {break;} rawData = JSON.parse(localStorage.cacheFriend);  break;
-		case "Chat":    if (typeof(localStorage.cacheChat) == "undefined")    {break;} rawData = JSON.parse(localStorage.cacheChat);    break;
-		case "Group":   if (typeof(localStorage.cacheGroup) == "undefined")   {break;} rawData = JSON.parse(localStorage.cacheGroup);   break;
-		case "Message": if (typeof(localStorage.cacheMessage) == "undefined") {break;} rawData = JSON.parse(localStorage.cacheMessage); break;
-		default:
+function cacheInitialization() {
+	cachePhoto = new Array;
+	cacheUser = new Array;
+	cacheFriend = new Array;
+	cacheChat = new Array;
+	cacheGroup = new Array;
+	cacheMessage = new Array;
+	var cachedList = ["Photo", "User", "Friend", "Chat", "Group", "Message"];
+	var rawData;
+	var lastUpdate;
+	var objectList;
+	var updateIdList;
+	for (var n = 0; n< cachedList.length; n++) {
+		rawData = [];
+		lastUpdate = 0;
+		objectList = [];
+		updateIdList = [];
+		switch (cachedList[n]){
+			case "Photo":   if (typeof(localStorage.cachePhoto) == "undefined")   {break;} rawData = JSON.parse(localStorage.cachePhoto);   break;
+			case "User":    if (typeof(localStorage.cacheUser) == "undefined")    {break;} rawData = JSON.parse(localStorage.cacheUser);    break;
+			case "Friend":  if (typeof(localStorage.cacheFriend) == "undefined")  {break;} rawData = JSON.parse(localStorage.cacheFriend);  break;
+			case "Chat":    if (typeof(localStorage.cacheChat) == "undefined")    {break;} rawData = JSON.parse(localStorage.cacheChat);    break;
+			case "Group":   if (typeof(localStorage.cacheGroup) == "undefined")   {break;} rawData = JSON.parse(localStorage.cacheGroup);   break;
+			case "Message": if (typeof(localStorage.cacheMessage) == "undefined") {break;} rawData = JSON.parse(localStorage.cacheMessage); break;
+			default:
+		}
+		if (rawData.length == 0)  {
+			console.log("empty: "+cachedList[n]);
+			continue;
+		}
+		for (var i=0; i < rawData.length; i++) {
+			var rawObject = rawData[i];
+			objectList.push(rawLocalToCache(rawObject));
+			updateIdList.push(rawData[i].objectId);
+			if (Date.parse(rawObject.updatedAt) > lastUpdate)
+				lastUpdate = Date.parse(rawObject.updatedAt);
+		}
+		lastUpdate = new Date(lastUpdate);
+		console.log(lastUpdate.toJSON());
+		switch (cachedList[n]){
+			case "Photo":   cachePhoto = objectList;   break;
+			case "User":    cacheUser = objectList;    break;
+			case "Friend":  cacheFriend = objectList;  break;
+			case "Chat":    cacheChat = objectList;    break;
+			case "Group":   cacheGroup = objectList;   break;
+			case "Message": cacheMessage = objectList; break;
+			default:
+		}
+		ParseUpdateCache(cachedList[n], updateIdList, lastUpdate);
 	}
-	if (rawData.length == 0)  {
-		console.log("empty: "+cachedList[n]);
-		continue;
-	}
-	for (var i=0; i < rawData.length; i++) {
-		var rawObject = rawData[i];
-		objectList.push(rawLocalToCache(rawObject));
-		updateIdList.push(rawData[i].objectId);
-		if (Date.parse(rawObject.updatedAt) > lastUpdate)
-			lastUpdate = Date.parse(rawObject.updatedAt);
-	}
-	lastUpdate = new Date(lastUpdate);
-	console.log(lastUpdate.toJSON());
-	switch (cachedList[n]){
-		case "Photo":   cachePhoto = objectList;   break;
-		case "User":    cacheUser = objectList;    break;
-		case "Friend":  cacheFriend = objectList;  break;
-		case "Chat":    cacheChat = objectList;    break;
-		case "Group":   cacheGroup = objectList;   break;
-		case "Message": cacheMessage = objectList; break;
-		default:
-	}
-	ParseUpdateCache(cachedList[n], updateIdList, lastUpdate);
 }
 
 
@@ -254,7 +263,7 @@ function CacheSetGroupMemberChatObjectReadFalse(senderId, groupId, text, notific
 	var cached = false;
 	for (var i = 0; i < cacheGroup.length; i++) {
 		if (cacheGroup[i].id == groupId) {
-			ParseSetGroupMemberChatObjectReadFalseWithMemeberId(senderId, cacheGroup[i].get("memberId"), groupId, text, notificationFunction);
+			ParseSetChatObjectReadFalseByCurrentIndexAndGroupId(senderId, cacheGroup[i].get("memberId"), 0, groupId, text, notificationFunction);
 			cached = true;
 			break;
 		}
