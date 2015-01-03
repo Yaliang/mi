@@ -726,6 +726,62 @@ function ParseAddChatMessage(senderId, groupId, text, displayFunction){
 	})
 }
 
+function ParseSetChatObjectReadFalseByCurrentIndexAndGroupId(senderId, memberId, currentIndex, groupId, text, notificationFunction) {
+	var Chat = Parse.Object.extend("Chat");
+	var query = new Parse.Query(Chat);
+	var ownerId = memberId[currentIndex];
+	query.equalTo("ownerId", ownerId);
+	query.equalTo("groupId", groupId);
+	if (senderId != ownerId) {
+		// if the member of group isn't the sender
+		query.first({
+			success:function(object){
+				if (typeof(object) == "undefined") {
+					// create new chat object for members of group
+					var chat = new Chat;
+					chat.set("ownerId", ownerId);
+					chat.set("groupId", groupId);
+					chat.set("hidden", false);
+					chat.set("unreadNum", 1);
+					chat.save(null,{
+						success: function(object) {
+							notificationFunction(text,object);
+							if (currentIndex + 1 < memberId.length) {
+								ParseSetChatObjectReadFalseByCurrentIndexAndGroupId(senderId, memberId, currentIndex+1, groupId, text, notificationFunction);
+							}
+						}
+					});
+				} else {
+					// set unread number plus 1 for chat object
+					object.increment("unreadNum", 1);
+					object.save(null, {
+						success: function(object) {
+							notificationFunction(text,object);
+							if (currentIndex + 1 < memberId.length) {
+								ParseSetChatObjectReadFalseByCurrentIndexAndGroupId(senderId, memberId, currentIndex+1, groupId, text, notificationFunction);
+							}
+						}
+					});
+				}
+			}
+		})
+	} else {
+		// if the member is the sender
+		query.first({
+			success: function(object){
+				object.save(null, {
+					success: function(object) {
+						CacheUpdateChat(object);
+						if (currentIndex + 1 < memberId.length) {
+							ParseSetChatObjectReadFalseByCurrentIndexAndGroupId(senderId, memberId, currentIndex+1, groupId, text, notificationFunction);
+						}
+					}
+				})
+			}
+		})
+	}
+}
+
 function ParseSetGroupMemberChatObjectReadFalse(senderId, groupId, text, notificationFunction) {
 	var Group = Parse.Object.extend("Group");
 	var query = new Parse.Query(Group);
@@ -736,103 +792,9 @@ function ParseSetGroupMemberChatObjectReadFalse(senderId, groupId, text, notific
 			// get the group members' id
 			CacheUpdateGroup(object);
 			var memberId = object.get("memberId");
-			for (var i=0; i<memberId.length; i++) {
-				var Chat = Parse.Object.extend("Chat");
-				var query = new Parse.Query(Chat);
-				var ownerId = memberId[i];
-				query.equalTo("ownerId", memberId[i]);
-				query.equalTo("groupId", groupId);
-				if (senderId != memberId[i]) {
-					// if the member of group isn't the sender
-					query.first({
-						success:function(object){
-							if (typeof(object) == "undefined") {
-								// create new chat object for members of group
-								var chat = new Chat;
-								chat.set("ownerId", ownerId);
-								chat.set("groupId", groupId);
-								chat.set("hidden", false);
-								chat.set("unreadNum", 1);
-								chat.save(null,{
-									success: function(object) {
-										notificationFunction(text,object);
-									}
-								});
-							} else {
-								// set unread number plus 1 for chat object
-								object.increment("unreadNum", 1);
-								object.save(null, {
-									success: function(object) {
-										notificationFunction(text,object);
-									}
-								});
-							}
-						}
-					})
-				} else {
-					// if the member is the sender
-					query.first({
-						success: function(object){
-							object.save(null, {
-								success: function(object) {
-									CacheUpdateChat(object);
-								}
-							})
-						}
-					})
-				}
-			}
+			ParseSetChatObjectReadFalseByCurrentIndexAndGroupId(senderId, memberId, 0, groupId, text, notificationFunction);
 		}
 	})
-}
-
-function ParseSetGroupMemberChatObjectReadFalseWithMemeberId(senderId, memberId, groupId, text, notificationFunction) {
-	for (var i=0; i<memberId.length; i++) {
-		var Chat = Parse.Object.extend("Chat");
-		var query = new Parse.Query(Chat);
-		var ownerId = memberId[i];
-		query.equalTo("ownerId", memberId[i]);
-		query.equalTo("groupId", groupId);
-		if (senderId != memberId[i]) {
-			// if the member of group isn't the sender
-			query.first({
-				success:function(object){
-					if (typeof(object) == "undefined") {
-						// create new chat object for members of group
-						var chat = new Chat;
-						chat.set("ownerId", ownerId);
-						chat.set("groupId", groupId);
-						chat.set("hidden", false);
-						chat.set("unreadNum", 1);
-						chat.save(null,{
-							success: function(object) {
-								notificationFunction(text,object);
-							}
-						});
-					} else {
-						// set unread number plus 1 for chat object
-						object.increment("unreadNum", 1);
-						object.save(null, {
-							success: function(object) {
-								notificationFunction(text,object);
-							}
-						});
-					}
-				}
-			})
-		} else {
-			// if the member is the sender
-			query.first({
-				success: function(object){
-					object.save(null, {
-						success: function(object) {
-							CacheUpdateChat(object);
-						}
-					})
-				}
-			})
-		}
-	}
 }
 
 function ParsePullMyChat(ownerId,descendingOrderKey,displayFunction){

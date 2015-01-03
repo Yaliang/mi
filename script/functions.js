@@ -34,6 +34,7 @@ $(document).ready(function (){
 		}
 		event.preventDefault();
 	});
+	cacheInitialization()
 	loginByLocalStorage();
 });
 
@@ -141,6 +142,7 @@ function signup(){
 }
 
 function login(){
+	cacheInitialization();
 	var email = $("#login-email").val();
 	var password = $("#login-password").val();
 	var errorObject = $("#login-error");
