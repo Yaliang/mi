@@ -34,6 +34,12 @@ $(document).ready(function (){
 		}
 		event.preventDefault();
 	});
+	$('#login-form').submit(function(event){
+		event.preventDefault();
+	});
+	$('#signup-form').submit(function(event){
+		event.preventDefault();
+	});
 	cacheInitialization()
 	loginByLocalStorage();
 });
