@@ -13,10 +13,14 @@ function ParseSignup(username, password, email, name, errorObject, destID, custo
 			customFunction(user);
 		},
 		error: function(user,error) {
-			errorObject.html("Error: " + error.code + " " + error.message);
+			//errorObject.html("Error: " + error.code + " " + error.message);
+			errorObject.html(error.message);
+
 		}
 	});
 }
+
+
 
 function ParseUpdateBridgeit(bridgeitId){
 	var current = Parse.User.current();
@@ -41,8 +45,33 @@ function ParseLogin(username, password, errorObject, destID, customFunction) {
 			CacheUpdateUser(user);
 		},
 		error: function(user, error){
-			errorObject.html("Error: " + error.code + " " + error.message);
+			var query = new Parse.Query(Parse.User);
+    		query.equalTo("username", username);  
+			query.find({
+	  			success: function(woman) {
+	  				if(woman.length == 0){
+	  					errorObject.html("Email does not exist");
+	  				}else{
+	   					errorObject.html("Wrong password");
+	   				}
+	  				
+	  			},
+	  			error: function(){
+	  				errorObject.html("Failed to connect server, please try again");
+	  			},
+			});
+			//errorObject.html("Error: " + error.code + " " + error.message);
 		}
+	});
+}
+
+function queryCredentials(username) {
+    var query = new Parse.Query(Parse.User);
+    query.equalTo("username", username);  
+	query.find({
+  		success: function() {
+   			errorObject.html("Wrong password");
+  		}
 	});
 }
 
