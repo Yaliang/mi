@@ -48,8 +48,8 @@ function ParseLogin(username, password, errorObject, destID, customFunction) {
 			var query = new Parse.Query(Parse.User);
     		query.equalTo("username", username);  
 			query.find({
-	  			success: function(woman) {
-	  				if(woman.length == 0){
+	  			success: function(userlist) {
+	  				if(userlist.length == 0){
 	  					errorObject.html("Email does not exist");
 	  				}else{
 	   					errorObject.html("Wrong password");
