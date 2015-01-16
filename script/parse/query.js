@@ -899,6 +899,19 @@ function ParseUpdateCache(className, updateIdList,lastUpdate){
 	})
 }
 
+
+function ParseUpdateGCMId(displayFunction){
+	var currentUser = Parse.User.current();
+
+	currentUser.set("GCMId",GCMId);
+	currentUser.save(null,{
+		success: function(object){
+			displayFunction();
+			CacheUpdateUser(object);
+		}
+	})
+}
+
 // functions for database maintaining /never used in front-end script.
 
 
