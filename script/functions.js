@@ -1119,6 +1119,8 @@ function pullMyFriendList() {
 	var descendingOrderKey = "createdAt";
 	var displayFunction = function(objects){
 		// sort user list
+		objects.sort(function(a, b){return a.get('name') - b.get('name')});
+		console.table(objects);
 
 		// display them
 		for (var i=0; i<objects.length; i++) {

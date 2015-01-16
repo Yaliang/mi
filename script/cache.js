@@ -195,6 +195,7 @@ function CachePullMyFriend(userId, descendingOrderKey, displayFunction) {
 			friends.push(cacheFriend[i]);
 		}
 	}
+	friends.sort(function(a, b){return a.get('name') - b.get('name')});
 
 	displayFunction(friends);
 }
