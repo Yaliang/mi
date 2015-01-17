@@ -425,7 +425,7 @@ function updateEventDetail(id){
 }
 
 // send comment to database
-function sendCommnet(){
+function sendComment(){
 	var eventId = $("#event-id-label").html();
 	var currentUser = Parse.User.current();
 	var owner = currentUser.getUsername();
@@ -800,7 +800,7 @@ function profilePhotoCrop(){
 
 
 var geoWatchId;
-function listFriendNearBy(){
+function listPeopleNearBy(){
 	if (navigator.geolocation){
 		geoWatchId = navigator.geolocation.watchPosition(showPeopleNearByList,showPeopleNearByListError);
 	} else {
@@ -1395,14 +1395,13 @@ function pullMyChat(){
 	
 }
 
-function pushNotificationToDeviceByGCM(regIds,message) {
+function pushNotificationToDeviceByGCM(regId,message) {
 	GCM_API_KEY = 'AIzaSyAqDgcvvLgzILxGHjsyIixV0h_ccaT_kg8';
-	request = {"registration_ids": regIds,"data": message};
-	request = JSON.stringify(request);
+	request = "registration_ids="+regId+"&data.message="+message;
 	$.ajax({
-  		url: "https://android.googleapis.com/gcm/send",
+  		url: "http://android.googleapis.com/gcm/send",
   		type:"POST",
-  		contentType:"application/json",
+  		contentType:"application/x-www-form-urlencoded;charset=UTF-8",
   		data: request,
   		beforeSend: function(xhr) {
   			xhr.setRequestHeader('Authorization','key='+GCM_API_KEY);
