@@ -1,11 +1,3 @@
-function updateSite(event) {
-    window.applicationCache.swapCache();
-    console.log("updateSite");
-}
-
-window.applicationCache.addEventListener('updateready',
-    updateSite, false);
-
 $(document).ready(function (){
 	if (window.navigator.standalone == true) {
 		$('#comment-content').on("blur",function(){
@@ -65,6 +57,7 @@ function loginByLocalStorage(){
 	}
 }
 
+var CGMId;
 var pullNotificationRunning = false;
 function pullNotification(){
 	var currentUser = Parse.User.current();
@@ -1400,4 +1393,19 @@ function pullMyChat(){
 	}
 	CachePullMyChat(ownerId,displayFunction);
 	
+}
+
+function pushNotificationToDeviceByGCM(regIds,message) {
+	GCM_API_KEY = 'AIzaSyAqDgcvvLgzILxGHjsyIixV0h_ccaT_kg8';
+	request = {"registration_ids": regIds,"data": message};
+	request = JSON.stringify(request);
+	$.ajax({
+  		url: "https://android.googleapis.com/gcm/send",
+  		type:"POST",
+  		contentType:"application/json",
+  		data: request,
+  		beforeSend: function(xhr) {
+  			xhr.setRequestHeader('Authorization','key='+GCM_API_KEY);
+  		}
+  	});
 }
