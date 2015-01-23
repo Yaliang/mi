@@ -1396,15 +1396,10 @@ function pullMyChat(){
 }
 
 function pushNotificationToDeviceByGCM(regId,message) {
-	GCM_API_KEY = 'AIzaSyAqDgcvvLgzILxGHjsyIixV0h_ccaT_kg8';
-	request = "registration_ids="+regId+"&data.message="+message;
-	$.ajax({
-  		url: "http://android.googleapis.com/gcm/send",
-  		type:"POST",
-  		contentType:"application/x-www-form-urlencoded;charset=UTF-8",
-  		data: request,
-  		beforeSend: function(xhr) {
-  			xhr.setRequestHeader('Authorization','key='+GCM_API_KEY);
-  		}
-  	});
+	var request="id="+regId+"&message="+message;//{id: regId, message: message};
+	console.log(request);
+	$.post("https://yueme-push-server.herokuapp.com/",request)
+		.done(function(data) {
+			console.log(data);
+		});
 }
