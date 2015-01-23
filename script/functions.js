@@ -1113,7 +1113,7 @@ function pullMyFriendList() {
 	var displayFunction = function(objects){
 		// sort user list
 		objects.sort(function(a, b){return a.get('name') - b.get('name')});
-		console.table(objects);
+		//console.table(objects);
 
 		// display them
 		for (var i=0; i<objects.length; i++) {
@@ -1174,10 +1174,20 @@ function sendMessage(){
 		var senderId = object.get("senderId");
 		var groupId = object.get("groupId");
 		var text = object.get('text');
-		var notificationFunction = function(text, object){
-			var subject = $("#chat-messages-title").html+": "+text;
-			var data = {subject: subject};
-			var ownerId = object.get('ownerId');
+		var notificationFunction = function(senderId,text,receiverId){
+			var displayFunction = function(object,data){
+				var regId = object.get("GCMId");
+				if (typeof(regId) != "undefined") {
+					data.regId = regId;
+					var displayFunction = function(object,data){
+						var message = object.get("name")+": " + data.message;
+						pushNotificationToDeviceByGCM(data.regId,message);
+					}
+					CacheGetProfileByUserId(data.senderId, displayFunction, data);
+				}
+			}
+			var data = {senderId : senderId, message: text};
+			CacheGetProfileByUserId(receiverId, displayFunction, data);
 		}
 		CacheSetGroupMemberChatObjectReadFalse(senderId, groupId, text, notificationFunction);
 		var newElement = buildElementInChatMessagesPage(object);
@@ -1320,6 +1330,9 @@ function buildElementInChatListPage(object){
 }
 
 function pullMyChat(){
+	if (!pullNotificationRunning) {
+		pullNotification();
+	}
 	var ownerId = Parse.User.current().id;
 	var displayFunction = function(objects){
 		for (var i=objects.length-1; i>=0; i--) {
@@ -1396,15 +1409,10 @@ function pullMyChat(){
 }
 
 function pushNotificationToDeviceByGCM(regId,message) {
-	GCM_API_KEY = 'AIzaSyAqDgcvvLgzILxGHjsyIixV0h_ccaT_kg8';
-	request = "registration_ids="+regId+"&data.message="+message;
-	$.ajax({
-  		url: "http://android.googleapis.com/gcm/send",
-  		type:"POST",
-  		contentType:"application/x-www-form-urlencoded;charset=UTF-8",
-  		data: request,
-  		beforeSend: function(xhr) {
-  			xhr.setRequestHeader('Authorization','key='+GCM_API_KEY);
-  		}
-  	});
+	var request="id="+regId+"&message="+message;//{id: regId, message: message};
+	//console.log(request);
+	$.post("https://yueme-push-server.herokuapp.com/",request)
+		.done(function(data) {
+			//console.log(data);
+		});
 }

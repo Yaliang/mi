@@ -774,7 +774,7 @@ function ParseSetChatObjectReadFalseByCurrentIndexAndGroupId(senderId, memberId,
 					chat.set("unreadNum", 1);
 					chat.save(null,{
 						success: function(object) {
-							notificationFunction(text,object);
+							notificationFunction(senderId,text,ownerId);
 							if (currentIndex + 1 < memberId.length) {
 								ParseSetChatObjectReadFalseByCurrentIndexAndGroupId(senderId, memberId, currentIndex+1, groupId, text, notificationFunction);
 							}
@@ -785,7 +785,7 @@ function ParseSetChatObjectReadFalseByCurrentIndexAndGroupId(senderId, memberId,
 					object.increment("unreadNum", 1);
 					object.save(null, {
 						success: function(object) {
-							notificationFunction(text,object);
+							notificationFunction(senderId,text,ownerId);
 							if (currentIndex + 1 < memberId.length) {
 								ParseSetChatObjectReadFalseByCurrentIndexAndGroupId(senderId, memberId, currentIndex+1, groupId, text, notificationFunction);
 							}
