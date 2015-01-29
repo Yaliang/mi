@@ -604,3 +604,14 @@ textarea {
 	float: left;
 	width: 20%;
 }
+
+.ui-custom-event-create-focus {
+    border-color:red!important;
+}
+
+.event-create-alert {
+    font-family: "Open Sans"!important;
+    font-weight: 300;
+    font-size: 12px;
+    color: red;
+}

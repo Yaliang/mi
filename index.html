@@ -150,13 +150,13 @@
 		<div role="main" class="ui-content">
 			<form id="event-create-form" style='padding: 1em '>
 				<label for="eventtitle">Title:</label>
-				<input type="text" data-clear-btn="true" name="eventtitle" id="event-create-title" required="true" value="">
+				<input type="text" data-clear-btn="true" name="eventtitle" id="event-create-title" value="">
 				<label for="eventlocation">Location:</label>
-				<input type="text" data-clear-btn="ture" name="eventlocation" id="event-create-location" required="true" value="">
+				<input type="text" data-clear-btn="ture" name="eventlocation" id="event-create-location" value="">
 				<label for="eventstarttime">Start Time:</label>
-				<input type="datetime-local" data-clear-btn="ture" name="eventstarttime" id="event-create-start-time" required="true" value="">
+				<input type="datetime-local" data-clear-btn="ture" name="eventstarttime" id="event-create-startTime" value="">
 				<label for="eventendtime">End Time:</label>
-				<input type="datetime-local" data-clear-btn="ture" name="eventendtime" id="event-create-end-time" required="true" value="">
+				<input type="datetime-local" data-clear-btn="ture" name="eventendtime" id="event-create-endTime" value="">
 				<label for="eventvisibility">Visibility:</label>
 				<select name="eventvisibility" id="event-create-visibility" data-role="flipswitch" data-wrapper-class="custom-size-flipswitch-event-create-visibility" checked="">
 					<option value="off">Friends</option>
@@ -170,8 +170,6 @@
 				-->
 				<label for="eventdescription">Description:</label>
 				<textarea name="eventdescription" id="event-create-description"></textarea>
-
-                <button id="event-create-form-hidden-button" style="display: none"></button>
 			</form>
 
 			<div id="event-create-preview"></div>
