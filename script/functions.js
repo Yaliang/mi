@@ -181,11 +181,42 @@ function createUserEvent(){
 
 	var title = $("#event-create-title").val();
 	var location = $("#event-create-location").val();
-	var startTime = $("#event-create-start-time").val().replace("T", ' ');
-    var endTime = $("#event-create-end-time").val().replace('T', ' ');
+	var startTime = $("#event-create-startTime").val().replace("T", ' ');
+    var endTime = $("#event-create-endTime").val().replace('T', ' ');
 
-    if (title.length == 0 || location.length == 0 || startTime.length == 0 || endTime.length == 0) {
-        $("#event-create-form-hidden-button").trigger("click");
+    var errorHandler = function(item) {
+        $("#event-create-" + item).focus().parent().addClass("ui-custom-event-create-focus");
+        if ($("#event-create-" + item + "-alert").length == 0) {
+            $("#event-create-" + item).parent().after("<p id='event-create-" + item + "-alert' class='event-create-alert'>Field required</p>");
+        }
+
+        setTimeout(function(){
+            $("#event-create-" + item).focus().parent().removeClass("ui-custom-event-create-focus");
+        }, 500);
+
+        $("#event-create-" + item).change(function(){
+            $("#event-create-" + item + "-alert").remove();
+            $("#event-create-" + item).unbind("change");
+        });
+    };
+
+    if (title.length == 0) {
+        errorHandler("title");
+        return;
+    }
+
+    if (location.length == 0) {
+        errorHandler("location");
+        return;
+    }
+
+    if (startTime.length == 0) {
+        errorHandler("startTime");
+        return;
+    }
+
+    if (endTime.length == 0) {
+        errorHandler("endTime");
         return;
     }
 
