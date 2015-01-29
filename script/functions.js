@@ -17,6 +17,11 @@ $(document).ready(function (){
 		}
 		event.preventDefault();
 	});
+
+    $('#event-create-form').submit(function(event) {
+        event.preventDefault();
+    });
+
 	$('#comment-form').submit(function(event){
 		sendToolbarActiveKeyboard('comment-content');
 		if (window.navigator.standalone == true) {
@@ -173,18 +178,25 @@ function logout(){
 function createUserEvent(){
 	var currentUser = Parse.User.current();
 	var owner = currentUser.getUsername();
-	$('#event-create-button').unbind("click");
+
 	var title = $("#event-create-title").val();
 	var location = $("#event-create-location").val();
-
 	var startTime = $("#event-create-start-time").val().replace("T", ' ');
+    var endTime = $("#event-create-end-time").val().replace('T', ' ');
+
+    if (title.length == 0 || location.length == 0 || startTime.length == 0 || endTime.length == 0) {
+        $("#event-create-form-hidden-button").trigger("click");
+        return;
+    }
+
+    $('#event-create-button').unbind("click");
+
     var index1 = startTime.indexOf(":");
     var index2 = startTime.lastIndexOf(":");
     if (index1 != index2) {
         startTime = startTime.substring(0, index2);
     }
 
-	endTime = $("#event-create-end-time").val().replace('T', ' ');
     index1 = endTime.indexOf(":");
     index2 = endTime.lastIndexOf(":");
     if (index1 != index2) {
@@ -266,7 +278,6 @@ function pullUserEvent(){
 				var title = objects[i].get("title");
 				var location = objects[i].get("location");
 				var time = objects[i].get("time");
-                console.log("time: " + time);
 				var visibility = objects[i].get("visibility");
 				var description = objects[i].get("description");
 				var interestNumber = objects[i].get("interestNumber");
