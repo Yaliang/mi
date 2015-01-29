@@ -32,7 +32,7 @@ $(document).ready(function (){
 	$('#signup-form').submit(function(event){
 		event.preventDefault();
 	});
-	cacheInitialization()
+	cacheInitialization();
 	loginByLocalStorage();
 });
 
@@ -168,7 +168,6 @@ function logout(){
 	localStorage.clear();
 	var destID = "page-login";
 	ParseLogout(destID);
-
 }
 
 function createUserEvent(){
@@ -177,11 +176,23 @@ function createUserEvent(){
 	$('#event-create-button').unbind("click");
 	var title = $("#event-create-title").val();
 	var location = $("#event-create-location").val();
-	var time = $("#event-create-start-time").val().replace('T',' ');
-	if (($("#event-create-start-time").val().toString().length > 0) && ($("#event-create-end-time").val().toString().length > 0)) {
-		time = time + ' -- ';
-	}
-	time = time + $("#event-create-end-time").val().replace('T', ' ');
+
+	var startTime = $("#event-create-start-time").val().replace("T", ' ');
+    var index1 = startTime.indexOf(":");
+    var index2 = startTime.lastIndexOf(":");
+    if (index1 != index2) {
+        startTime = startTime.substring(0, index2);
+    }
+
+	endTime = $("#event-create-end-time").val().replace('T', ' ');
+    index1 = endTime.indexOf(":");
+    index2 = endTime.lastIndexOf(":");
+    if (index1 != index2) {
+        endTime = endTime.substring(0, index2);
+    }
+
+    var time = startTime + " -- " + endTime;
+
 	var visibility = $("#event-create-visibility").val()=="on" ? true : false ;
 	var description = $("#event-create-description").val();
 	var errorObject = $("#event-error");
@@ -244,9 +255,9 @@ function pullUserEventHolderInfo(holder, eventId){
 function pullUserEvent(){
 	var limitNumber = 15;
 	var descendingOrderKey = "createdAt";
-	var ascendingOrderKey = "createdAt";
+	//var ascendingOrderKey = "createdAt";
 	$("#event-content").addClass("ui-hidden-accessible");
-	pullLastItem=3*limitNumber;
+	pullLastItem = 3 * limitNumber;
 	var displayFunction = function(objects){
 		var currentUser = Parse.User.current();
 		var owner = currentUser.getUsername();
@@ -255,6 +266,7 @@ function pullUserEvent(){
 				var title = objects[i].get("title");
 				var location = objects[i].get("location");
 				var time = objects[i].get("time");
+                console.log("time: " + time);
 				var visibility = objects[i].get("visibility");
 				var description = objects[i].get("description");
 				var interestNumber = objects[i].get("interestNumber");
@@ -309,7 +321,7 @@ function pullUserEvent(){
 					if (pullLastItem == 0) {
 						$("#event-content").removeClass("ui-hidden-accessible");
 					}
-				}
+				};
 				ParseCheckInterest(owner, id, successFunction);
 			} else {
 				var commentNumber = objects[i].get("commentNumber");
@@ -325,7 +337,7 @@ function pullUserEvent(){
 				// display event holder's name | not the email one
 				pullUserEventHolderInfo(holder, id);
 			}
-		};
+		}
 	};
 	ParsePullEvent(null, limitNumber, descendingOrderKey, "public", displayFunction);
 }
@@ -370,7 +382,6 @@ function convertTime(rawTime){
 	}
 	return showtime
 }
-
 
 // update the detail of event when the user clicked to the page-event-detail
 function updateEventDetail(id){
@@ -798,7 +809,6 @@ function profilePhotoCrop(){
 	reader.readAsDataURL(file);
 }
 
-
 var geoWatchId;
 function listPeopleNearBy(){
 	if (navigator.geolocation){
@@ -923,16 +933,16 @@ function displayEventMoreOption(){
 			createUserEvent();
 		});
 		hiddenEventMoreOption();
-	})
+	});
 	$('#event-page-right-top-option-2').on('click',function(){
 		pullMyEvent();
 		hiddenEventMoreOption();
-	})
+	});
 	$('.options-hidden-cover-layer').show();
 	$('.event-page-right-top-options').fadeIn('fast');
 	$('.options-hidden-cover-layer').on('click',hiddenEventMoreOption);
-	$('.options-hidden-cover-layer').on('swipeleft',hiddenEventMoreOption)
-	$('.options-hidden-cover-layer').on('swiperight',hiddenEventMoreOption)
+	$('.options-hidden-cover-layer').on('swipeleft',hiddenEventMoreOption);
+	$('.options-hidden-cover-layer').on('swiperight',hiddenEventMoreOption);
 	$(window).scroll(hiddenEventMoreOption)
 }
 

@@ -75,7 +75,6 @@ function cacheInitialization() {
 	}
 }
 
-
 // functions of cachedPhoto
 function CacheGetProfilePhoto(userId, displayFunction, data) {
 	var cached = false;
@@ -109,7 +108,6 @@ function CacheUpdatePhoto(object){
 	}
 	localStorage.cachePhoto = JSON.stringify(cachePhoto);
 }
-
 
 // functions of cachedUser
 function CacheGetProfileByUsername(username, displayFunction, data){

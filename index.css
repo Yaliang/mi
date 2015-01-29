@@ -101,6 +101,7 @@
 .custom-corners .ui-body {
 	border-left-width: 0;
 	border-right-width: 0;
+    font-family: "Open Sans";
 }
 
 .custom-corners .ui-footer {
@@ -353,12 +354,15 @@ a {
 }
 
 .ui-custom-event-title {
-	color: #A2A2A2;
-	font-weight: 400;
-	font-size: 14px;
+	color: #000000;
+	font-weight: 700;
+	font-size: 24px;
+    margin: 0.5em 0 0.5em 0;
 }
+
 .ui-custom-event-description-less-margin {
 }
+
 .ui-custom-event-description {
 	clear: both;
 	margin-top: 48px;
@@ -368,22 +372,22 @@ a {
 	font-weight: 300;
 	font-size: 12px;
 	padding-left: 20px;
-	background: url("./content/material-design/png/compass106-solid-pink-20.png") 0 50% no-repeat;
+	background: url("./content/material-design/png/compass106-solid-pink-20.png") 0 0 no-repeat;
 	background-size: 15px 15px;
 	float: left;
-	height: 15px;
-	margin: 0 15px 0 0;
+	/*height: 15px;*/
+	margin: 0 15px 15px 0;
 }
 
 .ui-custom-event-time {
 	font-weight: 300;
 	font-size: 12px;
 	padding-left: 20px;
-	background: url("./content/material-design/png/clock100-solid-pink-20.png") 0 50% no-repeat;
+	background: url("./content/material-design/png/clock100-solid-pink-20.png") 0 0 no-repeat;
 	background-size: 15px 15px;
 	float: left;
-	height: 15px;
-	margin: 0 15px 0 0;
+	/*height: 15px;*/
+	margin: 0 15px 15px 0;
 }
 
 .ui-custom-message-right {
@@ -461,8 +465,6 @@ a {
 .chat-list-title {
 	padding-top: 10px;
 }
-
-
 
 textarea {
 	resize: none!important;
@@ -574,10 +576,6 @@ textarea {
 	border-radius: .3125em;
 	cursor: pointer;
 }
-
-
-
-//custom grid
 
 .rwd-example {
 	overflow: hidden;

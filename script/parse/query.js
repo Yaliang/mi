@@ -15,12 +15,9 @@ function ParseSignup(username, password, email, name, errorObject, destID, custo
 		error: function(user,error) {
 			//errorObject.html("Error: " + error.code + " " + error.message);
 			errorObject.html(error.message);
-
 		}
 	});
 }
-
-
 
 function ParseUpdateBridgeit(bridgeitId){
 	var current = Parse.User.current();
@@ -46,7 +43,7 @@ function ParseLogin(username, password, errorObject, destID, customFunction) {
 		},
 		error: function(user, error){
 			var query = new Parse.Query(Parse.User);
-    		query.equalTo("username", username);  
+            query.equalTo("username", username);
 			query.find({
 	  			success: function(userlist) {
 	  				if(userlist.length == 0){
@@ -54,13 +51,11 @@ function ParseLogin(username, password, errorObject, destID, customFunction) {
 	  				}else{
 	   					errorObject.html("Wrong password");
 	   				}
-	  				
 	  			},
 	  			error: function(){
 	  				errorObject.html("Failed to connect server, please try again");
 	  			},
 			});
-			//errorObject.html("Error: " + error.code + " " + error.message);
 		}
 	});
 }
@@ -899,7 +894,6 @@ function ParseUpdateCache(className, updateIdList,lastUpdate){
 	})
 }
 
-
 function ParseUpdateGCMId(regid, displayFunction){
 	var currentUser = Parse.User.current();
 
@@ -913,7 +907,6 @@ function ParseUpdateGCMId(regid, displayFunction){
 }
 
 // functions for database maintaining /never used in front-end script.
-
 
 function ParseUserNameFieldUpdate(i){
 	console.log(i);
