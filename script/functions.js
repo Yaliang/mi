@@ -64,6 +64,7 @@ function loginByLocalStorage(){
 
 var CGMId;
 var pullNotificationRunning = false;
+
 function pullNotification(){
 	var currentUser = Parse.User.current();
 	pullNotificationRunning = true;
