@@ -971,6 +971,22 @@ function displayEventMoreOption(){
 	$('#ui-icon-custom-right-top-more').attr("id","ui-icon-custom-right-top-more-active");
 	$(window).unbind("scroll");
 	$('#event-page-right-top-option-1').on('click',function(){
+        var date = new Date();
+        var year = date.getFullYear();
+        var month = date.getMonth() + 1;
+        var day = date.getDate();
+        var hour = date.getHours();
+        var minute =  date.getMinutes();
+        var time = "";
+        time += year + "-";
+        time += (month < 10 ? "0" + month: month) + "-";
+        time += (day < 10 ? "0" + day : day) + "T";
+        time += (hour < 10 ? "0" + hour : hour) + ":";
+        time += (minute < 10 ? "0" + minute : minute);
+
+        $("#event-create-startTime").val(time);
+        $("#event-create-endTime").val(time);
+
 		$('#event-create-button').bind('click',function(){
 			createUserEvent();
 		});
