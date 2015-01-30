@@ -85,7 +85,7 @@ function pullNotification(){
 			});
 			$('#new-friend-requests-btn').html("<span>New Friend Requests</span>");
 		}
-	}
+	};
 	ParsePullUnreadFriendRequest(currentUser.id, displayFunction);
 
 	var displayFunction = function(objects){
@@ -109,8 +109,7 @@ function pullNotification(){
 				}
 			}
 		}
-
-	}
+	};
 
 	// if ($( ":mobile-pagecontainer" ).pagecontainer( "getActivePage" )[0].id == "page-chat") {
 	// 	pullMyChat();
@@ -187,7 +186,7 @@ function createUserEvent(){
     var errorHandler = function(item) {
         $("#event-create-" + item).focus().parent().addClass("ui-custom-event-create-focus");
         if ($("#event-create-" + item + "-alert").length == 0) {
-            $("#event-create-" + item).parent().after("<p id='event-create-" + item + "-alert' class='event-create-alert'>Field required</p>");
+            $("#event-create-" + item).parent().after("<p id='event-create-" + item + "-alert' class='event-create-alert'>*Field required</p>");
         }
 
         setTimeout(function(){
@@ -264,13 +263,13 @@ function pullUserEventHolderInfo(holder, eventId){
 
 		$("#"+eventId+"-owner-name").html(name);
 		if (typeof(gender) == 'undefined') {
-			//$("#"+eventId+"-owner-denger").html(gender.toString());
+			//$("#"+eventId+"-owner-genger").html(gender.toString());
 		} else if (gender) {
-			$("#"+eventId+"-owner-denger").css("backgroundImage","url('./content/customicondesign-line-user-black/png/male-white-20.png')");
-			$("#"+eventId+"-owner-denger").css("backgroundColor","#8970f1");
+			$("#"+eventId+"-owner-genger").css("backgroundImage","url('./content/customicondesign-line-user-black/png/male-white-20.png')");
+			$("#"+eventId+"-owner-genger").css("backgroundColor","#8970f1");
 		} else {
-			$("#"+eventId+"-owner-denger").css("backgroundImage","url('./content/customicondesign-line-user-black/png/female1-white-20.png')");
-			$("#"+eventId+"-owner-denger").css("backgroundColor","#f46f75");
+			$("#"+eventId+"-owner-genger").css("backgroundImage","url('./content/customicondesign-line-user-black/png/female1-white-20.png')");
+			$("#"+eventId+"-owner-genger").css("backgroundColor","#f46f75");
 		};
 		
 		pullLastItem = pullLastItem - 1;
@@ -320,20 +319,16 @@ function pullUserEvent(){
 				newElement = newElement + "<div class='custom-corners-public custom-corners'>";
 				newElement = newElement + "<div class='ui-bar ui-bar-a'>";
 				newElement = newElement + "<div><strong id='"+id+"-owner-name'></strong></div>";
-				newElement = newElement + "<div id='"+id+"-owner-denger' class='ui-icon-custom-gender'></div>";
+				newElement = newElement + "<div id='"+id+"-owner-genger' class='ui-icon-custom-gender'></div>";
 				newElement = newElement + "</div>";
 				newElement = newElement + "<div class='ui-body ui-body-a'>";
 				newElement = newElement + "<p class='ui-custom-event-title'>" + title + "</p>";
-				if (location.length > 0) {
-					newElement = newElement + "<p class='ui-custom-event-location'>" + location + "</p>";
-				}
-				if (time.length > 0) {
-					newElement = newElement + "<p class='ui-custom-event-time'>" + time + "</p>";
-				}
-				if ((location.length == 0) && (time.length == 0)) {
-					newElement = newElement + "<p class='ui-custom-event-description-less-margin'>" + ((description.length == 0) ? "</br>" : description.replace("\n","</br>")) + "</p>";
+				newElement = newElement + "<p class='ui-custom-event-location'>" + location + "</p>";
+				newElement = newElement + "<p class='ui-custom-event-time'>" + time + "</p>";
+				if (description.length == 0) {
+					newElement = newElement + "<p class='ui-custom-event-description-less-margin'></br></p>";
 				} else {
-					newElement = newElement + "<p class='ui-custom-event-description'>" + ((description.length == 0) ? "</br>" : description.replace("\n","</br>")) + "</p>";
+					newElement = newElement + "<p class='ui-custom-event-description'>" +  description.replace("\n","</br>") + "</p>";
 				}
 				newElement = newElement + "<div id='comment-statistics-"+id+"' class='event-statistics'>" + commentNumber + " Comments</div><div id='interest-statistics-"+id+"' class='event-statistics'>" + interestNumber + " Interests</div>";
 				newElement = newElement + "</div>";
@@ -894,20 +889,24 @@ function buildUserListElement(object, liIdPrefix, lat, lng) {
 	newElement += "<div><strong>"+name+"</strong></div>";
 	newElement += "<div class='ui-icon-custom-gender' style='";
 	if (typeof(gender) == 'undefined') {
-		//$("#"+eventId+"-owner-denger").html(gender.toString());
+		//$("#"+eventId+"-owner-genger").html(gender.toString());
 	} else if (gender) {
 		newElement += "background-image:url("+"./content/customicondesign-line-user-black/png/male-white-20.png"+");";
 		newElement += "background-color:"+"#8970f1"+";";
 	} else {
 		newElement += "background-image:url("+"./content/customicondesign-line-user-black/png/female1-white-20.png"+");";
 		newElement += "background-color:"+"#f46f75"+";";
-	};
+	}
+
 	newElement += "'></div>";
+
 	if ((lat != null) && (lng != null)) {
 		newElement += "<div class='people-near-by-list-distance'>" + getDistance(latitude, longitude, lat, lng) + "km, "+convertTime(updatedAt)+"</div>";
 	}
+
 	newElement += "</div>";
 	newElement += "</div>";
+
 	if (liIdPrefix != null) {
 		newElement += "</li>";
 	}
@@ -999,7 +998,7 @@ function hiddenEventMoreOption(){
 
 var prefixForGetFriendOptionsButton="";
 function getFriendOptionsButton(userId, option){
-	if ((option)&&(option = 3)) {
+	if ((option)&&(option == 3)) {
 		var startChatButton = "<div class='send-friend-request chat-friend' onclick=\"startPrivateChat('"+userId+"');\">Start Chat</div>";
 		$("#"+prefixForGetFriendOptionsButton+userId+" > .custom-corners-people-near-by > .ui-bar").append(startChatButton);
 		return;
@@ -1016,8 +1015,8 @@ function getFriendOptionsButton(userId, option){
 					})
 				} else {
 					var objectId = object.id;
-					var acceptFriendRequestButton = "<div class='send-friend-request accept-friend-request'>Accept Request</div>";
-					var rejectFriendRequestButton = "<div class='reject-friend-request'>Reject Request</div>";
+					var acceptFriendRequestButton = "<div class='send-friend-request accept-friend-request'>Accept</div>";
+					var rejectFriendRequestButton = "<div class='reject-friend-request'>Reject</div>";
 					$("#"+prefixForGetFriendOptionsButton+ownerId+" > .custom-corners-people-near-by > .ui-bar").append(acceptFriendRequestButton+rejectFriendRequestButton);
 					$("#"+prefixForGetFriendOptionsButton+ownerId+" > .custom-corners-people-near-by > .ui-bar > .accept-friend-request").on("click",function(){
 						// when click accept friend request
@@ -1033,7 +1032,7 @@ function getFriendOptionsButton(userId, option){
 							$("#"+prefixForGetFriendOptionsButton+friendId+" > .custom-corners-people-near-by > .ui-bar > .chat-friend").on("click",function(){
 								startPrivateChat(friendId);
 							});
-						}
+						};
 						ParseAcceptFriendRequest(objectId, null, null, successFunction);
 					});
 
@@ -1047,7 +1046,7 @@ function getFriendOptionsButton(userId, option){
 						ParseRejectFriendRequest(objectId, null, ownerId, successFunction);
 					});
 				}
-			}
+			};
 			CacheCheckFriend(ownerId, friendId, displayFunction);
 		} else {
 			var valid = object.get('valid');
@@ -1059,7 +1058,7 @@ function getFriendOptionsButton(userId, option){
 				$("#"+prefixForGetFriendOptionsButton+friendId+" > .custom-corners-people-near-by > .ui-bar").append(sendFriendRequestButton);
 			}
 		}
-	}
+	};
 	CacheCheckFriend(userId, Parse.User.current().id, displayFunction);
 }
 
@@ -1135,15 +1134,15 @@ function pullMyFriendRequests() {
 						photo120 = "./content/png/Taylor-Swift.png";
 					}
 					$("#new-friend-request-"+data.friendId+" > .custom-corners-people-near-by").css("backgroundImage","url('"+photo120+"')");
-				}
+				};
 				CacheGetProfilePhoto(friendId, displayFunction, {friendId: friendId});
 				prefixForGetFriendOptionsButton="new-friend-request-";
 				getFriendOptionsButton(friendId);
-			}
+			};
 			CacheGetProfileByUserId(friendId, displayFunction, {friendObject:objects[i]});
 			ParseSetRequestRead(objectId);
 		}
-	}
+	};
 	CachePullNewFriendRequest(Parse.User.current().id, descendingOrderKey, displayFunction);
 }
 
@@ -1158,20 +1157,20 @@ function pullMyFriendList() {
 			$("#page-my-friend-requests > .ui-content").removeClass("ui-hidden-accessible");
 			$("#new-friend-requests-btn").removeClass("ui-hidden-accessible");
 		}
-	}
+	};
+
 	CachePullNewFriendRequest(Parse.User.current().id, "updatedAt", displayFunction);
 
 	var descendingOrderKey = "createdAt";
 	var displayFunction = function(objects){
 		// sort user list
 		objects.sort(function(a, b){return a.get('name') - b.get('name')});
-		//console.table(objects);
 
 		// display them
 		for (var i=0; i<objects.length; i++) {
 			var friendId = objects[i].get("friend");
 			var objectId = objects[i].id;
-			$( "#friend-list" ).append("<li id='friend-list-"+friendId+"'></li>");
+			$("#friend-list").append("<li id='friend-list-"+friendId+"'></li>");
 			var displayFunction = function(userObject, data) {
 				var newElement = buildUserListElement(userObject, null, null, null);
 				var objectId = data.friendObject.id;
@@ -1182,15 +1181,16 @@ function pullMyFriendList() {
 					if (typeof(photo120) == "undefined") {
 						photo120 = "./content/png/Taylor-Swift.png";
 					}
-					$("#friend-list-"+data.friendId+" > .custom-corners-people-near-by").css("backgroundImage","url('"+photo120+"')");
-				}
+					$("#friend-list-"+data.friendId+">.custom-corners-people-near-by").css("backgroundImage","url('"+photo120+"')");
+				};
 				CacheGetProfilePhoto(friendId, displayFunction, {friendId : friendId});
 				prefixForGetFriendOptionsButton="friend-list-";
 				getFriendOptionsButton(friendId, 3);
-			}
+			};
 			CacheGetProfileByUserId(friendId, displayFunction, {friendObject:objects[i]});
 		}
-	}
+	};
+
 	CachePullMyFriend(Parse.User.current().id, descendingOrderKey, displayFunction);
 }
 
@@ -1280,7 +1280,7 @@ function updateChatTitle(friendId, id, option){
 				$('#'+id).append(alias);
 			}
 		}
-	}
+	};
 	// get the Friend object, in order to get alias of friend.
 	CacheCheckFriend(friendId, Parse.User.current().id, displayFunction);
 }
@@ -1311,7 +1311,7 @@ function startPrivateChat(friendId){
 							photo120 = "./content/png/Taylor-Swift.png";
 						}
 						$("#message-"+data.messageId).css("backgroundImage", "url("+photo120+")")
-					}
+					};
 					CacheGetProfilePhoto(objects[i].get('senderId'), displayFunction, {messageId: objects[i].id});
 				}
 				$.mobile.changePage( "#page-chat-messages", { transition: "slide"});
@@ -1322,12 +1322,12 @@ function startPrivateChat(friendId){
 				        }
 				    });
 				},1);
-			}
+			};
 			//CachePullChatMessage(groupId, limitNum, null, displayFunction);
 			ParsePullChatMessage(groupId, limitNum, descendingOrderKey, null, displayFunction)
-		}
+		};
 		ParseSetChatObjectAsRead(currentId, groupId, null, successFunction);
-	}
+	};
 	CacheGetGroupId(memberId,successFunction);
 	//updateCashedPhoto120(friendId);
 	updateChatTitle(friendId, "chat-messages-title");
@@ -1406,7 +1406,7 @@ function pullMyChat(){
 									photo120 = "./content/png/Taylor-Swift.png";
 								}
 								$("#chat-"+data.chatId).css("backgroundImage", "url("+photo120+")")
-							}
+							};
 							CacheGetProfilePhoto(data.friendId, displayFunction, data);
 							$("#chat-"+data.chatId).unbind("click");
 							$("#chat-"+data.chatId).on("click",function(){
@@ -1414,10 +1414,9 @@ function pullMyChat(){
 							});
 						}
 					}
-				}
+				};
 				CacheGetGroupMember(groupId, successFunction, data);
 			} else {
-				
 				var chatId = objects[i].id;
 				var data = {chatId: chatId};
 				var unreadNum = objects[i].get('unreadNum');
@@ -1455,9 +1454,8 @@ function pullMyChat(){
 				CacheGetGroupMember(groupId, successFunction, data);*/
 			}
 		}
-	}
+	};
 	CachePullMyChat(ownerId,displayFunction);
-	
 }
 
 function pushNotificationToDeviceByGCM(regId,message) {

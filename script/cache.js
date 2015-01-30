@@ -61,7 +61,7 @@ function cacheInitialization() {
 				lastUpdate = Date.parse(rawObject.updatedAt);
 		}
 		lastUpdate = new Date(lastUpdate);
-		console.log(lastUpdate.toJSON());
+		//console.log(lastUpdate.toJSON());
 		switch (cachedList[n]){
 			case "Photo":   cachePhoto = objectList;   break;
 			case "User":    cacheUser = objectList;    break;

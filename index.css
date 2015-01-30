@@ -41,6 +41,12 @@
 	padding: 0!important;
 }
 
+#page-loading {
+    background-image: url("./content/material-design/png/m-192.png");
+    text-align: center;
+    color: cyan;
+}
+
 .ui-bar-btn-custom {
 	margin: 0 0 0 16px!important;
 	border: 0px!important;
@@ -263,8 +269,6 @@ a {
 	opacity: 1!important;
 }
 
-
-
 .ui-icon-custom-more {
 	height: 40px;
 	width: 40px;
@@ -355,22 +359,14 @@ a {
 
 .ui-custom-event-title {
 	color: #000000;
-	font-weight: 700;
-	font-size: 24px;
-    margin: 0.5em 0 0.5em 0;
-}
-
-.ui-custom-event-description-less-margin {
-}
-
-.ui-custom-event-description {
-	clear: both;
-	margin-top: 48px;
+	font-weight: 500;
+	font-size: 28px;
+    margin: 0 0 0.5em 0;
 }
 
 .ui-custom-event-location {
-	font-weight: 300;
-	font-size: 12px;
+	font-weight: 400;
+	font-size: 15px;
 	padding-left: 20px;
 	background: url("./content/material-design/png/compass106-solid-pink-20.png") 0 0 no-repeat;
 	background-size: 15px 15px;
@@ -380,14 +376,24 @@ a {
 }
 
 .ui-custom-event-time {
-	font-weight: 300;
-	font-size: 12px;
+	font-weight: 400;
+	font-size: 15px;
 	padding-left: 20px;
 	background: url("./content/material-design/png/clock100-solid-pink-20.png") 0 0 no-repeat;
 	background-size: 15px 15px;
 	float: left;
 	/*height: 15px;*/
 	margin: 0 15px 15px 0;
+}
+
+.ui-custom-event-description-less-margin {
+}
+
+.ui-custom-event-description {
+    font-weight: 400;
+    font-size: 18px;
+    clear: both;
+    margin-top: 48px;
 }
 
 .ui-custom-message-right {
@@ -399,8 +405,8 @@ a {
 	margin-top: 10px;
 	margin-right: 20px;
 	font-family: 'Open Sans';
-	font-weight: 300!important;
-	font-size: 13px;
+	font-weight: 400!important;
+	font-size: 15px;
 }
 
 .ui-custom-message-right p {
@@ -429,8 +435,8 @@ a {
 	margin-top: 10px;
 	margin-left: 20px;
 	font-family: 'Open Sans';
-	font-weight: 300!important;
-	font-size: 13px;
+	font-weight: 400!important;
+	font-size: 15px;
 }
 
 .ui-custom-message-left p {
@@ -545,7 +551,7 @@ textarea {
 
 .send-friend-request {
 	clear: both;
-	font-size: .75em;
+	font-size: .6em;
 	font-weight: 400;
 	display: block;
 	text-overflow: ellipsis;
@@ -553,7 +559,7 @@ textarea {
 	white-space: nowrap;
 	margin-top: 5px;
 	border: 1px solid #9C94FF;
-	padding: 0.5em;
+	padding: 0.2em;
 	float: left;
 	-webkit-border-radius: .3125em;
 	border-radius: .3125em;
@@ -561,7 +567,7 @@ textarea {
 }
 
 .reject-friend-request {
-	font-size: .75em;
+	font-size: .6em;
 	font-weight: 400;
 	display: block;
 	text-overflow: ellipsis;
@@ -570,7 +576,7 @@ textarea {
 	margin-top: 5px;
 	margin-left: 10px;
 	border: 1px solid #9C94FF;
-	padding: 0.5em;
+	padding: 0.2em;
 	float: left;
 	-webkit-border-radius: .3125em;
 	border-radius: .3125em;
