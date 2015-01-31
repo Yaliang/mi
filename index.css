@@ -79,7 +79,7 @@
 	border-top-width: 0;
 	border-bottom-width: 0;
 	border-style: solid;
-	border-color: #bbb;
+	border-color: #ddd;
 	-webkit-border-bottom-left-radius: 0;
 	border-bottom-left-radius: 0;
 	-webkit-border-bottom-right-radius: 0;
@@ -103,6 +103,18 @@
 	border-top-right-radius: inherit;
 	border-width: 0;
 	background-color: white!important;
+	margin-left: 4em;
+	padding-top: 0.6em!important;	
+	padding-left: 0.5em!important;
+}
+
+.custom-people-in-friend-list .ui-bar {
+	-webkit-border-top-left-radius: inherit;
+	border-top-left-radius: inherit;
+	-webkit-border-top-right-radius: inherit;
+	border-top-right-radius: inherit;
+	border-width: 0;
+	background-color: #f1f1f1!important;
 	margin-left: 4em;
 	padding-top: 0.6em!important;	
 	padding-left: 0.5em!important;
@@ -469,18 +481,19 @@ a {
 
 .chat-list {
 	position: relative;
-	height: 83px;
+	height: 73px;
 	font-family: 'Open Sans';
 	font-weight: 300!important;
-	padding-left: 95px;
+	padding-left: 85px;
 	border-bottom: 1px solid #ddd;
 	cursor: pointer;
-	background: 0.8em 0.4em no-repeat;
-	background-size: 70px 70px;
+	background: 0.8em 0.65em no-repeat;
+	background-size: 55px 55px;
 }
 
 .chat-list-title {
 	padding-top: 10px;
+	font-weight: bold;
 }
 
 textarea {
@@ -555,9 +568,35 @@ textarea {
 	margin-top: 30px;
 }
 .custom-corners-people-near-by {
-	padding-left: 5em;
-	background: 0.8em 0.4em no-repeat;
-	background-size: 70px 70px;
+	padding-left: 20px;
+	padding-top: 0em;
+	padding-bottom: 0.2em;
+	background: 0.8em 0.6em no-repeat;
+	background-size: 62px 62px;
+	margin: 0;
+	background-color: white;
+	border-bottom-width: 1px;
+}
+
+.custom-people-in-friend-list {
+	padding-left: 0em;
+	padding-top: 0em;
+	padding-bottom: 0.2em;
+	background: 0.8em 0.6em no-repeat;
+	background-size: 42px 42px;
+	margin: 0;
+	border-bottom-width: 1px;
+}
+
+.ui-custom-listview {
+	margin-top: 1em;
+	box-shadow: 0px 0px 0px;
+	border-top-width: 1px;
+	border-color: #ddd;
+	border-style: solid;
+	border-bottom-width: 0px;
+	border-left-width: 0px;
+	border-right-width: 0px;
 }
 
 .send-friend-request {

@@ -874,7 +874,7 @@ function getDistance(lat1, lng1, lat2, lng2){
 	return s.toString();
 }
 
-function buildUserListElement(object, liIdPrefix, lat, lng) {
+function buildUserListElement(object, liIdPrefix, lat, lng, type) {
 	var name = object.get('name');
 	var gender = object.get('gender');
 	var latitude = object.get('latitude');
@@ -885,7 +885,11 @@ function buildUserListElement(object, liIdPrefix, lat, lng) {
 	if (liIdPrefix != null) {
 		newElement += "<li id='"+liIdPrefix+userId+"'>";
 	}
-	newElement += "<div class='custom-corners-people-near-by custom-corners'>"
+	if (type.localeCompare("friend-list") == 0){
+		newElement += "<div class='custom-people-in-friend-list custom-corners'>"
+	} else {//if (type.localeCompare("people-near-by-list") == 0) {
+		newElement += "<div class='custom-corners-people-near-by custom-corners'>"
+	}
 	newElement += "<div class='ui-bar ui-bar-a'>";
 	newElement += "<div><strong>"+name+"</strong></div>";
 	newElement += "<div class='ui-icon-custom-gender' style='";
@@ -925,7 +929,7 @@ function showPeopleNearByList(position){
 	var displayFunction = function(lat,lng,objects){
 		for (var i = objects.length-1; i >= 0; i--) {
 			if ($("#people-near-by-list > #near-by-"+objects[i].id).length == 0) {
-				var newElement = buildUserListElement(objects[i], "near-by-", lat, lng);
+				var newElement = buildUserListElement(objects[i], "near-by-", lat, lng, "people-near-by-list");
 				var userId = objects[i].id;
 				$("#people-near-by-list").prepend(newElement);
 				var displayFunction = function(object){
@@ -1100,7 +1104,7 @@ function bindSearchAutocomplete(){
 			var displayFunction = function(objects){
 				var html = "";
 				for (var i=0; i<objects.length; i++) {
-					var newElement = buildUserListElement(objects[i], "people-search-", null, null);
+					var newElement = buildUserListElement(objects[i], "people-search-", null, null, "people-near-by-list");
 					var userId = objects[i].id;
 					$( "#user-autocomplete-list" ).append(newElement);
 					var displayFunction = function(object){
@@ -1141,7 +1145,7 @@ function pullMyFriendRequests() {
 			var friendId = objects[i].get("owner");
 			var objectId = objects[i].id;
 			var displayFunction = function(userObject, data) {
-				var newElement = buildUserListElement(userObject, "new-friend-request-", null, null);
+				var newElement = buildUserListElement(userObject, "new-friend-request-", null, null, "people-near-by-list");
 				var objectId = data.friendObject.id;
 				var friendId = data.friendObject.get('owner');
 				$( "#friend-requests-list" ).append(newElement);
@@ -1187,9 +1191,9 @@ function pullMyFriendList() {
 		for (var i=0; i<objects.length; i++) {
 			var friendId = objects[i].get("friend");
 			var objectId = objects[i].id;
-			$("#friend-list").append("<li id='friend-list-"+friendId+"'></li>");
+			$("#friend-list").append("<li id='friend-list-"+friendId+"' style='cursor:pointer' onclick=\"startPrivateChat('"+friendId+"');\"></li>");
 			var displayFunction = function(userObject, data) {
-				var newElement = buildUserListElement(userObject, null, null, null);
+				var newElement = buildUserListElement(userObject, null, null, null, "friend-list");
 				var objectId = data.friendObject.id;
 				var friendId = data.friendObject.get('friend');
 				$( "#friend-list-"+userObject.id ).append(newElement);
@@ -1198,11 +1202,11 @@ function pullMyFriendList() {
 					if (typeof(photo120) == "undefined") {
 						photo120 = "./content/png/Taylor-Swift.png";
 					}
-					$("#friend-list-"+data.friendId+">.custom-corners-people-near-by").css("backgroundImage","url('"+photo120+"')");
+					$("#friend-list-"+data.friendId+">.custom-people-in-friend-list").css("backgroundImage","url('"+photo120+"')");
 				};
 				CacheGetProfilePhoto(friendId, displayFunction, {friendId : friendId});
 				prefixForGetFriendOptionsButton="friend-list-";
-				getFriendOptionsButton(friendId, 3);
+				//getFriendOptionsButton(friendId, 3);
 			};
 			CacheGetProfileByUserId(friendId, displayFunction, {friendObject:objects[i]});
 		}
