@@ -562,6 +562,7 @@ textarea {
 	background-size: 62px 62px;
 	margin: 0;
 	background-color: white;
+	border-bottom-width: 1px;
 }
 
 #friend-list {
