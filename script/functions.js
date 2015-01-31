@@ -324,14 +324,14 @@ function pullUserEvent(){
 				newElement = newElement + "</div>";
 				newElement = newElement + "<div class='ui-body ui-body-a'>";
 				newElement = newElement + "<p class='ui-custom-event-title'>" + title + "</p>";
-				newElement = newElement + "<p class='ui-custom-event-location'>" + location + "</p>";
-				newElement = newElement + "<p class='ui-custom-event-time'>" + time + "</p>";
 				if (description.length == 0) {
 					newElement = newElement + "<p class='ui-custom-event-description-less-margin'></br></p>";
 				} else {
 					newElement = newElement + "<p class='ui-custom-event-description'>" +  description.replace("\n","</br>") + "</p>";
 				}
-				newElement = newElement + "<div id='comment-statistics-"+id+"' class='event-statistics'>" + commentNumber + " Comments</div><div id='interest-statistics-"+id+"' class='event-statistics'>" + interestNumber + " Interests</div>";
+				newElement = newElement + "<p class='ui-custom-event-location'>" + location + "</p>";
+				newElement = newElement + "<p class='ui-custom-event-time'>" + time + "</p>";
+				newElement = newElement + "<div id='comment-statistics-"+id+"' class='event-statistics' style='clear:both'>" + commentNumber + " Comments</div><div id='interest-statistics-"+id+"' class='event-statistics'>" + interestNumber + " Interests</div>";
 				newElement = newElement + "</div>";
 				newElement = newElement + "<div class='ui-footer ui-bar-custom'>";
 				newElement = newElement + "<div class='ui-custom-float-left'><a href='#page-event-detail' data-transition='slide' class='ui-btn ui-bar-btn-custom ui-mini ui-icon-custom-comment' id='comment-button-"+id+"' onclick=\"updateEventDetail('"+id+"')\">"+"Detail"+"</a></div>";
