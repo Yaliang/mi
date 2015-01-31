@@ -555,9 +555,20 @@ textarea {
 	margin-top: 30px;
 }
 .custom-corners-people-near-by {
-	padding-left: 5em;
-	background: 0.8em 0.4em no-repeat;
-	background-size: 70px 70px;
+	padding-left: 20px;
+	padding-top: 0em;
+	padding-bottom: 0.2em;
+	background: 0.8em 0.6em no-repeat;
+	background-size: 62px 62px;
+	margin: 0;
+	background-color: white;
+}
+
+#friend-list {
+	margin-top: 0em;
+	padding-top: 0.5em;
+	padding-bottom: 1em;
+	background-color: white;
 }
 
 .send-friend-request {
