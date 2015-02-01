@@ -176,6 +176,7 @@ function logout(){
 	$("#signup-error").html("");
 	localStorage.clear();
 	cacheClear();
+	$("#page-chat > .ui-content").html("");
 	var destID = "page-login";
 	ParseLogout(destID);
 }
