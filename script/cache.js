@@ -4,6 +4,7 @@ var cacheFriend = new Array;
 var cacheChat = new Array;
 var cacheGroup = new Array;
 var cacheMessage = new Array;
+var cacheVersion = "1.0.0";
 
 function rawLocalToCache(object) {
 	var item = {
@@ -22,6 +23,15 @@ function rawLocalToCache(object) {
 	return item;
 }
 
+function cacheClear() {
+	cachePhoto = new Array;
+	cacheUser = new Array;
+	cacheFriend = new Array;
+	cacheChat = new Array;
+	cacheGroup = new Array;
+	cacheMessage = new Array;
+}
+
 // reload from localStorage and update
 function cacheInitialization() {
 	cachePhoto = new Array;
@@ -35,6 +45,10 @@ function cacheInitialization() {
 	var lastUpdate;
 	var objectList;
 	var updateIdList;
+	if ((typeof(localStorage.cacheVersion) == "undefined") || (localStorage.cacheVersion != cacheVersion)) {
+		localStorage.clear();
+		localStorage.cacheVersion = cacheVersion;		
+	}
 	for (var n = 0; n< cachedList.length; n++) {
 		rawData = [];
 		lastUpdate = 0;
