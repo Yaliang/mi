@@ -671,7 +671,7 @@ function ParseSetChatObjectAsRead(ownerId, groupId, count, successFunction){
 				var chat = new Chat;
 				chat.set("ownerId",ownerId);
 				chat.set("groupId",groupId);
-				chat.set("hidden",false);
+				chat.set("hidden",true);
 				chat.set("unreadNum",0);
 				chat.save(null, {
 					success: function(object){
@@ -685,6 +685,7 @@ function ParseSetChatObjectAsRead(ownerId, groupId, count, successFunction){
 				}
 				if (count != 0) {
 					object.increment("unreadNum",-count);
+					object.set("hidden",false);
 					object.save(null,{
 						success: function(object){
 							successFunction(object);
@@ -700,7 +701,7 @@ function ParseSetChatObjectAsRead(ownerId, groupId, count, successFunction){
 	})
 }
 
-function ParsePullChatMessage(groupId, limitNum, descendingOrderKey, beforeAt, displayFunction) {
+function ParsePullChatMessage(groupId, limitNum, descendingOrderKey, beforeAt, displayFunction, data) {
 	var Message = Parse.Object.extend("Message");
 	var query = new Parse.Query(Message);
 
@@ -712,7 +713,7 @@ function ParsePullChatMessage(groupId, limitNum, descendingOrderKey, beforeAt, d
 	query.limit(limitNum);
 	query.find({
 		success: function(objects){
-			displayFunction(objects);
+			displayFunction(objects, data);
 			for (var i = 0; i < objects.length; i++) {
 				CacheUpdateMessage(objects[i]);
 			}
@@ -778,6 +779,7 @@ function ParseSetChatObjectReadFalseByCurrentIndexAndGroupId(senderId, memberId,
 				} else {
 					// set unread number plus 1 for chat object
 					object.increment("unreadNum", 1);
+					object.set("hidden", false);
 					object.save(null, {
 						success: function(object) {
 							notificationFunction(senderId,text,ownerId);
@@ -951,6 +953,7 @@ function ParseUserNameFieldUpdate(i){
 }
 
 var refreshNumber=0;
+var ChatObjectSet;
 function ParseRefreshComment(){
 	ParseUserNameFieldUpdate(refreshNumber);
 	refreshNumber = refreshNumber+1;
@@ -996,4 +999,46 @@ function ParseRefreshUserProfilePhoto() {
 	setTimeout(function(){
 		ParseRefreshUserProfilePhoto();
 	}, 5000);
+}
+
+function ParseClearChatWithoutMessage() {
+	var Chat = Parse.Object.extend("Chat");
+	var query = new Parse.Query(Chat);
+
+	query.find({
+		success: function(objects) {
+			ChatObjectSet = objects;
+			ParseCheckChatObject();
+		}
+	})
+}
+
+function ParseCheckChatObject() {
+	var object = ChatObjectSet[refreshNumber];
+	var groupId = object.get("groupId");
+	var Message = Parse.Object.extend("Message");
+	var query = new Parse.Query(Message);
+
+	query.descending("createdAt");
+	query.equalTo("groupId",groupId);
+	query.first({
+		success: function(object){
+			if (typeof(object) == "undefined") {
+				ChatObjectSet[refreshNumber].set("hidden",true);
+				ChatObjectSet[refreshNumber].save({
+					success: function(){
+						console.log("hidden:" + ChatObjectSet[refreshNumber].id)
+					}
+				})
+			}
+		}
+	})
+
+	if (refreshNumber == ChatObjectSet.length - 1)
+		return;
+	setTimeout(function(){
+		console.log(ChatObjectSet[refreshNumber].id);
+		refreshNumber += 1;
+		ParseCheckChatObject();
+	},5000)
 }

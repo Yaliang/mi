@@ -354,6 +354,18 @@ function CachePullChatMessage(groupId, limitNum, beforeAt, displayFunction){
 	
 }
 
+function CacheGetLastestMessage(groupId, displayFunction,data){
+	var afterAt = null;
+	var message = null;
+	for (var i = 0; i < cacheMessage.length; i++) {
+		if ((cacheMessage[i].get('groupId') == groupId) && ((afterAt == null) || (Date.parse(cacheMessage[i].get("createdAt")) >= Date.parse(afterAt)))) {
+			message = cacheMessage[i];
+			afterAt = message.get("createdAt");
+		}
+	}
+	displayFunction(message,data);
+}
+
 function CacheUpdateMessage(object){
 	if (typeof(object) == "undefined")
 		return
