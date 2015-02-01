@@ -513,6 +513,11 @@ a {
 	float: left;
 	color: #828282;
 	clear: both;
+	overflow: hidden;
+	height: 1em;
+	width: 90%;
+	text-overflow: ellipsis;
+	white-space: nowrap;
 }
 
 textarea {
