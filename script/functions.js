@@ -322,7 +322,7 @@ function pullUserEvent(){
 				newElement = newElement + "<div><strong id='"+id+"-owner-name'></strong></div>";
 				newElement = newElement + "<div id='"+id+"-owner-genger' class='ui-icon-custom-gender'></div>";
 				newElement = newElement + "</div>";
-				newElement = newElement + "<div class='ui-body ui-body-a'>";
+				newElement = newElement + "<div class='ui-body ui-body-a' style='cursor:pointer' onclick=\"window.location.hash = \'page-event-detail\';updateEventDetail('"+id+"')\">";
 				newElement = newElement + "<p class='ui-custom-event-title'>" + title + "</p>";
 				if (description.length == 0) {
 					newElement = newElement + "<p class='ui-custom-event-description-less-margin'></br></p>";
@@ -1322,7 +1322,7 @@ function startPrivateChat(friendId){
 			var groupId = object.get("groupId");
 			var limitNum = 15;
 			var descendingOrderKey = "createdAt";
-			var displayFunction = function(objects){
+			var displayFunction = function(objects, data){
 				for (var i=objects.length-1; i>=0; i--) {
 					var newElement = buildElementInChatMessagesPage(objects[i]);
 					$("#page-chat-messages > .ui-content").append(newElement);
@@ -1345,7 +1345,7 @@ function startPrivateChat(friendId){
 				},1);
 			};
 			//CachePullChatMessage(groupId, limitNum, null, displayFunction);
-			ParsePullChatMessage(groupId, limitNum, descendingOrderKey, null, displayFunction)
+			ParsePullChatMessage(groupId, limitNum, descendingOrderKey, null, displayFunction, null)
 		};
 		ParseSetChatObjectAsRead(currentId, groupId, null, successFunction);
 	};
@@ -1359,7 +1359,7 @@ function updateChatMessage(object){
 	var beforeAt = object.updatedAt;
 	var limitNum = object.get("unreadNum");
 	var descendingOrderKey = "createdAt";
-	var displayFunction = function(objects) {
+	var displayFunction = function(objects, data) {
 		var currentId = Parse.User.current().id;
 		for (var i=objects.length-1; i>=0; i--) {
 			if ($("#message-"+objects[i].id).length == 0) {
@@ -1383,7 +1383,7 @@ function updateChatMessage(object){
 	        }
 	    });
 	}
-	ParsePullChatMessage(groupId, limitNum, descendingOrderKey, beforeAt, displayFunction);
+	ParsePullChatMessage(groupId, limitNum, descendingOrderKey, beforeAt, displayFunction, null);
 
 }
 
@@ -1394,6 +1394,8 @@ function buildElementInChatListPage(object){
 	var newElement = "";
 	newElement += "<div id='chat-"+chatId+"' class='chat-list'>";
 	newElement += "<div class='chat-list-title'></div>";
+	newElement += "<div class='chat-last-time'></div>";
+	newElement += "<div class='chat-last-message'></div>";
 	if (unreadNum > 0) {
 		newElement += "<span class='ui-li-count'>"+unreadNum+"</span>";
 	}
@@ -1437,23 +1439,33 @@ function pullMyChat(){
 					}
 				};
 				CacheGetGroupMember(groupId, successFunction, data);
+				updateLastMessage(groupId, data);
 			} else {
-				var chatId = objects[i].id;
+				var chatId = objects[i].id;				
+				var groupId = objects[i].get('groupId');
 				var data = {chatId: chatId};
 				var unreadNum = objects[i].get('unreadNum');
 				// move the element to top of the list
 				var element = $("#chat-"+data.chatId);
 				$("#page-chat > .ui-content").prepend(element);
 				// update unread number label
-				if (unreadNum > 0){
+				var unreadNum_Current;
+				if ($("#chat-"+data.chatId+"> .ui-li-count").length > 0) {
+					unreadNum_Current = parseInt($("#chat-"+data.chatId+"> .ui-li-count").html());
+				} else {
+					unreadNum_Current = 0;
+				}
+				if ((unreadNum != unreadNum_Current) && (unreadNum > 0)){
 					if ($("#chat-"+data.chatId+"> .ui-li-count").length > 0) {
 						$("#chat-"+data.chatId+"> .ui-li-count").html(unreadNum.toString());
 					} else {
 						$("#chat-"+data.chatId).append("<span class='ui-li-count'>"+unreadNum.toString()+"</span>");
 					}
+					updateLastMessage(groupId, data);
 				} else {
-					if ($("#chat-"+data.chatId+"> .ui-li-count").length > 0) {
-						$("#chat-"+data.chatId+"> .ui-li-count").remove();
+					if (($("#chat-"+data.chatId+"> .ui-li-count").length > 0) && (unreadNum == 0)) {
+						$("#chat-"+data.chatId+"> .ui-li-count").remove();						
+						$("#chat-"+data.chatId+"> .chat-last-time").removeClass("chat-last-time-right-blank");
 					}
 				}
 				// update photo and title 
@@ -1477,6 +1489,39 @@ function pullMyChat(){
 		}
 	};
 	CachePullMyChat(ownerId,displayFunction);
+}
+
+function updateLastMessage(groupId, data){
+	if (($("#chat-"+data.chatId+"> .ui-li-count").length == 0) && (typeof(data.parse) == "undefined")) {
+		var displayFunction = function(object, data){
+			if (object != null) {
+				var text = object.get("text");
+				var time = object.get("createdAt");
+				$("#chat-"+data.chatId+"> .chat-last-message").html(text);
+				$("#chat-"+data.chatId+"> .chat-last-time").html(convertTime(time));	
+				if ($("#chat-"+data.chatId+"> .ui-li-count").length > 0) {					
+					$("#chat-"+data.chatId+"> .chat-last-time").addClass("chat-last-time-right-blank");
+				}
+			} else {
+				data.parse = true;
+				updateLastMessage(groupId, data);
+			}
+		}
+		CacheGetLastestMessage(groupId, displayFunction, data);
+	} else {
+		var limitNum = 1;
+		var descendingOrderKey = "createdAt";
+		var displayFunction = function(object, data){
+			if (object.length > 0) {
+				var text = object[0].get("text");
+				var time = object[0].createdAt;
+				$("#chat-"+data.chatId+"> .chat-last-message").html(text);							
+				$("#chat-"+data.chatId+"> .chat-last-time").html(convertTime(time));
+				$("#chat-"+data.chatId+"> .chat-last-time").addClass("chat-last-time-right-blank");
+			}
+		}					
+		ParsePullChatMessage(groupId, limitNum, descendingOrderKey, null, displayFunction, data);
+	}
 }
 
 function pushNotificationToDeviceByGCM(regId,message) {
