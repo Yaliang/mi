@@ -4,7 +4,7 @@ var cacheFriend = new Array;
 var cacheChat = new Array;
 var cacheGroup = new Array;
 var cacheMessage = new Array;
-var cacheVersion = "1.0.0";
+var cacheVersion = "1.0.1";
 
 function rawLocalToCache(object) {
 	var item = {

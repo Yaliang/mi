@@ -795,6 +795,7 @@ function ParseSetChatObjectReadFalseByCurrentIndexAndGroupId(senderId, memberId,
 		// if the member is the sender
 		query.first({
 			success: function(object){
+				object.set("hidden", false);
 				object.save(null, {
 					success: function(object) {
 						CacheUpdateChat(object);
