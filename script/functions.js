@@ -171,6 +171,7 @@ function logout(){
 	$("#login-error").html("");
 	$("#signup-error").html("");
 	localStorage.clear();
+	cacheClear();
 	var destID = "page-login";
 	ParseLogout(destID);
 }
@@ -1517,7 +1518,9 @@ function updateLastMessage(groupId, data){
 				var time = object[0].createdAt;
 				$("#chat-"+data.chatId+"> .chat-last-message").html(text);							
 				$("#chat-"+data.chatId+"> .chat-last-time").html(convertTime(time));
-				$("#chat-"+data.chatId+"> .chat-last-time").addClass("chat-last-time-right-blank");
+				if ($("#chat-"+data.chatId+"> .ui-li-count").length > 0) {
+					$("#chat-"+data.chatId+"> .chat-last-time").addClass("chat-last-time-right-blank");
+				}
 			}
 		}					
 		ParsePullChatMessage(groupId, limitNum, descendingOrderKey, null, displayFunction, data);
