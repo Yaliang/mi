@@ -601,7 +601,7 @@ textarea {
 
 .send-friend-request {
 	clear: both;
-	font-size: .6em;
+	font-size: .75em;
 	font-weight: 400;
 	display: block;
 	text-overflow: ellipsis;
@@ -617,7 +617,7 @@ textarea {
 }
 
 .reject-friend-request {
-	font-size: .6em;
+	font-size: .75em;
 	font-weight: 400;
 	display: block;
 	text-overflow: ellipsis;
