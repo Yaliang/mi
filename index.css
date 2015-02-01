@@ -42,11 +42,11 @@
 	background-color: #F1F1F1;
 }
 
-#page-loading {
+/*#page-loading {
     background-image: url("./content/material-design/png/m-192.png");
     text-align: center;
     color: cyan;
-}
+}*/
 
 .ui-bar-btn-custom {
 	margin: 0 0 0 1em!important;

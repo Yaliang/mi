@@ -1,4 +1,5 @@
 $(document).ready(function (){
+	$.mobile.loading("show");
 	if (window.navigator.standalone == true) {
 		$('#comment-content').on("blur",function(){
 			$('#comment-content').prop('disabled', true);
@@ -46,6 +47,7 @@ function loginByLocalStorage(){
 	if (currentUser) {
 		var successFunction = function() {
 			window.location.hash = "page-event";
+			$.mobile.loading("show");
 			pullUserEvent();
 			if (!pullNotificationRunning) {
 				pullNotification();
@@ -152,6 +154,7 @@ function login(){
 	var errorObject = $("#login-error");
 	var destID = "page-event";
 	var customFunction = function(){
+		$("#login-password").val("");
 		pullUserEvent();
 		if (!pullNotificationRunning) {
 			pullNotification();
@@ -160,7 +163,8 @@ function login(){
 		ParsePullMyChat(Parse.User.current().id,"updatedAt",function(){});
 	};
 	ParseLogin(email, password, errorObject, destID, customFunction);
-	$("#login-password").val("");
+	//$("#login-password").val("");
+	$.mobile.loading("show");
 }
 
 function logout(){
@@ -277,6 +281,7 @@ function pullUserEventHolderInfo(holder, eventId){
 		pullLastItem = pullLastItem - 1;
 		if (pullLastItem == 0) {
 			$("#event-content").removeClass("ui-hidden-accessible");
+			$.mobile.loading("hide");
 		}
 
 		var displayFunction = function(object, data){
@@ -288,6 +293,7 @@ function pullUserEventHolderInfo(holder, eventId){
 			pullLastItem = pullLastItem - 1;
 			if (pullLastItem == 0) {
 				$("#event-content").removeClass("ui-hidden-accessible");
+				$.mobile.loading("hide");
 			}
 		}
 		CacheGetProfilePhoto(userId, displayFunction, data);
@@ -301,6 +307,9 @@ function pullUserEvent(){
 	var descendingOrderKey = "createdAt";
 	//var ascendingOrderKey = "createdAt";
 	$("#event-content").addClass("ui-hidden-accessible");
+	setTimeout(function(){
+		$.mobile.loading("show");
+	},50);
 	pullLastItem = 3 * limitNumber;
 	var displayFunction = function(objects){
 		var currentUser = Parse.User.current();
@@ -359,6 +368,7 @@ function pullUserEvent(){
 					pullLastItem = pullLastItem - 1;
 					if (pullLastItem == 0) {
 						$("#event-content").removeClass("ui-hidden-accessible");
+						$.mobile.loading("hide");
 					}
 				};
 				ParseCheckInterest(owner, id, successFunction);
@@ -372,6 +382,7 @@ function pullUserEvent(){
 				pullLastItem = pullLastItem - 1;
 				if (pullLastItem == 0) {
 					$("#event-content").removeClass("ui-hidden-accessible");
+					$.mobile.loading("hide");
 				}
 				// display event holder's name | not the email one
 				pullUserEventHolderInfo(holder, id);
