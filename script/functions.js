@@ -1,5 +1,4 @@
 $(document).ready(function (){
-	$.mobile.loading("show");
 	if (window.navigator.standalone == true) {
 		$('#comment-content').on("blur",function(){
 			$('#comment-content').prop('disabled', true);
@@ -170,14 +169,15 @@ function signup(){
 	var errorObject = $("#signup-error");
 	var destID = "page-event";
 	var customFunction = function(object){
+		$("#signup-password").val("");
 		pullUserEvent();
 		if (!pullNotificationRunning) {
 			pullNotification();
 		}
 		ParseCreateProfilePhotoObject(object.id);
 	};
-	ParseSignup(email, password, email, name, errorObject, destID, customFunction);
-	$("#signup-password").val("");
+	ParseSignup(email, password, email, name, errorObject, destID, customFunction);	
+	$.mobile.loading("show");
 }
 
 function login(){
@@ -343,7 +343,7 @@ function pullUserEvent(){
 	$("#event-content").addClass("ui-hidden-accessible");
 	setTimeout(function(){
 		$.mobile.loading("show");
-	},50);
+	},10);
 	pullLastItem = 3 * limitNumber;
 	var displayFunction = function(objects){
 		var currentUser = Parse.User.current();
