@@ -61,12 +61,16 @@ function loginByLocalStorage(){
 		ParseUpdateCurrentUser(successFunction, errorFunction);
 	} else {
 		//window.location.hash = "page-login";
-		$('.loading-page-image').click(function(){
+		$('#page-loading').click(function(){
 			window.location.hash = "page-login";
-		}).on('swiperight',function(){
-			window.location.hash = "page-login";
+			$('#page-loading').unbind("click");
+			$('#page-loading').unbind("swiperight");
 		});
-
+		$('#page-loading').on('swiperight',function(){
+			window.location.hash = "page-login";
+			$('#page-loading').unbind("click");
+			$('#page-loading').unbind("swiperight");
+		});
 	}
 }
 
