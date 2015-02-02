@@ -65,13 +65,13 @@ function loginByLocalStorage(){
 		var window_height = $(window).height();
 		if (window_width/window_height > 1) {
 			$('.loading-page-image').append("<div class='loading-page-button-top'>Join Us.</div>");
-			$('.loading-page-button-top').css("marginLeft", Math.round(($(".loading-page-image").width()-199)/2).toString()+"px");
+			$('.loading-page-button-top').css("marginLeft", Math.round(($(".loading-page-image").width()-93-44)/2).toString()+"px");
 			// setTimeout(function(){
 			// 	$('.loading-page-button-top').html("Join Us.</br>Today!");
 			// },2000);
 		} else {
 			$('.loading-page-image').append("<div class='loading-page-button-bottom'>Join Us.</div>");			
-			$('.loading-page-button-bottom').css("marginLeft", Math.round(($(".loading-page-image").width()-199)/2).toString()+"px");
+			$('.loading-page-button-bottom').css("marginLeft", Math.round(($(".loading-page-image").width()-93-44)/2).toString()+"px");
 			// setTimeout(function(){
 			// 	$('.loading-page-button-bottom').html("Join Us.</br>Today!");
 			// },2000);
