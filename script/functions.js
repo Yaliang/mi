@@ -61,12 +61,31 @@ function loginByLocalStorage(){
 		ParseUpdateCurrentUser(successFunction, errorFunction);
 	} else {
 		//window.location.hash = "page-login";
-		$('.loading-page-image').click(function(){
+		var window_width = $(window).width();
+		var window_height = $(window).height();
+		// if (window_width/window_height > 1) {
+		// 	$('.loading-page-image').append("<div class='loading-page-button-top'>Discover Now</div>")
+		// } else {
+		// 	$('.loading-page-image').append("<div class='loading-page-button-bottom'>Discover Now</div>")
+		// }
+		$('#page-loading').click(function(){
 			window.location.hash = "page-login";
-		}).on('swiperight',function(){
-			window.location.hash = "page-login";
+			$('#page-loading').unbind("click");
+			$('#page-loading').unbind("swiperight");
+			$('#page-loading').unbind("swipeleft");
 		});
-
+		$('#page-loading').on('swiperight',function(){
+			window.location.hash = "page-login";
+			$('#page-loading').unbind("click");
+			$('#page-loading').unbind("swiperight");
+			$('#page-loading').unbind("swipeleft");
+		});
+		$('#page-loading').on('swipeleft',function(){
+			window.location.hash = "page-login";
+			$('#page-loading').unbind("click");
+			$('#page-loading').unbind("swiperight");
+			$('#page-loading').unbind("swipeleft");
+		});
 	}
 }
 

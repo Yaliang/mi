@@ -697,6 +697,18 @@ textarea {
 
 .loading-page-image {
 	background: 0 0 no-repeat;
+	height: 100vh;
+	width: 100vw;
+	background-image: url("./content/png/apple-touch-startup-image-1536x2008.png");
+	background-size: cover;
+}
+
+.loading-page-button-top {
+
+}
+
+.loading-page-button-bottom {
+	
 }
 
  /*iPad retina portrait startup image */
