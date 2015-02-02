@@ -14,7 +14,9 @@ function ParseSignup(username, password, email, name, errorObject, destID, custo
 		},
 		error: function(user,error) {
 			//errorObject.html("Error: " + error.code + " " + error.message);
-			errorObject.html(error.message);
+			errorObject.html(error.message);			
+			$.mobile.loading("hide");
+			$("#signup-password").val("");
 		}
 	});
 }
@@ -43,18 +45,19 @@ function ParseLogin(username, password, errorObject, destID, customFunction) {
 		},
 		error: function(user, error){
 			$.mobile.loading("hide");
+			$("#login-password").val("");
 			var query = new Parse.Query(Parse.User);
             query.equalTo("username", username);
 			query.find({
 	  			success: function(userlist) {
 	  				if(userlist.length == 0){
-	  					errorObject.html("Email does not exist");
+	  					errorObject.html("Email does not exist.");
 	  				}else{
-	   					errorObject.html("Wrong password");
+	   					errorObject.html("Password does not match your Email.");
 	   				}
 	  			},
 	  			error: function(){
-	  				errorObject.html("Failed to connect server, please try again");
+	  				errorObject.html("Failed to connect server, please try again.");
 	  			},
 			});
 		}

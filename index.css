@@ -695,6 +695,13 @@ textarea {
     color: red;
 }
 
+.error-message {
+    font-family: "Open Sans"!important;
+    font-weight: 300;
+    font-size: 14px;
+    color: red;
+}
+
 .loading-page-image {
 	background: 0 -20px no-repeat;
 	height: 100vh;
@@ -707,6 +714,7 @@ textarea {
 	text-align: center;
 	margin-top: 20vh;
 	padding: 10px 20px;
+	padding-top: 6px;
 	float: left;
 	font-size: 25px;
 	font-weight: bold;
@@ -720,7 +728,8 @@ textarea {
 .loading-page-button-bottom {
 	text-align: center;
 	margin-top: 80vh;
-	padding: 10px 20px;
+	padding: 10px 20px;	
+	padding-top: 6px;
 	float: left;
 	font-size: 25px;
 	font-weight: bold;
