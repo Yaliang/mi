@@ -696,15 +696,16 @@ textarea {
 }
 
 .loading-page-image {
-	height: 100vh;
-	width: 100vw;
-	background: 50% 50% no-repeat;
+	background: 0 0 no-repeat;
 }
 
  /*iPad retina portrait startup image */
 @media (device-width: 768px) and (device-height: 1024px) and (-webkit-device-pixel-ratio: 2) and (orientation: portrait) {
 	.loading-page-image {
 		background-image: url("./content/png/apple-touch-startup-image-1536x2008.png");
+		background-size: 768px 1024px;
+		height: 768px;
+		width: 1024px;
 	}
 }
          
@@ -713,6 +714,9 @@ textarea {
 @media (device-width: 768px) and (device-height: 1024px) and (-webkit-device-pixel-ratio: 2) and (orientation: landscape) {
 	.loading-page-image {
 		background-image: url("./content/png/apple-touch-startup-image-1496x2048.png");
+		background-size: 768px 1024px;
+		height: 1024px;
+		width: 768px;
 	}
 }
  
@@ -720,6 +724,9 @@ textarea {
 @media (device-width: 768px) and (device-height: 1024px) and (-webkit-device-pixel-ratio: 1) and (orientation: portrait) {
 	.loading-page-image {
 		background-image: url("./content/png/apple-touch-startup-image-768x1004.png");
+		background-size: 768px 1024px;
+		height: 1024px;
+		width: 768px;
 	}
 }
  
@@ -727,6 +734,9 @@ textarea {
 @media (device-width: 768px) and (device-height: 1024px) and (-webkit-device-pixel-ratio: 1) and (orientation: landscape) {
 	.loading-page-image {
 		background-image: url("./content/png/apple-touch-startup-image-748x1024.png");
+		background-size: 768px 1024px;
+		height: 1024px;
+		width: 768px;
 	}
 }
  
@@ -734,6 +744,9 @@ textarea {
 @media (device-width: 414px) and (device-height: 736px) and (-webkit-device-pixel-ratio: 3) and (orientation: portrait) {
 	.loading-page-image {
 		background-image: url("./content/png/apple-touch-startup-image-1242x2148.png");
+		background-size: 414px 736px;
+		height: 736px;
+		width: 414px;
 	}
 }
  
@@ -741,6 +754,9 @@ textarea {
 @media (device-width: 414px) and (device-height: 736px) and (-webkit-device-pixel-ratio: 3) and (orientation: landscape) {
 	.loading-page-image {
 		background-image: url("./content/png/apple-touch-startup-image-1182x2208.png");
+		background-size: 414px 736px;
+		height: 736px;
+		width: 414px;
 	}
 }
  
@@ -748,6 +764,9 @@ textarea {
 @media (device-width: 375px) and (device-height: 667px) and (-webkit-device-pixel-ratio: 2) {
 	.loading-page-image {
 		background-image: url("./content/png/apple-touch-startup-image-750x1294.png");
+		background-size: 375px 667px;
+		height: 667px;
+		width: 375px;
 	}
 }
  
@@ -755,6 +774,9 @@ textarea {
 @media (device-width: 320px) and (device-height: 568px) and (-webkit-device-pixel-ratio: 2) {
 	.loading-page-image {
 		background-image: url("./content/png/apple-touch-startup-image-640x1096.png");
+		background-size: 320px 568px;
+		height: 568px;
+		width: 320px;
 	}
 }
  
@@ -762,6 +784,9 @@ textarea {
 @media (device-width: 320px) and (device-height: 480px) and (-webkit-device-pixel-ratio: 2) {
 	.loading-page-image {
 		background-image: url("./content/png/apple-touch-startup-image-640x920.png");
+		background-size: 320px 480px;
+		height: 480px;
+		width: 320px;
 	}
 }
 
@@ -770,5 +795,8 @@ textarea {
 @media (device-width: 320px) and (device-height: 480px) and (-webkit-device-pixel-ratio: 1) {
 	.loading-page-image {
 		background-image: url("./content/png/apple-touch-startup-image-320x460.png");
+		background-size: 320px 480px;
+		height: 480px;
+		width: 320px;
 	}
 }
