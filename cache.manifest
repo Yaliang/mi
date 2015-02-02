@@ -1,9 +1,8 @@
 CACHE MANIFEST
-# Cache manifest version 1.1.0
+# Cache manifest version 1.2.0
 # If you change the version number in this comment,
 # the cache manifest is no longer byte-for-byte
 # identical.
-
 # image
 index.html
 http://yaliang.github.io/mi/script/jquery/jquery-1.11.1.min.js
