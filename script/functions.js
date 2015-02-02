@@ -63,11 +63,19 @@ function loginByLocalStorage(){
 		//window.location.hash = "page-login";
 		var window_width = $(window).width();
 		var window_height = $(window).height();
-		// if (window_width/window_height > 1) {
-		// 	$('.loading-page-image').append("<div class='loading-page-button-top'>Discover Now</div>")
-		// } else {
-		// 	$('.loading-page-image').append("<div class='loading-page-button-bottom'>Discover Now</div>")
-		// }
+		if (window_width/window_height > 1) {
+			$('.loading-page-image').append("<div class='loading-page-button-top'>Join Us.</div>");
+			$('.loading-page-button-top').css("marginLeft", Math.round(($(".loading-page-image").width()-199)/2).toString()+"px");
+			// setTimeout(function(){
+			// 	$('.loading-page-button-top').html("Join Us.</br>Today!");
+			// },2000);
+		} else {
+			$('.loading-page-image').append("<div class='loading-page-button-bottom'>Join Us.</div>");			
+			$('.loading-page-button-bottom').css("marginLeft", Math.round(($(".loading-page-image").width()-199)/2).toString()+"px");
+			// setTimeout(function(){
+			// 	$('.loading-page-button-bottom').html("Join Us.</br>Today!");
+			// },2000);
+		}
 		$('#page-loading').click(function(){
 			window.location.hash = "page-login";
 			$('#page-loading').unbind("click");
