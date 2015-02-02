@@ -42,6 +42,7 @@ function ParseLogin(username, password, errorObject, destID, customFunction) {
 			CacheUpdateUser(user);
 		},
 		error: function(user, error){
+			$.mobile.loading("hide");
 			var query = new Parse.Query(Parse.User);
             query.equalTo("username", username);
 			query.find({
