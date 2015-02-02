@@ -60,7 +60,13 @@ function loginByLocalStorage(){
 		};
 		ParseUpdateCurrentUser(successFunction, errorFunction);
 	} else {
-		window.location.hash = "page-login";
+		//window.location.hash = "page-login";
+		$('.loading-page-image').click(function(){
+			window.location.hash = "page-login";
+		}).on('swiperight',function(){
+			window.location.hash = "page-login";
+		});
+
 	}
 }
 
