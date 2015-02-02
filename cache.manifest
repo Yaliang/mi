@@ -1,5 +1,5 @@
 CACHE MANIFEST
-# Cache manifest version 1.2.0
+# Cache manifest version 1.3.0
 # If you change the version number in this comment,
 # the cache manifest is no longer byte-for-byte
 # identical.
@@ -23,6 +23,8 @@ NETWORK:
 # are whitelisted.
 # http://example.com/examplepath/
 # http://www.example.org/otherexamplepath/
+
+*
  
 FALLBACK:
 # demoimages/currentImg.jpg images/stockImage.jpg
