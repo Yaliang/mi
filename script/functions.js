@@ -60,7 +60,7 @@ function loginByLocalStorage(){
 		};
 		ParseUpdateCurrentUser(successFunction, errorFunction);
 	} else {
-		window.location.hash = "page-login";
+		//window.location.hash = "page-login";
 	}
 }
 
