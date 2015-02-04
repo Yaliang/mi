@@ -9,13 +9,14 @@ function ParseSignup(username, password, email, name, errorObject, destID, custo
 
 	user.signUp(null, {
 		success: function(user) {
+            setCurrLocationHash(destID);
 			window.location.hash = destID;
 			customFunction(user);
 		},
 		error: function(user,error) {
+            $.mobile.loading("hide");
 			//errorObject.html("Error: " + error.code + " " + error.message);
-			errorObject.html(error.message);			
-			$.mobile.loading("hide");
+			errorObject.html(error.message);
 			$("#signup-password").val("");
 		}
 	});
@@ -39,6 +40,7 @@ function ParseCreateProfilePhotoObject(userId){
 function ParseLogin(username, password, errorObject, destID, customFunction) {
 	Parse.User.logIn(username,password,{
 		success: function(user){
+            setCurrLocationHash(destID);
 			window.location.hash = destID;
 			customFunction();
 			CacheUpdateUser(user);
@@ -53,12 +55,12 @@ function ParseLogin(username, password, errorObject, destID, customFunction) {
 	  				if(userlist.length == 0){
 	  					errorObject.html("Email does not exist.");
 	  				}else{
-	   					errorObject.html("Password does not match your Email.");
+	   					errorObject.html("Password does not match your email.");
 	   				}
 	  			},
 	  			error: function(){
 	  				errorObject.html("Failed to connect server, please try again.");
-	  			},
+	  			}
 			});
 		}
 	});
@@ -84,6 +86,7 @@ function ParseRemoveCurrentBridgeitId() {
 
 function ParseLogout(destID) {
 	Parse.User.logOut();
+    setCurrLocationHash(destID);
 	window.location.hash = destID;
 }
 

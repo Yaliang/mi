@@ -18,7 +18,7 @@ function rawLocalToCache(object) {
 	}
 	item['toJSON'] = function() {
 		return this.attributes;
-	}
+	};
 
 	return item;
 }
@@ -64,7 +64,7 @@ function cacheInitialization() {
 			default:
 		}
 		if (rawData.length == 0)  {
-			console.log("empty: "+cachedList[n]);
+			//console.log("empty: "+cachedList[n]);
 			continue;
 		}
 		for (var i=0; i < rawData.length; i++) {

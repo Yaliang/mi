@@ -1,3 +1,9 @@
+var currLocationHash = "#page-loading"; // the location hash for current page
+
+function setCurrLocationHash(locationHash){
+    currLocationHash = locationHash;
+}
+
 $(document).ready(function (){
 	if (window.navigator.standalone == true) {
 		$('#comment-content').on("blur",function(){
@@ -37,6 +43,26 @@ $(document).ready(function (){
 	$('#signup-form').submit(function(event){
 		event.preventDefault();
 	});
+
+    $(window).hashchange(function(){
+        var preHash = currLocationHash;
+        var currHash = window.location.hash;
+        console.log("currHash:" + currHash);
+        console.log("preHash:" + preHash);
+
+        // in user session
+        if (currHash == "#page-login" && (preHash != "#page-loading" && preHash != "#page-login" && preHash != "#page-signup")) {
+            window.location.hash = "#page-event";
+            currLocationHash = "#page-event";
+        }
+
+        // out of user session
+        if (currHash == "#page-setting" && (preHash == "#page-loading" || preHash == "#page-login" || preHash == "#page-signup")) {
+            window.location.hash = "#page-login";
+            currLocationHash = "#page-login";
+        }
+    });
+
 	cacheInitialization();
 	loginByLocalStorage();
 });
@@ -45,7 +71,8 @@ function loginByLocalStorage(){
 	var currentUser = Parse.User.current();
 	if (currentUser) {
 		var successFunction = function() {
-			window.location.hash = "page-event";
+            setCurrLocationHash('#page-event');
+			window.location.hash = "#page-event";
 			$.mobile.loading("show");
 			pullUserEvent();
 			if (!pullNotificationRunning) {
@@ -55,11 +82,12 @@ function loginByLocalStorage(){
 			ParsePullMyChat(Parse.User.current().id,"updatedAt",function(){});
 		};
 		var errorFunction = function() {
-			window.location.hash = "page-login";
+            setCurrLocationHash('#page-login');
+			window.location.hash = "#page-login";
 		};
 		ParseUpdateCurrentUser(successFunction, errorFunction);
 	} else {
-		//window.location.hash = "page-login";
+		//window.location.hash = "#page-login";
 		var window_width = $(window).width();
 		var window_height = $(window).height();
 		if (window_width/window_height > 1) {
@@ -76,22 +104,25 @@ function loginByLocalStorage(){
 			// },2000);
 		}
 		$('#page-loading').click(function(){
+            setCurrLocationHash('#page-login');
 			window.location.hash = "page-login";
-			$('#page-loading').unbind("click");
-			$('#page-loading').unbind("swiperight");
-			$('#page-loading').unbind("swipeleft");
+			//$('#page-loading').unbind("click");
+			//$('#page-loading').unbind("swiperight");
+			//$('#page-loading').unbind("swipeleft");
 		});
 		$('#page-loading').on('swiperight',function(){
+            setCurrLocationHash('#page-login');
 			window.location.hash = "page-login";
-			$('#page-loading').unbind("click");
-			$('#page-loading').unbind("swiperight");
-			$('#page-loading').unbind("swipeleft");
+			//$('#page-loading').unbind("click");
+			//$('#page-loading').unbind("swiperight");
+			//$('#page-loading').unbind("swipeleft");
 		});
 		$('#page-loading').on('swipeleft',function(){
+            setCurrLocationHash('#page-login');
 			window.location.hash = "page-login";
-			$('#page-loading').unbind("click");
-			$('#page-loading').unbind("swiperight");
-			$('#page-loading').unbind("swipeleft");
+			//$('#page-loading').unbind("click");
+			//$('#page-loading').unbind("swiperight");
+			//$('#page-loading').unbind("swipeleft");
 		});
 	}
 }
@@ -167,7 +198,7 @@ function signup(){
 	var email = $("#signup-email").val();
 	var password = $("#signup-password").val();
 	var errorObject = $("#signup-error");
-	var destID = "page-event";
+	var destID = "#page-event";
 	var customFunction = function(object){
 		$("#signup-password").val("");
 		pullUserEvent();
@@ -176,8 +207,8 @@ function signup(){
 		}
 		ParseCreateProfilePhotoObject(object.id);
 	};
-	ParseSignup(email, password, email, name, errorObject, destID, customFunction);	
-	$.mobile.loading("show");
+    $.mobile.loading("show");
+	ParseSignup(email, password, email, name, errorObject, destID, customFunction);
 }
 
 function login(){
@@ -185,7 +216,7 @@ function login(){
 	var email = $("#login-email").val();
 	var password = $("#login-password").val();
 	var errorObject = $("#login-error");
-	var destID = "page-event";
+	var destID = "#page-event";
 	var customFunction = function(){
 		$("#login-password").val("");
 		pullUserEvent();
@@ -195,9 +226,10 @@ function login(){
 		ParsePullAllFriendObjectById(Parse.User.current().id);
 		ParsePullMyChat(Parse.User.current().id,"updatedAt",function(){});
 	};
+
+    $.mobile.loading("show");
 	ParseLogin(email, password, errorObject, destID, customFunction);
 	//$("#login-password").val("");
-	$.mobile.loading("show");
 }
 
 function logout(){
@@ -210,7 +242,7 @@ function logout(){
 	localStorage.clear();
 	cacheClear();
 	$("#page-chat > .ui-content").html("");
-	var destID = "page-login";
+	var destID = "#page-login";
 	ParseLogout(destID);
 }
 
@@ -310,7 +342,7 @@ function pullUserEventHolderInfo(holder, eventId){
 		} else {
 			$("#"+eventId+"-owner-genger").css("backgroundImage","url('./content/customicondesign-line-user-black/png/female1-white-20.png')");
 			$("#"+eventId+"-owner-genger").css("backgroundColor","#f46f75");
-		};
+		}
 		
 		pullLastItem = pullLastItem - 1;
 		if (pullLastItem == 0) {
@@ -329,7 +361,7 @@ function pullUserEventHolderInfo(holder, eventId){
 				$("#event-content").removeClass("ui-hidden-accessible");
 				$.mobile.loading("hide");
 			}
-		}
+		};
 		CacheGetProfilePhoto(userId, displayFunction, data);
 	};
 	CacheGetProfileByUsername(holder, displayFunction, {eventId : eventId})
@@ -984,7 +1016,7 @@ function showPeopleNearByList(position){
 						photo120 = "./content/png/Taylor-Swift.png";
 					}
 					$("#near-by-"+object.get('userId')+" > .custom-corners-people-near-by").css("backgroundImage","url('"+photo120+"')");
-				}
+				};
 				CacheGetProfilePhoto(userId, displayFunction);
 				prefixForGetFriendOptionsButton="near-by-";
 				getFriendOptionsButton(userId);
@@ -1001,16 +1033,16 @@ function showPeopleNearByList(position){
 function showPeopleNearByListError(error){
 	switch(error.code) {
 		case error.PERMISSION_DENIED:
-		$("#page-people-near-by > .ui-content").html("<p style='padding: 1em'>User denied the request for Geolocation.</p>");
+		$("#page-people-near-by > .ui-content").html("<p style='padding: 1em'>Location request has been denied. Please turn on your location service and try again.</p>");
 		break;
 		case error.POSITION_UNAVAILABLE:
-		$("#page-people-near-by > .ui-content").html("<p style='padding: 1em'>Location information is unavailable.</p>");
+		$("#page-people-near-by > .ui-content").html("<p style='padding: 1em'>Location information is currently unavailable. Please try again later.</p>");
 		break;
 		case error.TIMEOUT:
-		$("#page-people-near-by > .ui-content").html("<p style='padding: 1em'>The request to get user location timed out.</p>");
+		$("#page-people-near-by > .ui-content").html("<p style='padding: 1em'>Location request has timed out. Please check your network connection and try again.</p>");
 		break;
 		case error.UNKNOWN_ERROR:
-		$("#page-people-near-by > .ui-content").html("<p style='padding: 1em'>An unknown error occurred.</p>");
+		$("#page-people-near-by > .ui-content").html("<p style='padding: 1em'>Location information is currently unavailable due to an unknown error. Please try again later.</p>");
 		break;
 	}
 }
@@ -1567,7 +1599,7 @@ function updateLastMessage(groupId, data){
 					$("#chat-"+data.chatId+"> .chat-last-time").addClass("chat-last-time-right-blank");
 				}
 			}
-		}					
+		};
 		ParsePullChatMessage(groupId, limitNum, descendingOrderKey, null, displayFunction, data);
 	}
 }
