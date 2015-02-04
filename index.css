@@ -383,8 +383,8 @@ a {
 
 .ui-custom-event-title {
 	color: #000000;
-	font-weight: 500;
-	font-size: 28px;
+	font-weight: 400;
+	font-size: 20px;
     margin: 0 0 0.5em 0;
 }
 
@@ -395,7 +395,7 @@ a {
 	background: url("./content/material-design/png/compass106-solid-pink-20.png") 0 0 no-repeat;
 	background-size: 15px 15px;
 	float: left;
-	/*height: 15px;*/
+	line-height: 15px;
 	margin: 0 15px 15px 0;
 }
 
@@ -406,7 +406,7 @@ a {
 	background: url("./content/material-design/png/clock100-solid-pink-20.png") 0 0 no-repeat;
 	background-size: 15px 15px;
 	float: left;
-	/*height: 15px;*/
+	line-height: 15px;
 	margin: 0 15px 15px 0;
 }
 
