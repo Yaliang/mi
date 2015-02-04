@@ -47,8 +47,8 @@ $(document).ready(function (){
     $(window).hashchange(function(){
         var preHash = currLocationHash;
         var currHash = window.location.hash;
-        console.log("currHash:" + currHash);
-        console.log("preHash:" + preHash);
+        //console.log("currHash:" + currHash);
+        //console.log("preHash:" + preHash);
 
         // in user session
         if (currHash == "#page-login" && (preHash != "#page-loading" && preHash != "#page-login" && preHash != "#page-signup")) {
@@ -1339,7 +1339,7 @@ function sendMessage(){
 			}
 			var data = {senderId : senderId, message: text};
 			CacheGetProfileByUserId(receiverId, displayFunction, data);
-		}
+		};
 		CacheSetGroupMemberChatObjectReadFalse(senderId, groupId, text, notificationFunction);
 		var newElement = buildElementInChatMessagesPage(object);
 		$("#page-chat-messages > .ui-content").append(newElement);
@@ -1349,13 +1349,13 @@ function sendMessage(){
 				photo120 = "./content/png/Taylor-Swift.png";
 			}
 			$("#message-"+data.messageId).css("backgroundImage","url('"+photo120+"')");
-		}
+		};
 		CacheGetProfilePhoto(senderId, displayFunction, {messageId : messageId});
 		$("html body").animate({ scrollTop: $(document).height().toString()+"px" }, {
 			duration: 150,
 			complete : function(){}
 		});
-	}
+	};
 
 	ParseAddChatMessage(senderId, groupId, text, displayFunction);
 }
