@@ -134,6 +134,7 @@
     </script>
 	<script src="./script/jquery/jquery-1.11.1.min.js"></script>
 	<script src="./script/jquery/mobile/jquery.mobile-1.4.5.min.js"></script>
+	<script src="./script/exif/load-image.all.min.js"></script>
 	<script src="./script/parse/parse-1.3.2.min.js"></script>
 	<!--<script src="./script/parse/parse-1.3.2.js"></script>-->
 	<script src="./script/parse/query.js"></script>
@@ -462,6 +463,7 @@
 				<label style='padding-left: 1em;' for="profilephoto">Photo:</label>
 				<canvas id="canvas-photo" class="profile-photo-preview" width="120px" height="120px"></canvas>
 				<input type="file" data-clear-btn="false" name="profilephoto" id="profile-edit-photo" onchange="profilePhotoCrop()" value="">
+				<div id="photo-orientation" class="ui-hidden-accessible"></div>
 			</div>
 			<form style='padding: 1em;'>
 				<label for="profileusername">Name:</label>
