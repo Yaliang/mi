@@ -454,7 +454,7 @@
 
 		<div data-role="header">
 			<h1>My Profile</h1>
-			<a data-rel="back" href="#page-setting" class="ui-btn-left ui-btn ui-btn-inline ui-corner-all" onclick="refreshPreviewPhoto = false;setCurrLocationHash('#page-setting')">Back</a>
+			<a data-rel="back" href="#page-setting" class="ui-btn-left ui-btn ui-btn-inline ui-corner-all" onclick="setCurrLocationHash('#page-setting')">Back</a>
 			<a data-rel="back" href="#page-setting" class="ui-btn-right ui-btn ui-btn-inline ui-corner-all" id="profile-save-btn" onclick="saveProfile();setCurrLocationHash('#page-setting')">Save</a>
 		</div><!-- /header -->
 
@@ -462,7 +462,7 @@
 			<div class="profile-photo-bar">
 				<label style='padding-left: 1em;' for="profilephoto">Photo:</label>
 				<canvas id="canvas-photo" class="profile-photo-preview" width="120px" height="120px"></canvas>
-				<input type="file" data-clear-btn="false" name="profilephoto" id="profile-edit-photo" onchange="profilePhotoCrop()" value="">
+				<input type="file" data-clear-btn="false" name="profilephoto" id="profile-edit-photo" onchange="profilePhotoCrop()" onblur="profilePhotoCrop()" value="">
 				<div id="photo-orientation" class="ui-hidden-accessible"></div>
 			</div>
 			<form style='padding: 1em;'>
