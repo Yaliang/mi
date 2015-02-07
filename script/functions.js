@@ -810,7 +810,19 @@ function deleteMyEvent(eventId){
 	ParseDeleteEvent(eventId, displayFunction);
 }
 
+var refreshPreviewPhoto = false;
+function refreshPreviewCanvas(){
+	profilePhotoCrop();
+	if (refreshPreviewPhoto) {
+		setTimeout(function(){
+			refreshPreviewCanvas();
+		},5000);
+	}
+}
+
 function getMyProfile(){
+	refreshPreviewPhoto = true;
+	refreshPreviewCanvas();
 	var currentUser = Parse.User.current();
 	var owner = currentUser.getUsername();
 	var userId = currentUser.id;
@@ -855,6 +867,7 @@ function getMyProfile(){
 }
 
 function saveProfile(){
+	refreshPreviewPhoto = false;
 	$("#profile-save-btn").unbind("click");
 	var currentUser = Parse.User.current();
 	var owner = currentUser.getUsername();
