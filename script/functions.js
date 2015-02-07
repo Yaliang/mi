@@ -813,12 +813,12 @@ function refreshPreviewCanvas(){
 	if (refreshPreviewPhoto) {
 		setTimeout(function(){
 			refreshPreviewCanvas();
-		},1000);
+		},5000);
 	}
 }
 
 function getMyProfile(){
-	refreshPreviewPhoto = true;
+	//refreshPreviewPhoto = true;
 	refreshPreviewCanvas();
 	var currentUser = Parse.User.current();
 	var owner = currentUser.getUsername();
@@ -920,9 +920,52 @@ function profilePhotoCrop(){
 			destHeight = sourceHeight*(destWidth/sourceWidth);
 			destY = (canvas.height - destHeight)/2;
 		}
+		var orientation = parseInt($("#photo-orientation").html());
 		context.drawImage(image, sourceX, sourceY, sourceWidth, sourceHeight, destX, destY, destWidth, destHeight);
+		switch(orientation){
+			case 8:
+				context.drawImage(image, sourceX, sourceY, sourceWidth, sourceHeight, destX-canvas.width/2, destY-canvas.height/2, destWidth, destHeight);
+				context.rotate(90*Math.PI/180);
+				context.translate(-canvas.width/2,-canvas.height/2);
+				break;
+			case 3:
+				context.drawImage(image, sourceX, sourceY, sourceWidth, sourceHeight, destX-canvas.width/2, destY-canvas.height/2, destWidth, destHeight);
+				context.rotate(-180*Math.PI/180);
+				context.translate(-canvas.width/2,-canvas.height/2);
+				break;
+			case 6:
+				context.drawImage(image, sourceX, sourceY, sourceWidth, sourceHeight, destX-canvas.width/2, destY-canvas.height/2, destWidth, destHeight);
+				context.rotate(-90*Math.PI/180);
+				context.translate(-canvas.width/2,-canvas.height/2);
+				break;
+			default:
+				context.drawImage(image, sourceX, sourceY, sourceWidth, sourceHeight, destX, destY, destWidth, destHeight);
+	    }
 	}
-	reader.readAsDataURL(file);
+	loadImage.parseMetaData(file,function (data) {
+    	if (typeof(data.exif) != "undefined"){
+	    	var orientation = data.exif.get('Orientation');
+	    	//console.log(orientation);
+	    	var canvas = document.getElementById('canvas-photo');
+	    	var context = canvas.getContext('2d');
+	    	switch(orientation){
+	    		case 8:
+	    			context.translate(canvas.width/2,canvas.height/2);
+	    			context.rotate(-90*Math.PI/180);
+	    			break;
+	    		case 3:
+	    			context.translate(canvas.width/2,canvas.height/2);
+	    			context.rotate(180*Math.PI/180);
+	    			break;
+	    		case 6:
+	    			context.translate(canvas.width/2,canvas.height/2);
+	    			context.rotate(90*Math.PI/180);
+	    			break;
+		    }
+		    $("#photo-orientation").html(orientation.toString());
+		    reader.readAsDataURL(file);
+		}
+	},{});	
 }
 
 var geoWatchId;
