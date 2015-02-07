@@ -816,7 +816,7 @@ function refreshPreviewCanvas(){
 	if (refreshPreviewPhoto) {
 		setTimeout(function(){
 			refreshPreviewCanvas();
-		},5000);
+		},1000);
 	}
 }
 
