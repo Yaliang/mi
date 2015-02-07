@@ -15,6 +15,9 @@ $(document).ready(function (){
 		$('#comment-content').prop('disabled', true);
 		$('#message-content').prop('disabled', true);
 	}
+	$('#profile-edit-photo').on('blur change',function(){
+		profilePhotoCrop();
+	})
 	$('#message-chat-form').submit(function(event){
 		if (window.navigator.standalone == true) {
 			$('#message-content').trigger('blur');
