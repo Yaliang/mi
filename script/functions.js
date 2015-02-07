@@ -964,6 +964,8 @@ function profilePhotoCrop(){
 		    }
 		    $("#photo-orientation").html(orientation.toString());
 		    reader.readAsDataURL(file);
+		} else {
+			reader.readAsDataURL(file);
 		}
 	},{});	
 }
