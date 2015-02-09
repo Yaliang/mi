@@ -115,6 +115,7 @@ function ParseEventCreate(owner, title, location, time, visibility, description,
 	userEvent.set("description",description);
 	userEvent.set("interestNumber",0);
 	userEvent.set("commentNumber",0);
+	userEvent.set("reportNum", 0);
 
 	userEvent.save(null, {
 		success: function(userEvent) {
