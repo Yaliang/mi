@@ -152,7 +152,7 @@ function ParsePullEvent(owner, limitNumber, descendingOrderKey, accessibility, d
 		query.equalTo("owner",owner);
 	}else{
 		query.lessThan("reportNum", 11);
-		// query.notEqualTo("reportUserId", Parse.User.current().id);
+		query.notEqualTo("reportUserId", Parse.User.current().id);
 	}
 	if (limitNumber != null) {
 		query.limit(limitNumber);

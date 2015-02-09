@@ -742,6 +742,8 @@ textarea {
 
 .ui-custom-event-activityreport{
 	cursor: pointer;
+	font-size: 13px;
+	color:#a8a8a8;
 }
 
  /*iPad retina portrait startup image */
