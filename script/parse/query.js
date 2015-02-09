@@ -127,21 +127,22 @@ function ParseEventCreate(owner, title, location, time, visibility, description,
 	});
 }
 
-function ParseUpdateReport(id){
+
+function ParseUpdateReport(id, hiddenUserEvent){
 	var UserEvent = Parse.Object.extend("UserEvent");
 	var query = new Parse.Query(UserEvent);
 	query.get(id, {
 		success: function(userEvent){
-			userEvent.increment("report",1);
+			userEvent.increment("reportNum",1);
+			userEvent.add("reportUserId", Parse.User.current().id);
 			userEvent.save(null, {
 				success: function(userEvent){
-					//todo hide the report event
+					//hide the report event
+					hiddenUserEvent(userEvent);
 				}
 			});
 		}
 	});
-
-
 }
 
 function ParsePullEvent(owner, limitNumber, descendingOrderKey, accessibility, displayFunction) {
@@ -149,6 +150,9 @@ function ParsePullEvent(owner, limitNumber, descendingOrderKey, accessibility, d
 	var query = new Parse.Query(UserEvent);
 	if (owner != null) {
 		query.equalTo("owner",owner);
+	}else{
+		query.lessThan("reportNum", 11);
+		// query.notEqualTo("reportUserId", Parse.User.current().id);
 	}
 	if (limitNumber != null) {
 		query.limit(limitNumber);

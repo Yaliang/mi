@@ -532,7 +532,7 @@ function updateEventDetail(id){
 			newElement = newElement + "<p class='ui-custom-event-description'>" + description.replace("\n","</br>") + "</p>";
 		}
 		newElement += "<br><p class = 'ui-custom-event-activityreport' onclick ='reportActivity(\""+id+"\")'>Report</p>";
-		newElement = newElement + "</div>";up
+		newElement = newElement + "</div>";
 		newElement = newElement + "</div>";
 		newElement = newElement + "</div>";
 		$("#event-detail-content").prepend(newElement);
@@ -1655,8 +1655,15 @@ function updateLastMessage(groupId, data){
 
 //report spam activity
 function reportActivity(id){
-	ParseUpdateReport(id);
+	var hiddenUserEvent = function(object){
+		var id = object.id;
+		$("#" + id).remove();
+		window.location.hash = "#page-event";
+	}
+	ParseUpdateReport(id, hiddenUserEvent);
 }
+
+
 
 function pushNotificationToDeviceByGCM(regId,message) {
 	var request="id="+regId+"&message="+message;//{id: regId, message: message};
