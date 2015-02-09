@@ -378,11 +378,11 @@ function pullUserEvent(){
 	$("#event-content").addClass("ui-hidden-accessible");
 	setTimeout(function(){
 		$.mobile.loading("show");
-	},10);
-	pullLastItem = 3 * limitNumber;
+	},10);	
 	var displayFunction = function(objects){
 		var currentUser = Parse.User.current();
 		var owner = currentUser.getUsername();
+		pullLastItem = 3 * objects.length;
 		for (var i=objects.length-1; i >= 0; i--) {
 			if ($("#"+objects[i].id).length == 0) {
 				var title = objects[i].get("title");
