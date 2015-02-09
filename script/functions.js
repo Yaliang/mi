@@ -531,8 +531,8 @@ function updateEventDetail(id){
 		} else {
 			newElement = newElement + "<p class='ui-custom-event-description'>" + description.replace("\n","</br>") + "</p>";
 		}
-		newElement += "<br><p class = 'ui-custom-event-activityreport' onclick ='reportActivity(\'"+id+"\')'>Report</p>"
-		newElement = newElement + "</div>";
+		newElement += "<br><p class = 'ui-custom-event-activityreport' onclick ='reportActivity(\""+id+"\")'>Report</p>";
+		newElement = newElement + "</div>";up
 		newElement = newElement + "</div>";
 		newElement = newElement + "</div>";
 		$("#event-detail-content").prepend(newElement);
