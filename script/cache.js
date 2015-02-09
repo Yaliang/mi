@@ -15,7 +15,7 @@ function rawLocalToCache(object) {
 	};
 	item['get'] = function(a) {
 		return this.attributes[a];
-	}
+	};
 	item['toJSON'] = function() {
 		return this.attributes;
 	};

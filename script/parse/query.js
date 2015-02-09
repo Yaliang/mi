@@ -898,7 +898,7 @@ function ParseUpdateCache(className, updateIdList,lastUpdate){
 	query.greaterThan("updatedAt",lastUpdate);
 	query.find({
 		success: function(objects){
-			console.log(className+": "+lastUpdate.toJSON()+" "+objects.length);
+			//console.log(className+": "+lastUpdate.toJSON()+" "+objects.length);
 			for (var i = 0; i < objects.length; i++) {
 				switch(className) {
 					case "Photo":
@@ -941,7 +941,7 @@ function ParseUpdateGCMId(regid, displayFunction){
 // functions for database maintaining /never used in front-end script.
 
 function ParseUserNameFieldUpdate(i){
-	console.log(i);
+	//console.log(i);
 	var Comment = Parse.Object.extend("Comment");
 	var query = new Parse.Query(Comment);
 
@@ -951,31 +951,31 @@ function ParseUserNameFieldUpdate(i){
 				var query = new Parse.Query(Parse.User);
 				var email = comments[i].get("owner");
 				var objectId = comments[i].id;
-				console.log(email);
+				//console.log(email);
 				query.equalTo("username", email);
 				query.find({
 					success: function(user){
 						var ownerName = user[0].get("name");
-						console.log(ownerName);
+						//console.log(ownerName);
 						var Comment = Parse.Object.extend("Comment");
 						var query = new Parse.Query(Comment);
 						query.get(objectId,{
 							success: function(comment){
-								console.log(ownerName);
+								//console.log(ownerName);
 								comment.set("ownerName",ownerName);
 								comment.save(null, {
 									success: function(comments){
-										console.log("success");
+										//console.log("success");
 									}
 								});
 							},
 							error: function(comment, error){
-								console.log("Error: " + error.code + " " + error.message);
+								//console.log("Error: " + error.code + " " + error.message);
 							}
 						});
 					},
 					error: function(userEvent, error){
-						console.log("Error: " + error.code + " " + error.message);
+						//console.log("Error: " + error.code + " " + error.message);
 					}
 				})
 		}
@@ -999,13 +999,13 @@ function ParsePhotoClassCreateBaseUserObject(i){
 	query.descending("createdAt");
 	query.find({
 		success: function(user) {
-			console.log(i);
+			//console.log(i);
 			var userId = user[i].id;
 			var profilePhoto = user[i].get("photo");
 			var profilePhoto120 = user[i].get("photo50");
-			console.log(userId);
-			console.log(profilePhoto);
-			console.log(profilePhoto120);
+			//console.log(userId);
+			//console.log(profilePhoto);
+			//console.log(profilePhoto120);
 			var Photo = Parse.Object.extend("Photo");
 			var photo = new Photo;
 
@@ -1014,7 +1014,7 @@ function ParsePhotoClassCreateBaseUserObject(i){
 			photo.set('profilePhoto120',profilePhoto120);
 			photo.save(null,{
 				success: function() {
-					console.log('success');
+					//console.log('success');
 				}
 			})
 		}
@@ -1057,7 +1057,7 @@ function ParseCheckChatObject() {
 				ChatObjectSet[refreshNumber].set("hidden",true);
 				ChatObjectSet[refreshNumber].save({
 					success: function(){
-						console.log("hidden:" + ChatObjectSet[refreshNumber].id)
+						//console.log("hidden:" + ChatObjectSet[refreshNumber].id)
 					}
 				})
 			}
@@ -1067,7 +1067,7 @@ function ParseCheckChatObject() {
 	if (refreshNumber == ChatObjectSet.length - 1)
 		return;
 	setTimeout(function(){
-		console.log(ChatObjectSet[refreshNumber].id);
+		//console.log(ChatObjectSet[refreshNumber].id);
 		refreshNumber += 1;
 		ParseCheckChatObject();
 	},5000)
