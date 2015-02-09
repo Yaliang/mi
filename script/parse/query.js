@@ -127,6 +127,23 @@ function ParseEventCreate(owner, title, location, time, visibility, description,
 	});
 }
 
+function ParseUpdateReport(id){
+	var UserEvent = Parse.Object.extend("UserEvent");
+	var query = new Parse.Query(UserEvent);
+	query.get(id, {
+		success: function(userEvent){
+			userEvent.increment("report",1);
+			userEvent.save(null, {
+				success: function(userEvent){
+					//todo hide the report event
+				}
+			});
+		}
+	});
+
+
+}
+
 function ParsePullEvent(owner, limitNumber, descendingOrderKey, accessibility, displayFunction) {
 	var UserEvent = Parse.Object.extend("UserEvent");
 	var query = new Parse.Query(UserEvent);

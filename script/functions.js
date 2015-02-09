@@ -531,6 +531,7 @@ function updateEventDetail(id){
 		} else {
 			newElement = newElement + "<p class='ui-custom-event-description'>" + description.replace("\n","</br>") + "</p>";
 		}
+		newElement += "<br><p class = 'ui-custom-event-activityreport' onclick ='reportActivity(\'"+id+"\')'>Report</p>"
 		newElement = newElement + "</div>";
 		newElement = newElement + "</div>";
 		newElement = newElement + "</div>";
@@ -1650,6 +1651,11 @@ function updateLastMessage(groupId, data){
 		};
 		ParsePullChatMessage(groupId, limitNum, descendingOrderKey, null, displayFunction, data);
 	}
+}
+
+//report spam activity
+function reportActivity(id){
+	ParseUpdateReport(id);
 }
 
 function pushNotificationToDeviceByGCM(regId,message) {
