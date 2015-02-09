@@ -531,11 +531,15 @@ function updateEventDetail(id){
 		} else {
 			newElement = newElement + "<p class='ui-custom-event-description'>" + description.replace("\n","</br>") + "</p>";
 		}
-		newElement += "<br><p class = 'ui-custom-event-activityreport' onclick ='reportActivity(\""+id+"\")'>Report</p>";
+		//newElement += "<br><p class = 'ui-custom-event-activityreport' onclick ='$(\".ui-custom-report\").click(reportActivity(\""+id+"\"))'>Report</p>";
+		newElement += "<a href='#page-event-report' role='button' class='ui-custom-event-activityreport' data-transition='slideup' onclick='$(\"#send-comment-bar\").fadeOut();'>Report</a>";
 		newElement = newElement + "</div>";
 		newElement = newElement + "</div>";
 		newElement = newElement + "</div>";
 		$("#event-detail-content").prepend(newElement);
+		$(".ui-custom-report").on("click",function(){
+			reportActivity(id);
+		})
 	}
 	ParseSelectEvent(id, displayFunction);
 	displayFunction = function(objects){
@@ -1660,7 +1664,7 @@ function reportActivity(id){
 		$("#" + id).remove();
 		window.location.hash = "#page-event";
 	}
-	ParseUpdateReport(id, hiddenUserEvent);
+	ParseUpdateReport(id, hiddenUserEvent);	
 }
 
 
