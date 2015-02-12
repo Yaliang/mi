@@ -73,7 +73,7 @@
 }
 
 .custom-corners {
-	margin: 2em 0;
+	margin: 1em 0;
 	padding-top: 0.4em;
 	border-width: 0;
 	border-top-width: 0;
@@ -289,6 +289,14 @@ a {
 	width: 35px!important;
 }
 
+.ui-icon-custom-delete {
+	background: url("./content/material-design/png/rubbish-red-36.png") 0 50% no-repeat;
+	background-size: 18px 18px;
+	text-align: left!important;
+	padding-left: 25px!important;
+	width: 50px!important;
+}
+
 .ui-state-disabled {
 	opacity: 1!important;
 }
@@ -477,6 +485,53 @@ a {
 	border-radius: .3125em;
 	background-color: #FFFFFF;
 	text-shadow: 0 0 0;
+}
+
+.ui-custom-comment-container {
+	overflow: auto;
+	background-color: white;
+	margin-bottom: 5em;
+}
+
+.ui-custom-comment-left {
+	background: 0 0 no-repeat;
+	background-size: 30px 30px;
+	padding-left: 40px;
+	margin-top: 10px;
+	margin-bottom: 10px;
+	margin-left: 1em;
+	font-family: 'Open Sans';
+	font-weight: 300!important;
+	font-size: 15px;
+	word-break: break-all;
+}
+
+.ui-comment-owner{
+	font-weight: 700;
+	font-size: 0.8em;
+	float: left;
+}
+
+.ui-comment-time{
+	float: right;
+	padding-right: 2em;
+	font-size: 0.6em;
+	text-shadow: 0 0 0;
+	color: #7B7B7B;
+}
+
+.ui-comment-content{
+	clear: both;
+	padding-top: 0.4em;
+	padding-bottom: 0.4em;
+}
+
+.ui-load-more-activity {
+	font-family: "Open Sans";
+	font-weight: 300;
+	padding-bottom: 1em;
+	text-align: center;
+	cursor: pointer;
 }
 
 .chat-list {

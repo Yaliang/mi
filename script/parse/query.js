@@ -147,7 +147,7 @@ function ParseUpdateReport(id, hiddenUserEvent){
 	});
 }
 
-function ParsePullEvent(owner, limitNumber, descendingOrderKey, accessibility, displayFunction) {
+function ParsePullEvent(owner, limitNumber, descendingOrderKey, accessibility, beforeAt, displayFunction) {
 	var UserEvent = Parse.Object.extend("UserEvent");
 	var query = new Parse.Query(UserEvent);
 	if (owner != null) {
@@ -165,6 +165,9 @@ function ParsePullEvent(owner, limitNumber, descendingOrderKey, accessibility, d
 		}
 	}
 	query.descending(descendingOrderKey);
+	if ((typeof(beforeAt) != "undefined")&&(beforeAt != null)) {
+		query.lessThan("createdAt",beforeAt);
+	}
 	query.find({
 		success: function(userEvents) {
 			displayFunction(userEvents);
@@ -391,6 +394,18 @@ function ParseGetProfilePhoto(userId, displayFunction, data) {
 		success: function(object){
 			displayFunction(object, data);
 			CacheUpdatePhoto(object);
+		}
+	})
+}
+
+function ParseGetProfilePhotoByUsername(username, displayFunction, data) {
+	var User = Parse.Object.extend("User");
+	var query = new Parse.Query(User);
+
+	query.equalTo("username",username);
+	query.first({
+		success: function(object){
+			ParseGetProfilePhoto(object.id, displayFunction, data);
 		}
 	})
 }

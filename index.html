@@ -204,7 +204,7 @@
 	<!-- Page for displaying the list of events -->
 	<div data-role="page" id="page-event" data-title="Yueme">
 
-		<div data-role="header" data-position="fixed" data-tap-toggle="false">
+		<div data-role="header" data-position="fixed" data-tap-toggle="false" >
 			<h1>Activities</h1>
 			<a href="#" class="ui-btn-right ui-btn ui-btn-inline ui-corner-all" id="ui-icon-custom-right-top-more" onclick="displayEventMoreOption();"></a>
 			<!--
@@ -214,6 +214,7 @@
 		</div><!-- /header -->
 
 		<div role="main" class="ui-content" id="event-content">
+			<div class="ui-load-more-activity" onclick="pullUserEvent(currentLastEvent)">More Activities</div>
 		</div><!-- /content -->
 
 		<div data-role="footer" class="nav-glyphish-example" data-position="fixed" data-tap-toggle="false">
@@ -239,7 +240,7 @@
 	<!-- Page for displaying the list of my events -->
 	<div data-role="page" id="page-event-my-event" data-title="Yueme">
 
-		<div data-role="header">
+		<div data-role="header" data-position="fixed" data-tap-toggle="false" >
 			<h1>Activities</h1>
 			<a data-rel="back" href="#page-event" class="ui-btn-left ui-btn ui-btn-inline ui-corner-all" onclick="setCurrLocationHash('#page-event')">Back</a>
 		</div><!-- /header -->
@@ -320,10 +321,26 @@
 
 		<div role="main" class="ui-content">
 		<br>
-		<div align = "center">Are you sure to report this activity? You might not be able to cancel this action.</div>
+		<div align = "center" style="font-family: 'Open Sans';">Are you sure to report this activity? You might not be able to cancel this action.</div>
 		<br>
 			<a  data-rel="back" class="ui-btn ui-shadow ui-corner-all ui-btn-a ui-custom-report">Confirm</a>
 			<a  data-rel="back" class="ui-btn ui-shadow ui-corner-all ui-btn-a" onclick="$('#send-comment-bar').fadeIn();">Cancel</a>
+		</div>
+	</div>
+
+	<!-- page for delete confirm pop up  -->
+	<div data-role="page" id="page-event-delete" data-title="Yueme">
+
+		<div data-role="header" data-theme="b">
+		<h1>Delete Activity</h1>
+		</div>
+
+		<div role="main" class="ui-content">
+		<br>
+		<div align = "center" style="font-family: 'Open Sans';">Are you sure to delete this activity? You might not be able to undo this action.</div>
+		<br>
+			<a  data-rel="back" class="ui-btn ui-shadow ui-corner-all ui-btn-a ui-custom-delete-confirm">Confirm</a>
+			<a  data-rel="back" class="ui-btn ui-shadow ui-corner-all ui-btn-a" onclick="setCurrLocationHash('#page-event-detail');">Cancel</a>
 		</div>
 	</div>
 
@@ -406,7 +423,7 @@
 	<!-- Page for displaying the chat list -->
 	<div data-role="page" id="page-chat" data-title="Yueme">
 
-		<div data-role="header">
+		<div data-role="header" data-position="fixed" data-tap-toggle="false" >
 			<h1>Chats</h1>
 		</div><!-- /header -->
 
@@ -426,7 +443,7 @@
 	</div><!-- /page -->
 
 	<!-- Page for displaying the messages of a chat -->
-	<div data-role="page" id="page-chat-messages" data-transition="none" data-title="Yueme" data-add-back-btn="true">
+	<div data-role="page" id="page-chat-messages" data-title="Yueme" data-add-back-btn="true">
 
 		<div data-role="header" data-position="fixed" data-tap-toggle="false" >
 			<h1 id='chat-messages-title'></h1>

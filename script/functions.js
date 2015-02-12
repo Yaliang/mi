@@ -79,7 +79,9 @@ function loginByLocalStorage(){
 			$.mobile.loading("show");
 			pullUserEvent();
 			if (!pullNotificationRunning) {
-				pullNotification();
+				setTimeout(function(){
+					pullNotification();
+				},5000);
 			}
 			ParsePullAllFriendObjectById(Parse.User.current().id);
 			ParsePullMyChat(Parse.User.current().id,"updatedAt",function(){});
@@ -371,20 +373,28 @@ function pullUserEventHolderInfo(holder, eventId){
 	//ParseGetProfile(holder, displayFunction, eventId);
 }
 
-function pullUserEvent(){
+var currentLastEvent;
+function pullUserEvent(beforeAt){
+	currentLastEvent = new Date;
 	var limitNumber = 15;
 	var descendingOrderKey = "createdAt";
 	//var ascendingOrderKey = "createdAt";
-	$("#event-content").addClass("ui-hidden-accessible");
-	setTimeout(function(){
-		$.mobile.loading("show");
-	},10);	
+	if (typeof(beforeAt) == "undefined") {
+		$("#event-content").addClass("ui-hidden-accessible");
+		setTimeout(function(){
+			$.mobile.loading("show");
+		},350);	
+	}
 	var displayFunction = function(objects){
 		var currentUser = Parse.User.current();
 		var owner = currentUser.getUsername();
 		pullLastItem = 3 * objects.length;
-		for (var i=objects.length-1; i >= 0; i--) {
+		if (objects.length < limitNumber)
+			$(".ui-load-more-activity").html("No More Activities");
+		for (var i=0; i <= objects.length-1; i++) {
 			if ($("#"+objects[i].id).length == 0) {
+				if (Date.parse(currentLastEvent) > Date.parse(objects[i].createdAt))
+					currentLastEvent = objects[i].createdAt
 				var title = objects[i].get("title");
 				var location = objects[i].get("location");
 				var time = objects[i].get("time");
@@ -418,7 +428,7 @@ function pullUserEvent(){
 				newElement = newElement + "</div>";
 				newElement = newElement + "</div>";
 				newElement = newElement + "</div>";
-				$("#event-content").prepend(newElement);
+				$(".ui-load-more-activity").before(newElement);
 				// display event holder's name | not the email one
 				pullUserEventHolderInfo(holder, id);
 				// check if owner has interested this event
@@ -458,7 +468,7 @@ function pullUserEvent(){
 			}
 		}
 	};
-	ParsePullEvent(null, limitNumber, descendingOrderKey, "public", displayFunction);
+	ParsePullEvent(null, limitNumber, descendingOrderKey, "public", beforeAt, displayFunction);
 }
 
 // convert ISO time format to relative time
@@ -502,6 +512,22 @@ function convertTime(rawTime){
 	return showtime
 }
 
+function buildCommentInEventDetail(object){
+	var commentId = object.id;
+	var ownerName = object.get("ownerName");
+	var text = object.get('content');
+	var time = object.createdAt;
+
+	var newElement = "";
+	newElement += "<div id='comment-"+commentId+"' class='ui-custom-comment-left'>";
+	newElement += "<div class='ui-comment-owner'>"+ownerName+"</div>";
+	newElement += "<div class='ui-comment-time'>"+convertTime(time)+"</div>";
+	newElement += "<div class='ui-comment-content'>"+text+"</div>";
+	newElement += "</div>";
+
+	return newElement;
+}
+
 // update the detail of event when the user clicked to the page-event-detail
 function updateEventDetail(id){
 	$("#event-detail-content").html("");
@@ -542,21 +568,39 @@ function updateEventDetail(id){
 	};
 	ParseSelectEvent(id, displayFunction);
 
-	displayFunction = function(objects){
-		$("#event-detail-content").append("<ul id='event-commnets-list' data-role='listview' data-inset='true' class='ui-listview ui-listview-inset ui-corner-all ui-shadow'></ul>")
-		
-		for (var i=objects.length-1; i>=0; i--) {
-			var ownerName = objects[i].get("ownerName");
-			var content = objects[i].get("content");
-			var newElement = "<li>";
-			newElement = newElement + "<a href='#' class='ui-btn'>"
-			newElement = newElement + "<p><strong>"+ownerName+": </strong>"+content+"</p>";
-			newElement = newElement + "<p><strong>"+convertTime(objects[i].createdAt)+"</strong></p>"
-			newElement = newElement + "</a></li>";
-			$("#event-commnets-list").prepend(newElement);
+	var displayFunction = function(objects) {
+		$("#event-detail-content").append("<div id='event-commnets-list' class='ui-custom-comment-container'></div>")
+
+		for (var i=0; i<=objects.length-1; i++) {
+			var newElement = buildCommentInEventDetail(objects[i]);
+			$("#event-commnets-list").append(newElement);
+			var displayFunction = function(object, data) {
+				var photo120 = object.get("profilePhoto120");
+				if (typeof(photo120) == "undefined") {
+					photo120 = "./content/png/Taylor-Swift.png";
+				}
+				$("#comment-"+data.commentId).css("backgroundImage", "url("+photo120+")")
+			}
+			CacheGetProfilePhotoByUsername(objects[i].get('owner'), displayFunction, {commentId: objects[i].id});
 		}
-	};
+	}
 	ParsePullEventComment(id, descendingOrderKey, displayFunction);
+
+	// displayFunction = function(objects){
+	// 	$("#event-detail-content").append("<ul id='event-commnets-list' data-role='listview' data-inset='true' class='ui-listview ui-listview-inset ui-corner-all ui-shadow'></ul>")
+		
+	// 	for (var i=objects.length-1; i>=0; i--) {
+	// 		var ownerName = objects[i].get("ownerName");
+	// 		var content = objects[i].get("content");
+	// 		var newElement = "<li>";
+	// 		newElement = newElement + "<a href='#' class='ui-btn'>"
+	// 		newElement = newElement + "<p><strong>"+ownerName+": </strong>"+content+"</p>";
+	// 		newElement = newElement + "<p><strong>"+convertTime(objects[i].createdAt)+"</strong></p>"
+	// 		newElement = newElement + "</a></li>";
+	// 		$("#event-commnets-list").prepend(newElement);
+	// 	}
+	// };
+	// ParsePullEventComment(id, descendingOrderKey, displayFunction);
 }
 
 // send comment to database
@@ -592,7 +636,7 @@ function sendComment(){
 
 var selectedElement="";
 var animateDuration=150;
-function pullMyEvent(){
+function pullMyEvent(beforeAt){
 	var currentUser = Parse.User.current();
 	var owner = currentUser.getUsername();
 	var descendingOrderKey = "createdAt";
@@ -610,7 +654,7 @@ function pullMyEvent(){
 				var id = objects[i].id;
 				var newElement = "";
 				newElement = newElement + "<div id='my-"+id+"'>";
-				newElement = newElement + "<div class='custom-corners'>";
+				newElement = newElement + "<div class='custom-corners custom-corners-public'>";
 				newElement = newElement + "<div class='ui-body ui-body-a'>";
 				newElement = newElement + "<p class='ui-custom-event-title'>" + title + "</p>";
 				if (location.length > 0) {
@@ -627,7 +671,8 @@ function pullMyEvent(){
 				newElement = newElement + "<div id='my-comment-statistics-"+id+"' class='event-statistics'>" + commentNumber + " Comments</div><div id='my-interest-statistics-"+id+"' class='event-statistics'>" + interestNumber + " Interests</div>";
 				newElement = newElement + "</div>";
 				newElement = newElement + "<div class='ui-footer ui-bar-custom'>"
-				newElement = newElement + "<div class='ui-custom-float-left'><a href='#page-event-detail' data-transition='slide' class='ui-btn ui-bar-btn-custom ui-mini ui-icon-custom-comment' id='my-comment-button-"+id+"' onclick=\"updateEventDetail('"+id+"')\">"+"Detail"+"</a></div>";
+				newElement = newElement + "<div class='ui-custom-float-left'><a href='#page-event-detail' data-transition='slide' class='ui-btn ui-bar-btn-custom ui-mini ui-icon-custom-comment' id='my-comment-button-"+id+"' onclick=\"updateEventDetail('"+id+"'); setCurrLocationHash('#page-event-delete')\">"+"Detail"+"</a></div>";
+				newElement = newElement + "<div class='ui-custom-float-left'><a href='#page-event-delete' data-transition='slideup' class='ui-btn ui-bar-btn-custom ui-mini ui-icon-custom-delete' id='my-comment-button-"+id+"' onclick=\"deleteMyEvent('"+id+"'); setCurrLocationHash('#page-event-delete')\">"+"Delete"+"</a></div>";
 				//newElement = newElement + "<div class='ui-block-c'><a href='#' class='ui-btn ui-mini ui-btn-icon-left' id='my-delete-button-"+id+"' onclick=\"deleteMyEvent('"+id+"')\">"+'delete'+"</a></div>";
 				newElement = newElement + "</div>";
 				newElement = newElement + "</div>";
@@ -665,7 +710,7 @@ function pullMyEvent(){
 						duration: animateDuration,
 					});
 					$(this).children(".ui-custom-delete-btn").css({
-						"height": ($(this).height()-6.4).toString()+"px",
+						"height": ($(this).height()).toString()+"px",
 						"top": (-$(this).height()-6.4).toString()+"px",
 						"marginBottom": (-$(this).height()+6.4).toString()+"px",
 						"width":"72px"
@@ -749,7 +794,7 @@ function pullMyEvent(){
 			}
 		};
 	};
-	ParsePullEvent(owner, null, descendingOrderKey, null, displayFunction);
+	ParsePullEvent(owner, null, descendingOrderKey, null, beforeAt, displayFunction);
 }
 
 function addInterestEvent(eventId){
@@ -806,13 +851,16 @@ function sendToolbarActiveKeyboard(id){
 }
 
 function deleteMyEvent(eventId){
-	var displayFunction = function(eventId){
-		$("#my-"+eventId).slideUp("fast", function(){
-			$("#"+eventId).remove();
-			$("#my-"+eventId).remove();
-		});
-	};
-	ParseDeleteEvent(eventId, displayFunction);
+	$(".ui-custom-delete-confirm").click(function(){
+		var displayFunction = function(eventId){
+			$("#my-"+eventId).slideUp("fast", function(){
+				$("#"+eventId).remove();
+				$("#my-"+eventId).remove();
+			});
+		};
+		ParseDeleteEvent(eventId, displayFunction);
+	});
+	
 }
 
 var refreshPreviewPhoto = false;
@@ -1466,7 +1514,7 @@ function startPrivateChat(friendId){
 					};
 					CacheGetProfilePhoto(objects[i].get('senderId'), displayFunction, {messageId: objects[i].id});
 				}
-				$.mobile.changePage( "#page-chat-messages", { transition: "slide"});
+				$.mobile.changePage( "#page-chat-messages");
 				setTimeout(function(){
 					$("html body").animate({ scrollTop: $(document).height().toString()+"px" }, {
 						duration: 500,
