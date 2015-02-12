@@ -747,6 +747,7 @@ textarea {
 	text-decoration: initial;
 	font-weight: 300!important;
 	margin: 3em 0 0 0;
+	clear: both;
 	display: block;
 }
 
