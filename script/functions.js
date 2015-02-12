@@ -313,7 +313,7 @@ function createUserEvent(){
 	var visibility = $("#event-create-visibility").val()=="on" ? true : false ;
 	var description = $("#event-create-description").val();
 	var errorObject = $("#event-error");
-	var destID = "page-event";
+	var destID = "#page-event";
 	var clearFunction = function(){
 		$("#event-create-title").val("");
 		$("#event-create-location").val("");
