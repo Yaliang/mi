@@ -10,7 +10,7 @@ function ParseSignup(username, password, email, name, errorObject, destID, custo
 	user.signUp(null, {
 		success: function(user) {
             setCurrLocationHash(destID);
-			window.location.hash = destID;
+            $.mobile.changePage("#"+destID);//			window.location.hash = destID;
 			customFunction(user);
 		},
 		error: function(user,error) {
@@ -41,7 +41,8 @@ function ParseLogin(username, password, errorObject, destID, customFunction) {
 	Parse.User.logIn(username,password,{
 		success: function(user){
             setCurrLocationHash(destID);
-			window.location.hash = destID;
+
+			$.mobile.changePage("#"+destID); //window.location.hash = destID;
 			customFunction();
 			CacheUpdateUser(user);
 		},
@@ -87,7 +88,7 @@ function ParseRemoveCurrentBridgeitId() {
 function ParseLogout(destID) {
 	Parse.User.logOut();
     setCurrLocationHash(destID);
-	window.location.hash = destID;
+    $.mobile.changePage("#"+destID); //	window.location.hash = destID;
 }
 
 function ParseUpdateCurrentUser(successFunction, errorFunction) {
@@ -120,7 +121,7 @@ function ParseEventCreate(owner, title, location, time, visibility, description,
 	userEvent.save(null, {
 		success: function(userEvent) {
 			clearFunction();
-			window.location.hash = destID;
+			$.mobile.changePage("#"+destID); //			window.location.hash = destID;
 		},
 		error: function(userEvent, error){
 			errorObject.html("Error: " + error.code + " " + error.message);

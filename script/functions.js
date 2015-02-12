@@ -55,13 +55,13 @@ $(document).ready(function (){
 
         // in user session
         if (currHash == "#page-login" && (preHash != "#page-loading" && preHash != "#page-login" && preHash != "#page-signup")) {
-            window.location.hash = "#page-event";
+            $.mobile.changePage("#page-event"); // window.location.hash = "#page-event";
             currLocationHash = "#page-event";
         }
 
         // out of user session
         if (currHash == "#page-setting" && (preHash == "#page-loading" || preHash == "#page-login" || preHash == "#page-signup")) {
-            window.location.hash = "#page-login";
+            $.mobile.changePage("#page-login"); // window.location.hash = "#page-login";
             currLocationHash = "#page-login";
         }
     });
@@ -75,7 +75,7 @@ function loginByLocalStorage(){
 	if (currentUser) {
 		var successFunction = function() {
             setCurrLocationHash('#page-event');
-			window.location.hash = "#page-event";
+			$.mobile.changePage("#page-event"); // window.location.hash = "#page-event";
 			$.mobile.loading("show");
 			pullUserEvent();
 			if (!pullNotificationRunning) {
@@ -86,7 +86,7 @@ function loginByLocalStorage(){
 		};
 		var errorFunction = function() {
             setCurrLocationHash('#page-login');
-			window.location.hash = "#page-login";
+			$.mobile.changePage("#page-login"); // window.location.hash = "#page-login";
 		};
 		ParseUpdateCurrentUser(successFunction, errorFunction);
 	} else {
@@ -108,21 +108,21 @@ function loginByLocalStorage(){
 		}
 		$('#page-loading').click(function(){
             setCurrLocationHash('#page-login');
-			window.location.hash = "page-login";
+			$.mobile.changePage("#page-login"); //window.location.hash = "page-login";
 			//$('#page-loading').unbind("click");
 			//$('#page-loading').unbind("swiperight");
 			//$('#page-loading').unbind("swipeleft");
 		});
 		$('#page-loading').on('swiperight',function(){
             setCurrLocationHash('#page-login');
-			window.location.hash = "page-login";
+			$.mobile.changePage("#page-login"); //window.location.hash = "page-login";
 			//$('#page-loading').unbind("click");
 			//$('#page-loading').unbind("swiperight");
 			//$('#page-loading').unbind("swipeleft");
 		});
 		$('#page-loading').on('swipeleft',function(){
             setCurrLocationHash('#page-login');
-			window.location.hash = "page-login";
+			$.mobile.changePage("#page-login"); //window.location.hash = "page-login";
 			//$('#page-loading').unbind("click");
 			//$('#page-loading').unbind("swiperight");
 			//$('#page-loading').unbind("swipeleft");
@@ -401,7 +401,7 @@ function pullUserEvent(){
 				newElement = newElement + "<div><strong id=\'"+id+"-owner-name\'></strong></div>";
 				newElement = newElement + "<div id=\'"+id+"-owner-gender\' class=\'ui-icon-custom-gender\'></div>";
 				newElement = newElement + "</div>";
-				newElement = newElement + "<div class='ui-body ui-body-a' style='cursor:pointer' onclick=\"window.location.hash = \'page-event-detail\';updateEventDetail('"+id+"')\">";
+				newElement = newElement + "<div class='ui-body ui-body-a' style='cursor:pointer' onclick=\"$.mobile.changePage(\'#page-event-detail\');updateEventDetail('"+id+"')\">";
 				newElement = newElement + "<p class='ui-custom-event-title'>" + title + "</p>";
 				if (description.length == 0) {
 					newElement = newElement + "<p class='ui-custom-event-description-less-margin'></br></p>";
@@ -1662,7 +1662,7 @@ function reportActivity(id){
 	var hiddenUserEvent = function(object){
 		var id = object.id;
 		$("#" + id).remove();
-		window.location.hash = "#page-event";
+		$.mobile.changePage("#page-event");//window.location.hash = "#page-event";
 	}
 	ParseUpdateReport(id, hiddenUserEvent);	
 }
