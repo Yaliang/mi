@@ -338,13 +338,13 @@ function pullUserEventHolderInfo(holder, eventId){
 
 		$("#"+eventId+"-owner-name").html(name);
 		if (typeof(gender) == 'undefined') {
-			//$("#"+eventId+"-owner-genger").html(gender.toString());
+			//$("#"+eventId+"-owner-gender").html(gender.toString());
 		} else if (gender) {
-			$("#"+eventId+"-owner-genger").css("backgroundImage","url('./content/customicondesign-line-user-black/png/male-white-20.png')");
-			$("#"+eventId+"-owner-genger").css("backgroundColor","#8970f1");
+			$("#"+eventId+"-owner-gender").css("backgroundImage","url('./content/customicondesign-line-user-black/png/male-white-20.png')");
+			$("#"+eventId+"-owner-gender").css("backgroundColor","#8970f1");
 		} else {
-			$("#"+eventId+"-owner-genger").css("backgroundImage","url('./content/customicondesign-line-user-black/png/female1-white-20.png')");
-			$("#"+eventId+"-owner-genger").css("backgroundColor","#f46f75");
+			$("#"+eventId+"-owner-gender").css("backgroundImage","url('./content/customicondesign-line-user-black/png/female1-white-20.png')");
+			$("#"+eventId+"-owner-gender").css("backgroundColor","#f46f75");
 		}
 		
 		pullLastItem = pullLastItem - 1;
@@ -367,7 +367,7 @@ function pullUserEventHolderInfo(holder, eventId){
 		};
 		CacheGetProfilePhoto(userId, displayFunction, data);
 	};
-	CacheGetProfileByUsername(holder, displayFunction, {eventId : eventId})
+	CacheGetProfileByUsername(holder, displayFunction, {eventId : eventId});
 	//ParseGetProfile(holder, displayFunction, eventId);
 }
 
@@ -395,11 +395,11 @@ function pullUserEvent(){
 				var holder = objects[i].get("owner");
 				var id = objects[i].id;
 				var newElement = "";
-				newElement = newElement + "<div id='"+id+"'>";
+				newElement = newElement + "<div id=\'"+id+"\'>";
 				newElement = newElement + "<div class='custom-corners-public custom-corners'>";
 				newElement = newElement + "<div class='ui-bar ui-bar-a'>";
-				newElement = newElement + "<div><strong id='"+id+"-owner-name'></strong></div>";
-				newElement = newElement + "<div id='"+id+"-owner-genger' class='ui-icon-custom-gender'></div>";
+				newElement = newElement + "<div><strong id=\'"+id+"-owner-name\'></strong></div>";
+				newElement = newElement + "<div id=\'"+id+"-owner-gender\' class=\'ui-icon-custom-gender\'></div>";
 				newElement = newElement + "</div>";
 				newElement = newElement + "<div class='ui-body ui-body-a' style='cursor:pointer' onclick=\"window.location.hash = \'page-event-detail\';updateEventDetail('"+id+"')\">";
 				newElement = newElement + "<p class='ui-custom-event-title'>" + title + "</p>";
@@ -514,34 +514,34 @@ function updateEventDetail(id){
 		var time = object[0].get("time");
 		var visibility = object[0].get("visibility");
 		var description = object[0].get("description");
+        var holder = object[0].get("owner");
 		var id = object[0].id;
+
 		var newElement = "";
 		newElement = newElement + "<div id=event-detail-'"+id+"'>";
-		newElement = newElement + "<div class='ui-corner-all custom-corners custom-corners-detail'>";
+        newElement = newElement + "<div class='ui-corner-all custom-corners custom-corners-detail'>";
 		newElement = newElement + "<div class='ui-body ui-body-a'>";
 		newElement = newElement + "<p class='ui-custom-event-title'>" + title + "</p>";
-		if (location.length > 0) {
-			newElement = newElement + "<p class='ui-custom-event-location'>" + location + "</p>";
-		}
-		if (time.length > 0) {
-			newElement = newElement + "<p class='ui-custom-event-time'>" + time + "</p>";
-		}
-		if ((location.length == 0) && (time.length == 0)) {
-			newElement = newElement + "<p class='ui-custom-event-description-less-margin'>" + description.replace("\n","</br>") + "</p>";
-		} else {
-			newElement = newElement + "<p class='ui-custom-event-description'>" + description.replace("\n","</br>") + "</p>";
-		}
+        if (description.length == 0) {
+            newElement = newElement + "<p class='ui-custom-event-description-less-margin'>" + description.replace("\n","</br>") + "</p>";
+        } else {
+            newElement = newElement + "<p class='ui-custom-event-description'>" + description.replace("\n","</br>") + "</p>";
+        }
+		newElement = newElement + "<p class='ui-custom-event-location'>" + location + "</p>";
+		newElement = newElement + "<p class='ui-custom-event-time'>" + time + "</p>";
 		//newElement += "<br><p class = 'ui-custom-event-activityreport' onclick ='$(\".ui-custom-report\").click(reportActivity(\""+id+"\"))'>Report</p>";
 		newElement += "<a href='#page-event-report' role='button' class='ui-custom-event-activityreport' data-transition='slideup' onclick='$(\"#send-comment-bar\").fadeOut();'>Report</a>";
 		newElement = newElement + "</div>";
 		newElement = newElement + "</div>";
 		newElement = newElement + "</div>";
+
 		$("#event-detail-content").prepend(newElement);
 		$(".ui-custom-report").on("click",function(){
 			reportActivity(id);
-		})
-	}
+		});
+	};
 	ParseSelectEvent(id, displayFunction);
+
 	displayFunction = function(objects){
 		$("#event-detail-content").append("<ul id='event-commnets-list' data-role='listview' data-inset='true' class='ui-listview ui-listview-inset ui-corner-all ui-shadow'></ul>")
 		
@@ -555,7 +555,7 @@ function updateEventDetail(id){
 			newElement = newElement + "</a></li>";
 			$("#event-commnets-list").prepend(newElement);
 		}
-	}
+	};
 	ParsePullEventComment(id, descendingOrderKey, displayFunction);
 }
 
@@ -569,7 +569,7 @@ function sendComment(){
 		return;
 	$("#comment-content").val("");
 	if (content.length==0)
-		return
+		return;
 	var errorFunction = function(error){
 		$.mobile.loading( 'show', {
 			text: error,
@@ -1025,7 +1025,7 @@ function buildUserListElement(object, liIdPrefix, lat, lng, type) {
 	newElement += "<div><strong>"+name+"</strong></div>";
 	newElement += "<div class='ui-icon-custom-gender' style='";
 	if (typeof(gender) == 'undefined') {
-		//$("#"+eventId+"-owner-genger").html(gender.toString());
+		//$("#"+eventId+"-owner-gender").html(gender.toString());
 	} else if (gender) {
 		newElement += "background-image:url("+"./content/customicondesign-line-user-black/png/male-white-20.png"+");";
 		newElement += "background-color:"+"#8970f1"+";";
