@@ -105,6 +105,30 @@ function CacheGetProfilePhoto(userId, displayFunction, data) {
 	}
 }
 
+function CacheGetProfilePhotoByUsername(username, displayFunction, data) {
+	var cached = false;
+	var userId = null;
+	for (var i = 0; i < cacheUser.length; i++) {
+		if (cacheUser[i].get('username') == username) {
+			userId = cacheUser[i].id;
+			break;
+		}
+	}
+	if (userId != null) {
+		for (var i = 0; i < cachePhoto.length; i++) {
+			if (cachePhoto[i].get('userId') == userId) {
+				displayFunction(cachePhoto[i], data);
+				cached = true;
+				break;
+			}
+		}
+	}
+	if (!cached) {
+		console.log("Photo miss: "+username);
+		ParseGetProfilePhotoByUsername(username, displayFunction, data);
+	}
+}
+
 function CacheUpdatePhoto(object){
 	if (typeof(object) == "undefined")
 		return
