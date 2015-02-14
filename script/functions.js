@@ -98,36 +98,30 @@ function loginByLocalStorage(){
 		if (window_width/window_height > 1) {
 			$('.loading-page-image').append("<div class='loading-page-button-top'>Join Us.</div>");
 			$('.loading-page-button-top').css("marginLeft", Math.round(($(".loading-page-image").width()-93-44)/2).toString()+"px");
-			// setTimeout(function(){
-			// 	$('.loading-page-button-top').html("Join Us.</br>Today!");
-			// },2000);
 		} else {
 			$('.loading-page-image').append("<div class='loading-page-button-bottom'>Join Us.</div>");			
 			$('.loading-page-button-bottom').css("marginLeft", Math.round(($(".loading-page-image").width()-93-44)/2).toString()+"px");
-			// setTimeout(function(){
-			// 	$('.loading-page-button-bottom').html("Join Us.</br>Today!");
-			// },2000);
 		}
 		$('#page-loading').click(function(){
             setCurrLocationHash('#page-login');
 			$.mobile.changePage("#page-login"); //window.location.hash = "page-login";
-			//$('#page-loading').unbind("click");
-			//$('#page-loading').unbind("swiperight");
-			//$('#page-loading').unbind("swipeleft");
+			$('#page-loading').unbind("click");
+			$('#page-loading').unbind("swiperight");
+			$('#page-loading').unbind("swipeleft");
 		});
 		$('#page-loading').on('swiperight',function(){
             setCurrLocationHash('#page-login');
 			$.mobile.changePage("#page-login"); //window.location.hash = "page-login";
-			//$('#page-loading').unbind("click");
-			//$('#page-loading').unbind("swiperight");
-			//$('#page-loading').unbind("swipeleft");
+			$('#page-loading').unbind("click");
+			$('#page-loading').unbind("swiperight");
+			$('#page-loading').unbind("swipeleft");
 		});
 		$('#page-loading').on('swipeleft',function(){
             setCurrLocationHash('#page-login');
 			$.mobile.changePage("#page-login"); //window.location.hash = "page-login";
-			//$('#page-loading').unbind("click");
-			//$('#page-loading').unbind("swiperight");
-			//$('#page-loading').unbind("swipeleft");
+			$('#page-loading').unbind("click");
+			$('#page-loading').unbind("swiperight");
+			$('#page-loading').unbind("swipeleft");
 		});
 	}
 }
@@ -382,7 +376,9 @@ function pullUserEvent(beforeAt){
 	if (typeof(beforeAt) == "undefined") {
 		$("#event-content").addClass("ui-hidden-accessible");
 		setTimeout(function(){
-			$.mobile.loading("show");
+			if (pullLastItem > 0) {
+				$.mobile.loading("show");
+			}
 		},350);	
 	}
 	var displayFunction = function(objects){
@@ -860,7 +856,6 @@ function deleteMyEvent(eventId){
 		};
 		ParseDeleteEvent(eventId, displayFunction);
 	});
-	
 }
 
 var refreshPreviewPhoto = false;
@@ -1023,7 +1018,7 @@ function profilePhotoCrop(){
 		} else {
 			reader.readAsDataURL(file);
 		}
-	},{});	
+	},{});
 }
 
 var geoWatchId;
