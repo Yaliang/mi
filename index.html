@@ -326,7 +326,7 @@
 			<a  data-rel="back" class="ui-btn ui-shadow ui-corner-all ui-btn-a ui-custom-report">Confirm</a>
 			<a  data-rel="back" class="ui-btn ui-shadow ui-corner-all ui-btn-a" onclick="$('#send-comment-bar').fadeIn();">Cancel</a>
 		</div>
-		
+
 	</div><!-- /page -->
 
 	<!-- page for delete confirm pop up  -->
@@ -496,7 +496,7 @@
 			<div class="profile-photo-bar">
 				<label style='padding-left: 1em;' for="profilephoto">Photo:</label>
 				<canvas id="canvas-photo" class="profile-photo-preview" width="120px" height="120px"></canvas>
-				<input type="file" data-clear-btn="false" name="profilephoto" id="profile-edit-photo" value="">
+				<input type="file" data-clear-btn="false" name="profilephoto" id="profile-edit-photo" onclick="refreshPreviewPhoto = true; refreshPreviewCanvas();" value="">
 				<div id="photo-orientation" class="ui-hidden-accessible"></div>
 			</div>
 			<form style='padding: 1em;'>
