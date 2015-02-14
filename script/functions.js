@@ -370,13 +370,14 @@ function pullUserEventHolderInfo(holder, eventId){
 var currentLastEvent;
 function pullUserEvent(beforeAt){
 	currentLastEvent = new Date;
+	pullLastItem = -1;
 	var limitNumber = 15;
 	var descendingOrderKey = "createdAt";
 	//var ascendingOrderKey = "createdAt";
 	if (typeof(beforeAt) == "undefined") {
 		$("#event-content").addClass("ui-hidden-accessible");
 		setTimeout(function(){
-			if (pullLastItem > 0) {
+			if (pullLastItem != 0) {
 				$.mobile.loading("show");
 			}
 		},350);	
