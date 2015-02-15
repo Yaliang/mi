@@ -126,9 +126,8 @@ function loginByLocalStorage(){
 	}
 }
 
-var CGMId;
+var GCMId;
 var pullNotificationRunning = false;
-
 function pullNotification(){
 	var currentUser = Parse.User.current();
 	pullNotificationRunning = true;
@@ -596,22 +595,6 @@ function updateEventDetail(id){
 		}
 	}
 	ParsePullEventComment(id, descendingOrderKey, displayFunction);
-
-	// displayFunction = function(objects){
-	// 	$("#event-detail-content").append("<ul id='event-commnets-list' data-role='listview' data-inset='true' class='ui-listview ui-listview-inset ui-corner-all ui-shadow'></ul>")
-		
-	// 	for (var i=objects.length-1; i>=0; i--) {
-	// 		var ownerName = objects[i].get("ownerName");
-	// 		var content = objects[i].get("content");
-	// 		var newElement = "<li>";
-	// 		newElement = newElement + "<a href='#' class='ui-btn'>"
-	// 		newElement = newElement + "<p><strong>"+ownerName+": </strong>"+content+"</p>";
-	// 		newElement = newElement + "<p><strong>"+convertTime(objects[i].createdAt)+"</strong></p>"
-	// 		newElement = newElement + "</a></li>";
-	// 		$("#event-commnets-list").prepend(newElement);
-	// 	}
-	// };
-	// ParsePullEventComment(id, descendingOrderKey, displayFunction);
 }
 
 // send comment to database
@@ -687,115 +670,8 @@ function pullMyEvent(beforeAt){
 				//newElement = newElement + "<div class='ui-block-c'><a href='#' class='ui-btn ui-mini ui-btn-icon-left' id='my-delete-button-"+id+"' onclick=\"deleteMyEvent('"+id+"')\">"+'delete'+"</a></div>";
 				newElement = newElement + "</div>";
 				newElement = newElement + "</div>";
-				newElement = newElement + "<div class='ui-custom-delete-btn' onclick=\"deleteMyEvent('"+id+"')\"></div>"
 				newElement = newElement + "</div>";
 				$("#my-event-content").prepend(newElement);
-
-
-				$("#my-"+id).on("swipeleft", function (){
-					var id= $(this)[0].id;
-					if (selectedElement == id) {
-						return;
-					}
-					$("#"+selectedElement).animate({
-						marginLeft:"0%"
-					},{
-						duration: animateDuration,
-						complete: function(){
-							$(this).css("width","");
-						}
-					});
-					$("#"+selectedElement).children(".ui-custom-delete-btn").animate({
-						width:"0%"
-					},{
-						duration: animateDuration,
-						complete: function(){
-							$(this).css("height","");
-						}
-					});
-					var eventId = id.substring(3);
-					$(this).css("width","100%");
-					$(this).animate({
-						marginLeft:"-72px"
-					},{
-						duration: animateDuration,
-					});
-					$(this).children(".ui-custom-delete-btn").css({
-						"height": ($(this).height()).toString()+"px",
-						"top": (-$(this).height()-6.4).toString()+"px",
-						"marginBottom": (-$(this).height()+6.4).toString()+"px",
-						"width":"72px"
-					});
-					selectedElement = id;
-					$(window).scroll(function(){
-						$("#"+selectedElement).animate({
-							marginLeft:"0%"
-						},{
-							duration: animateDuration,
-							complete: function(){
-								$(this).css("width","");
-							}
-						});
-						$("#"+selectedElement).children(".ui-custom-delete-btn").animate({
-							width:"0%"
-						},{
-							duration: animateDuration,
-							complete: function(){
-								$(this).css("height","");
-							}
-						});
-						$("#page-event-my-event").not("#"+selectedElement).unbind("click");
-						$(window).unbind("scroll");
-						selectedElement = "";
-					});
-					$("#page-event-my-event").not("#"+selectedElement).click(function() {
-						$("#"+selectedElement).animate({
-							marginLeft:"0%"
-						},{
-							duration: animateDuration,
-							complete: function(){
-								$(this).css("width","");
-							}
-						});
-						$("#"+selectedElement).children(".ui-custom-delete-btn").animate({
-							width:"0%"
-						},{
-							duration: animateDuration,
-							complete: function(){
-								$(this).css("height","");
-							}
-						});
-						$("#page-event-my-event").not("#"+selectedElement).unbind("click");
-						$(window).unbind("scroll");
-						selectedElement = "";
-					});
-				});
-				$("#my-"+id).on("swiperight", function (){
-					if (selectedElement == "") {
-						return;
-					}
-					$("#"+selectedElement).animate({
-						marginLeft:"0%"
-					},{
-						duration: animateDuration,
-						complete: function(){
-							$(this).css("width","");
-						}
-					});
-					$("#"+selectedElement).children(".ui-custom-delete-btn").animate({
-						width:"0%"
-					},{
-						duration: animateDuration,
-						complete: function(){
-							$(this).css("height","");
-						}
-					});
-					$("#page-event-my-event").not("#"+selectedElement).unbind("click");
-					$(window).unbind("scroll");
-					selectedElement = "";
-				});
-
-
 			} else {
 				var commentNumber = objects[i].get("commentNumber");
 				var interestNumber = objects[i].get("interestNumber");
@@ -879,7 +755,7 @@ function refreshPreviewCanvas(){
 	if (refreshPreviewPhoto) {
 		setTimeout(function(){
 			refreshPreviewCanvas();
-		},1000);
+		},1500);
 	}
 }
 
