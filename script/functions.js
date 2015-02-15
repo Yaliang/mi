@@ -1604,7 +1604,7 @@ function reportActivity(id){
 function pushNotificationToDeviceByGCM(regId,message) {
 	var request="id="+regId+"&message="+message;//{id: regId, message: message};
 	//console.log(request);
-	$.post("https://yueme-push-server.herokuapp.com/",request)
+	$.post("https://yueme-push-server.herokuapp.com/gcm",request)
 		.done(function(data) {
 			//console.log(data);
 		});
