@@ -310,7 +310,7 @@ function createUserEvent(){
 	var description = $("#event-create-description").val();
 	var errorObject = $("#event-error");
 	var destID = "#page-event";
-	var clearFunction = function(){
+	var displayFunction = function(object){
 		$("#event-create-title").val("");
 		$("#event-create-location").val("");
 		$("#event-create-start-time").val("");
@@ -318,9 +318,15 @@ function createUserEvent(){
 		$("#event-create-description").val("");
 		$("#event-create-visibility").val("on").flipswitch('refresh');
 		$("#event-create-error").html("");
-		pullUserEvent();
+		//pullUserEvent();
+		var id = object.id;
+		var holder = object.get("owner");
+		var newElement = buildUserEventElement(object);
+		$("#event-content").prepend(newElement);
+		// display event holder's name | not the email one
+		pullUserEventHolderInfo(holder, id);
 	};
-	ParseEventCreate(owner, title, location, time, visibility, description, errorObject, destID, clearFunction);
+	ParseEventCreate(owner, title, location, time, visibility, description, errorObject, destID, displayFunction);
 }
 
 var pullLastItem=0;
@@ -367,6 +373,44 @@ function pullUserEventHolderInfo(holder, eventId){
 	//ParseGetProfile(holder, displayFunction, eventId);
 }
 
+function buildUserEventElement(object){
+	var title = object.get("title");
+	var location = object.get("location");
+	var time = object.get("time");
+	var visibility = object.get("visibility");
+	var description = object.get("description");
+	var interestNumber = object.get("interestNumber");
+	var commentNumber = object.get("commentNumber");
+	var holder = object.get("owner");
+	var id = object.id;
+	var newElement = "";
+	newElement = newElement + "<div id=\'"+id+"\'>";
+	newElement = newElement + "<div class='custom-corners-public custom-corners'>";
+	newElement = newElement + "<div class='ui-bar ui-bar-a'>";
+	newElement = newElement + "<div><strong id=\'"+id+"-owner-name\'></strong></div>";
+	newElement = newElement + "<div id=\'"+id+"-owner-gender\' class=\'ui-icon-custom-gender\'></div>";
+	newElement = newElement + "</div>";
+	newElement = newElement + "<div class='ui-body ui-body-a' style='cursor:pointer' onclick=\"$.mobile.changePage(\'#page-event-detail\');updateEventDetail('"+id+"')\">";
+	newElement = newElement + "<p class='ui-custom-event-title'>" + title + "</p>";
+	if (description.length == 0) {
+		newElement = newElement + "<p class='ui-custom-event-description-less-margin'></br></p>";
+	} else {
+		newElement = newElement + "<p class='ui-custom-event-description'>" +  description.replace("\n","</br>") + "</p>";
+	}
+	newElement = newElement + "<p class='ui-custom-event-location'>" + location + "</p>";
+	newElement = newElement + "<p class='ui-custom-event-time'>" + time + "</p>";
+	newElement = newElement + "<div id='comment-statistics-"+id+"' class='event-statistics' style='clear:both'>" + commentNumber + " Comments</div><div id='interest-statistics-"+id+"' class='event-statistics'>" + interestNumber + " Interests</div>";
+	newElement = newElement + "</div>";
+	newElement = newElement + "<div class='ui-footer ui-bar-custom'>";
+	newElement = newElement + "<div class='ui-custom-float-left'><a href='#page-event-detail' data-transition='slide' class='ui-btn ui-bar-btn-custom ui-mini ui-icon-custom-comment' id='comment-button-"+id+"' onclick=\"updateEventDetail('"+id+"')\">"+"Detail"+"</a></div>";
+	newElement = newElement + "<div class='ui-custom-float-left'><a href='#' class='ui-btn ui-bar-btn-custom ui-mini ui-icon-custom-favor-false' id='interest-button-"+id+"' >"+"Interest"+"</a></div>";
+	newElement = newElement + "</div>";
+	newElement = newElement + "</div>";
+	newElement = newElement + "</div>";
+
+	return newElement;
+}
+
 var currentLastEvent;
 function pullUserEvent(beforeAt){
 	currentLastEvent = new Date;
@@ -392,39 +436,9 @@ function pullUserEvent(beforeAt){
 			if ($("#"+objects[i].id).length == 0) {
 				if (Date.parse(currentLastEvent) > Date.parse(objects[i].createdAt))
 					currentLastEvent = objects[i].createdAt
-				var title = objects[i].get("title");
-				var location = objects[i].get("location");
-				var time = objects[i].get("time");
-				var visibility = objects[i].get("visibility");
-				var description = objects[i].get("description");
-				var interestNumber = objects[i].get("interestNumber");
-				var commentNumber = objects[i].get("commentNumber");
-				var holder = objects[i].get("owner");
 				var id = objects[i].id;
-				var newElement = "";
-				newElement = newElement + "<div id=\'"+id+"\'>";
-				newElement = newElement + "<div class='custom-corners-public custom-corners'>";
-				newElement = newElement + "<div class='ui-bar ui-bar-a'>";
-				newElement = newElement + "<div><strong id=\'"+id+"-owner-name\'></strong></div>";
-				newElement = newElement + "<div id=\'"+id+"-owner-gender\' class=\'ui-icon-custom-gender\'></div>";
-				newElement = newElement + "</div>";
-				newElement = newElement + "<div class='ui-body ui-body-a' style='cursor:pointer' onclick=\"$.mobile.changePage(\'#page-event-detail\');updateEventDetail('"+id+"')\">";
-				newElement = newElement + "<p class='ui-custom-event-title'>" + title + "</p>";
-				if (description.length == 0) {
-					newElement = newElement + "<p class='ui-custom-event-description-less-margin'></br></p>";
-				} else {
-					newElement = newElement + "<p class='ui-custom-event-description'>" +  description.replace("\n","</br>") + "</p>";
-				}
-				newElement = newElement + "<p class='ui-custom-event-location'>" + location + "</p>";
-				newElement = newElement + "<p class='ui-custom-event-time'>" + time + "</p>";
-				newElement = newElement + "<div id='comment-statistics-"+id+"' class='event-statistics' style='clear:both'>" + commentNumber + " Comments</div><div id='interest-statistics-"+id+"' class='event-statistics'>" + interestNumber + " Interests</div>";
-				newElement = newElement + "</div>";
-				newElement = newElement + "<div class='ui-footer ui-bar-custom'>";
-				newElement = newElement + "<div class='ui-custom-float-left'><a href='#page-event-detail' data-transition='slide' class='ui-btn ui-bar-btn-custom ui-mini ui-icon-custom-comment' id='comment-button-"+id+"' onclick=\"updateEventDetail('"+id+"')\">"+"Detail"+"</a></div>";
-				newElement = newElement + "<div class='ui-custom-float-left'><a href='#' class='ui-btn ui-bar-btn-custom ui-mini ui-icon-custom-favor-false' id='interest-button-"+id+"' >"+"Interest"+"</a></div>";
-				newElement = newElement + "</div>";
-				newElement = newElement + "</div>";
-				newElement = newElement + "</div>";
+				var holder = objects[i].get("owner");
+				var newElement = buildUserEventElement(objects[i]);
 				$(".ui-load-more-activity").before(newElement);
 				// display event holder's name | not the email one
 				pullUserEventHolderInfo(holder, id);
