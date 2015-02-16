@@ -1528,13 +1528,13 @@ function pullMyChat(){
 					} else {
 						$("#chat-"+data.chatId).append("<span class='ui-li-count'>"+unreadNum.toString()+"</span>");
 					}
-					updateLastMessage(groupId, data);
 				} else {
 					if (($("#chat-"+data.chatId+"> .ui-li-count").length > 0) && (unreadNum == 0)) {
 						$("#chat-"+data.chatId+"> .ui-li-count").remove();						
 						$("#chat-"+data.chatId+"> .chat-last-time").removeClass("chat-last-time-right-blank");
 					}
 				}
+				updateLastMessage(groupId, data);
 				// update photo and title 
 				/*var groupId = objects[i].get('groupId');
 				var successFunction = function(object, data){
