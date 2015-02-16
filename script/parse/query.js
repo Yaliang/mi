@@ -121,6 +121,9 @@ function ParseEventCreate(owner, title, location, time, visibility, description,
 	userEvent.save(null, {
 		success: function(userEvent) {
 			displayFunction(userEvent);
+			if(destID == "#page-event-my-event"){
+				pullMyEvent();
+			}
 			$.mobile.changePage(destID); //			window.location.hash = destID;
 		},
 		error: function(userEvent, error){
@@ -128,7 +131,6 @@ function ParseEventCreate(owner, title, location, time, visibility, description,
 		}
 	});
 }
-
 
 function ParseUpdateReport(id, hiddenUserEvent){
 	var UserEvent = Parse.Object.extend("UserEvent");
@@ -147,30 +149,38 @@ function ParseUpdateReport(id, hiddenUserEvent){
 	});
 }
 
-function ParsePullEvent(owner, limitNumber, descendingOrderKey, accessibility, beforeAt, displayFunction) {
+function ParsePullEvent(obj) {
+	//owner, limitNumber, descendingOrderKey, accessibility, beforeAt, displayFunction
 	var UserEvent = Parse.Object.extend("UserEvent");
 	var query = new Parse.Query(UserEvent);
-	if (owner != null) {
-		query.equalTo("owner",owner);
+	if (("owner" in obj) && (obj.owner != null)) {
+		query.equalTo("owner",obj.owner);
 	}else{
 		query.lessThan("reportNum", 11);
 		query.notEqualTo("reportUserId", Parse.User.current().id);
 	}
-	if (limitNumber != null) {
-		query.limit(limitNumber);
+	if (("limitNumber" in obj) && (obj.limitNumber != null)) {
+		query.limit(obj.limitNumber);
 	}
-	if (accessibility != null) {
-		if (accessibility == "public") {
+	if (("accessibility" in obj) && (obj.accessibility != null)) {
+		if (obj.accessibility == "public") {
 			query.equalTo("visibility",true);
 		}
 	}
-	query.descending(descendingOrderKey);
-	if ((typeof(beforeAt) != "undefined")&&(beforeAt != null)) {
-		query.lessThan("createdAt",beforeAt);
+	if (("descendingOrderKey" in obj) && (obj.descendingOrderKey != null)) {
+		query.descending(obj.descendingOrderKey);
+	}
+	
+	if (("beforeAt" in obj) && (typeof(obj.beforeAt) != "undefined") && (obj.beforeAt != null)) {
+		query.lessThan("createdAt",obj.beforeAt);
+	}
+	if(("eventId" in obj) && obj.eventId != null){
+		console.log(obj.eventId);	
+		query.equalTo("objectId", obj.eventId);
 	}
 	query.find({
 		success: function(userEvents) {
-			displayFunction(userEvents);
+			obj.displayFunction(userEvents);
 		}
 	});
 }

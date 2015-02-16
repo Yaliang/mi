@@ -241,7 +241,7 @@
 	<div data-role="page" id="page-event-my-event" data-title="Yueme">
 
 		<div data-role="header" data-position="fixed" data-tap-toggle="false" >
-			<h1>Activities</h1>
+			<h1>My Activities</h1>
 			<a data-rel="back" href="#page-event" class="ui-btn-left ui-btn ui-btn-inline ui-corner-all" onclick="setCurrLocationHash('#page-event')">Back</a>
 		</div><!-- /header -->
 
@@ -340,6 +340,82 @@
 		<div data-role="footer" data-position="fixed" data-tap-toggle="false">
 		</div><!-- /footer -->
 	</div><!-- /page -->
+
+
+
+	<!-- edit event -->
+	<div data-role="page" id="page-event-edit" data-title="Yueme">
+
+		<div data-role="header">
+			<h1>Edit Activity</h1>
+
+	<!-- update activity -->
+	<div data-role="page" id="page-event-update" data-title="觅校缘">
+
+		<div data-role="header">
+			<h1>Update Activity</h1>
+
+			<a href="#page-event" class="ui-btn-left ui-btn ui-btn-inline ui-corner-all" onclick="setCurrLocationHash('#page-event')">Cancel</a>
+		</div><!-- /header -->
+
+		<div role="main" class="ui-content">
+			<form id="event-create-form" style='padding: 1em '>
+				<label for="eventtitle">Title:</label>
+				<input type="text" data-clear-btn="true" name="eventtitle" id="event-edit-title" value="">
+				<label for="eventlocation">Location:</label>
+				<input type="text" data-clear-btn="ture" name="eventlocation" id="event-edit-location" value="">
+				<label for="eventstarttime">Start Time:</label>
+				<input type="datetime-local" data-clear-btn="ture" name="eventstarttime" id="event-edit-startTime" value="">
+				<label for="eventendtime">End Time:</label>
+				<input type="datetime-local" data-clear-btn="ture" name="eventendtime" id="event-edit-endTime" value="">
+				<label for="eventvisibility">Visibility:</label>
+				<select name="eventvisibility" id="event-edit-visibility" data-role="flipswitch" data-wrapper-class="custom-size-flipswitch-event-create-visibility" checked="">
+				<input type="text" data-clear-btn="true" name="eventtitle" id="event-create-title" value="">
+				<label for="eventlocation">Location:</label>
+				<input type="text" data-clear-btn="ture" name="eventlocation" id="event-create-location" value="">
+				<label for="eventstarttime">Start Time:</label>
+				<input type="datetime-local" data-clear-btn="ture" name="eventstarttime" id="event-create-startTime" value="">
+				<label for="eventendtime">End Time:</label>
+				<input type="datetime-local" data-clear-btn="ture" name="eventendtime" id="event-create-endTime" value="">
+				<label for="eventvisibility">Visibility:</label>
+				<select name="eventvisibility" id="event-create-visibility" data-role="flipswitch" data-wrapper-class="custom-size-flipswitch-event-create-visibility" checked="">
+
+					<option value="off">Friends</option>
+					<option value="on" selected="">Public</option>
+				</select>
+				<!-- flyer will comming later 
+					<label for="eventflyer">Flyer:</label>
+					<input type="file" name="eventflyer" accept="image/*" capture>
+				-->
+				<!-- label of event will comming later 
+				-->
+				<label for="eventdescription">Description:</label>
+
+				<textarea name="eventdescription" id="event-edit-description"></textarea>
+
+				<textarea name="eventdescription" id="event-create-description"></textarea>
+
+			</form>
+
+			<div id="event-create-preview"></div>
+			<div id="event-create-error"></div>
+
+
+            <button id="event-editsave-button" class="ui-btn">Save</button>
+
+            <button id="event-create-button" class="ui-btn">Create</button>
+
+
+		</div><!-- /content -->
+
+		<div data-role="footer" data-position="fixed" data-tap-toggle="false">
+		</div><!-- /footer -->
+	</div><!-- /page -->
+
+
+
+
+
 
 	<!-- Page for displaying the detail of an event -->
 	<div data-role="page" id="page-event-detail" data-title="Yueme" data-add-back-btn="true">
