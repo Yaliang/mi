@@ -477,7 +477,17 @@ function pullUserEvent(beforeAt){
 			}
 		}
 	};
-	ParsePullEvent(null, limitNumber, descendingOrderKey, "public", beforeAt, displayFunction);
+
+	ParsePullEvent({
+		// owner: owner,
+		limitNumber: limitNumber,
+		descendingOrderKey:descendingOrderKey,
+		accessibility: "public",
+		beforeAt: beforeAt,
+		displayFunction: displayFunction
+		// eventId: null
+	});
+	// ParsePullEvent(null, limitNumber, descendingOrderKey, "public", beforeAt, displayFunction);
 }
 
 // convert ISO time format to relative time
@@ -666,6 +676,8 @@ function pullMyEvent(beforeAt){
 				newElement = newElement + "<div class='ui-footer ui-bar-custom'>"
 				newElement = newElement + "<div class='ui-custom-float-left'><a href='#page-event-detail' data-transition='slide' class='ui-btn ui-bar-btn-custom ui-mini ui-icon-custom-comment' id='my-comment-button-"+id+"' onclick=\"updateEventDetail('"+id+"'); setCurrLocationHash('#page-event-delete')\">"+"Detail"+"</a></div>";
 				newElement = newElement + "<div class='ui-custom-float-left'><a href='#page-event-delete' data-transition='slideup' class='ui-btn ui-bar-btn-custom ui-mini ui-icon-custom-delete' id='my-comment-button-"+id+"' onclick=\"deleteMyEvent('"+id+"'); setCurrLocationHash('#page-event-delete')\">"+"Delete"+"</a></div>";
+				newElement = newElement + "<div class='ui-custom-float-left'><a href='#page-event-update' data-transition='slideup' class='ui-btn ui-bar-btn-custom ui-mini ui-icon-custom-edit' id='my-comment-button-"+id+"' onclick=\"editMyEvent('"+id+"'); setCurrLocationHash('#page-event-delete')\">"+"Edit"+"</a></div>";
+
 				//newElement = newElement + "<div class='ui-block-c'><a href='#' class='ui-btn ui-mini ui-btn-icon-left' id='my-delete-button-"+id+"' onclick=\"deleteMyEvent('"+id+"')\">"+'delete'+"</a></div>";
 				newElement = newElement + "</div>";
 				newElement = newElement + "</div>";
@@ -680,7 +692,16 @@ function pullMyEvent(beforeAt){
 			}
 		};
 	};
-	ParsePullEvent(owner, null, descendingOrderKey, null, beforeAt, displayFunction);
+	ParsePullEvent({
+		owner: owner,
+		// limitNumber: null,
+		descendingOrderKey:descendingOrderKey,
+		// accessibility: null,
+		beforeAt: beforeAt,
+		displayFunction: displayFunction
+		// eventId: null
+	});
+	// ParsePullEvent(owner, null, descendingOrderKey, null, beforeAt, displayFunction);
 }
 
 function addInterestEvent(eventId){
@@ -747,6 +768,110 @@ function deleteMyEvent(eventId){
 		ParseDeleteEvent(eventId, displayFunction);
 	});
 }
+
+function editMyEvent(eventId){
+	console.log(eventId);
+	var display = function(objs){
+		console.log(objs);
+		$("#event-edit-title").val(objs[0].get("title"));
+		$("#event-edit-location").val(objs[0].get("location"));
+		var time = objs[0].get("time").split(" -- ");
+		$("#event-edit-startTime").val(time[0].replace(" ", "T"));
+		$("#event-edit-endTime").val(time[1].replace(" ", "T"));
+		if(objs[0].get("visibility") == false){
+			$("#event-edit-visibility").val("Friends");
+		}
+		$("#event-edit-description").val(objs[0].get("description"));
+		setCurrLocationHash('#page-event-edit');
+		$.mobile.changePage("#page-event-edit"); // window.location.hash = "#page-event";
+		$('#event-editsave-button').on('click',function(){
+			editSaveUserEvent();
+		});
+	}
+	ParsePullEvent({eventId: eventId, displayFunction: display});
+}
+
+function editSaveUserEvent(){
+	var currentUser = Parse.User.current();
+	var owner = currentUser.getUsername();
+
+	var title = $("#event-edit-title").val();
+	var location = $("#event-edit-location").val();
+	var startTime = $("#event-edit-startTime").val().replace("T", ' ');
+    var endTime = $("#event-edit-endTime").val().replace('T', ' ');
+
+    var errorHandler = function(item) {
+        $("#event-edit-" + item).focus().parent().addClass("ui-custom-event-edit-focus");
+        if ($("#event-edit-" + item + "-alert").length == 0) {
+            $("#event-edit-" + item).parent().after("<p id='event-edit-" + item + "-alert' class='event-edit-alert'>*Field required</p>");
+        }
+
+        setTimeout(function(){
+            $("#event-edit-" + item).focus().parent().removeClass("ui-custom-event-edit-focus");
+        }, 500);
+
+        $("#event-edit-" + item).change(function(){
+            $("#event-edit-" + item + "-alert").remove();
+            $("#event-edit-" + item).unbind("change");
+        });
+    };
+
+    if (title.length == 0) {
+        errorHandler("title");
+        return;
+    }
+
+    if (location.length == 0) {
+        errorHandler("location");
+        return;
+    }
+
+    if (startTime.length == 0) {
+        errorHandler("startTime");
+        return;
+    }
+
+    if (endTime.length == 0) {
+        errorHandler("endTime");
+        return;
+    }
+
+    $('#event-edit-button').unbind("click");
+
+    var index1 = startTime.indexOf(":");
+    var index2 = startTime.lastIndexOf(":");
+    if (index1 != index2) {
+        startTime = startTime.substring(0, index2);
+    }
+
+    index1 = endTime.indexOf(":");
+    index2 = endTime.lastIndexOf(":");
+    if (index1 != index2) {
+        endTime = endTime.substring(0, index2);
+    }
+
+    var time = startTime + " -- " + endTime;
+
+	var visibility = $("#event-edit-visibility").val()=="on" ? true : false ;
+	var description = $("#event-edit-description").val();
+	var errorObject = $("#event-error");
+	var destID = "#page-event-my-event";
+	var displayFunction = function(object){
+		$("#event-edit-title").val("");
+		$("#event-edit-location").val("");
+		$("#event-edit-start-time").val("");
+		$("#event-edit-end-time").val("");
+		$("#event-edit-description").val("");
+		$("#event-edit-visibility").val("on").flipswitch('refresh');
+		$("#event-edit-error").html("");
+		var id = object.id;
+		var holder = object.get("owner");
+		var newElement = buildUserEventElement(object);
+		$("#event-content").prepend(newElement);
+	};
+	ParseEventCreate(owner, title, location, time, visibility, description, errorObject, destID, displayFunction);
+}
+
 
 var refreshPreviewPhoto = false;
 function refreshPreviewCanvas(){
