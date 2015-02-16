@@ -297,6 +297,14 @@ a {
 	width: 50px!important;
 }
 
+.ui-icon-custom-edit {
+	background: url("./content/material-design/png/my_event_edit.png") 0 50% no-repeat;
+	background-size: 18px 18px;
+	text-align: left!important;
+	padding-left: 25px!important;
+	width: 35px!important;
+}
+
 .ui-state-disabled {
 	opacity: 1!important;
 }
