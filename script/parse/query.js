@@ -205,7 +205,6 @@ function ParsePullEvent(obj) {
 		query.lessThan("createdAt",obj.beforeAt);
 	}
 	if(("eventId" in obj) && obj.eventId != null){
-		console.log(obj.eventId);	
 		query.equalTo("objectId", obj.eventId);
 	}
 	query.find({

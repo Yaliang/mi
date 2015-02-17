@@ -22,7 +22,6 @@ $(document).ready(function (){
 		if (window.navigator.standalone == true) {
 			//$('#message-content').trigger('blur');
 			sendToolbarActiveKeyboard('message-content');
-			
 		} else {
 			sendToolbarActiveKeyboard('message-content');
 		}
@@ -782,9 +781,7 @@ function deleteMyEvent(eventId){
 }
 
 function editMyEvent(eventId){
-	console.log(eventId);
 	var display = function(objs){
-		console.log(objs);
 		$("#event-edit-title").val(objs[0].get("title"));
 		$("#event-edit-location").val(objs[0].get("location"));
 		var time = objs[0].get("time").split(" -- ");
