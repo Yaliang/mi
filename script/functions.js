@@ -19,11 +19,19 @@ $(document).ready(function (){
 	$('#comment-content').prop('disabled', true);
 	$('#message-content').prop('disabled', true);
 	$('#message-chat-form').submit(function(event){
-		sendToolbarActiveKeyboard('#message-content','#send-message-bar','#page-chat-messages');
+		// sendToolbarActiveKeyboard({
+		// 	id:'#message-content',
+		// 	bar:'#send-message-bar',
+		// 	base:'#page-chat-messages'
+		// });
 		event.preventDefault();
 	});
 	$('#comment-form').submit(function(event){
-		sendToolbarActiveKeyboard('#comment-content','#send-comment-bar','#page-event-detail');
+		// sendToolbarActiveKeyboard({
+		// 	id:'#comment-content',
+		// 	bar:'#send-comment-bar',
+		// 	base:'#page-event-detail'
+		// });
 		event.preventDefault();
 	});
 	// finish
@@ -762,20 +770,19 @@ function removeInterestEvent(eventId){
 	ParseRemoveInterest(null, owner, eventId, displayFunction);
 }
 
-function sendToolbarActiveKeyboard(id,bar,base){
+function sendToolbarActiveKeyboard(object){
 	$("html body").animate({ scrollTop: $(document).height().toString()+"px" }, {
 		duration: 300,
         complete : function(){
-	    	$(id).prop('disabled', false);
-			$(id).focus(function(){
-				$(window).scroll(function(){
-					$(id).trigger("blur");
-				});
-				$(bar).css("position","absolute");
-				$(bar).css("bottom",($("body").height()-$(base).height()-44).toString()+"px");
-	
-				//$(id).css("bottom",($("body").height()-$(window).height()-$(window).scrollTop()).toString()+"px");
+	    	$(object.id).prop('disabled', false);
+			$(window).scroll(function(){
+				$(object.id).trigger("blur");
+				console.log("scroll happen");
 			});
+			$(object.bar).css("position","absolute");
+			$(object.bar).css("bottom",($("body").height()-$(object.base).height()-44).toString()+"px");
+			
+			$(object.id).trigger("focus");
         }
     });
 }
@@ -1449,6 +1456,7 @@ function sendMessage(){
 	var text = $("#message-content").val();
 	if (text == "") 
 		return;
+	$(window).unbind("scroll");
 	$("#message-content").val("");
 	var displayFunction= function(object){
 		var messageId = object.id;
@@ -1487,15 +1495,18 @@ function sendMessage(){
 		};
 		CacheGetProfilePhoto(senderId, displayFunction, {messageId : messageId});
 		//$('#send-message-bar').css("bottom",($("body").height()-$("#page-chat-messages").height()-44).toString()+"px");
+		
 		$("html body").animate({ scrollTop: $(document).height().toString()+"px" }, {
 			duration: 200,
-			complete : function(){}
+			complete : function(){
+				$(window).scroll(function(){
+					$("#send-message-bar").trigger("blur");
+					console.log("scroll happen")
+				});
+			}
 		});
 		if ($("#send-message-bar").css("position") == "absolute") {
-			$('#send-message-bar').animate({ bottom: ($("body").height()-$("#page-chat-messages").height()-44).toString()+"px"}, {
-				duration: 200,
-				complete : function(){}
-			});
+			$('#send-message-bar').css("bottom", ($("body").height()-$("#page-chat-messages").height()-44).toString()+"px");
 		}
 		
 	};
@@ -1749,10 +1760,6 @@ function reportActivity(id){
 		$.mobile.changePage("#page-event");//window.location.hash = "#page-event";
 	}
 	ParseUpdateReport(id, hiddenUserEvent);	
-}
-
-function sendBarPossitionUpdate(id) {
-	$(id).css("bottom",($("body").height()-$(window).height()-$(window).scrollTop()).toString()+"px");	
 }
 
 function pushNotificationToDevice(platform,regId,message) {
