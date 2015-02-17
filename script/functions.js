@@ -20,7 +20,8 @@ $(document).ready(function (){
 	})
 	$('#message-chat-form').submit(function(event){
 		if (window.navigator.standalone == true) {
-			$('#message-content').trigger('blur');
+			//$('#message-content').trigger('blur');
+			sendToolbarActiveKeyboard('message-content');
 		} else {
 			sendToolbarActiveKeyboard('message-content');
 		}
@@ -32,11 +33,10 @@ $(document).ready(function (){
     });
 
 	$('#comment-form').submit(function(event){
-		sendToolbarActiveKeyboard('comment-content');
 		if (window.navigator.standalone == true) {
 			$('#comment-content').trigger('blur');
 		} else {
-			sendToolbarActiveKeyboard('message-content');
+			sendToolbarActiveKeyboard('comment-content');
 		}
 		event.preventDefault();
 	});
@@ -760,10 +760,10 @@ function sendToolbarActiveKeyboard(id){
 	$("html body").animate({ scrollTop: $(document).height().toString()+"px" }, {
 		duration: 300,
         complete : function(){
-        	if (window.navigator.standalone == true) {
-        		$('#'+id).prop('disabled', false);
-				$('#'+id).focus();
-        	}
+    //     	if (window.navigator.standalone == true) {
+    //     		$('#'+id).prop('disabled', false);
+				// $('#'+id).focus();
+    //     	}
         }
     });
 }
