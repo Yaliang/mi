@@ -775,10 +775,10 @@ function sendToolbarActiveKeyboard(object){
 		duration: 300,
         complete : function(){
 	    	$(object.id).prop('disabled', false);
-			$(window).scroll(function(){
-				$(object.id).trigger("blur");
-				console.log("scroll happen");
-			});
+			// $(window).scroll(function(){
+			// 	$(object.id).trigger("blur");
+			// 	console.log("scroll happen");
+			// });
 			$(object.bar).css("position","absolute");
 			$(object.bar).css("bottom",($("body").height()-$(object.base).height()-44).toString()+"px");
 			
@@ -1456,7 +1456,7 @@ function sendMessage(){
 	var text = $("#message-content").val();
 	if (text == "") 
 		return;
-	$(window).unbind("scroll");
+	// $(window).unbind("scroll");
 	$("#message-content").val("");
 	var displayFunction= function(object){
 		var messageId = object.id;
@@ -1499,10 +1499,10 @@ function sendMessage(){
 		$("html body").animate({ scrollTop: $(document).height().toString()+"px" }, {
 			duration: 200,
 			complete : function(){
-				$(window).scroll(function(){
-					$("#send-message-bar").trigger("blur");
-					console.log("scroll happen")
-				});
+				// $(window).scroll(function(){
+				// 	$("#send-message-bar").trigger("blur");
+				// 	console.log("scroll happen")
+				// });
 			}
 		});
 		if ($("#send-message-bar").css("position") == "absolute") {
