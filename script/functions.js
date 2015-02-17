@@ -22,6 +22,7 @@ $(document).ready(function (){
 		if (window.navigator.standalone == true) {
 			//$('#message-content').trigger('blur');
 			sendToolbarActiveKeyboard('message-content');
+			
 		} else {
 			sendToolbarActiveKeyboard('message-content');
 		}
