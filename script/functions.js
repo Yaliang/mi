@@ -796,13 +796,13 @@ function editMyEvent(eventId){
 		setCurrLocationHash('#page-event-edit');
 		$.mobile.changePage("#page-event-edit"); // window.location.hash = "#page-event";
 		$('#event-editsave-button').on('click',function(){
-			editSaveUserEvent();
+			editSaveUserEvent(eventId);
 		});
 	}
 	ParsePullEvent({eventId: eventId, displayFunction: display});
 }
 
-function editSaveUserEvent(){
+function editSaveUserEvent(eventId){
 	var currentUser = Parse.User.current();
 	var owner = currentUser.getUsername();
 
@@ -880,7 +880,7 @@ function editSaveUserEvent(){
 		var newElement = buildUserEventElement(object);
 		$("#event-content").prepend(newElement);
 	};
-	ParseEventCreate(owner, title, location, time, visibility, description, errorObject, destID, displayFunction);
+	ParseEventEditSave(owner, title, location, time, visibility, description, errorObject, destID, displayFunction, eventId);
 }
 
 
