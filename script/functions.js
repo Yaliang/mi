@@ -5,41 +5,39 @@ function setCurrLocationHash(locationHash){
 }
 
 $(document).ready(function (){
-	if (window.navigator.standalone == true) {
-		$('#comment-content').on("blur",function(){
-			$('#comment-content').prop('disabled', true);
-		});
-		$('#message-content').on("blur",function(){
-			$('#message-content').prop('disabled', true);
-		});
+	// set comment and message send bar diable
+	$('#comment-content').on("blur",function(){
 		$('#comment-content').prop('disabled', true);
+		$('#send-comment-bar').css("position",'fixed');
+		$('#send-comment-bar').css("bottom","0");
+	});
+	$('#message-content').on("blur",function(){
 		$('#message-content').prop('disabled', true);
-	}
+		$('#send-message-bar').css("position",'fixed');
+		$('#send-message-bar').css("bottom","0");
+	});
+	$('#comment-content').prop('disabled', true);
+	$('#message-content').prop('disabled', true);
+	$('#message-chat-form').submit(function(event){
+		sendToolbarActiveKeyboard('#message-content','#send-message-bar','#page-chat-messages');
+		event.preventDefault();
+	});
+	$('#comment-form').submit(function(event){
+		sendToolbarActiveKeyboard('#comment-content','#send-comment-bar','#page-event-detail');
+		event.preventDefault();
+	});
+	// finish
+
 	$('#profile-edit-photo').on('blur change',function(){
 		profilePhotoCrop();
 	})
-	$('#message-chat-form').submit(function(event){
-		if (window.navigator.standalone == true) {
-			//$('#message-content').trigger('blur');
-			sendToolbarActiveKeyboard('message-content');
-		} else {
-			sendToolbarActiveKeyboard('message-content');
-		}
-		event.preventDefault();
-	});
+
 
     $('#event-create-form').submit(function(event) {
         event.preventDefault();
     });
 
-	$('#comment-form').submit(function(event){
-		if (window.navigator.standalone == true) {
-			$('#comment-content').trigger('blur');
-		} else {
-			sendToolbarActiveKeyboard('comment-content');
-		}
-		event.preventDefault();
-	});
+	
 	$('#login-form').submit(function(event){
 		event.preventDefault();
 	});
@@ -71,20 +69,11 @@ $(document).ready(function (){
 		$("html body").animate({ scrollTop: $(document).height().toString()+"px" }, {
 			duration: 500,
 	        complete : function(){
-	        	sendBarPossitionUpdate("#send-message-bar");
-	        	$('#send-message-bar').fadeIn();
-	        	$(window).scroll(function(){
-			    	console.log("scroll:position correct");
-					sendBarPossitionUpdate("#send-message-bar");
-				});
-				$(window).resize(function(){
-					console.log("resize:position correct");
-					sendBarPossitionUpdate("#send-message-bar");
-				});
+	        	$("#send-message-bar").css("position","fixed");
+	        	$("#send-message-bar").css("bottom","0");
+	        	$("#send-message-bar").fadeIn();
 	        }
 	    });
-	    
-		console.log("set correctly");
 	});
 	$(document).on("pagehide","#page-chat-messages",function(){
 		console.log("scroll:remove");
@@ -773,14 +762,20 @@ function removeInterestEvent(eventId){
 	ParseRemoveInterest(null, owner, eventId, displayFunction);
 }
 
-function sendToolbarActiveKeyboard(id){
+function sendToolbarActiveKeyboard(id,bar,base){
 	$("html body").animate({ scrollTop: $(document).height().toString()+"px" }, {
 		duration: 300,
         complete : function(){
-	    	if (window.navigator.standalone == true) {
-	    		$('#'+id).prop('disabled', false);
-				$('#'+id).focus();
-	    	}
+	    	$(id).prop('disabled', false);
+			$(id).focus(function(){
+				$(window).scroll(function(){
+					$(id).trigger("blur");
+				});
+				$(bar).css("position","absolute");
+				$(bar).css("bottom",($("body").height()-$(base).height()-44).toString()+"px");
+	
+				//$(id).css("bottom",($("body").height()-$(window).height()-$(window).scrollTop()).toString()+"px");
+			});
         }
     });
 }
@@ -1491,11 +1486,18 @@ function sendMessage(){
 			$("#message-"+data.messageId).css("backgroundImage","url('"+photo120+"')");
 		};
 		CacheGetProfilePhoto(senderId, displayFunction, {messageId : messageId});
+		//$('#send-message-bar').css("bottom",($("body").height()-$("#page-chat-messages").height()-44).toString()+"px");
 		$("html body").animate({ scrollTop: $(document).height().toString()+"px" }, {
-			duration: 150,
+			duration: 200,
 			complete : function(){}
 		});
-		$('#send-message-bar').css("bottom",($("body").height()-$("#page-chat-messages").height()-44).toString()+"px");
+		if ($("#send-message-bar").css("position") == "absolute") {
+			$('#send-message-bar').animate({ bottom: ($("body").height()-$("#page-chat-messages").height()-44).toString()+"px"}, {
+				duration: 200,
+				complete : function(){}
+			});
+		}
+		
 	};
 
 	ParseAddChatMessage(senderId, groupId, text, displayFunction);
