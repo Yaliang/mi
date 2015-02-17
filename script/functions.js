@@ -760,10 +760,10 @@ function sendToolbarActiveKeyboard(id){
 	$("html body").animate({ scrollTop: $(document).height().toString()+"px" }, {
 		duration: 300,
         complete : function(){
-    //     	if (window.navigator.standalone == true) {
-    //     		$('#'+id).prop('disabled', false);
-				// $('#'+id).focus();
-    //     	}
+	    	if (window.navigator.standalone == true) {
+	    		$('#'+id).prop('disabled', false);
+				$('#'+id).focus();
+	    	}
         }
     });
 }
