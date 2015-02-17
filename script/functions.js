@@ -19,11 +19,19 @@ $(document).ready(function (){
 	$('#comment-content').prop('disabled', true);
 	$('#message-content').prop('disabled', true);
 	$('#message-chat-form').submit(function(event){
-		sendToolbarActiveKeyboard('#message-content','#send-message-bar','#page-chat-messages');
+		sendToolbarActiveKeyboard({
+			id:'#message-content',
+			bar:'#send-message-bar',
+			base:'#page-chat-messages'
+		});
 		event.preventDefault();
 	});
 	$('#comment-form').submit(function(event){
-		sendToolbarActiveKeyboard('#comment-content','#send-comment-bar','#page-event-detail');
+		sendToolbarActiveKeyboard({
+			id:'#comment-content',
+			bar:'#send-comment-bar',
+			base:'#page-event-detail'
+		});
 		event.preventDefault();
 	});
 	// finish
@@ -762,20 +770,28 @@ function removeInterestEvent(eventId){
 	ParseRemoveInterest(null, owner, eventId, displayFunction);
 }
 
-function sendToolbarActiveKeyboard(id,bar,base){
+function sendToolbarActiveKeyboard(object){
+	console.log(object.id);
+	console.log(object.bar);
+	console.log(object.base);
 	$("html body").animate({ scrollTop: $(document).height().toString()+"px" }, {
 		duration: 300,
         complete : function(){
-	    	$(id).prop('disabled', false);
-			$(id).focus(function(){
+	    	$(object.id).prop('disabled', false);
+			$(object.id).focus(function(){
 				$(window).scroll(function(){
-					$(id).trigger("blur");
+					$(object.id).trigger("blur");
+					console.log(object);
 				});
-				$(bar).css("position","absolute");
-				$(bar).css("bottom",($("body").height()-$(base).height()-44).toString()+"px");
-	
+				console.log("fired");
+				console.log(object);
+				
 				//$(id).css("bottom",($("body").height()-$(window).height()-$(window).scrollTop()).toString()+"px");
 			});
+			$(object.bar).css("position","absolute");
+			$(object.bar).css("bottom",($("body").height()-$(object.base).height()-44).toString()+"px");
+			console.log(object);
+			$(object.id).trigger("focus");
         }
     });
 }
