@@ -46,6 +46,7 @@ $(document).ready(function (){
 	$('#signup-form').submit(function(event){
 		event.preventDefault();
 	});
+	
 
     $(window).hashchange(function(){
         var preHash = currLocationHash;
@@ -65,6 +66,16 @@ $(document).ready(function (){
             currLocationHash = "#page-login";
         }
     });
+    // add function when the page #page-chat-messages completed.
+    $(document).on("pageshow","#page-chat-messages",function(){
+		$('#send-message-bar').css("bottom",($("body").height()-$("#page-chat-messages").height()-44).toString()+"px");
+		$('#send-message-bar').fadeIn();
+		$("html body").animate({ scrollTop: $(document).height().toString()+"px" }, {
+			duration: 500,
+	        complete : function(){
+	        }
+	    });
+	});
 
 	cacheInitialization();
 	loginByLocalStorage();
@@ -1467,6 +1478,7 @@ function sendMessage(){
 			duration: 150,
 			complete : function(){}
 		});
+		$('#send-message-bar').css("bottom",($("body").height()-$("#page-chat-messages").height()-44).toString()+"px");
 	};
 
 	ParseAddChatMessage(senderId, groupId, text, displayFunction);
@@ -1499,8 +1511,8 @@ function updateChatTitle(friendId, id, option){
 function startPrivateChat(friendId){
 	$("#page-chat-messages > .ui-content").html("");
 	$("#chat-messages-title").html("");
-	$("#message-content").val("");
-	$('#send-message-bar').fadeIn();
+	$("#message-content").val("");	
+	
 	var memberId = new Array;
 	memberId.push(friendId);
 	memberId.push(Parse.User.current().id);
@@ -1526,13 +1538,7 @@ function startPrivateChat(friendId){
 					CacheGetProfilePhoto(objects[i].get('senderId'), displayFunction, {messageId: objects[i].id});
 				}
 				$.mobile.changePage( "#page-chat-messages");
-				setTimeout(function(){
-					$("html body").animate({ scrollTop: $(document).height().toString()+"px" }, {
-						duration: 500,
-				        complete : function(){
-				        }
-				    });
-				},1);
+				
 			};
 			//CachePullChatMessage(groupId, limitNum, null, displayFunction);
 			ParsePullChatMessage(groupId, limitNum, descendingOrderKey, null, displayFunction, null)
