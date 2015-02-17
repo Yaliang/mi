@@ -79,7 +79,7 @@ $(document).ready(function (){
 	        complete : function(){
 	        	$("#send-message-bar").css("position","fixed");
 	        	$("#send-message-bar").css("bottom","0");
-	        	$("#send-message-bar").fadeIn();
+	        	$("#send-message-bar").fadeIn("fast");
 	        }
 	    });
 	});
@@ -1497,12 +1497,8 @@ function sendMessage(){
 		//$('#send-message-bar').css("bottom",($("body").height()-$("#page-chat-messages").height()-44).toString()+"px");
 		
 		$("html body").animate({ scrollTop: $(document).height().toString()+"px" }, {
-			duration: 200,
+			duration: 750,
 			complete : function(){
-				// $(window).scroll(function(){
-				// 	$("#send-message-bar").trigger("blur");
-				// 	console.log("scroll happen")
-				// });
 			}
 		});
 		if ($("#send-message-bar").css("position") == "absolute") {
@@ -1608,6 +1604,9 @@ function updateChatMessage(object){
 	        complete : function(){
 	        }
 	    });
+	    if ($("#send-message-bar").css("position") == "absolute") {
+			$('#send-message-bar').css("bottom", ($("body").height()-$("#page-chat-messages").height()-44).toString()+"px");
+		}
 	}
 	ParsePullChatMessage(groupId, limitNum, descendingOrderKey, beforeAt, displayFunction, null);
 
