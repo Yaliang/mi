@@ -591,20 +591,18 @@
         </div>
     </div>
 
-	<div id="send-message-bar" class="ui-footer ui-bar-inherit ui-footer-fixed slideup ui-page-theme-a" style="z-index:3; display:none">
-		<div class="rwd-example ui-footer ui-bar-inherit ui-footer-fixed slideup" style="position:fixed; bottom:0px">
-			<form id='message-chat-form'>
-				<label id="group-id-label" class="ui-hidden-accessible"></label>
-				<div class="custom-block-a" onclick="sendToolbarActiveKeyboard('message-content')">
-					<div class="ui-input-text ui-shadow-inset ui-focus ui-body-inherit ui-corner-all">
-						<input type="text" name="messagecontent" id="message-content" value="">
-					</div>
+	<div id="send-message-bar" class="ui-page-theme-a rwd-example ui-footer ui-bar-inherit ui-footer-fixed slideup" style="z-index:3; display:none; position:absolute;">
+		<form id='message-chat-form'>
+			<label id="group-id-label" class="ui-hidden-accessible"></label>
+			<div class="custom-block-a" onclick="sendToolbarActiveKeyboard('message-content')">
+				<div class="ui-input-text ui-shadow-inset ui-focus ui-body-inherit ui-corner-all">
+					<input type="text" name="messagecontent" id="message-content" value="">
 				</div>
-				<div class="custom-block-b">
-					<button id="send-message-button" class="ui-btn ui-corner-all custom-send-button" onclick="sendMessage();">Send</button>
-				</div>
-			</form>
-		</div>
+			</div>
+			<div class="custom-block-b">
+				<button id="send-message-button" class="ui-btn ui-corner-all custom-send-button" onclick="sendMessage();">Send</button>
+			</div>
+		</form>
 	</div>
 
 </body>
