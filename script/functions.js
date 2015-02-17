@@ -68,14 +68,31 @@ $(document).ready(function (){
     });
     // add function when the page #page-chat-messages completed.
     $(document).on("pageshow","#page-chat-messages",function(){
-		$('#send-message-bar').css("bottom",($("body").height()-$("#page-chat-messages").height()-44).toString()+"px");
-		$('#send-message-bar').fadeIn();
 		$("html body").animate({ scrollTop: $(document).height().toString()+"px" }, {
 			duration: 500,
 	        complete : function(){
+	        	sendBarPossitionUpdate("#send-message-bar");
+	        	$('#send-message-bar').fadeIn();
+	        	$(window).scroll(function(){
+			    	console.log("scroll:position correct");
+					sendBarPossitionUpdate("#send-message-bar");
+				});
+				$(window).resize(function(){
+					console.log("resize:position correct");
+					sendBarPossitionUpdate("#send-message-bar");
+				});
 	        }
 	    });
+	    
+		console.log("set correctly");
 	});
+	$(document).on("pagehide","#page-chat-messages",function(){
+		console.log("scroll:remove");
+	    $(window).unbind("scroll");
+	    console.log("resize:remove");
+	    $(window).unbind("resize");
+	});
+
 
 	cacheInitialization();
 	loginByLocalStorage();
@@ -1732,7 +1749,9 @@ function reportActivity(id){
 	ParseUpdateReport(id, hiddenUserEvent);	
 }
 
-
+function sendBarPossitionUpdate(id) {
+	$(id).css("bottom",($("body").height()-$(window).height()-$(window).scrollTop()).toString()+"px");	
+}
 
 function pushNotificationToDevice(platform,regId,message) {
 	var request="id="+regId+"&message="+message;//{id: regId, message: message};
