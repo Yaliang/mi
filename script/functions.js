@@ -79,17 +79,22 @@ $(document).ready(function (){
 	        complete : function(){
 	        	$("#send-message-bar").css("position","fixed");
 	        	$("#send-message-bar").css("bottom","0");
-	        	$("#send-message-bar").fadeIn("fast");
+	        	$("#send-message-bar").show();
 	        }
 	    });
 	});
 	$(document).on("pagehide","#page-chat-messages",function(){
-		console.log("scroll:remove");
-	    $(window).unbind("scroll");
-	    console.log("resize:remove");
-	    $(window).unbind("resize");
+		$("#send-message-bar").fadeOut("fast");
 	});
-
+	// add function when the page #page-event-detail completed.
+    $(document).on("pageshow","#page-event-detail",function(){
+		$("#send-comment-bar").css("position","fixed");
+		$("#send-comment-bar").css("bottom","0");
+		$("#send-comment-bar").fadeIn("fast");
+	});
+	$(document).on("pagehide","#page-event-detail",function(){
+		$("#send-comment-bar").fadeOut("fast");
+	});
 
 	cacheInitialization();
 	loginByLocalStorage();
@@ -576,7 +581,6 @@ function buildCommentInEventDetail(object){
 function updateEventDetail(id){
 	$("#event-detail-content").html("");
 	$("#event-id-label").html(id);
-	$("#send-comment-bar").fadeIn();
 	var descendingOrderKey = "createdAt";
 	var displayFunction = function(object){
 		var title = object[0].get("title");
