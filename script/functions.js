@@ -461,9 +461,9 @@ function pullUserEvent(beforeAt){
 		if (objects.length < limitNumber)
 			$(".ui-load-more-activity").html("No More Activities");
 		for (var i=0; i <= objects.length-1; i++) {
+			if (Date.parse(currentLastEvent) > Date.parse(objects[i].createdAt))
+				currentLastEvent = objects[i].createdAt
 			if ($("#"+objects[i].id).length == 0) {
-				if (Date.parse(currentLastEvent) > Date.parse(objects[i].createdAt))
-					currentLastEvent = objects[i].createdAt
 				var id = objects[i].id;
 				var holder = objects[i].get("owner");
 				var newElement = buildUserEventElement(objects[i]);
