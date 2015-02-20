@@ -270,11 +270,27 @@ a {
 	background-size: 18px 18px;
 	text-align: left!important;
 	padding-left: 25px!important;
-	width: 50px!important;
+	width: 45px!important;
 }
 
 .ui-icon-custom-favor-true {
 	background: url("./content/material-design/png/favorite21-red-36.png") 0 50% no-repeat;
+	background-size: 18px 18px;
+	text-align: left!important;
+	padding-left: 25px!important;
+	width: 45px!important;
+}
+
+.ui-icon-custom-going-false {
+	background: url("./content/material-design/png/tick7-red-36-unchecked.png") 0 50% no-repeat;
+	background-size: 18px 18px;
+	text-align: left!important;
+	padding-left: 25px!important;
+	width: 50px!important;
+}
+
+.ui-icon-custom-going-true {
+	background: url("./content/material-design/png/tick7-red-36-checked.png") 0 50% no-repeat;
 	background-size: 18px 18px;
 	text-align: left!important;
 	padding-left: 25px!important;
