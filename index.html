@@ -242,7 +242,7 @@
 
 		<div data-role="header" data-position="fixed" data-tap-toggle="false" >
 			<h1>My Activities</h1>
-			<a data-rel="back" href="#page-event" class="ui-btn-left ui-btn ui-btn-inline ui-corner-all" onclick="setCurrLocationHash('#page-event')">Back</a>
+			<a href="#page-event" class="ui-btn-left ui-btn ui-btn-inline ui-corner-all" onclick="setCurrLocationHash('#page-event')">Back</a>
 		</div><!-- /header -->
 
 		<div role="main" class="ui-content" id="my-event-content">
@@ -302,7 +302,7 @@
 
 		<div data-role="header">
 			<h1>Edit Activity</h1>
-			<a href="#page-event" class="ui-btn-left ui-btn ui-btn-inline ui-corner-all" onclick="setCurrLocationHash('#page-event')">Cancel</a>
+			<a href="#" data-rel="back" class="ui-btn-left ui-btn ui-btn-inline ui-corner-all" onclick="setCurrLocationHash('#page-event')">Cancel</a>
 		</div><!-- /header -->
 
 		<div role="main" class="ui-content">
@@ -330,8 +330,8 @@
 				<textarea name="eventdescription" id="event-edit-description"></textarea>
 			</form>
 
-			<div id="event-create-preview"></div>
-			<div id="event-create-error"></div>
+			<div id="event-edit-preview"></div>
+			<div id="event-edit-error"></div>
 
             <button id="event-editsave-button" class="ui-btn">Save</button>
 
