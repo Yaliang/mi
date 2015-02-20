@@ -15,6 +15,10 @@ http://fonts.googleapis.com/css?family=Open+Sans:400,300,700
 /script/parse/query.js
 /script/cache.js 
 /script/functions.js
+/script/functions-events.js
+/script/functions-friends.js
+/script/functions-chats.js
+/script/functions-settings.js
 # images
 /content/png/apple-touch-startup-image-320x460.png
 /content/png/apple-touch-startup-image-640x920.png
