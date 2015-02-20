@@ -260,6 +260,11 @@ function initialElementEventSetting(){
 	        	$("#send-message-bar").css("position","fixed");
 	        	$("#send-message-bar").css("bottom","0");
 	        	$("#send-message-bar").show();
+	        	$(window).on("swiperight",function(){
+					window.history.back();
+					setCurrLocationHash('#page-event');
+					$(window).unbind("swiperight");
+				})
 	        }
 	    });
 	});
@@ -272,7 +277,7 @@ function initialElementEventSetting(){
 		$("#send-comment-bar").css("bottom","0");
 		$("#send-comment-bar").show();
 		$(window).on("swiperight",function(){
-			$.mobile.changePage('#page-event',{transition: "slide", reverse: true});
+			window.history.back();
 			setCurrLocationHash('#page-event');
 			$(window).unbind("swiperight");
 		})
