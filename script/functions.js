@@ -1,15 +1,15 @@
-var currLocationHash = "#page-loading"; // the location hash for current page
-
-function setCurrLocationHash(locationHash){
-    currLocationHash = locationHash;
-}
-
 $(document).ready(function (){
 	initialElementEventSetting();
 
 	cacheInitialization();
 	loginByLocalStorage();
 });
+
+var currLocationHash = "#page-loading"; // the location hash for current page
+
+function setCurrLocationHash(locationHash){
+    currLocationHash = locationHash;
+}
 
 function loginByLocalStorage(){
 	var currentUser = Parse.User.current();
