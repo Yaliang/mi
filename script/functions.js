@@ -272,7 +272,7 @@ function initialElementEventSetting(){
 		$("#send-comment-bar").css("bottom","0");
 		$("#send-comment-bar").show();
 		$(window).on("swiperight",function(){
-			$.mobile.changePage('#page-event',{transition: "slide"});
+			$.mobile.changePage('#page-event',{transition: "slide", reverse: true});
 			setCurrLocationHash('#page-event');
 			$(window).unbind("swiperight");
 		})
