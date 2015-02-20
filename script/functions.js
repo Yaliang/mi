@@ -269,7 +269,7 @@ function initialElementEventSetting(){
 	    });
 	});
 	$(document).on("pagehide","#page-chat-messages",function(){
-		$("#send-message-bar").fadeOut("fast");
+		$("#send-message-bar").hide();
 	});
 	// add function when the page #page-event-detail completed.
     $(document).on("pageshow","#page-event-detail",function(){
@@ -283,7 +283,7 @@ function initialElementEventSetting(){
 		})
 	});
 	$(document).on("pagehide","#page-event-detail",function(){
-		$("#send-comment-bar").fadeOut("fast");
+		$("#send-comment-bar").hide();
 	});
 }
 

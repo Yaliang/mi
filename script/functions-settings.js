@@ -47,8 +47,10 @@ function getMyProfile(){
 		var canvas = document.getElementById('canvas-photo');
 		var context = canvas.getContext('2d');
 		var image = new Image();
-		image.src = photo120;
-		context.drawImage(image, 0, 0);
+		image.onload = function(){
+			context.drawImage(image, 0, 0);
+		}
+		image.src = photo120;		
 	}
 	CacheGetProfilePhoto(userId, displayFunction, {});
 }
