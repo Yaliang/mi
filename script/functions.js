@@ -5,96 +5,7 @@ function setCurrLocationHash(locationHash){
 }
 
 $(document).ready(function (){
-	// set comment and message send bar diable
-	$('#comment-content').on("blur",function(){
-		$('#comment-content').prop('disabled', true);
-		$('#send-comment-bar').css("position",'fixed');
-		$('#send-comment-bar').css("bottom","0");
-	});
-	$('#message-content').on("blur",function(){
-		$('#message-content').prop('disabled', true);
-		$('#send-message-bar').css("position",'fixed');
-		$('#send-message-bar').css("bottom","0");
-	});
-	$('#comment-content').prop('disabled', true);
-	$('#message-content').prop('disabled', true);
-	$('#message-chat-form').submit(function(event){
-		// sendToolbarActiveKeyboard({
-		// 	id:'#message-content',
-		// 	bar:'#send-message-bar',
-		// 	base:'#page-chat-messages'
-		// });
-		event.preventDefault();
-	});
-	$('#comment-form').submit(function(event){
-		// sendToolbarActiveKeyboard({
-		// 	id:'#comment-content',
-		// 	bar:'#send-comment-bar',
-		// 	base:'#page-event-detail'
-		// });
-		event.preventDefault();
-	});
-	// finish
-
-	$('#profile-edit-photo').on('blur change',function(){
-		profilePhotoCrop();
-	})
-
-
-    $('#event-create-form').submit(function(event) {
-        event.preventDefault();
-    });
-
-	
-	$('#login-form').submit(function(event){
-		event.preventDefault();
-	});
-	$('#signup-form').submit(function(event){
-		event.preventDefault();
-	});
-	
-
-    $(window).hashchange(function(){
-        var preHash = currLocationHash;
-        var currHash = window.location.hash;
-        //console.log("currHash:" + currHash);
-        //console.log("preHash:" + preHash);
-
-        // in user session
-        if (currHash == "#page-login" && (preHash != "#page-loading" && preHash != "#page-login" && preHash != "#page-signup")) {
-            $.mobile.changePage("#page-event"); // window.location.hash = "#page-event";
-            currLocationHash = "#page-event";
-        }
-
-        // out of user session
-        if (currHash == "#page-setting" && (preHash == "#page-loading" || preHash == "#page-login" || preHash == "#page-signup")) {
-            $.mobile.changePage("#page-login"); // window.location.hash = "#page-login";
-            currLocationHash = "#page-login";
-        }
-    });
-    // add function when the page #page-chat-messages completed.
-    $(document).on("pageshow","#page-chat-messages",function(){
-		$("html body").animate({ scrollTop: $(document).height().toString()+"px" }, {
-			duration: 500,
-	        complete : function(){
-	        	$("#send-message-bar").css("position","fixed");
-	        	$("#send-message-bar").css("bottom","0");
-	        	$("#send-message-bar").show();
-	        }
-	    });
-	});
-	$(document).on("pagehide","#page-chat-messages",function(){
-		$("#send-message-bar").fadeOut("fast");
-	});
-	// add function when the page #page-event-detail completed.
-    $(document).on("pageshow","#page-event-detail",function(){
-		$("#send-comment-bar").css("position","fixed");
-		$("#send-comment-bar").css("bottom","0");
-		$("#send-comment-bar").fadeIn("fast");
-	});
-	$(document).on("pagehide","#page-event-detail",function(){
-		$("#send-comment-bar").fadeOut("fast");
-	});
+	initialElementEventSetting();
 
 	cacheInitialization();
 	loginByLocalStorage();
@@ -271,6 +182,99 @@ function logout(){
 	$("#page-chat > .ui-content").html("");
 	var destID = "#page-login";
 	ParseLogout(destID);
+}
+
+function initialElementEventSetting(){
+	// set comment and message send bar diable
+	$('#comment-content').on("blur",function(){
+		$('#comment-content').prop('disabled', true);
+		$('#send-comment-bar').css("position",'fixed');
+		$('#send-comment-bar').css("bottom","0");
+	});
+	$('#message-content').on("blur",function(){
+		$('#message-content').prop('disabled', true);
+		$('#send-message-bar').css("position",'fixed');
+		$('#send-message-bar').css("bottom","0");
+	});
+	$('#comment-content').prop('disabled', true);
+	$('#message-content').prop('disabled', true);
+	$('#message-chat-form').submit(function(event){
+		// sendToolbarActiveKeyboard({
+		// 	id:'#message-content',
+		// 	bar:'#send-message-bar',
+		// 	base:'#page-chat-messages'
+		// });
+		event.preventDefault();
+	});
+	$('#comment-form').submit(function(event){
+		// sendToolbarActiveKeyboard({
+		// 	id:'#comment-content',
+		// 	bar:'#send-comment-bar',
+		// 	base:'#page-event-detail'
+		// });
+		event.preventDefault();
+	});
+	// finish
+
+	$('#profile-edit-photo').on('blur change',function(){
+		profilePhotoCrop();
+	})
+
+
+    $('#event-create-form').submit(function(event) {
+        event.preventDefault();
+    });
+
+	
+	$('#login-form').submit(function(event){
+		event.preventDefault();
+	});
+	$('#signup-form').submit(function(event){
+		event.preventDefault();
+	});
+	
+
+    $(window).hashchange(function(){
+        var preHash = currLocationHash;
+        var currHash = window.location.hash;
+        //console.log("currHash:" + currHash);
+        //console.log("preHash:" + preHash);
+
+        // in user session
+        if (currHash == "#page-login" && (preHash != "#page-loading" && preHash != "#page-login" && preHash != "#page-signup")) {
+            $.mobile.changePage("#page-event"); // window.location.hash = "#page-event";
+            currLocationHash = "#page-event";
+        }
+
+        // out of user session
+        if (currHash == "#page-setting" && (preHash == "#page-loading" || preHash == "#page-login" || preHash == "#page-signup")) {
+            $.mobile.changePage("#page-login"); // window.location.hash = "#page-login";
+            currLocationHash = "#page-login";
+        }
+    });
+    // add function when the page #page-chat-messages completed.
+    $(document).on("pageshow","#page-chat-messages",function(){
+		$("html body").animate({ scrollTop: $(document).height().toString()+"px" }, {
+			duration: 500,
+	        complete : function(){
+	        	$("#send-message-bar").css("position","fixed");
+	        	$("#send-message-bar").css("bottom","0");
+	        	$("#send-message-bar").show();
+	        }
+	    });
+	});
+	$(document).on("pagehide","#page-chat-messages",function(){
+		$("#send-message-bar").fadeOut("fast");
+	});
+	// add function when the page #page-event-detail completed.
+    $(document).on("pageshow","#page-event-detail",function(){
+		$("#send-comment-bar").css("position","fixed");
+		$("#send-comment-bar").css("bottom","0");
+		$("#send-comment-bar").fadeIn("fast");
+	});
+	$(document).on("pagehide","#page-event-detail",function(){
+		$("#send-comment-bar").fadeOut("fast");
+	});
 }
 
 function createUserEvent(){
