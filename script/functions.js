@@ -270,7 +270,12 @@ function initialElementEventSetting(){
     $(document).on("pageshow","#page-event-detail",function(){
 		$("#send-comment-bar").css("position","fixed");
 		$("#send-comment-bar").css("bottom","0");
-		$("#send-comment-bar").fadeIn("fast");
+		$("#send-comment-bar").show();
+		$(window).on("swiperight",function(){
+			$.mobile.changePage('#page-event',{transition: "slide"});
+			setCurrLocationHash('#page-event');
+			$(window).unbind("swiperight");
+		})
 	});
 	$(document).on("pagehide","#page-event-detail",function(){
 		$("#send-comment-bar").fadeOut("fast");
