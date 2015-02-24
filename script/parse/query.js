@@ -1130,3 +1130,34 @@ function ParseCheckChatObject() {
 		ParseCheckChatObject();
 	},5000)
 }
+var NoticeNewVersionObjects;
+function ParseNoticeNewVersion() {
+	var User = Parse.Object.extend("User");
+	var query = new Parse.Query(User);
+
+	query.equalTo("objectId", Parse.User.current().id);
+	query.find({
+		success: function(objects){
+			NoticeNewVersionObjects = objects;
+			SendNewVersionNotification(0);
+		}
+	})
+}
+
+function SendNewVersionNotification(i) {
+	if (i >= NoticeNewVersionObjects.length)
+		return
+	var object = NoticeNewVersionObjects[i];
+	console.log(object.id);
+	if (typeof(object.get("GCMId")) != "undefined") {
+		pushNotificationToDevice('gcm', object.get("GCMId"), "New version is available.");
+		console.log("GCMId:" + object.get("GCMId"));
+	}
+	if (typeof(object.get("APNId")) != "undefined") {
+		pushNotificationToDevice('apn', object.get("APNId"), "New version is available.");
+		console.log("APNId:" + object.get("APNId"));
+	}
+	setTimeout(function(){
+		SendNewVersionNotification(i+1)
+	}, 1000);
+}
