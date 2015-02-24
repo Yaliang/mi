@@ -208,7 +208,6 @@ function pullUserEvent(beforeAt){
                 $(".ui-load-more-activity").before(newElement);
                 // display event holder's name | not the email one
                 pullUserEventHolderInfo(holder, id);
-                // check if owner has interested this event
             } else {
                 var commentNumber = objects[i].get("commentNumber");
                 var goingId = object.get("goingId");
@@ -567,7 +566,9 @@ function buildMyUserEventElement(object){
     var time = object.get("time");
     var visibility = object.get("visibility");
     var description = object.get("description");
-    var interestNumber = object.get("interestNumber");
+    var interestNumber = 0;
+    if (typeof(object.get("interestId")) != "undefined")
+        interestNumber = object.get("interestId").length;
     var commentNumber = object.get("commentNumber");
     var goingId = object.get("goingId");
     if (typeof(goingId) == "undefined"){
@@ -591,14 +592,12 @@ function buildMyUserEventElement(object){
     } else {
         newElement += "<p class='ui-custom-event-description'>" + description.replace("\n","</br>") + "</p>";
     }
-    newElement += "<div id='my-comment-statistics-"+id+"' class='event-statistics'>" + commentNumber + " Comments</div><div id='my-interest-statistics-"+id+"' class='event-statistics'>" + interestNumber + " Interests</div><div id='my-going-statistics-"+id+"' class='event-statistics'>" + goingNumber + " Goings</div>";
+    newElement += "<div class='event-statistics comment-statistics-"+id+"'>" + commentNumber + " Comments</div><div class='event-statistics interest-statistics-"+id+"'>" + interestNumber + " Interests</div><div class='event-statistics going-statistics-"+id+"'>" + goingNumber + " Goings</div>";
     newElement += "</div>";
     newElement += "<div class='ui-footer ui-bar-custom'>"
     newElement += "<div class='ui-custom-float-left'><a href='#page-event-detail' data-transition='slide' class='ui-btn ui-bar-btn-custom ui-mini ui-icon-custom-comment' id='my-comment-button-"+id+"' onclick=\"updateEventDetail('"+id+"'); setCurrLocationHash('#page-event-delete')\">"+"Detail"+"</a></div>";
     newElement += "<div class='ui-custom-float-left'><a href='#page-event-delete' data-transition='slideup' class='ui-btn ui-bar-btn-custom ui-mini ui-icon-custom-delete' id='my-comment-button-"+id+"' onclick=\"deleteMyEvent('"+id+"'); setCurrLocationHash('#page-event-delete')\">"+"Delete"+"</a></div>";
     newElement += "<div class='ui-custom-float-left'><a href='#page-event-edit' data-transition='slide' class='ui-btn ui-bar-btn-custom ui-mini ui-icon-custom-edit' id='my-comment-button-"+id+"' onclick=\"editMyEvent('"+id+"'); setCurrLocationHash('#page-event-delete')\">"+"Edit"+"</a></div>";
-
-    //newElement = newElement + "<div class='ui-block-c'><a href='#' class='ui-btn ui-mini ui-btn-icon-left' id='my-delete-button-"+id+"' onclick=\"deleteMyEvent('"+id+"')\">"+'delete'+"</a></div>";
     newElement += "</div>";
     newElement += "</div>";
     newElement += "</div>";
@@ -618,29 +617,27 @@ function pullMyEvent(beforeAt){
                 $("#my-event-content").prepend(buildMyUserEventElement(objects[i]));
             } else {
                 var commentNumber = objects[i].get("commentNumber");
-                var interestNumber = objects[i].get("interestNumber");
+                var interestNumber = 0;
+                if (typeof(object.get("interestId")) != "undefined")
+                    interestNumber = object.get("interestId").length;
                 var goingId = objects[i].get("goingId");
                 if (typeof(goingId) == "undefined"){
                     goingId = new Array;
                 }
                 var goingNumber = goingId.length;
                 var id = objects[i].id;
-                $("#my-comment-statistics-"+id).html(commentNumber.toString()+" Comments");
-                $("#my-interest-statistics-"+id).html(interestNumber.toString()+" Interests");
-                $("#my-going-statistics-"+id).html(goingNumber.toString()+" Goings");
+                $(".comment-statistics-"+id).each(function(){html(commentNumber.toString()+" Comments");});
+                $(".interest-statistics-"+id).each(function(){html(interestNumber.toString()+" Interests");});
+                $(".going-statistics-"+id).each(function(){html(goingNumber.toString()+" Goings");});
             }
         };
     };
     ParsePullEvent({
         owner: owner,
-        // limitNumber: null,
         descendingOrderKey:descendingOrderKey,
-        // accessibility: null,
         beforeAt: beforeAt,
         displayFunction: displayFunction
-        // eventId: null
     });
-    // ParsePullEvent(owner, null, descendingOrderKey, null, beforeAt, displayFunction);
 }
 
 function deleteMyEvent(eventId){
