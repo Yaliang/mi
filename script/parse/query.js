@@ -114,7 +114,6 @@ function ParseEventCreate(owner, title, location, time, visibility, description,
 	userEvent.set("time",time);
 	userEvent.set("visibility",visibility);
 	userEvent.set("description",description);
-	userEvent.set("interestNumber",0);
 	userEvent.set("commentNumber",0);
 	userEvent.set("reportNum", 0);
 
@@ -269,68 +268,32 @@ function ParseUpdateEventCommentNumber(count, eventId, displayFunction){
 	});
 }
 
-function ParseAddInterest(owner, eventId, displayFunction){
-	var Interest = Parse.Object.extend("Interest");
-	var interest = new Interest;
-
-	interest.set("owner", owner);
-	interest.set("eventId", eventId);
-	interest.save(null, {
-		success: function(interest){
-			ParseUpdateEventInterestNumber(1, eventId, displayFunction);
-		}
-	});
-}
-
-function ParseCheckInterest(owner, eventId, successFunction){
-	var Interest = Parse.Object.extend("Interest");
-	var query = new Parse.Query(Interest);
-
-	query.equalTo("owner", owner);
-	query.equalTo("eventId", eventId);
-	query.find({
-		success: function(interest) {
-			successFunction(eventId, interest);
-		}
-	});
-
-}
-
-function ParseRemoveInterest(objectId, owner, eventId, displayFunction){
-	var Interest = Parse.Object.extend("Interest");
-	var query = new Parse.Query(Interest);
-	if (objectId == null) {
-		query.equalTo("owner", owner);
-		query.equalTo("eventId", eventId);
-		query.find({
-			success: function(interest){
-				displayFunction(interest,eventId);
-			}
-		});
-	} 
-	else {
-		query.get(objectId, {
-			success: function(interest){
-				interest.destroy({
-					success: function(interest){
-						ParseUpdateEventInterestNumber(-1, eventId, displayFunction);
-					}
-				});
-			}
-		});
-	}
-}
-
-function ParseUpdateEventInterestNumber(count, eventId, displayFunction){
+function ParseAddInterest(eventId, displayFunction){
 	var UserEvent = Parse.Object.extend("UserEvent");
 	var query = new Parse.Query(UserEvent);
-	
+
 	query.get(eventId, {
-		success: function(userEvent){
-			userEvent.increment("interestNumber",count);
-			userEvent.save(null, {
-				success: function(userEvent){
-					displayFunction(userEvent);
+		success: function(object){
+			object.addUnique("interestId",Parse.User.current().id);
+			object.save(null, {
+				success: function(object){
+					displayFunction(object);
+				}
+			});
+		}
+	});
+}
+
+function ParseRemoveInterest(eventId, displayFunction){
+	var UserEvent = Parse.Object.extend("UserEvent");
+	var query = new Parse.Query(UserEvent);
+
+	query.get(eventId, {
+		success: function(object){
+			object.remove("interestId",Parse.User.current().id);
+			object.save(null, {
+				success: function(object){
+					displayFunction(object);
 				}
 			});
 		}
@@ -1166,4 +1129,35 @@ function ParseCheckChatObject() {
 		refreshNumber += 1;
 		ParseCheckChatObject();
 	},5000)
+}
+var NoticeNewVersionObjects;
+function ParseNoticeNewVersion() {
+	var User = Parse.Object.extend("User");
+	var query = new Parse.Query(User);
+
+	query.equalTo("objectId", Parse.User.current().id);
+	query.find({
+		success: function(objects){
+			NoticeNewVersionObjects = objects;
+			SendNewVersionNotification(0);
+		}
+	})
+}
+
+function SendNewVersionNotification(i) {
+	if (i >= NoticeNewVersionObjects.length)
+		return
+	var object = NoticeNewVersionObjects[i];
+	console.log(object.id);
+	if (typeof(object.get("GCMId")) != "undefined") {
+		pushNotificationToDevice('gcm', object.get("GCMId"), "New version is available.");
+		console.log("GCMId:" + object.get("GCMId"));
+	}
+	if (typeof(object.get("APNId")) != "undefined") {
+		pushNotificationToDevice('apn', object.get("APNId"), "New version is available.");
+		console.log("APNId:" + object.get("APNId"));
+	}
+	setTimeout(function(){
+		SendNewVersionNotification(i+1)
+	}, 1000);
 }

@@ -6,6 +6,7 @@
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black">
     <meta name="mobile-web-app-capable" content="yes">
+    <meta name="google-site-verification" content="zqi1qvIiwocwoL_b0haed8dM1LCW1J5RgaahmKOngTE" />
     <title>Yueme</title>
     <link rel="icon" sizes="192x192" href="./content/material-design/png/m-192.png">
     <link rel="apple-touch-icon" href="./content/material-design/png/m-192.png">
@@ -345,20 +346,23 @@
 		</div><!-- /footer -->
 	</div><!-- /page -->
 
-
-
-
-
 	<!-- Page for displaying the detail of an event -->
 	<div data-role="page" id="page-event-detail" data-title="Yueme" data-add-back-btn="true">
 
 		<div data-role="header">
 			<h1>Activity Detail</h1>
 			<a data-rel="back" href="#page-event" class="ui-btn-left ui-btn ui-btn-inline ui-corner-all" onclick="$('#send-comment-bar').fadeOut(); setCurrLocationHash('#page-event')">Back</a>
+			<a href="#" class="ui-btn-right ui-btn ui-btn-inline ui-corner-all" id="ui-icon-custom-right-top-more" onclick="displayEventDetailMoreOption()"></a>
 		</div><!-- /header -->
 
 		<div role="main" class="ui-content" id="event-detail-content">
 		</div><!-- /content -->
+
+		<div id="page-event-detail-more-option" class="ui-page-detail-more-option-bottom">
+			<a href="#page-event-report" data-transition="slideup" class='ui-btn report-btn' onclick="hideEventDetailMoreOption()">Report</a>
+			<div class='ui-btn ui-more-option-cancel-btn' onclick="
+            hideEventDetailMoreOption()">Cancel</div>
+		</div>
 
 	</div><!-- /page -->
 
