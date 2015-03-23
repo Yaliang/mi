@@ -306,12 +306,12 @@ function hiddenEventMoreOption(){
 // #page-create-event functions
 
 function createUserEvent(){
-	var currentUser = Parse.User.current();
-	var owner = currentUser.getUsername();
+    var currentUser = Parse.User.current();
+    var owner = currentUser.getUsername();
 
-	var title = $("#event-create-title").val();
-	var location = $("#event-create-location").val();
-	var startTime = $("#event-create-startTime").val().replace("T", ' ');
+    var title = $("#event-create-title").val();
+    var location = $("#event-create-location").val();
+    var startTime = $("#event-create-startTime").val().replace("T", ' ');
     var endTime = $("#event-create-endTime").val().replace('T', ' ');
 
     var errorHandler = function(item) {
@@ -366,27 +366,27 @@ function createUserEvent(){
 
     var time = startTime + " -- " + endTime;
 
-	var visibility = $("#event-create-visibility").val()=="on" ? true : false ;
-	var description = $("#event-create-description").val();
-	var errorObject = $("#event-create-error");
-	var destID = "#page-event";
-	var displayFunction = function(object){
-		$("#event-create-title").val("");
-		$("#event-create-location").val("");
-		$("#event-create-start-time").val("");
-		$("#event-create-end-time").val("");
-		$("#event-create-description").val("");
-		$("#event-create-visibility").val("on").flipswitch('refresh');
-		$("#event-create-error").html("");
-		//pullUserEvent();
-		var id = object.id;
-		var holder = object.get("owner");
-		var newElement = buildUserEventElement(object);
-		$("#event-content").prepend(newElement);
-		// display event holder's name | not the email one
-		pullUserEventHolderInfo(holder, id);
-	};
-	ParseEventCreate(owner, title, location, time, visibility, description, errorObject, destID, displayFunction);
+    var visibility = $("#event-create-visibility").val()=="on" ? true : false ;
+    var description = $("#event-create-description").val();
+    var errorObject = $("#event-create-error");
+    var destID = "#page-event";
+    var displayFunction = function(object){
+        $("#event-create-title").val("");
+        $("#event-create-location").val("");
+        $("#event-create-start-time").val("");
+        $("#event-create-end-time").val("");
+        $("#event-create-description").val("");
+        $("#event-create-visibility").val("on").flipswitch('refresh');
+        $("#event-create-error").html("");
+        //pullUserEvent();
+        var id = object.id;
+        var holder = object.get("owner");
+        var newElement = buildUserEventElement(object);
+        $("#event-content").prepend(newElement);
+        // display event holder's name | not the email one
+        pullUserEventHolderInfo(holder, id);
+    };
+    ParseEventCreate(owner, title, location, time, visibility, description, errorObject, destID, displayFunction);
 }
 
 // #page-event-detail functions

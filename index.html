@@ -1,57 +1,24 @@
-<!DOCTYPE html> 
+<!DOCTYPE html>
 <html manifest="cache.manifest">
+
 <head>
-	<meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no">
+    <meta charset="utf-8">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black">
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="google-site-verification" content="zqi1qvIiwocwoL_b0haed8dM1LCW1J5RgaahmKOngTE" />
+    <!-- Disable automatic phone number detection. -->
+    <meta name="format-detection" content="telephone=no">
+    
+    <!--Name of the web app-->
     <title>Yueme</title>
+
     <link rel="icon" sizes="192x192" href="./content/material-design/png/m-192.png">
     <link rel="apple-touch-icon" href="./content/material-design/png/m-192.png">
-    <!-- Disable automatic phone number detection. -->
-    <meta name="format-detection"
-          content="telephone=no">
- 
-    <!-- ICONS --> 
-    <!-- iPad retina icon -->
-    <!-- <link href="./content/png/apple-touch-icon-precomposed-152.png" -->
-          <!-- sizes="152x152" -->
-          <!-- rel="apple-touch-icon-precomposed"> -->
- 
-    <!-- iPad retina icon (iOS < 7) -->
-    <!-- <link href="./content/png/apple-touch-icon-precomposed-144.png"
-          sizes="144x144"
-          rel="apple-touch-icon-precomposed">
-  -->
-    <!-- iPad non-retina icon -->
-   <!--  <link href="./content/png/apple-touch-icon-precomposed-76.png"
-          sizes="76x76"
-          rel="apple-touch-icon-precomposed">
-  -->
-    <!-- iPad non-retina icon (iOS < 7) -->
-  <!--   <link href="./content/png/apple-touch-icon-precomposed-72.png"
-          sizes="72x72"
-          rel="apple-touch-icon-precomposed">
-  -->
-    <!-- iPhone 6 Plus icon -->
-  <!--   <link href="./content/png/apple-touch-icon-precomposed-180.png"
-          sizes="120x120"
-          rel="apple-touch-icon-precomposed">
-  -->
-    <!-- iPhone retina icon (iOS < 7) -->
-   <!--  <link href="./content/png/apple-touch-icon-precomposed-114.png"
-          sizes="114x114"
-          rel="apple-touch-icon-precomposed">
-  -->
-    <!-- iPhone non-retina icon (iOS < 7) -->
-   <!--  <link href="./content/png/apple-touch-icon-precomposed-57.png"
-          sizes="57x57"
-          rel="apple-touch-icon-precomposed">
-  -->
+
     <!-- STARTUP IMAGES -->
- 
     <!-- iPad retina portrait startup image -->
     <link href="./content/png/apple-touch-startup-image-1536x2008.png"
           media="(device-width: 768px) and (device-height: 1024px)
@@ -117,8 +84,7 @@
           media="(device-width: 320px) and (device-height: 480px)
                  and (-webkit-device-pixel-ratio: 1)"
           rel="apple-touch-startup-image">
- 
-    <!-- HACKS -->
+    <!-- END OF STARTUP IMAGES -->
  
     <!-- Prevent text size change on orientation change. -->
     <style>
@@ -126,112 +92,114 @@
         -webkit-text-size-adjust: 100%;
       }
     </style>
+
     <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,300,700' rel='stylesheet' type='text/css'>
-	<link rel="stylesheet" href="./script/jquery/mobile/jquery.mobile-1.4.5.min.css" />
-	<link rel="stylesheet" href="index.css" />
-	<!--  -->
-	<script type="text/javascript">
+    <link rel="stylesheet" href="./script/jquery/mobile/jquery.mobile-1.4.5.min.css" />
+    <link rel="stylesheet" href="index.css" />
+
+    <script type="text/javascript">
         window.location.hash = "#page-loading";
     </script>
-	<script src="./script/jquery/jquery-1.11.1.min.js"></script>
-	<script src="./script/jquery/mobile/jquery.mobile-1.4.5.min.js"></script>
-	<script src="./script/exif/load-image.all.min.js"></script>
-	<script src="./script/parse/parse-1.3.2.min.js"></script>
-	<!--<script src="./script/parse/parse-1.3.2.js"></script>-->
-	<script src="./script/parse/query.js"></script>
-	<script src="./script/cache.js"></script>
-	<script src="./script/functions.js"></script>
-	<script src="./script/functions-events.js"></script>
-	<script src="./script/functions-friends.js"></script>
-	<script src="./script/functions-chats.js"></script>
-	<script src="./script/functions-settings.js"></script>
+    <script src="./script/jquery/jquery-1.11.1.min.js"></script>
+    <script src="./script/jquery/mobile/jquery.mobile-1.4.5.min.js"></script>
+    <script src="./script/exif/load-image.all.min.js"></script>
+    <script src="./script/parse/parse-1.3.2.min.js"></script>
+    <script src="./script/parse/query.js"></script>
+    <script src="./script/cache.js"></script>
+    <script src="./script/functions.js"></script>
+    <script src="./script/functions-events.js"></script>
+    <script src="./script/functions-friends.js"></script>
+    <script src="./script/functions-chats.js"></script>
+    <script src="./script/functions-settings.js"></script>
 </head>
 
 <body>
-	<!--Page for loading -->
-	<div data-role="page" id="page-loading" data-title="Yueme">
+    <!--Page for loading -->
+    <div id="page-loading" data-role="page" data-title="Yueme">
 
-		<div role="main" class="ui-content">
-			<!-- <h1>loading</h1> -->
-			<div class="loading-page-image"></div>
-		</div>
+        <div role="main"
+             class="ui-content">
 
-	</div><!-- /page -->
+            <div class="loading-page-image"></div>
 
-	 <!--Page for signup -->
-	<div data-role="page" id="page-signup" data-title="Yueme">
+        </div>
 
-		<div data-role="header">
-			<h1>Sign Up</h1>
-			<a href="#page-login" class="ui-btn-right ui-btn ui-btn-inline ui-corner-all" onclick="$('#login-error').html('');setCurrLocationHash('#page-login')">Log In</a>
-		</div><!-- header -->
+    </div><!-- /page -->
 
-		<div role="main" class="ui-content">
-			<form style='padding: 1em ' id='signup-form'>
-				<label for="signup-name">Name:</label>
-				<input type="text" data-clear-btn="true" name="username" id="signup-name" value="">
-				<label for="signup-email">Email:</label>
-				<input type="email" data-clear-btn="true" name="useremail" id="signup-email" value="">
-				<label for="signup-password">Password:</label>
-				<input type="password" data-clear-btn="ture" name="userpassword" id="signup-password" value="" autocomplete="off">
-				<div id="signup-error" class="error-message"></div>
-				<button class="ui-btn" onclick="signup()">Sign Up</button>
-			</form>
-		</div><!-- /content -->
+     <!--Page for signup -->
+    <div data-role="page" id="page-signup" data-title="Yueme">
 
-		<div data-role="footer" data-position="fixed" data-tap-toggle="false">
-		</div><!-- /footer -->
-	</div><!-- /page -->
+        <div data-role="header">
+            <h1>Sign Up</h1>
+            <a href="#page-login" class="ui-btn-right ui-btn ui-btn-inline ui-corner-all" onclick="$('#login-error').html('');setCurrLocationHash('#page-login')">Log In</a>
+        </div><!-- header -->
 
-	 <!--Page for login -->
-	<div data-role="page" id="page-login" data-title="Yueme">
+        <div role="main" class="ui-content">
+            <form style='padding: 1em ' id='signup-form'>
+                <label for="signup-name">Name:</label>
+                <input type="text" data-clear-btn="true" name="username" id="signup-name" value="">
+                <label for="signup-email">Email:</label>
+                <input type="email" data-clear-btn="true" name="useremail" id="signup-email" value="">
+                <label for="signup-password">Password:</label>
+                <input type="password" data-clear-btn="ture" name="userpassword" id="signup-password" value="" autocomplete="off">
+                <div id="signup-error" class="error-message"></div>
+                <button class="ui-btn" onclick="signup()">Sign Up</button>
+            </form>
+        </div><!-- /content -->
 
-		<div data-role="header">
-			<h1>Log In</h1>
-			<a href="#page-signup" class="ui-btn-right ui-btn ui-btn-inline ui-corner-all" onclick="$('#signup-error').html('');setCurrLocationHash('#page-signup')">Sign Up</a>
-		</div><!-- header -->
+        <div data-role="footer" data-position="fixed" data-tap-toggle="false">
+        </div><!-- /footer -->
+    </div><!-- /page -->
 
-		<div role="main" class="ui-content">
-			<form style='padding: 1em ' id='login-form'>
-				<label for="login-email">Email:</label>
-				<input type="email" data-clear-btn="true" name="useremail" id="login-email" value="">
-				<label for="login-password">Password:</label>
-				<input type="password" data-clear-btn="ture" name="userpassword" id="login-password" value="" autocomplete="off">
-				<div id="login-error" class="error-message"></div>
-				<button class="ui-btn" onclick="login();">Log In</button>
-			</form>
-		</div><!-- /content -->
+     <!--Page for login -->
+    <div data-role="page" id="page-login" data-title="Yueme">
 
-		<div data-role="footer" data-position="fixed" data-tap-toggle="false">
-		</div><!-- /footer -->
-	</div><!-- /page -->
+        <div data-role="header">
+            <h1>Log In</h1>
+            <a href="#page-signup" class="ui-btn-right ui-btn ui-btn-inline ui-corner-all" onclick="$('#signup-error').html('');setCurrLocationHash('#page-signup')">Sign Up</a>
+        </div><!-- header -->
 
-	<!-- Page for displaying the list of events -->
-	<div data-role="page" id="page-event" data-title="Yueme">
+        <div role="main" class="ui-content">
+            <form style='padding: 1em ' id='login-form'>
+                <label for="login-email">Email:</label>
+                <input type="email" data-clear-btn="true" name="useremail" id="login-email" value="">
+                <label for="login-password">Password:</label>
+                <input type="password" data-clear-btn="ture" name="userpassword" id="login-password" value="" autocomplete="off">
+                <div id="login-error" class="error-message"></div>
+                <button class="ui-btn" onclick="login();">Log In</button>
+            </form>
+        </div><!-- /content -->
 
-		<div data-role="header" data-position="fixed" data-tap-toggle="false" >
-			<h1>Activities</h1>
-			<a href="#" class="ui-btn-right ui-btn ui-btn-inline ui-corner-all" id="ui-icon-custom-right-top-more" onclick="displayEventMoreOption();"></a>
-			<!--
-				<a href="#page-event-create" class="ui-btn-right ui-btn ui-btn-inline ui-corner-all" onclick="$('#event-create-button').bind('click',function(){createUserEvent();});">Create</a>
-				<a href="#page-event-my-event" class="ui-btn-left ui-btn ui-btn-inline ui-corner-all" onclick="pullMyEvent();">My Event</a>
-			-->
-		</div><!-- /header -->
+        <div data-role="footer" data-position="fixed" data-tap-toggle="false">
+        </div><!-- /footer -->
+    </div><!-- /page -->
 
-		<div role="main" class="ui-content" id="event-content">
-			<div class="ui-load-more-activity" onclick="pullUserEvent(currentLastEvent)">More Activities</div>
-		</div><!-- /content -->
+    <!-- Page for displaying the list of events -->
+    <div data-role="page" id="page-event" data-title="Yueme">
 
-		<div data-role="footer" class="nav-glyphish-example" data-position="fixed" data-tap-toggle="false">
-			<div data-role="navbar" class="nav-glyphish-example" data-grid="c">
-			<ul>
-				<li><a href="#page-event" data-transition="none" class="event-active-custom" id="event" onclick="pullUserEvent();setCurrLocationHash('#page-event')">Activities</a></li>
-				<li><a href="#page-friend" data-transition="none" id="friend" onclick="pullMyFriendList();setCurrLocationHash('#page-friend')">Friends</a></li>
-				<li><a href="#page-chat" data-transition="none" id="chat" onclick="pullMyChat();setCurrLocationHash('#page-chat')">Chats</a></li>
-				<li><a href="#page-setting" data-transition="none" id="setting" onclick="setCurrLocationHash('#page-setting')">Settings</a></li>
-			</ul>
-			</div>
-		</div><!-- /footer -->
+        <div data-role="header" data-position="fixed" data-tap-toggle="false" >
+            <h1>Activities</h1>
+            <a href="#" class="ui-btn-right ui-btn ui-btn-inline ui-corner-all" id="ui-icon-custom-right-top-more" onclick="displayEventMoreOption();"></a>
+            <!--
+                <a href="#page-event-create" class="ui-btn-right ui-btn ui-btn-inline ui-corner-all" onclick="$('#event-create-button').bind('click',function(){createUserEvent();});">Create</a>
+                <a href="#page-event-my-event" class="ui-btn-left ui-btn ui-btn-inline ui-corner-all" onclick="pullMyEvent();">My Event</a>
+            -->
+        </div><!-- /header -->
+
+        <div role="main" class="ui-content" id="event-content">
+            <div class="ui-load-more-activity" onclick="pullUserEvent(currentLastEvent)">More Activities</div>
+        </div><!-- /content -->
+
+        <div data-role="footer" class="nav-glyphish-example" data-position="fixed" data-tap-toggle="false">
+            <div data-role="navbar" class="nav-glyphish-example" data-grid="c">
+            <ul>
+                <li><a href="#page-event" data-transition="none" class="event-active-custom" id="event" onclick="pullUserEvent();setCurrLocationHash('#page-event')">Activities</a></li>
+                <li><a href="#page-friend" data-transition="none" id="friend" onclick="pullMyFriendList();setCurrLocationHash('#page-friend')">Friends</a></li>
+                <li><a href="#page-chat" data-transition="none" id="chat" onclick="pullMyChat();setCurrLocationHash('#page-chat')">Chats</a></li>
+                <li><a href="#page-setting" data-transition="none" id="setting" onclick="setCurrLocationHash('#page-setting')">Settings</a></li>
+            </ul>
+            </div>
+        </div><!-- /footer -->
 
         <ul class='event-page-right-top-options' style='display: none;'>
             <li><a href='#page-event-create' id='event-page-right-top-option-1' onclick="setCurrLocationHash('#page-event-create')">Create</a></li>
@@ -240,385 +208,386 @@
 
         <div class='options-hidden-cover-layer' style='display: none;'></div>
 
-	</div><!-- /page -->
+    </div><!-- /page -->
 
-	<!-- Page for displaying the list of my events -->
-	<div data-role="page" id="page-event-my-event" data-title="Yueme">
+    <!-- Page for displaying the list of my events -->
+    <div data-role="page" id="page-event-my-event" data-title="Yueme">
 
-		<div data-role="header" data-position="fixed" data-tap-toggle="false" >
-			<h1>My Activities</h1>
-			<a href="#page-event" class="ui-btn-left ui-btn ui-btn-inline ui-corner-all" onclick="setCurrLocationHash('#page-event')">Back</a>
-		</div><!-- /header -->
+        <div data-role="header" data-position="fixed" data-tap-toggle="false" >
+            <h1>My Activities</h1>
+            <a href="#page-event" class="ui-btn-left ui-btn ui-btn-inline ui-corner-all" onclick="setCurrLocationHash('#page-event')">Back</a>
+        </div><!-- /header -->
 
-		<div role="main" class="ui-content" id="my-event-content">
-		</div><!-- /content -->
+        <div role="main" class="ui-content" id="my-event-content">
+        </div><!-- /content -->
 
-		<div data-role="footer" data-position="fixed" data-tap-toggle="false">
-		</div><!-- /footer -->
-	</div><!-- /page -->
+        <div data-role="footer" data-position="fixed" data-tap-toggle="false">
+        </div><!-- /footer -->
+    </div><!-- /page -->
 
-	<!-- Page for creating a new event -->
-	<div data-role="page" id="page-event-create" data-title="Yueme">
+    <!-- Page for creating a new event -->
+    <div data-role="page" id="page-event-create" data-title="Yueme">
 
-		<div data-role="header">
-			<h1>Create Activity</h1>
-			<a href="#page-event" class="ui-btn-left ui-btn ui-btn-inline ui-corner-all" onclick="setCurrLocationHash('#page-event')">Cancel</a>
-		</div><!-- /header -->
+        <div data-role="header">
+            <h1>Create Activity</h1>
+            <a href="#page-event" class="ui-btn-left ui-btn ui-btn-inline ui-corner-all" onclick="setCurrLocationHash('#page-event')">Cancel</a>
+        </div><!-- /header -->
 
-		<div role="main" class="ui-content">
-			<form id="event-create-form" style='padding: 1em '>
-				<label for="event-create-title">Title:</label>
-				<input type="text" data-clear-btn="true" name="eventtitle" id="event-create-title" value="">
-				<label for="event-create-location">Location:</label>
-				<input type="text" data-clear-btn="ture" name="eventlocation" id="event-create-location" value="">
-				<label for="event-create-startTime">Start Time:</label>
-				<input type="datetime-local" data-clear-btn="ture" name="eventstarttime" id="event-create-startTime" value="">
-				<label for="event-create-endTime">End Time:</label>
-				<input type="datetime-local" data-clear-btn="ture" name="eventendtime" id="event-create-endTime" value="">
-				<label for="event-create-visibility">Visibility:</label>
-				<select name="eventvisibility" id="event-create-visibility" data-role="flipswitch" data-wrapper-class="custom-size-flipswitch-event-create-visibility" checked="">
-					<option value="off">Friends</option>
-					<option value="on" selected="">Public</option>
-				</select>
-				<!-- flyer will comming later 
-					<label for="eventflyer">Flyer:</label>
-					<input type="file" name="eventflyer" accept="image/*" capture>
-				-->
-				<!-- label of event will comming later 
-				-->
-				<label for="event-create-description">Description:</label>
-				<textarea name="eventdescription" id="event-create-description"></textarea>
-			</form>
+        <div role="main" class="ui-content">
+            <form id="event-create-form" style='padding: 1em '>
+                <label for="event-create-title">Title:</label>
+                <input type="text" data-clear-btn="true" name="eventtitle" id="event-create-title" value="">
+                <label for="event-create-location">Location:</label>
+                <input type="text" data-clear-btn="ture" name="eventlocation" id="event-create-location" value="">
+                <label for="event-create-startTime">Start Time:</label>
+                <input type="datetime-local" data-clear-btn="ture" name="eventstarttime" id="event-create-startTime" value="">
+                <label for="event-create-endTime">End Time:</label>
+                <input type="datetime-local" data-clear-btn="ture" name="eventendtime" id="event-create-endTime" value="">
+                <label for="event-create-visibility">Visibility:</label>
+                <select name="eventvisibility" id="event-create-visibility" data-role="flipswitch" data-wrapper-class="custom-size-flipswitch-event-create-visibility" checked="">
+                    <option value="off">Friends</option>
+                    <option value="on" selected="">Public</option>
+                </select>
+                <!-- flyer will comming later 
+                    <label for="eventflyer">Flyer:</label>
+                    <input type="file" name="eventflyer" accept="image/*" capture>
+                -->
+                <!-- label of event will comming later 
+                -->
+                <label for="event-create-description">Description:</label>
+                <textarea name="eventdescription" id="event-create-description"></textarea>
+            </form>
 
-			<div id="event-create-preview"></div>
-			<div id="event-create-error"></div>
+            <div id="event-create-preview"></div>
+            <div id="event-create-error"></div>
 
             <button id="event-create-button" class="ui-btn">Create</button>
 
-		</div><!-- /content -->
+        </div><!-- /content -->
 
-		<div data-role="footer" data-position="fixed" data-tap-toggle="false">
-		</div><!-- /footer -->
-	</div><!-- /page -->
+        <div data-role="footer" data-position="fixed" data-tap-toggle="false">
+        </div><!-- /footer -->
+    </div><!-- /page -->
 
 
-	<!-- Page for edit event -->
-	<div data-role="page" id="page-event-edit" data-title="Yueme">
+    <!-- Page for edit event -->
+    <div data-role="page" id="page-event-edit" data-title="Yueme">
 
-		<div data-role="header">
-			<h1>Edit Activity</h1>
-			<a href="#" data-rel="back" class="ui-btn-left ui-btn ui-btn-inline ui-corner-all" onclick="setCurrLocationHash('#page-event')">Cancel</a>
-		</div><!-- /header -->
+        <div data-role="header">
+            <h1>Edit Activity</h1>
+            <a href="#" data-rel="back" class="ui-btn-left ui-btn ui-btn-inline ui-corner-all" onclick="setCurrLocationHash('#page-event')">Cancel</a>
+        </div><!-- /header -->
 
-		<div role="main" class="ui-content">
-			<form id="event-edit-form" style='padding: 1em '>
-				<label for="event-edit-title">Title:</label>
-				<input type="text" data-clear-btn="true" name="eventtitle" id="event-edit-title" value="">
-				<label for="event-edit-location">Location:</label>
-				<input type="text" data-clear-btn="ture" name="eventlocation" id="event-edit-location" value="">
-				<label for="event-edit-startTime">Start Time:</label>
-				<input type="datetime-local" data-clear-btn="ture" name="eventstarttime" id="event-edit-startTime" value="">
-				<label for="event-edit-endTime">End Time:</label>
-				<input type="datetime-local" data-clear-btn="ture" name="eventendtime" id="event-edit-endTime" value="">
-				<label for="event-edit-visibility">Visibility:</label>
-				<select name="eventvisibility" id="event-edit-visibility" data-role="flipswitch" data-wrapper-class="custom-size-flipswitch-event-create-visibility" checked="">
-					<option value="off">Friends</option>
-					<option value="on" selected="">Public</option>
-				</select>
-				<!-- flyer will comming later 
-					<label for="eventflyer">Flyer:</label>
-					<input type="file" name="eventflyer" accept="image/*" capture>
-				-->
-				<!-- label of event will comming later 
-				-->
-				<label for="event-edit-description">Description:</label>
-				<textarea name="eventdescription" id="event-edit-description"></textarea>
-			</form>
+        <div role="main" class="ui-content">
+            <form id="event-edit-form" style='padding: 1em '>
+                <label for="event-edit-title">Title:</label>
+                <input type="text" data-clear-btn="true" name="eventtitle" id="event-edit-title" value="">
+                <label for="event-edit-location">Location:</label>
+                <input type="text" data-clear-btn="ture" name="eventlocation" id="event-edit-location" value="">
+                <label for="event-edit-startTime">Start Time:</label>
+                <input type="datetime-local" data-clear-btn="ture" name="eventstarttime" id="event-edit-startTime" value="">
+                <label for="event-edit-endTime">End Time:</label>
+                <input type="datetime-local" data-clear-btn="ture" name="eventendtime" id="event-edit-endTime" value="">
+                <label for="event-edit-visibility">Visibility:</label>
+                <select name="eventvisibility" id="event-edit-visibility" data-role="flipswitch" data-wrapper-class="custom-size-flipswitch-event-create-visibility" checked="">
+                    <option value="off">Friends</option>
+                    <option value="on" selected="">Public</option>
+                </select>
+                <!-- flyer will comming later 
+                    <label for="eventflyer">Flyer:</label>
+                    <input type="file" name="eventflyer" accept="image/*" capture>
+                -->
+                <!-- label of event will comming later 
+                -->
+                <label for="event-edit-description">Description:</label>
+                <textarea name="eventdescription" id="event-edit-description"></textarea>
+            </form>
 
-			<div id="event-edit-preview"></div>
-			<div id="event-edit-error"></div>
+            <div id="event-edit-preview"></div>
+            <div id="event-edit-error"></div>
 
             <button id="event-editsave-button" class="ui-btn">Save</button>
 
-		</div><!-- /content -->
+        </div><!-- /content -->
 
-		<div data-role="footer" data-position="fixed" data-tap-toggle="false">
-		</div><!-- /footer -->
-	</div><!-- /page -->
+        <div data-role="footer" data-position="fixed" data-tap-toggle="false">
+        </div><!-- /footer -->
+    </div><!-- /page -->
 
-	<!-- Page for displaying the detail of an event -->
-	<div data-role="page" id="page-event-detail" data-title="Yueme" data-add-back-btn="true">
+    <!-- Page for displaying the detail of an event -->
+    <div data-role="page" id="page-event-detail" data-title="Yueme" data-add-back-btn="true">
 
-		<div data-role="header">
-			<h1>Activity Detail</h1>
-			<a data-rel="back" href="#page-event" class="ui-btn-left ui-btn ui-btn-inline ui-corner-all" onclick="$('#send-comment-bar').fadeOut(); setCurrLocationHash('#page-event')">Back</a>
-			<a href="#" class="ui-btn-right ui-btn ui-btn-inline ui-corner-all" id="ui-icon-custom-right-top-more" onclick="displayEventDetailMoreOption()"></a>
-		</div><!-- /header -->
+        <div data-role="header">
+            <h1>Activity Detail</h1>
+            <a data-rel="back" href="#page-event" class="ui-btn-left ui-btn ui-btn-inline ui-corner-all" onclick="$('#send-comment-bar').fadeOut(); setCurrLocationHash('#page-event')">Back</a>
+            <a href="#" class="ui-btn-right ui-btn ui-btn-inline ui-corner-all" id="ui-icon-custom-right-top-more" onclick="displayEventDetailMoreOption()"></a>
+        </div><!-- /header -->
 
-		<div role="main" class="ui-content" id="event-detail-content">
-		</div><!-- /content -->
+        <div role="main" class="ui-content" id="event-detail-content">
+        </div><!-- /content -->
 
-		<div id="page-event-detail-more-option" class="ui-page-detail-more-option-bottom">
-			<a href="#page-event-report" data-transition="slideup" class='ui-btn report-btn' onclick="hideEventDetailMoreOption()">Report</a>
-			<div class='ui-btn ui-more-option-cancel-btn' onclick="
+        <div id="page-event-detail-more-option" class="ui-page-detail-more-option-bottom">
+            <a href="#page-event-report" data-transition="slideup" class='ui-btn report-btn' onclick="hideEventDetailMoreOption()">Report</a>
+            <div class='ui-btn ui-more-option-cancel-btn' onclick="
             hideEventDetailMoreOption()">Cancel</div>
-		</div>
+        </div>
 
-	</div><!-- /page -->
+    </div><!-- /page -->
 
-	<!-- page for report pop up  -->
-	<div data-role="page" id="page-event-report" data-title="Yueme">
+    <!-- page for report pop up  -->
+    <div data-role="page" id="page-event-report" data-title="Yueme">
 
-		<div data-role="header" data-theme="b">
-		<h1>Report Activity</h1>
-		</div>
+        <div data-role="header" data-theme="b">
+        <h1>Report Activity</h1>
+        </div>
 
-		<div role="main" class="ui-content">
-		<br>
-		<div align = "center" style="font-family: 'Open Sans';">Are you sure to report this activity? You might not be able to cancel this action.</div>
-		<br>
-			<a  data-rel="back" class="ui-btn ui-shadow ui-corner-all ui-btn-a ui-custom-report">Confirm</a>
-			<a  data-rel="back" class="ui-btn ui-shadow ui-corner-all ui-btn-a" onclick="$('#send-comment-bar').fadeIn();">Cancel</a>
-		</div>
+        <div role="main" class="ui-content">
+        <br>
+        <div align = "center" style="font-family: 'Open Sans';">Are you sure to report this activity? You might not be able to cancel this action.</div>
+        <br>
+            <a  data-rel="back" class="ui-btn ui-shadow ui-corner-all ui-btn-a ui-custom-report">Confirm</a>
+            <a  data-rel="back" class="ui-btn ui-shadow ui-corner-all ui-btn-a" onclick="$('#send-comment-bar').fadeIn();">Cancel</a>
+        </div>
 
-	</div><!-- /page -->
+    </div><!-- /page -->
 
-	<!-- page for delete confirm pop up  -->
-	<div data-role="page" id="page-event-delete" data-title="Yueme">
+    <!-- page for delete confirm pop up  -->
+    <div data-role="page" id="page-event-delete" data-title="Yueme">
 
-		<div data-role="header" data-theme="b">
-		<h1>Delete Activity</h1>
-		</div>
+        <div data-role="header" data-theme="b">
+        <h1>Delete Activity</h1>
+        </div>
 
-		<div role="main" class="ui-content">
-		<br>
-		<div align = "center" style="font-family: 'Open Sans';">Are you sure to delete this activity? You might not be able to undo this action.</div>
-		<br>
-			<a  data-rel="back" class="ui-btn ui-shadow ui-corner-all ui-btn-a ui-custom-delete-confirm">Confirm</a>
-			<a  data-rel="back" class="ui-btn ui-shadow ui-corner-all ui-btn-a" onclick="setCurrLocationHash('#page-event-detail');">Cancel</a>
-		</div>
-	</div><!-- /page -->
+        <div role="main" class="ui-content">
+        <br>
+        <div align = "center" style="font-family: 'Open Sans';">Are you sure to delete this activity? You might not be able to undo this action.</div>
+        <br>
+            <a  data-rel="back" class="ui-btn ui-shadow ui-corner-all ui-btn-a ui-custom-delete-confirm">Confirm</a>
+            <a  data-rel="back" class="ui-btn ui-shadow ui-corner-all ui-btn-a" onclick="setCurrLocationHash('#page-event-detail');">Cancel</a>
+        </div>
+    </div><!-- /page -->
 
-	<!-- Page for displaying the friend list -->
-	<div data-role="page" id="page-friend" data-title="Yueme">
+    <!-- Page for displaying the friend list -->
+    <div data-role="page" id="page-friend" data-title="Yueme">
 
-		<div data-role="header">
-			<h1>Friends</h1>
-			<a href="#page-people-near-by" class="ui-btn-left ui-btn ui-btn-inline ui-corner-all" onclick="listPeopleNearBy();setCurrLocationHash('#page-people-near-by')">Near By</a>
-			<a href="#page-people-search" class="ui-btn-right ui-btn ui-btn-inline ui-corner-all" onclick="bindSearchAutocomplete();setCurrLocationHash('#page-people-search')">Search</a>
-		</div><!-- /header -->
+        <div data-role="header">
+            <h1>Friends</h1>
+            <a href="#page-people-near-by" class="ui-btn-left ui-btn ui-btn-inline ui-corner-all" onclick="listPeopleNearBy();setCurrLocationHash('#page-people-near-by')">Near By</a>
+            <a href="#page-people-search" class="ui-btn-right ui-btn ui-btn-inline ui-corner-all" onclick="bindSearchAutocomplete();setCurrLocationHash('#page-people-search')">Search</a>
+        </div><!-- /header -->
 
-		<div role="main" class="ui-content">
-			<a href="#page-my-friend-requests" id="new-friend-requests-btn" class="ui-btn" onclick="pullMyFriendRequests();setCurrLocationHash('#page-my-friend-requests')">New Friend Requests<span id="new-friend-requests-number" class="ui-li-count"></span></a>
-			<ul id='friend-list' class='ui-custom-listview ui-listview ui-listview-inset ui-corner-all ui-shadow'>
-			</ul>
-		</div><!-- /content -->
+        <div role="main" class="ui-content">
+            <a href="#page-my-friend-requests" id="new-friend-requests-btn" class="ui-btn" onclick="pullMyFriendRequests();setCurrLocationHash('#page-my-friend-requests')">New Friend Requests<span id="new-friend-requests-number" class="ui-li-count"></span></a>
+            <ul id='friend-list' class='ui-custom-listview ui-listview ui-listview-inset ui-corner-all ui-shadow'>
+            </ul>
+        </div><!-- /content -->
 
-		<div data-role="footer" class="nav-glyphish-example" data-position="fixed" data-tap-toggle="false">
-			<div data-role="navbar" class="nav-glyphish-example" data-grid="c">
-			<ul>
-				<li><a href="#page-event" data-transition="none" id="event" onclick="pullUserEvent();setCurrLocationHash('#page-event')">Activities</a></li>
-				<li><a href="#page-friend" data-transition="none" class="friend-active-custom" id="friend" onclick="pullMyFriendList();setCurrLocationHash('#page-friend')">Friends</a></li>
-				<li><a href="#page-chat" data-transition="none" id="chat" onclick="pullMyChat();setCurrLocationHash('#page-chat')">Chats</a></li>
-				<li><a href="#page-setting" data-transition="none" id="setting" onclick="setCurrLocationHash('#page-setting')">Settings</a></li>
-			</ul>
-			</div>
-		</div><!-- /footer -->
-	</div><!-- /page -->
+        <div data-role="footer" class="nav-glyphish-example" data-position="fixed" data-tap-toggle="false">
+            <div data-role="navbar" class="nav-glyphish-example" data-grid="c">
+            <ul>
+                <li><a href="#page-event" data-transition="none" id="event" onclick="pullUserEvent();setCurrLocationHash('#page-event')">Activities</a></li>
+                <li><a href="#page-friend" data-transition="none" class="friend-active-custom" id="friend" onclick="pullMyFriendList();setCurrLocationHash('#page-friend')">Friends</a></li>
+                <li><a href="#page-chat" data-transition="none" id="chat" onclick="pullMyChat();setCurrLocationHash('#page-chat')">Chats</a></li>
+                <li><a href="#page-setting" data-transition="none" id="setting" onclick="setCurrLocationHash('#page-setting')">Settings</a></li>
+            </ul>
+            </div>
+        </div><!-- /footer -->
+    </div><!-- /page -->
 
-	<!-- Page for displaying other user's profile -->
-	<div data-role="page" id="page-display-user-profile" data-title="Yueme">
+    <!-- Page for displaying other user's profile -->
+    <div data-role="page" id="page-display-user-profile" data-title="Yueme">
 
-		<div data-role="header">
-			<h1>Profile</h1>
-			<a data-rel="back" class="ui-btn-left ui-btn ui-btn-inline ui-corner-all">Back</a>
-		</div><!-- /header -->
+        <div data-role="header">
+            <h1>Profile</h1>
+            <a data-rel="back" class="ui-btn-left ui-btn ui-btn-inline ui-corner-all">Back</a>
+        </div><!-- /header -->
 
-		<div role="main" class="ui-content" id="user-profile">
-		</div><!-- /content -->
+        <div role="main" class="ui-content" id="user-profile">
+        </div><!-- /content -->
 
-	</div><!-- /page -->
+    </div><!-- /page -->
 
-	<!-- Page for displaying the people near by -->
-	<div data-role="page" id="page-people-near-by" data-title="Yueme">
+    <!-- Page for displaying the people near by -->
+    <div data-role="page" id="page-people-near-by" data-title="Yueme">
 
-		<div data-role="header">
-			<h1>People</h1>
-			<a data-rel="back" href="#page-friend" class="ui-btn-left ui-btn ui-btn-inline ui-corner-all" onclick="stopGeoWatch();setCurrLocationHash('#page-friend')">Back</a>
-		</div><!-- /header -->
+        <div data-role="header">
+            <h1>People</h1>
+            <a data-rel="back" href="#page-friend" class="ui-btn-left ui-btn ui-btn-inline ui-corner-all" onclick="stopGeoWatch();setCurrLocationHash('#page-friend')">Back</a>
+        </div><!-- /header -->
 
-		<div role="main" class="ui-content">
-		</div><!-- /content -->
+        <div role="main" class="ui-content">
+        </div><!-- /content -->
 
-		<div data-role="footer" class="nav-glyphish-example" data-position="fixed" data-tap-toggle="false">
-		</div><!-- /footer -->
-	</div><!-- /page -->
+        <div data-role="footer" class="nav-glyphish-example" data-position="fixed" data-tap-toggle="false">
+        </div><!-- /footer -->
+    </div><!-- /page -->
 
-	<!-- Page for searching user by email/name/maybe others -->
-	<div data-role="page" id="page-people-search" data-title="Yueme">
+    <!-- Page for searching user by email/name/maybe others -->
+    <div data-role="page" id="page-people-search" data-title="Yueme">
 
-		<div data-role="header">
-			<h1>People</h1>
-			<a data-rel="back" href="#page-friend" class="ui-btn-left ui-btn ui-btn-inline ui-corner-all" onclick="unbindSearchAutocomplete();setCurrLocationHash('#page-friend')">Back</a>
-		</div><!-- /header -->
+        <div data-role="header">
+            <h1>People</h1>
+            <a data-rel="back" href="#page-friend" class="ui-btn-left ui-btn ui-btn-inline ui-corner-all" onclick="unbindSearchAutocomplete();setCurrLocationHash('#page-friend')">Back</a>
+        </div><!-- /header -->
 
-		<div role="main" class="ui-content">
-			<form class="ui-filterable">
-				<input id="user-autocomplete-input" data-type="search" placeholder="Email/Name">
-			</form>
-			<ul id="user-autocomplete-list" data-role="listview" data-inset="true" data-filter="true" data-input="#user-autocomplete-input"></ul>
-		</div><!-- /content -->
+        <div role="main" class="ui-content">
+            <form class="ui-filterable">
+                <input id="user-autocomplete-input" data-type="search" placeholder="Email/Name">
+            </form>
+            <ul id="user-autocomplete-list" data-role="listview" data-inset="true" data-filter="true" data-input="#user-autocomplete-input"></ul>
+        </div><!-- /content -->
 
-		<div data-role="footer" data-position="fixed" data-tap-toggle="false">
-		</div><!-- /footer -->
-	</div><!-- /page -->
+        <div data-role="footer" data-position="fixed" data-tap-toggle="false">
+        </div><!-- /footer -->
+    </div><!-- /page -->
 
-	<!-- Page for displaying all new friend requests -->
-	<div data-role="page" id="page-my-friend-requests" data-title="Yueme">
+    <!-- Page for displaying all new friend requests -->
+    <div data-role="page" id="page-my-friend-requests" data-title="Yueme">
 
-		<div data-role="header">
-			<h1>People</h1>
-			<a data-rel="back" href="#page-friend" class="ui-btn-left ui-btn ui-btn-inline ui-corner-all" onclick="pullMyFriendList();setCurrLocationHash('#page-friend')">Back</a>
-		</div><!-- /header -->
+        <div data-role="header">
+            <h1>People</h1>
+            <a data-rel="back" href="#page-friend" class="ui-btn-left ui-btn ui-btn-inline ui-corner-all" onclick="pullMyFriendList();setCurrLocationHash('#page-friend')">Back</a>
+        </div><!-- /header -->
 
-		<div role="main" class="ui-content">
-		</div><!-- /content -->
+        <div role="main" class="ui-content">
+        </div><!-- /content -->
 
-		<div data-role="footer" data-position="fixed" data-tap-toggle="false">
-		</div><!-- /footer -->
-	</div><!-- /page -->
+        <div data-role="footer" data-position="fixed" data-tap-toggle="false">
+        </div><!-- /footer -->
+    </div><!-- /page -->
 
-	<!-- Page for displaying the chat list -->
-	<div data-role="page" id="page-chat" data-title="Yueme">
+    <!-- Page for displaying the chat list -->
+    <div data-role="page" id="page-chat" data-title="Yueme">
 
-		<div data-role="header" data-position="fixed" data-tap-toggle="false" >
-			<h1>Chats</h1>
-		</div><!-- /header -->
+        <div data-role="header" data-position="fixed" data-tap-toggle="false" >
+            <h1>Chats</h1>
+        </div><!-- /header -->
 
-		<div role="main" class="ui-content">
-		</div><!-- /content -->
+        <div role="main" class="ui-content">
+        </div><!-- /content -->
 
-		<div data-role="footer" class="nav-glyphish-example" data-position="fixed" data-tap-toggle="false">
-			<div data-role="navbar" class="nav-glyphish-example" data-grid="c">
-			<ul>
-				<li><a href="#page-event" data-transition="none" id="event" onclick="pullUserEvent();setCurrLocationHash('#page-event')">Activities</a></li>
-				<li><a href="#page-friend" data-transition="none" id="friend" onclick="pullMyFriendList();setCurrLocationHash('#page-friend')">Friends</a></li>
-				<li><a href="#page-chat" data-transition="none" class="chat-active-custom" id="chat" onclick="pullMyChat();setCurrLocationHash('#page-chat')">Chats</a></li>
-				<li><a href="#page-setting" data-transition="none" id="setting" onclick="setCurrLocationHash('#page-setting')">Settings</a></li>
-			</ul>
-			</div>
-		</div><!-- /footer -->
-	</div><!-- /page -->
+        <div data-role="footer" class="nav-glyphish-example" data-position="fixed" data-tap-toggle="false">
+            <div data-role="navbar" class="nav-glyphish-example" data-grid="c">
+            <ul>
+                <li><a href="#page-event" data-transition="none" id="event" onclick="pullUserEvent();setCurrLocationHash('#page-event')">Activities</a></li>
+                <li><a href="#page-friend" data-transition="none" id="friend" onclick="pullMyFriendList();setCurrLocationHash('#page-friend')">Friends</a></li>
+                <li><a href="#page-chat" data-transition="none" class="chat-active-custom" id="chat" onclick="pullMyChat();setCurrLocationHash('#page-chat')">Chats</a></li>
+                <li><a href="#page-setting" data-transition="none" id="setting" onclick="setCurrLocationHash('#page-setting')">Settings</a></li>
+            </ul>
+            </div>
+        </div><!-- /footer -->
+    </div><!-- /page -->
 
-	<!-- Page for displaying the messages of a chat -->
-	<div data-role="page" id="page-chat-messages" data-title="Yueme" data-add-back-btn="true">
+    <!-- Page for displaying the messages of a chat -->
+    <div data-role="page" id="page-chat-messages" data-title="Yueme" data-add-back-btn="true">
 
-		<div data-role="header" data-position="fixed" data-tap-toggle="false" >
-			<h1 id='chat-messages-title'></h1>
-			<a data-rel="back" href="#page-chat" class="ui-btn-left ui-btn ui-btn-inline ui-corner-all" onclick="pullMyChat(); $('#send-message-bar').fadeOut();setCurrLocationHash('#page-chat')">Back</a>
-		</div><!-- /header -->
+        <div data-role="header" data-position="fixed" data-tap-toggle="false" >
+            <h1 id='chat-messages-title'></h1>
+            <a data-rel="back" href="#page-chat" class="ui-btn-left ui-btn ui-btn-inline ui-corner-all" onclick="pullMyChat(); $('#send-message-bar').fadeOut();setCurrLocationHash('#page-chat')">Back</a>
+        </div><!-- /header -->
 
-		<div role="main" class="ui-content" style="margin-bottom:100px">
-		</div><!-- /content -->
+        <div role="main" class="ui-content" style="margin-bottom:100px">
+        </div><!-- /content -->
 
-	</div><!-- /page -->
+    </div><!-- /page -->
 
-	<!-- Page for displaying setting options -->
-	<div data-role="page" id="page-setting" data-title="Yueme">
+    <!-- Page for displaying setting options -->
+    <div data-role="page" id="page-setting" data-title="Yueme">
 
-		<div data-role="header">
-			<h1>Setting</h1>
-		</div><!-- /header -->
+        <div data-role="header">
+            <h1>Setting</h1>
+        </div><!-- /header -->
 
-		<div role="main" class="ui-content">
-			<a href="#page-edit-my-profile" class="ui-btn" onclick="getMyProfile(); $('#profile-save-btn').on('click', function(){saveProfile()});setCurrLocationHash('#page-edit-my-profile')">Edit My Profile</a>
-			<a href="#page-change-my-password" class="ui-btn" onclick="setCurrLocationHash('#page-change-my-password')">Password</a>
-			<button class="ui-btn ui-custom-log-out" onclick="logout();">Logout</button>
-		</div><!-- /content -->
+        <div role="main" class="ui-content">
+            <a href="#page-edit-my-profile" class="ui-btn" onclick="getMyProfile(); $('#profile-save-btn').on('click', function(){saveProfile()});setCurrLocationHash('#page-edit-my-profile')">Edit My Profile</a>
+            <a href="#page-change-my-password" class="ui-btn" onclick="setCurrLocationHash('#page-change-my-password')">Password</a>
+            <button class="ui-btn ui-custom-log-out" onclick="logout();">Logout</button>
+        </div><!-- /content -->
 
-		<div data-role="footer" class="nav-glyphish-example" data-position="fixed" data-tap-toggle="false">
-			<div data-role="navbar" class="nav-glyphish-example" data-grid="c">
-			<ul>
-				<li><a href="#page-event" data-transition="none" id="event" onclick="pullUserEvent();setCurrLocationHash('#page-event')">Activities</a></li>
-				<li><a href="#page-friend" data-transition="none" id="friend" onclick="pullMyFriendList();setCurrLocationHash('#page-friend')">Friends</a></li>
-				<li><a href="#page-chat" data-transition="none" id="chat" onclick="pullMyChat();setCurrLocationHash('#page-chat')">Chats</a></li>
-				<li><a href="#page-setting" data-transition="none" class="setting-active-custom" id="setting" onclick="setCurrLocationHash('#page-setting')">Settings</a></li>
-			</ul>
-			</div>
-		</div><!-- /footer -->
-	</div><!-- /page -->
+        <div data-role="footer" class="nav-glyphish-example" data-position="fixed" data-tap-toggle="false">
+            <div data-role="navbar" class="nav-glyphish-example" data-grid="c">
+            <ul>
+                <li><a href="#page-event" data-transition="none" id="event" onclick="pullUserEvent();setCurrLocationHash('#page-event')">Activities</a></li>
+                <li><a href="#page-friend" data-transition="none" id="friend" onclick="pullMyFriendList();setCurrLocationHash('#page-friend')">Friends</a></li>
+                <li><a href="#page-chat" data-transition="none" id="chat" onclick="pullMyChat();setCurrLocationHash('#page-chat')">Chats</a></li>
+                <li><a href="#page-setting" data-transition="none" class="setting-active-custom" id="setting" onclick="setCurrLocationHash('#page-setting')">Settings</a></li>
+            </ul>
+            </div>
+        </div><!-- /footer -->
+    </div><!-- /page -->
 
-	<!-- Page for displaying edit my profile -->
-	<div data-role="page" id="page-edit-my-profile" data-title="Yueme">
+    <!-- Page for displaying edit my profile -->
+    <div data-role="page" id="page-edit-my-profile" data-title="Yueme">
 
-		<div data-role="header">
-			<h1>My Profile</h1>
-			<a data-rel="back" href="#page-setting" class="ui-btn-left ui-btn ui-btn-inline ui-corner-all" onclick="refreshPreviewPhoto = false; setCurrLocationHash('#page-setting')">Back</a>
-			<a data-rel="back" href="#page-setting" class="ui-btn-right ui-btn ui-btn-inline ui-corner-all" id="profile-save-btn" onclick="saveProfile();setCurrLocationHash('#page-setting')">Save</a>
-		</div><!-- /header -->
+        <div data-role="header">
+            <h1>My Profile</h1>
+            <a data-rel="back" href="#page-setting" class="ui-btn-left ui-btn ui-btn-inline ui-corner-all" onclick="refreshPreviewPhoto = false; setCurrLocationHash('#page-setting')">Back</a>
+            <a data-rel="back" href="#page-setting" class="ui-btn-right ui-btn ui-btn-inline ui-corner-all" id="profile-save-btn" onclick="saveProfile();setCurrLocationHash('#page-setting')">Save</a>
+        </div><!-- /header -->
 
-		<div role="main" class="ui-content" id="my-profile">
-			<div class="profile-photo-bar">
-				<label style='padding-left: 1em;' for="profile-edit-photo">Photo:</label>
-				<canvas id="canvas-photo" class="profile-photo-preview" width="120px" height="120px"></canvas>
-				<input type="file" data-clear-btn="false" name="profilephoto" id="profile-edit-photo" onclick="refreshPreviewPhoto = true; refreshPreviewCanvas();" value="">
-				<div id="photo-orientation" class="ui-hidden-accessible"></div>
-			</div>
-			<form style='padding: 1em;'>
-				<label for="profile-edit-name">Name:</label>
-				<input type="text" data-clear-btn="true" name="profilename" id="profile-edit-name" value="">
-				<label for="profile-edit-gender">Gender:</label>
-				<select name="profilegender" id="profile-edit-gender" data-role="flipswitch" data-wrapper-class="custom-size-flipswitch-event-create-visibility" checked="">
-					<option value="off">Female</option>
-					<option value="on" selected="">Male</option>
-				</select>
-				<label for="profile-edit-birthdate">Birthdate:</label>
-				<input type="date" data-role="date" name="profilebirthdate" id="profile-edit-birthdate">
-				<label for="profile-edit-motto">Motto:</label>
-				<input type="text" data-clear-btn="true" name="profilemotto" id="profile-edit-motto" value="">
-				<label for="profile-edit-school">School:</label>
-				<input type="text" data-clear-btn="true" name="profileuschool" id="profile-edit-school" value="">
-				<label for="profile-edit-major">Major:</label>
-				<input type="text" data-clear-btn="true" name="profilemajor" id="profile-edit-major" value="">
-				<label for="profile-edit-interest">Interest:</label>
-				<input type="text" data-clear-btn="true" name="profileinterest" id="profile-edit-interest" value="">
-				<label for="profile-edit-location">Location:</label>
-				<input type="text" data-clear-btn="true" name="profilelocation" id="profile-edit-location" value="">
-			</form>
-		</div><!-- /content -->
+        <div role="main" class="ui-content" id="my-profile">
+            <div class="profile-photo-bar">
+                <label style='padding-left: 1em;' for="profile-edit-photo">Photo:</label>
+                <canvas id="canvas-photo" class="profile-photo-preview" width="120px" height="120px"></canvas>
+                <input type="file" data-clear-btn="false" name="profilephoto" id="profile-edit-photo" onclick="refreshPreviewPhoto = true; refreshPreviewCanvas();" value="">
+                <div id="photo-orientation" class="ui-hidden-accessible"></div>
+            </div>
+            <form style='padding: 1em;'>
+                <label for="profile-edit-name">Name:</label>
+                <input type="text" data-clear-btn="true" name="profilename" id="profile-edit-name" value="">
+                <label for="profile-edit-gender">Gender:</label>
+                <select name="profilegender" id="profile-edit-gender" data-role="flipswitch" data-wrapper-class="custom-size-flipswitch-event-create-visibility" checked="">
+                    <option value="off">Female</option>
+                    <option value="on" selected="">Male</option>
+                </select>
+                <label for="profile-edit-birthdate">Birthdate:</label>
+                <input type="date" data-role="date" name="profilebirthdate" id="profile-edit-birthdate">
+                <label for="profile-edit-motto">Motto:</label>
+                <input type="text" data-clear-btn="true" name="profilemotto" id="profile-edit-motto" value="">
+                <label for="profile-edit-school">School:</label>
+                <input type="text" data-clear-btn="true" name="profileuschool" id="profile-edit-school" value="">
+                <label for="profile-edit-major">Major:</label>
+                <input type="text" data-clear-btn="true" name="profilemajor" id="profile-edit-major" value="">
+                <label for="profile-edit-interest">Interest:</label>
+                <input type="text" data-clear-btn="true" name="profileinterest" id="profile-edit-interest" value="">
+                <label for="profile-edit-location">Location:</label>
+                <input type="text" data-clear-btn="true" name="profilelocation" id="profile-edit-location" value="">
+            </form>
+        </div><!-- /content -->
 
-		<div data-role="footer" data-position="fixed" data-tap-toggle="false">
-		</div><!-- /footer -->
-	</div><!-- /page -->
+        <div data-role="footer" data-position="fixed" data-tap-toggle="false">
+        </div><!-- /footer -->
+    </div><!-- /page -->
 
-	<!-- Page for displaying change my password page -->
-	<div data-role="page" id="page-change-my-password" data-title="Yueme">
+    <!-- Page for displaying change my password page -->
+    <div data-role="page" id="page-change-my-password" data-title="Yueme">
 
-		<div data-role="header">
-			<h1 id='setting-change-my-password-title'>Password</h1>
-			<a data-rel="back" href="#page-setting" class="ui-btn-left ui-btn ui-btn-inline ui-corner-all" onclick="setCurrLocationHash('#page-setting')">Back</a>
-		</div><!-- /header -->
+        <div data-role="header">
+            <h1 id='setting-change-my-password-title'>Set Password</h1>
+            <a data-rel="back" href="#page-setting" class="ui-btn-left ui-btn ui-btn-inline ui-corner-all" onclick="setCurrLocationHash('#page-setting')">Back</a>
+        </div><!-- /header -->
 
-		<div role="main" class="ui-content">
-			<form style='padding: 1em;' id='setting-confirm-password'>
-				<label for="setting-old-password">Current Password:</label>
-				<input type="password" data-clear-btn="true" name="oldpassword" id="setting-old-password" value="">
-				<div id='setting-confirm-password-error' class='error-message'></div>
-				<button id='setting-confirm-password-btn' class="ui-btn" onclick="changePassword('old',$('#setting-old-password').val(),null)">Next</button>
-			</form>
-			<form style='padding: 1em; display:none' id='setting-set-new-password'>
-				<label for='setting-new-password'>New Password:</label>
-				<input type='password' data-clear-btn='true' name='newpassword' id='setting-new-password' value=''>
-				<label for='setting-new-password-confirmation'>Confirm Password:</label>
-				<input type='password' data-clear-btn='true' name='confirmpassword' id='setting-new-password-confirmation' value=''>
-				<div id='setting-set-new-password-error' class='error-message'></div>
-				<button id='setting-set-new-password-btn' class='ui-btn' style="display:none" onclick="changePassword('new',$('#setting-new-password').val(),$('#setting-new-password-confirmation').val())">Save</button>
-			</form>
-		</div><!-- /content -->
+        <div role="main" class="ui-content">
+            <form style='padding: 1em;' id='setting-confirm-password'>
+                <label for="setting-old-password">Current Password:</label>
+                <input type="password" data-clear-btn="true" id="setting-old-password" value="">
+                <div id='setting-confirm-password-error' class='error-message'></div>
+                <button id='setting-confirm-password-btn' class="ui-btn" onclick="changePassword('old',$('#setting-old-password').val(),null)">Next</button>
+            </form>
 
-	</div><!-- /page -->
+            <form style='padding: 1em; display:none' id='setting-set-new-password'>
+                <label for='setting-new-password'>New Password:</label>
+                <input type='password' data-clear-btn='true' id='setting-new-password' value=''>
+                <label for='setting-new-password-confirmation'>Confirm Password:</label>
+                <input type='password' data-clear-btn='true' id='setting-new-password-confirmation' value=''>
+                <div id='setting-set-new-password-error' class='error-message'></div>
+                <button id='setting-set-new-password-btn' class='ui-btn' style="display:none" onclick="changePassword('new',$('#setting-new-password').val(),$('#setting-new-password-confirmation').val())">Save</button>
+            </form>
+        </div><!-- /content -->
 
-	<div id="send-comment-bar" class="rwd-example ui-footer ui-bar-inherit ui-footer-fixed slideup ui-page-theme-a" style="z-index:3; display:none; position:absolute; background-color: #e9e9e9; border-color: #ddd;">
+    </div><!-- /page -->
+
+    <div id="send-comment-bar" class="rwd-example ui-footer ui-bar-inherit ui-footer-fixed slideup ui-page-theme-a" style="z-index:3; display:none; position:absolute; background-color: #e9e9e9; border-color: #ddd;">
         <form id="comment-form">
             <label id="event-id-label" class="ui-hidden-accessible"></label>
             <div class="custom-block-a" onclick="sendToolbarActiveKeyboard({id:'#comment-content',bar:'#send-comment-bar',base:'#page-event-detail'});">
@@ -632,19 +601,19 @@
         </form>
     </div>
 
-	<div id="send-message-bar" class="rwd-example ui-footer ui-bar-inherit ui-footer-fixed slideup ui-page-theme-a" style="z-index:3; display:none; position:absolute; background-color: #e9e9e9; border-color: #ddd;">
-		<form id='message-chat-form'>
-			<label id="group-id-label" class="ui-hidden-accessible"></label>
-			<div class="custom-block-a" onclick="sendToolbarActiveKeyboard({id:'#message-content',bar:'#send-message-bar',base:'#page-chat-messages'});">
-				<div class="ui-input-text ui-shadow-inset ui-focus ui-body-inherit ui-corner-all">
-					<input type="text" name="messagecontent" id="message-content" value="">
-				</div>
-			</div>
-			<div class="custom-block-b">
-				<button id="send-message-button" class="ui-btn ui-corner-all custom-send-button" onclick="sendMessage();">Send</button>
-			</div>
-		</form>
-	</div>
+    <div id="send-message-bar" class="rwd-example ui-footer ui-bar-inherit ui-footer-fixed slideup ui-page-theme-a" style="z-index:3; display:none; position:absolute; background-color: #e9e9e9; border-color: #ddd;">
+        <form id='message-chat-form'>
+            <label id="group-id-label" class="ui-hidden-accessible"></label>
+            <div class="custom-block-a" onclick="sendToolbarActiveKeyboard({id:'#message-content',bar:'#send-message-bar',base:'#page-chat-messages'});">
+                <div class="ui-input-text ui-shadow-inset ui-focus ui-body-inherit ui-corner-all">
+                    <input type="text" name="messagecontent" id="message-content" value="">
+                </div>
+            </div>
+            <div class="custom-block-b">
+                <button id="send-message-button" class="ui-btn ui-corner-all custom-send-button" onclick="sendMessage();">Send</button>
+            </div>
+        </form>
+    </div>
 
 </body>
 </html>
