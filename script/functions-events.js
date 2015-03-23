@@ -561,7 +561,7 @@ function sendComment(){
         if (title.length>10) {
             title = title.slice(0,6) + "...";
         }
-        pushNotificationToDeviceByUsername(ownerUsername, Parse.User.current().get('name')+" comments on your activity \""+title+"\".");
+        pushNotificationToDeviceByUsername(ownerUsername, Parse.User.current().get('name')+" commented on your activity \""+title+"\".");
     };
     ParseAddEventComment(eventId, owner, content, errorFunction, successFunction);
 }
