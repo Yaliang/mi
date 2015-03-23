@@ -41,7 +41,6 @@ function ParseLogin(username, password, errorObject, destID, customFunction) {
 	Parse.User.logIn(username,password,{
 		success: function(user){
             setCurrLocationHash(destID);
-
 			$.mobile.changePage(destID); //window.location.hash = destID;
 			customFunction();
 			CacheUpdateUser(user);
@@ -63,6 +62,30 @@ function ParseLogin(username, password, errorObject, destID, customFunction) {
 	  				errorObject.html("Failed to connect server, please try again.");
 	  			}
 			});
+		}
+	});
+}
+
+function ParseConfirmPassword(password, successFunction, errorFunction) {
+	Parse.User.logIn(Parse.User.current().getUsername(), password, {
+		success: function(user){
+			successFunction();
+		},
+		error: function(user, error){
+			errorFunction(error);
+		}
+	});
+}
+
+function ParseChangePassword(newpassword, successFunction, errorFunction) {
+	var currentUser = Parse.User.current();
+	currentUser.set('password',newpassword);
+	currentUser.save(null, {
+		success: function(user){
+			successFunction();
+		},
+		error: function(user, error){
+			errorFunction(error);
 		}
 	});
 }

@@ -532,6 +532,7 @@
 
 		<div role="main" class="ui-content">
 			<a href="#page-edit-my-profile" class="ui-btn" onclick="getMyProfile(); $('#profile-save-btn').on('click', function(){saveProfile()});setCurrLocationHash('#page-edit-my-profile')">Edit My Profile</a>
+			<a href="#page-change-my-password" class="ui-btn" onclick="setCurrLocationHash('#page-change-my-password')">Change Password</a>
 			<button class="ui-btn ui-custom-log-out" onclick="logout();">Logout</button>
 		</div><!-- /content -->
 
@@ -588,6 +589,35 @@
 
 		<div data-role="footer" data-position="fixed" data-tap-toggle="false">
 		</div><!-- /footer -->
+	</div><!-- /page -->
+
+	<!-- Page for displaying change my password page -->
+	<div data-role="page" id="page-change-my-password" data-title="Yueme">
+
+		<div data-role="header">
+			<h1>Change Password</h1>
+			<a data-rel="back" href="#page-setting" class="ui-btn-left ui-btn ui-btn-inline ui-corner-all" onclick="setCurrLocationHash('#page-setting')">Back</a>
+		</div><!-- /header -->
+
+		<div role="main" class="ui-content">
+			<form style='padding: 1em;' id='setting-confirm-password'>
+				<label for="oldpassword">Current Password:</label>
+				<input type="password" data-clear-btn="true" name="oldpassword" id="setting-old-password" value="">
+				<input id="setting-confirm-password-native-btn" type="submit" name="settingConfirmPassword" value="Next">
+				<div id='setting-confirmpassword-error' class='error-message'></div>
+			</form>
+			<form style='padding: 1em; display:none' id='setting-set-new-password'>
+				<label for='newpassword'>New Password:</label>
+				<input type='password' data-clear-btn='true' name='newpassword' id='setting-new-password' value=''>
+				<label for='confirmpassword'>Confirm Password:</label>
+				<input type='password' data-clear-btn='true' name='confirmpassword' id='setting-new-password-confirm' value=''>
+				<input id="setting-save-password-native-btn" type="submit" name="settingSaveNewPassword" value="Save">
+				<div id='setting-setnewpassword-error' class='error-message'></div>
+			</form>
+			<button id='setting-confirm-password-btn' class="ui-btn" onclick="changePassword('old',$('#setting-old-password').val(),null)">Next</button>
+			<button id='setting-save-new-btn' class='ui-btn' style="display:none" onclick="changePassword('new',$('#setting-new-password').val(),$('#setting-new-password-confirm').val())">Save</button>
+		</div><!-- /content -->
+
 	</div><!-- /page -->
 
 	<div id="send-comment-bar" class="rwd-example ui-footer ui-bar-inherit ui-footer-fixed slideup ui-page-theme-a" style="z-index:3; display:none; position:absolute; background-color: #e9e9e9; border-color: #ddd;">
