@@ -79,7 +79,7 @@ function ParseConfirmPassword(password, successFunction, errorFunction) {
 
 function ParseChangePassword(newpassword, successFunction, errorFunction) {
     var currentUser = Parse.User.current();
-    currentUser.set('password',newpassword);
+    currentUser.set("password",newpassword);
     currentUser.save(null, {
         success: function(user){
             successFunction();
@@ -411,7 +411,7 @@ function ParseSaveProfilePhoto(id, photo, photo120, displayFunction) {
     query.equalTo("userId",id);
     query.first({
         success: function(photoObject) {
-            photoObject.set('profilePhoto120',photo120);
+            photoObject.set("profilePhoto120",photo120);
             var parseFile = new Parse.File(photo.name, photo);
             parseFile.save().then(function(object) {
                 photoObject.set("profilePhoto",object.url());
@@ -477,17 +477,17 @@ function ParseSendFriendRequest(ownerId, friendId, successFunction){
     var Friend = Parse.Object.extend("Friend");
     var query = new Parse.Query(Friend);
 
-    query.equalTo('owner', ownerId);
-    query.equalTo('friend',friendId);
+    query.equalTo("owner", ownerId);
+    query.equalTo("friend",friendId);
     query.first({
         success: function(object){
             if (typeof(object)=="undefined") {
                 var friend = new Friend;
 
-                friend.set('owner', ownerId);
-                friend.set('friend', friendId);
-                friend.set('valid',false);
-                friend.set('read',false);
+                friend.set("owner", ownerId);
+                friend.set("friend", friendId);
+                friend.set("valid",false);
+                friend.set("read",false);
                 friend.save(null, {
                     success: function(friend){
                         successFunction(friend);
@@ -518,29 +518,29 @@ function ParseAcceptFriendRequest(objectId, ownerId, friendId, successFunction){
     }
     query.first({
         success:function(object){
-            // update current user's friend data
-            object.set('valid',true);
-            object.set('read',true);
+            // update current user"s friend data
+            object.set("valid",true);
+            object.set("read",true);
             object.save(null, {
                 success: function(object){
                     CacheUpdateFriend(object);
-                    // try to update frient's data
-                    var ownerId = object.get('friend');
-                    var friendId = object.get('owner');
+                    // try to update frient"s data
+                    var ownerId = object.get("friend");
+                    var friendId = object.get("owner");
                     var query = new Parse.Query(Friend);
 
-                    query.equalTo('owner',ownerId);
-                    query.equalTo('friend',friendId);
+                    query.equalTo("owner",ownerId);
+                    query.equalTo("friend",friendId);
                     query.first({
                         success: function(object){
                             if (typeof(object) == "undefined") {
                                 // if friend's data doesn't exist
                                 var friend = new Friend;
 
-                                friend.set('owner',ownerId);
-                                friend.set('friend',friendId);
-                                friend.set('valid',true);
-                                friend.set('read',true);
+                                friend.set("owner",ownerId);
+                                friend.set("friend",friendId);
+                                friend.set("valid",true);
+                                friend.set("read",true);
                                 friend.save(null, {
                                     success: function(object){
                                         successFunction(object);
@@ -549,8 +549,8 @@ function ParseAcceptFriendRequest(objectId, ownerId, friendId, successFunction){
                                 })
                             } else {
                                 // if existed
-                                object.set('valid',true);
-                                object.set('read',true);
+                                object.set("valid",true);
+                                object.set("read",true);
                                 object.save(null,{
                                     success: function(object){
                                         successFunction(object);
@@ -628,8 +628,8 @@ function ParseCheckFriend(ownerId, friendId, displayFunction) {
     var Friend = Parse.Object.extend("Friend");
     var query = new Parse.Query(Friend);
 
-    query.equalTo('owner',ownerId);
-    query.equalTo('friend',friendId);
+    query.equalTo("owner",ownerId);
+    query.equalTo("friend",friendId);
 
     query.first({
         success: function(object){
@@ -644,8 +644,8 @@ function ParsePullMyFriend(ownerId, descendingOrderKey, displayFunction) {
     var Friend = Parse.Object.extend("Friend");
     var query = new Parse.Query(Friend);
 
-    query.equalTo('owner',ownerId);
-    query.equalTo('valid',true);
+    query.equalTo("owner",ownerId);
+    query.equalTo("valid",true);
     query.descending(descendingOrderKey);
 
     query.find({
@@ -751,8 +751,8 @@ function ParseSetChatObjectAsRead(ownerId, groupId, count, successFunction){
     var Chat = Parse.Object.extend("Chat");
     var query = new Parse.Query(Chat);
 
-    query.equalTo('ownerId',ownerId);
-    query.equalTo('groupId',groupId);
+    query.equalTo("ownerId",ownerId);
+    query.equalTo("groupId",groupId);
     query.first({
         success: function(object){
             if (typeof(object) == "undefined") {
@@ -793,7 +793,7 @@ function ParsePullChatMessage(groupId, limitNum, descendingOrderKey, beforeAt, d
     var Message = Parse.Object.extend("Message");
     var query = new Parse.Query(Message);
 
-    query.equalTo('groupId',groupId);
+    query.equalTo("groupId",groupId);
     query.descending(descendingOrderKey);
     if (beforeAt != null) {
         query.lessThan("createdAt", beforeAt);
@@ -813,7 +813,7 @@ function ParsePullAllMessageByGroupIdForCache(groupId, limitNum, beforeAt, displ
     var Message = Parse.Object.extend("Message");
     var query = new Parse.Query(Message);
 
-    query.equalTo('groupId',groupId);
+    query.equalTo("groupId",groupId);
     query.find({
         success: function(objects){
             for (var i = 0; i < objects.length; i++) {
@@ -1080,9 +1080,9 @@ function ParsePhotoClassCreateBaseUserObject(i){
             var Photo = Parse.Object.extend("Photo");
             var photo = new Photo;
 
-            photo.set('userId',userId);
-            photo.set('profilePhoto',profilePhoto);
-            photo.set('profilePhoto120',profilePhoto120);
+            photo.set("userId",userId);
+            photo.set("profilePhoto",profilePhoto);
+            photo.set("profilePhoto120",profilePhoto120);
             photo.save(null,{
                 success: function() {
                     //console.log('success');
@@ -1163,11 +1163,11 @@ function SendNewVersionNotification(i) {
     var object = NoticeNewVersionObjects[i];
     console.log(object.id);
     if (typeof(object.get("GCMId")) != "undefined") {
-        pushNotificationToDevice('gcm', object.get("GCMId"), "New version is available.");
+        pushNotificationToDevice("gcm", object.get("GCMId"), "New version is available.");
         console.log("GCMId:" + object.get("GCMId"));
     }
     if (typeof(object.get("APNId")) != "undefined") {
-        pushNotificationToDevice('apn', object.get("APNId"), "New version is available.");
+        pushNotificationToDevice("apn", object.get("APNId"), "New version is available.");
         console.log("APNId:" + object.get("APNId"));
     }
     setTimeout(function(){

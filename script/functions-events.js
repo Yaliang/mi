@@ -2,7 +2,7 @@
 function addInterestEvent(eventId){
     var displayFunction = function(object){
         var eventId = object.id;
-        var ownerUsername = object.get('owner');
+        var ownerUsername = object.get("owner");
         var interestNumber = 0;
         if (typeof(object.get("interestId")) != "undefined")
             interestNumber = object.get("interestId").length;
@@ -16,11 +16,11 @@ function addInterestEvent(eventId){
         });
 
         // push notification to owner
-        var title = object.get('title');
+        var title = object.get("title");
         if (title.length>10) {
             title = title.slice(0,6) + "...";
         }
-        pushNotificationToDeviceByUsername(ownerUsername, Parse.User.current().get('name')+" interested in your activity \""+title+"\".");
+        pushNotificationToDeviceByUsername(ownerUsername, Parse.User.current().get("name")+" interested in your activity \""+title+"\".");
     };
     ParseAddInterest(eventId, displayFunction);
 }
@@ -47,7 +47,7 @@ function addGoingEvent(eventId){
     var currentUser = Parse.User.current();
     var displayFunction = function(object){
         var eventId = object.id;
-        var ownerUsername = object.get('owner');
+        var ownerUsername = object.get("owner");
         var goingNumber = 0;
         if (typeof(object.get("goingId")) != "undefined")
             goingNumber = object.get("goingId").length;
@@ -61,11 +61,11 @@ function addGoingEvent(eventId){
         });
 
         // push notification to owner
-        var title = object.get('title');
+        var title = object.get("title");
         if (title.length>10) {
             title = title.slice(0,6) + "...";
         }
-        pushNotificationToDeviceByUsername(ownerUsername, Parse.User.current().get('name')+" wanna go with you in activity \""+title+"\"!");
+        pushNotificationToDeviceByUsername(ownerUsername, Parse.User.current().get("name")+" wanna go with you in activity \""+title+"\"!");
     };
     ParseAddGoing(eventId, displayFunction);
 }
@@ -103,7 +103,7 @@ function pullUserEventHolderInfo(holder, elementIdBase){
             displayUserProfile(userId);
         });
         $("#"+elementIdBase+"-owner-name").html(name);
-        if (typeof(gender) == 'undefined') {
+        if (typeof(gender) == "undefined") {
             //$("#"+eventId+"-owner-gender").html(gender.toString());
         } else if (gender) {
             $("#"+elementIdBase+"-owner-gender").css("backgroundImage","url('./content/customicondesign-line-user-black/png/male-white-20.png')");
@@ -266,41 +266,41 @@ function pullUserEvent(beforeAt){
 }
 
 function displayEventMoreOption(){
-    $('#event-page-right-top-option-1').unbind("click");
-    $('#event-page-right-top-option-2').unbind("click");
-    $('#ui-icon-custom-right-top-more').attr("id","ui-icon-custom-right-top-more-active");
+    $("#event-page-right-top-option-1").unbind("click");
+    $("#event-page-right-top-option-2").unbind("click");
+    $("#ui-icon-custom-right-top-more").attr("id","ui-icon-custom-right-top-more-active");
     $(window).unbind("scroll");
-    $('#event-page-right-top-option-1').on('click',function(){
+    $("#event-page-right-top-option-1").on("click",function(){
         var date = new Date().toISOString();
         var timeRes = date.split(":");
         time = timeRes[0]+":"+timeRes[1];
         $("#event-create-startTime").val(time);
         $("#event-create-endTime").val(time);
 
-        $('#event-create-button').on('click',function(){
+        $("#event-create-button").on("click",function(){
             createUserEvent();
         });
         hiddenEventMoreOption();
     });
-    $('#event-page-right-top-option-2').on('click',function(){
+    $("#event-page-right-top-option-2").on("click",function(){
         pullMyEvent();
         hiddenEventMoreOption();
     });
-    $('.options-hidden-cover-layer').show();
-    $('.event-page-right-top-options').fadeIn('fast');
-    $('.options-hidden-cover-layer').on('click',hiddenEventMoreOption);
-    $('.options-hidden-cover-layer').on('swipeleft',hiddenEventMoreOption);
-    $('.options-hidden-cover-layer').on('swiperight',hiddenEventMoreOption);
+    $(".options-hidden-cover-layer").show();
+    $(".event-page-right-top-options").fadeIn("fast");
+    $(".options-hidden-cover-layer").on("click",hiddenEventMoreOption);
+    $(".options-hidden-cover-layer").on("swipeleft",hiddenEventMoreOption);
+    $(".options-hidden-cover-layer").on("swiperight",hiddenEventMoreOption);
     $(window).scroll(hiddenEventMoreOption)
 }
 
 function hiddenEventMoreOption(){
-    $('#event-page-right-top-option-1').unbind("click");
-    $('#event-page-right-top-option-2').unbind("click");
-    $('#ui-icon-custom-right-top-more-active').attr("id","ui-icon-custom-right-top-more");
+    $("#event-page-right-top-option-1").unbind("click");
+    $("#event-page-right-top-option-2").unbind("click");
+    $("#ui-icon-custom-right-top-more-active").attr("id","ui-icon-custom-right-top-more");
     $(window).unbind("scroll");
-    $('.options-hidden-cover-layer').hide();
-    $('.event-page-right-top-options').fadeOut('fast');
+    $(".options-hidden-cover-layer").hide();
+    $(".event-page-right-top-options").fadeOut("fast");
 }
 
 // #page-create-event functions
@@ -311,13 +311,13 @@ function createUserEvent(){
 
     var title = $("#event-create-title").val();
     var location = $("#event-create-location").val();
-    var startTime = $("#event-create-startTime").val().replace("T", ' ');
-    var endTime = $("#event-create-endTime").val().replace('T', ' ');
+    var startTime = $("#event-create-startTime").val().replace("T", " ");
+    var endTime = $("#event-create-endTime").val().replace("T", " ");
 
     var errorHandler = function(item) {
         $("#event-create-" + item).focus().parent().addClass("ui-custom-event-create-focus");
         if ($("#event-create-" + item + "-alert").length == 0) {
-            $("#event-create-" + item).parent().after("<p id='event-create-" + item + "-alert' class='event-create-alert'>*Field required</p>");
+            $("#event-create-" + item).parent().after("<p id="event-create-" + item + "-alert" class="event-create-alert">*Field required</p>");
         }
 
         setTimeout(function(){
@@ -350,7 +350,7 @@ function createUserEvent(){
         return;
     }
 
-    $('#event-create-button').unbind("click");
+    $("#event-create-button").unbind("click");
 
     var index1 = startTime.indexOf(":");
     var index2 = startTime.lastIndexOf(":");
@@ -376,7 +376,7 @@ function createUserEvent(){
         $("#event-create-start-time").val("");
         $("#event-create-end-time").val("");
         $("#event-create-description").val("");
-        $("#event-create-visibility").val("on").flipswitch('refresh');
+        $("#event-create-visibility").val("on").flipswitch("refresh");
         $("#event-create-error").html("");
         //pullUserEvent();
         var id = object.id;
@@ -394,7 +394,7 @@ function createUserEvent(){
 function buildCommentInEventDetail(object){
     var commentId = object.id;
     var ownerName = object.get("ownerName");
-    var text = object.get('content');
+    var text = object.get("content");
     var time = object.createdAt;
 
     var newElement = "";
@@ -472,7 +472,7 @@ function updateEventDetail(id){
         var holder = object[0].get("owner");
         $("#event-detail-content").prepend(buildEventDetailElement(object[0]));
         // display event holder's name | not the email one
-        pullUserEventHolderInfo(holder, 'event-detail-'+id);
+        pullUserEventHolderInfo(holder, "event-detail-"+id);
         $(".ui-custom-report").on("click",function(){
             reportActivity(id);
         });
@@ -493,15 +493,15 @@ function updateEventDetail(id){
                 }
                 $("#comment-"+data.commentId).css("backgroundImage", "url("+photo120+")")
             }
-            CacheGetProfilePhotoByUsername(objects[i].get('owner'), displayFunction, {commentId: objects[i].id});
+            CacheGetProfilePhotoByUsername(objects[i].get("owner"), displayFunction, {commentId: objects[i].id});
         }
     }
     ParsePullEventComment(id, descendingOrderKey, displayFunction);
 }
 
 function displayEventDetailMoreOption(){
-    $("#page-event-detail-more-option").css('position',"fixed");
-    $("#page-event-detail-more-option").css('bottom',(-$("#page-event-detail-more-option").height()).toString()+"px");
+    $("#page-event-detail-more-option").css("position","fixed");
+    $("#page-event-detail-more-option").css("bottom",(-$("#page-event-detail-more-option").height()).toString()+"px");
     $("#page-event-detail-more-option").show();
     $("body").append("<div class='ui-gray-cover' style='position:fixed; width:100%; height:100%; opacity:0; background-color:#000; z-index:4' onclick='hideEventDetailMoreOption()'><div>")
     $("#page-event-detail-more-option").animate({
@@ -513,15 +513,15 @@ function displayEventDetailMoreOption(){
 }
 
 function hideEventDetailMoreOption(){
-    $('#page-event-detail-more-option').animate({
+    $("#page-event-detail-more-option").animate({
         bottom: (-$("#page-event-detail-more-option").height()).toString()+"px"
     },300,function(){
-        $('#page-event-detail-more-option').hide();
+        $("#page-event-detail-more-option").hide();
     });
     $(".ui-gray-cover").animate({
         opacity: 0
     },300, function(){
-        $('.ui-gray-cover').remove();
+        $(".ui-gray-cover").remove();
     });
 }
 
@@ -537,10 +537,10 @@ function sendComment(){
     if (content.length==0)
         return;
     var errorFunction = function(error){
-        $.mobile.loading( 'show', {
+        $.mobile.loading( "show", {
             text: error,
             textVisible: true,
-            theme: 'a',
+            theme: "a",
             textonly: true,
             html: ""
         });
@@ -548,7 +548,7 @@ function sendComment(){
     };
     var successFunction = function(object){
         var eventId = object.id;
-        var ownerUsername = object.get('owner');
+        var ownerUsername = object.get("owner");
         var commentNumber = object.get("commentNumber");
         updateEventDetail(eventId);
         $(".comment-statistics-"+eventId).each(function(){
@@ -557,11 +557,11 @@ function sendComment(){
         $("#my-comment-statistics-"+eventId).html(commentNumber.toString()+" Comments");
 
         // push notification to owner
-        var title = object.get('title');
+        var title = object.get("title");
         if (title.length>10) {
             title = title.slice(0,6) + "...";
         }
-        pushNotificationToDeviceByUsername(ownerUsername, Parse.User.current().get('name')+" commented on your activity \""+title+"\".");
+        pushNotificationToDeviceByUsername(ownerUsername, Parse.User.current().get("name")+" commented on your activity \""+title+"\".");
     };
     ParseAddEventComment(eventId, owner, content, errorFunction, successFunction);
 }
@@ -682,7 +682,7 @@ function editMyEvent(eventId){
             $("#event-edit-visibility").val("Friends");
         }
         $("#event-edit-description").val(objs[0].get("description"));
-        $('#event-editsave-button').on('click',function(){
+        $("#event-editsave-button").on("click",function(){
             editSaveUserEvent(eventId);
         });
     }
@@ -695,8 +695,8 @@ function editSaveUserEvent(eventId){
 
     var title = $("#event-edit-title").val();
     var location = $("#event-edit-location").val();
-    var startTime = $("#event-edit-startTime").val().replace("T", ' ');
-    var endTime = $("#event-edit-endTime").val().replace('T', ' ');
+    var startTime = $("#event-edit-startTime").val().replace("T", " ");
+    var endTime = $("#event-edit-endTime").val().replace("T", " ");
 
     var errorHandler = function(item) {
         $("#event-edit-" + item).focus().parent().addClass("ui-custom-event-edit-focus");
@@ -734,7 +734,7 @@ function editSaveUserEvent(eventId){
         return;
     }
 
-    $('#event-edit-button').unbind("click");
+    $("#event-edit-button").unbind("click");
 
     var index1 = startTime.indexOf(":");
     var index2 = startTime.lastIndexOf(":");
@@ -761,7 +761,7 @@ function editSaveUserEvent(eventId){
         $("#event-edit-start-time").val("");
         $("#event-edit-end-time").val("");
         $("#event-edit-description").val("");
-        $("#event-edit-visibility").val("on").flipswitch('refresh');
+        $("#event-edit-visibility").val("on").flipswitch("refresh");
         $("#event-edit-error").html("");
         // rebuilt element in page-event-my-event
         var id = object.id;
@@ -780,18 +780,18 @@ function editSaveUserEvent(eventId){
         pullUserEventHolderInfo(holder, id);
 
         // push notification to users who are on the going list
-        var goingId = object.get('goingId');
+        var goingId = object.get("goingId");
         if (typeof(goingId) == "undefined") {
             goingId == new Array;
         }
         var goingUsrId;
-        var title = object.get('title');
+        var title = object.get("title");
         if (title.length>10) {
             title = title.slice(0,6) + "...";
         }
         for (var i=0; i< goingId.length; i++) {
             goingUsrId = goingId[i];
-            pushNotificationToDeviceByUserId(goingUsrId, Parse.User.current().get('name')+" updated the activity \"" +title+ "\".");
+            pushNotificationToDeviceByUserId(goingUsrId, Parse.User.current().get("name")+" updated the activity \"" +title+ "\".");
         }
     };
     ParseEventEditSave(owner, title, location, time, visibility, description, errorObject, destID, displayFunction, eventId);

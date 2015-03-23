@@ -27,7 +27,7 @@ function getFriendOptionsButton(userId, option){
                         $("#"+prefixForGetFriendOptionsButton+ownerId+" > .custom-corners-people-near-by > .ui-bar > .reject-friend-request").unbind("click");
                         var successFunction = function(object){
                             var objectId = object.id;
-                            var friendId = object.get('friend');
+                            var friendId = object.get("friend");
                             $("#"+prefixForGetFriendOptionsButton+friendId+" > .custom-corners-people-near-by > .ui-bar > .reject-friend-request").remove();
                             $("#"+prefixForGetFriendOptionsButton+friendId+" > .custom-corners-people-near-by > .ui-bar > .accept-friend-request").addClass("chat-friend");
                             $("#"+prefixForGetFriendOptionsButton+friendId+" > .custom-corners-people-near-by > .ui-bar > .accept-friend-request").removeClass("accept-friend-request");
@@ -52,7 +52,7 @@ function getFriendOptionsButton(userId, option){
             };
             CacheCheckFriend(ownerId, friendId, displayFunction);
         } else {
-            var valid = object.get('valid');
+            var valid = object.get("valid");
             if (valid) {
                 var startChatButton = "<div class='send-friend-request chat-friend' onclick=\"startPrivateChat('"+friendId+"');\">Start Chat</div>";
                 $("#"+prefixForGetFriendOptionsButton+friendId+" > .custom-corners-people-near-by > .ui-bar").append(startChatButton);
@@ -69,17 +69,17 @@ function sendFriendRequest(friendId) {
     var currentUser = Parse.User.current();
     $("#"+prefixForGetFriendOptionsButton+friendId+" > .custom-corners-people-near-by > .ui-bar > .send-friend-request").unbind("click");
     var successFunction = function(object){
-        var friendId = object.get('friend');
+        var friendId = object.get("friend");
         $("#"+prefixForGetFriendOptionsButton+friendId+" > .custom-corners-people-near-by > .ui-bar > .send-friend-request").html("Request Sent");
     }
     ParseSendFriendRequest(currentUser.id, friendId, successFunction);
 }
 
 function buildUserListElement(object, liIdPrefix, lat, lng, type) {
-    var name = object.get('name');
-    var gender = object.get('gender');
-    var latitude = object.get('latitude');
-    var longitude = object.get('longitude');
+    var name = object.get("name");
+    var gender = object.get("gender");
+    var latitude = object.get("latitude");
+    var longitude = object.get("longitude");
     var userId = object.id;
     var updatedAt = object.updatedAt;
     var newElement = "";
@@ -94,7 +94,7 @@ function buildUserListElement(object, liIdPrefix, lat, lng, type) {
     newElement += "<div class='ui-bar ui-bar-a'>";
     newElement += "<div><strong>"+name+"</strong></div>";
     newElement += "<div class='ui-icon-custom-gender' style='";
-    if (typeof(gender) == 'undefined') {
+    if (typeof(gender) == "undefined") {
         //$("#"+eventId+"-owner-gender").html(gender.toString());
     } else if (gender) {
         newElement += "background-image:url("+"./content/customicondesign-line-user-black/png/male-white-20.png"+");";
@@ -166,14 +166,14 @@ function showPeopleNearByList(position){
                     if (typeof(photo120) == "undefined") {
                         photo120 = "./content/png/Taylor-Swift.png";
                     }
-                    $("#near-by-"+object.get('userId')+" > .custom-corners-people-near-by").css("backgroundImage","url('"+photo120+"')");
+                    $("#near-by-"+object.get("userId")+" > .custom-corners-people-near-by").css("backgroundImage","url('"+photo120+"')");
                 };
                 CacheGetProfilePhoto(userId, displayFunction);
                 prefixForGetFriendOptionsButton="near-by-";
                 getFriendOptionsButton(userId);
             } else {
-                var latitude = objects[i].get('latitude');
-                var longitude = objects[i].get('longitude');
+                var latitude = objects[i].get("latitude");
+                var longitude = objects[i].get("longitude");
                 $("#near-by-"+objects[i].id+" > .custom-corners-people-near-by > .ui-bar-a > .people-near-by-list-distance").html(getDistance(latitude, longitude, lat, lng) + "km, "+convertTime(objects[i].updatedAt));
             }
         }
@@ -219,7 +219,7 @@ function bindSearchAutocomplete(){
                         if (typeof(photo120) == "undefined") {
                             photo120 = "./content/png/Taylor-Swift.png";
                         }
-                        $("#people-search-"+object.get('userId')+" > .custom-corners-people-near-by").css("backgroundImage","url('"+photo120+"')");
+                        $("#people-search-"+object.get("userId")+" > .custom-corners-people-near-by").css("backgroundImage","url('"+photo120+"')");
                     }
                     CacheGetProfilePhoto(userId, displayFunction);
                     prefixForGetFriendOptionsButton="people-search-";
@@ -255,7 +255,7 @@ function pullMyFriendRequests() {
             var displayFunction = function(userObject, data) {
                 var newElement = buildUserListElement(userObject, "new-friend-request-", null, null, "people-near-by-list");
                 var objectId = data.friendObject.id;
-                var friendId = data.friendObject.get('owner');
+                var friendId = data.friendObject.get("owner");
                 $( "#friend-requests-list" ).append(newElement);
                 var displayFunction = function(object, data){
                     var photo120 = object.get("profilePhoto120");
@@ -293,7 +293,7 @@ function pullMyFriendList() {
     var descendingOrderKey = "createdAt";
     var displayFunction = function(objects){
         // sort user list
-        objects.sort(function(a, b){return a.get('name') - b.get('name')});
+        objects.sort(function(a, b){return a.get("name") - b.get("name")});
 
         // display them
         for (var i=0; i<objects.length; i++) {
@@ -303,7 +303,7 @@ function pullMyFriendList() {
             var displayFunction = function(userObject, data) {
                 var newElement = buildUserListElement(userObject, null, null, null, "friend-list");
                 var objectId = data.friendObject.id;
-                var friendId = data.friendObject.get('friend');
+                var friendId = data.friendObject.get("friend");
                 $( "#friend-list-"+userObject.id ).append(newElement);
                 var displayFunction = function(object, data){
                     var photo120 = object.get("profilePhoto120");
@@ -326,14 +326,14 @@ function pullMyFriendList() {
 // #page-display-user-profile
 
 function buildUserProfileDetailElement(object){
-    var name = object.get('name');
-    var gender = object.get('gender');
-    var birthdate = object.get('birthdate');
-    var school = object.get('school');
-    var interest = object.get('interest');
-    var location = object.get('location');
-    var motto = object.get('motto');
-    var major = object.get('major');
+    var name = object.get("name");
+    var gender = object.get("gender");
+    var birthdate = object.get("birthdate");
+    var school = object.get("school");
+    var interest = object.get("interest");
+    var location = object.get("location");
+    var motto = object.get("motto");
+    var major = object.get("major");
     // var latitude = object.get('latitude');
     // var longitude = object.get('longitude');
     var newElement = "";

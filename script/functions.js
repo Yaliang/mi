@@ -15,7 +15,7 @@ function loginByLocalStorage(){
     var currentUser = Parse.User.current();
     if (currentUser) {
         var successFunction = function() {
-            setCurrLocationHash('#page-event');
+            setCurrLocationHash("#page-event");
             $.mobile.changePage("#page-event"); // window.location.hash = "#page-event";
             $.mobile.loading("show");
             pullUserEvent();
@@ -28,7 +28,7 @@ function loginByLocalStorage(){
             ParsePullMyChat(Parse.User.current().id,"updatedAt",function(){});
         };
         var errorFunction = function() {
-            setCurrLocationHash('#page-login');
+            setCurrLocationHash("#page-login");
             $.mobile.changePage("#page-login"); // window.location.hash = "#page-login";
         };
         ParseUpdateCurrentUser(successFunction, errorFunction);
@@ -37,32 +37,32 @@ function loginByLocalStorage(){
         var window_width = $(window).width();
         var window_height = $(window).height();
         if (window_width/window_height > 1) {
-            $('.loading-page-image').append("<div class='loading-page-button-top'>Join Us.</div>");
-            $('.loading-page-button-top').css("marginLeft", Math.round(($(".loading-page-image").width()-93-44)/2).toString()+"px");
+            $(".loading-page-image").append("<div class='loading-page-button-top'>Join Us.</div>");
+            $(".loading-page-button-top").css("marginLeft", Math.round(($(".loading-page-image").width()-93-44)/2).toString()+"px");
         } else {
-            $('.loading-page-image').append("<div class='loading-page-button-bottom'>Join Us.</div>");            
-            $('.loading-page-button-bottom').css("marginLeft", Math.round(($(".loading-page-image").width()-93-44)/2).toString()+"px");
+            $(".loading-page-image").append("<div class='loading-page-button-bottom'>Join Us.</div>");            
+            $(".loading-page-button-bottom").css("marginLeft", Math.round(($(".loading-page-image").width()-93-44)/2).toString()+"px");
         }
-        $('#page-loading').click(function(){
-            setCurrLocationHash('#page-login');
+        $("#page-loading").click(function(){
+            setCurrLocationHash("#page-login");
             $.mobile.changePage("#page-login"); //window.location.hash = "page-login";
-            $('#page-loading').unbind("click");
-            $('#page-loading').unbind("swiperight");
-            $('#page-loading').unbind("swipeleft");
+            $("#page-loading").unbind("click");
+            $("#page-loading").unbind("swiperight");
+            $("#page-loading").unbind("swipeleft");
         });
-        $('#page-loading').on('swiperight',function(){
-            setCurrLocationHash('#page-login');
+        $("#page-loading").on("swiperight",function(){
+            setCurrLocationHash("#page-login");
             $.mobile.changePage("#page-login"); //window.location.hash = "page-login";
-            $('#page-loading').unbind("click");
-            $('#page-loading').unbind("swiperight");
-            $('#page-loading').unbind("swipeleft");
+            $("#page-loading").unbind("click");
+            $("#page-loading").unbind("swiperight");
+            $("#page-loading").unbind("swipeleft");
         });
-        $('#page-loading').on('swipeleft',function(){
-            setCurrLocationHash('#page-login');
+        $("#page-loading").on("swipeleft",function(){
+            setCurrLocationHash("#page-login");
             $.mobile.changePage("#page-login"); //window.location.hash = "page-login";
-            $('#page-loading').unbind("click");
-            $('#page-loading').unbind("swiperight");
-            $('#page-loading').unbind("swipeleft");
+            $("#page-loading").unbind("click");
+            $("#page-loading").unbind("swiperight");
+            $("#page-loading").unbind("swipeleft");
         });
     }
 }
@@ -82,12 +82,12 @@ function pullNotification(){
             jQuery("[id=friend]") .each(function(){
                 $(this).addClass("friend-notification-custom");
             });
-            $('#new-friend-requests-btn').html("<span>New Friend Requests</span><span id='new-friend-requests-number' class='ui-li-count'>"+objects.length.toString()+"</span>");
+            $("#new-friend-requests-btn").html("<span>New Friend Requests</span><span id='new-friend-requests-number' class='ui-li-count'>"+objects.length.toString()+"</span>");
         } else {
             jQuery("[id=friend]") .each(function(){
                 $(this).removeClass("friend-notification-custom");
             });
-            $('#new-friend-requests-btn').html("<span>New Friend Requests</span>");
+            $("#new-friend-requests-btn").html("<span>New Friend Requests</span>");
         }
     };
     ParsePullUnreadFriendRequest(currentUser.id, displayFunction);
@@ -186,66 +186,66 @@ function logout(){
 
 function initialElementEventSetting(){
     // set comment and message send bar diable
-    $('#comment-content').on("blur",function(){
-        $('#comment-content').prop('disabled', true);
-        $('#send-comment-bar').css("position",'fixed');
-        $('#send-comment-bar').css("bottom","0");
+    $("#comment-content").on("blur",function(){
+        $("#comment-content").prop("disabled", true);
+        $("#send-comment-bar").css("position","fixed");
+        $("#send-comment-bar").css("bottom","0");
     });
-    $('#message-content').on("blur",function(){
-        $('#message-content').prop('disabled', true);
-        $('#send-message-bar').css("position",'fixed');
-        $('#send-message-bar').css("bottom","0");
+    $("#message-content").on("blur",function(){
+        $("#message-content").prop("disabled", true);
+        $("#send-message-bar").css("position","fixed");
+        $("#send-message-bar").css("bottom","0");
     });
-    $('#comment-content').prop('disabled', true);
-    $('#message-content').prop('disabled', true);
-    $('#message-chat-form').submit(function(event){
+    $("#comment-content").prop("disabled", true);
+    $("#message-content").prop("disabled", true);
+    $("#message-chat-form").submit(function(event){
         // sendToolbarActiveKeyboard({
-        //     id:'#message-content',
-        //     bar:'#send-message-bar',
-        //     base:'#page-chat-messages'
+        //     id:"#message-content",
+        //     bar:"#send-message-bar",
+        //     base:"#page-chat-messages"
         // });
         event.preventDefault();
     });
-    $('#comment-form').submit(function(event){
+    $("#comment-form").submit(function(event){
         // sendToolbarActiveKeyboard({
-        //     id:'#comment-content',
-        //     bar:'#send-comment-bar',
-        //     base:'#page-event-detail'
+        //     id:"#comment-content",
+        //     bar:"#send-comment-bar",
+        //     base:"#page-event-detail"
         // });
         event.preventDefault();
     });
     // finish
 
-    $('#profile-edit-photo').on('blur change',function(){
+    $("#profile-edit-photo").on("blur change",function(){
         profilePhotoCrop();
     });
 
-    $('#setting-confirm-password').submit(function(event) {
+    $("#setting-confirm-password").submit(function(event) {
         event.preventDefault();
-        changePassword('old',$('#setting-old-password').val(),null);
+        changePassword("old",$("#setting-old-password").val(),null);
     });
 
-    $('#setting-set-new-password').submit(function(event) {
+    $("#setting-set-new-password").submit(function(event) {
         event.preventDefault();
-        changePassword('new',$('#setting-new-password').val(),$('#setting-new-password-confirmation').val());
+        changePassword("new",$("#setting-new-password").val(),$("#setting-new-password-confirmation").val());
     });
 
-    $('#setting-new-password').focusout(function(){
+    $("#setting-new-password").focusout(function(){
         if ($(this).val().length < 6){
             var errorMessage = "Password should be at least 6 characters. Please reenter password.";
-            $('#setting-set-new-password-error').html(errorMessage);
+            $("#setting-set-new-password-error").html(errorMessage);
         }
     });
 
-    $('#event-create-form').submit(function(event) {
+    $("#event-create-form").submit(function(event) {
         event.preventDefault();
     });
 
     
-    $('#login-form').submit(function(event){
+    $("#login-form").submit(function(event){
         event.preventDefault();
     });
-    $('#signup-form').submit(function(event){
+    $("#signup-form").submit(function(event){
         event.preventDefault();
     });
     
@@ -278,7 +278,7 @@ function initialElementEventSetting(){
                 $("#send-message-bar").show();
                 $(window).on("swiperight",function(){
                     window.history.back();
-                    setCurrLocationHash('#page-event');
+                    setCurrLocationHash("#page-event");
                     $(window).unbind("swiperight");
                 })
             }
@@ -295,7 +295,7 @@ function initialElementEventSetting(){
         $("#send-comment-bar").show();
         $(window).on("swiperight",function(){
             window.history.back();
-            setCurrLocationHash('#page-event');
+            setCurrLocationHash("#page-event");
             $(window).unbind("swiperight");
         })
     });
@@ -304,20 +304,20 @@ function initialElementEventSetting(){
     });
 
     $(document).on("pagebeforeshow","#page-change-my-password",function(){
-        $('#setting-confirm-password').show();
-        $('#setting-set-new-password').hide();
-        $('#setting-confirm-password-btn').show();
-        $('#setting-set-new-password-btn').hide();
-        $('#setting-old-password').val("");
-        $('#setting-new-password').val("");
-        $('#setting-new-password-confirmation').val("");
-        $('#setting-confirm-password-error').html("");
-        $('#setting-set-new-password-error').html("");
-        $('#setting-change-my-password-title').html("Password");
+        $("#setting-confirm-password").show();
+        $("#setting-set-new-password").hide();
+        $("#setting-confirm-password-btn").show();
+        $("#setting-set-new-password-btn").hide();
+        $("#setting-old-password").val("");
+        $("#setting-new-password").val("");
+        $("#setting-new-password-confirmation").val("");
+        $("#setting-confirm-password-error").html("");
+        $("#setting-set-new-password-error").html("");
+        $("#setting-change-my-password-title").html("Password");
     });
 
     $(document).on("pageshow","#page-change-my-password", function(){
-        $('#setting-old-password').focus();
+        $("#setting-old-password").focus();
     });
 }
 
@@ -366,7 +366,7 @@ function sendToolbarActiveKeyboard(object){
     $("html body").animate({ scrollTop: $(document).height().toString()+"px" }, {
         duration: 300,
         complete : function(){
-            $(object.id).prop('disabled', false);
+            $(object.id).prop("disabled", false);
             // $(window).scroll(function(){
             //     $(object.id).trigger("blur");
             //     console.log("scroll happen");
@@ -393,13 +393,13 @@ function pushNotificationToDeviceByUsername(username, message) {
     CacheGetProfileByUsername(username, function(obj,data){
         // push notification
         var regId;
-        if (typeof(obj.get('GCMId')) != "undefined") {
-            regId = obj.get('GCMId');
-            pushNotificationToDevice('gcm',regId, data.message);
+        if (typeof(obj.get("GCMId")) != "undefined") {
+            regId = obj.get("GCMId");
+            pushNotificationToDevice("gcm",regId, data.message);
         }
-        if (typeof(obj.get('APNId')) != "undefined") {
-            regId = obj.get('APNId');
-            pushNotificationToDevice('apn',regId, data.message);
+        if (typeof(obj.get("APNId")) != "undefined") {
+            regId = obj.get("APNId");
+            pushNotificationToDevice("apn",regId, data.message);
         }
     }, {message: message});
 }
@@ -409,13 +409,13 @@ function pushNotificationToDeviceByUserId(userid, message) {
     CacheGetProfileByUserId(userid, function(obj,data){
         // push notification
         var regId;
-        if (typeof(obj.get('GCMId')) != "undefined") {
-            regId = obj.get('GCMId');
-            pushNotificationToDevice('gcm',regId, data.message);
+        if (typeof(obj.get("GCMId")) != "undefined") {
+            regId = obj.get("GCMId");
+            pushNotificationToDevice("gcm",regId, data.message);
         }
-        if (typeof(obj.get('APNId')) != "undefined") {
-            regId = obj.get('APNId');
-            pushNotificationToDevice('apn',regId, data.message);
+        if (typeof(obj.get("APNId")) != "undefined") {
+            regId = obj.get("APNId");
+            pushNotificationToDevice("apn",regId, data.message);
         }
     }, {message: message});
 }
