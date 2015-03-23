@@ -313,6 +313,7 @@ function initialElementEventSetting(){
 		$('#setting-new-password-confirmation').val("");
 		$('#setting-confirm-password-error').html("");
 		$('#setting-set-new-password-error').html("");
+		$('#setting-change-my-password-title').html("Password");
 	});
 
 	$(document).on("pageshow","#page-change-my-password", function(){

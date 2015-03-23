@@ -532,7 +532,7 @@
 
 		<div role="main" class="ui-content">
 			<a href="#page-edit-my-profile" class="ui-btn" onclick="getMyProfile(); $('#profile-save-btn').on('click', function(){saveProfile()});setCurrLocationHash('#page-edit-my-profile')">Edit My Profile</a>
-			<a href="#page-change-my-password" class="ui-btn" onclick="setCurrLocationHash('#page-change-my-password')">Change Password</a>
+			<a href="#page-change-my-password" class="ui-btn" onclick="setCurrLocationHash('#page-change-my-password')">Password</a>
 			<button class="ui-btn ui-custom-log-out" onclick="logout();">Logout</button>
 		</div><!-- /content -->
 
@@ -595,7 +595,7 @@
 	<div data-role="page" id="page-change-my-password" data-title="Yueme">
 
 		<div data-role="header">
-			<h1>Password</h1>
+			<h1 id='setting-change-my-password-title'>Password</h1>
 			<a data-rel="back" href="#page-setting" class="ui-btn-left ui-btn ui-btn-inline ui-corner-all" onclick="setCurrLocationHash('#page-setting')">Back</a>
 		</div><!-- /header -->
 
