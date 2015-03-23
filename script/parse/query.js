@@ -90,16 +90,6 @@ function ParseChangePassword(newpassword, successFunction, errorFunction) {
 	});
 }
 
-function queryCredentials(username) {
-    var query = new Parse.Query(Parse.User);
-    query.equalTo("username", username);  
-	query.find({
-  		success: function() {
-   			errorObject.html("Wrong password");
-  		}
-	});
-}
-
 function ParseRemoveCurrentBridgeitId() {
 	var current = Parse.User.current();
 	var empty;

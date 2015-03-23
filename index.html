@@ -168,11 +168,11 @@
 
 		<div role="main" class="ui-content">
 			<form style='padding: 1em ' id='signup-form'>
-				<label for="username">Name:</label>
+				<label for="signup-name">Name:</label>
 				<input type="text" data-clear-btn="true" name="username" id="signup-name" value="">
-				<label for="useremail">Email:</label>
+				<label for="signup-email">Email:</label>
 				<input type="email" data-clear-btn="true" name="useremail" id="signup-email" value="">
-				<label for="userpassword">Password:</label>
+				<label for="signup-password">Password:</label>
 				<input type="password" data-clear-btn="ture" name="userpassword" id="signup-password" value="" autocomplete="off">
 				<div id="signup-error" class="error-message"></div>
 				<button class="ui-btn" onclick="signup()">Sign Up</button>
@@ -193,9 +193,9 @@
 
 		<div role="main" class="ui-content">
 			<form style='padding: 1em ' id='login-form'>
-				<label for="useremail">Email:</label>
+				<label for="login-email">Email:</label>
 				<input type="email" data-clear-btn="true" name="useremail" id="login-email" value="">
-				<label for="userpassword">Password:</label>
+				<label for="login-password">Password:</label>
 				<input type="password" data-clear-btn="ture" name="userpassword" id="login-password" value="" autocomplete="off">
 				<div id="login-error" class="error-message"></div>
 				<button class="ui-btn" onclick="login();">Log In</button>
@@ -267,15 +267,15 @@
 
 		<div role="main" class="ui-content">
 			<form id="event-create-form" style='padding: 1em '>
-				<label for="eventtitle">Title:</label>
+				<label for="event-create-title">Title:</label>
 				<input type="text" data-clear-btn="true" name="eventtitle" id="event-create-title" value="">
-				<label for="eventlocation">Location:</label>
+				<label for="event-create-location">Location:</label>
 				<input type="text" data-clear-btn="ture" name="eventlocation" id="event-create-location" value="">
-				<label for="eventstarttime">Start Time:</label>
+				<label for="event-create-startTime">Start Time:</label>
 				<input type="datetime-local" data-clear-btn="ture" name="eventstarttime" id="event-create-startTime" value="">
-				<label for="eventendtime">End Time:</label>
+				<label for="event-create-endTime">End Time:</label>
 				<input type="datetime-local" data-clear-btn="ture" name="eventendtime" id="event-create-endTime" value="">
-				<label for="eventvisibility">Visibility:</label>
+				<label for="event-create-visibility">Visibility:</label>
 				<select name="eventvisibility" id="event-create-visibility" data-role="flipswitch" data-wrapper-class="custom-size-flipswitch-event-create-visibility" checked="">
 					<option value="off">Friends</option>
 					<option value="on" selected="">Public</option>
@@ -286,7 +286,7 @@
 				-->
 				<!-- label of event will comming later 
 				-->
-				<label for="eventdescription">Description:</label>
+				<label for="event-create-description">Description:</label>
 				<textarea name="eventdescription" id="event-create-description"></textarea>
 			</form>
 
@@ -312,15 +312,15 @@
 
 		<div role="main" class="ui-content">
 			<form id="event-create-form" style='padding: 1em '>
-				<label for="eventtitle">Title:</label>
+				<label for="event-edit-title">Title:</label>
 				<input type="text" data-clear-btn="true" name="eventtitle" id="event-edit-title" value="">
-				<label for="eventlocation">Location:</label>
+				<label for="event-edit-location">Location:</label>
 				<input type="text" data-clear-btn="ture" name="eventlocation" id="event-edit-location" value="">
-				<label for="eventstarttime">Start Time:</label>
+				<label for="event-edit-startTime">Start Time:</label>
 				<input type="datetime-local" data-clear-btn="ture" name="eventstarttime" id="event-edit-startTime" value="">
-				<label for="eventendtime">End Time:</label>
+				<label for="event-edit-endTime">End Time:</label>
 				<input type="datetime-local" data-clear-btn="ture" name="eventendtime" id="event-edit-endTime" value="">
-				<label for="eventvisibility">Visibility:</label>
+				<label for="event-edit-visibility">Visibility:</label>
 				<select name="eventvisibility" id="event-edit-visibility" data-role="flipswitch" data-wrapper-class="custom-size-flipswitch-event-create-visibility" checked="">
 					<option value="off">Friends</option>
 					<option value="on" selected="">Public</option>
@@ -331,7 +331,7 @@
 				-->
 				<!-- label of event will comming later 
 				-->
-				<label for="eventdescription">Description:</label>
+				<label for="event-edit-description">Description:</label>
 				<textarea name="eventdescription" id="event-edit-description"></textarea>
 			</form>
 
@@ -559,30 +559,30 @@
 
 		<div role="main" class="ui-content" id="my-profile">
 			<div class="profile-photo-bar">
-				<label style='padding-left: 1em;' for="profilephoto">Photo:</label>
+				<label style='padding-left: 1em;' for="profile-edit-photo">Photo:</label>
 				<canvas id="canvas-photo" class="profile-photo-preview" width="120px" height="120px"></canvas>
 				<input type="file" data-clear-btn="false" name="profilephoto" id="profile-edit-photo" onclick="refreshPreviewPhoto = true; refreshPreviewCanvas();" value="">
 				<div id="photo-orientation" class="ui-hidden-accessible"></div>
 			</div>
 			<form style='padding: 1em;'>
-				<label for="profileusername">Name:</label>
+				<label for="profile-edit-name">Name:</label>
 				<input type="text" data-clear-btn="true" name="profilename" id="profile-edit-name" value="">
-				<label for="eventlocation">Gender:</label>
+				<label for="profile-edit-gender">Gender:</label>
 				<select name="profilegender" id="profile-edit-gender" data-role="flipswitch" data-wrapper-class="custom-size-flipswitch-event-create-visibility" checked="">
 					<option value="off">Female</option>
 					<option value="on" selected="">Male</option>
 				</select>
-				<label for="profilebirthdate">Birthdate:</label>
+				<label for="profile-edit-birthdate">Birthdate:</label>
 				<input type="date" data-role="date" name="profilebirthdate" id="profile-edit-birthdate">
-				<label for="profilemotto">Motto:</label>
+				<label for="profile-edit-motto">Motto:</label>
 				<input type="text" data-clear-btn="true" name="profilemotto" id="profile-edit-motto" value="">
-				<label for="profileschool">School:</label>
+				<label for="profile-edit-school">School:</label>
 				<input type="text" data-clear-btn="true" name="profileuschool" id="profile-edit-school" value="">
-				<label for="profilemajor">Major:</label>
+				<label for="profile-edit-major">Major:</label>
 				<input type="text" data-clear-btn="true" name="profilemajor" id="profile-edit-major" value="">
-				<label for="profileinterest">Interest:</label>
+				<label for="profile-edit-interest">Interest:</label>
 				<input type="text" data-clear-btn="true" name="profileinterest" id="profile-edit-interest" value="">
-				<label for="profilelocation">Location:</label>
+				<label for="profile-edit-location">Location:</label>
 				<input type="text" data-clear-btn="true" name="profilelocation" id="profile-edit-location" value="">
 			</form>
 		</div><!-- /content -->
@@ -601,15 +601,15 @@
 
 		<div role="main" class="ui-content">
 			<form style='padding: 1em;' id='setting-confirm-password'>
-				<label for="oldpassword">Current Password:</label>
+				<label for="setting-old-password">Current Password:</label>
 				<input type="password" data-clear-btn="true" name="oldpassword" id="setting-old-password" value="">
 				<input id="setting-confirm-password-native-btn" type="submit" name="settingConfirmPassword" value="Next">
 				<div id='setting-confirmpassword-error' class='error-message'></div>
 			</form>
 			<form style='padding: 1em; display:none' id='setting-set-new-password'>
-				<label for='newpassword'>New Password:</label>
+				<label for='setting-new-password'>New Password:</label>
 				<input type='password' data-clear-btn='true' name='newpassword' id='setting-new-password' value=''>
-				<label for='confirmpassword'>Confirm Password:</label>
+				<label for='setting-new-password-confirm'>Confirm Password:</label>
 				<input type='password' data-clear-btn='true' name='confirmpassword' id='setting-new-password-confirm' value=''>
 				<input id="setting-save-password-native-btn" type="submit" name="settingSaveNewPassword" value="Save">
 				<div id='setting-setnewpassword-error' class='error-message'></div>
