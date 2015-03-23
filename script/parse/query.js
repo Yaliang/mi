@@ -1148,7 +1148,7 @@ function ParseNoticeNewVersion() {
 	var User = Parse.Object.extend("User");
 	var query = new Parse.Query(User);
 
-	query.equalTo("objectId", Parse.User.current().id);
+	//query.equalTo("objectId", Parse.User.current().id);
 	query.find({
 		success: function(objects){
 			NoticeNewVersionObjects = objects;
