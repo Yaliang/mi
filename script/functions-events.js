@@ -16,7 +16,11 @@ function addInterestEvent(eventId){
         });
 
         // push notification to owner
-        pushNotificationToDeviceByUsername(ownerUsername, " interested in your activity.");
+        var title = object.get('title');
+        if (title.length>10) {
+            title = title.slice(0,6) + "...";
+        }
+        pushNotificationToDeviceByUsername(ownerUsername, Parse.User.current().get('name')+" interested in your activity \""+title+"\".");
     };
     ParseAddInterest(eventId, displayFunction);
 }
@@ -57,7 +61,11 @@ function addGoingEvent(eventId){
         });
 
         // push notification to owner
-        pushNotificationToDeviceByUsername(ownerUsername, " wanna go with you!");
+        var title = object.get('title');
+        if (title.length>10) {
+            title = title.slice(0,6) + "...";
+        }
+        pushNotificationToDeviceByUsername(ownerUsername, Parse.User.current().get('name')+" wanna go with you in activity \""+title+"\"!");
     };
     ParseAddGoing(eventId, displayFunction);
 }
@@ -549,7 +557,11 @@ function sendComment(){
         $("#my-comment-statistics-"+eventId).html(commentNumber.toString()+" Comments");
 
         // push notification to owner
-        pushNotificationToDeviceByUsername(ownerUsername, " comments on your activity.");
+        var title = object.get('title');
+        if (title.length>10) {
+            title = title.slice(0,6) + "...";
+        }
+        pushNotificationToDeviceByUsername(ownerUsername, Parse.User.current().get('name')+" comments on your activity \""+title+"\".");
     };
     ParseAddEventComment(eventId, owner, content, errorFunction, successFunction);
 }
@@ -767,6 +779,20 @@ function editSaveUserEvent(eventId){
         // display event holder's name | not the email one
         pullUserEventHolderInfo(holder, id);
 
+        // push notification to users who are on the going list
+        var goingId = object.get('goingId');
+        if (typeof(goingId) == "undefined") {
+            goingId == new Array;
+        }
+        var goingUsrId;
+        var title = object.get('title');
+        if (title.length>10) {
+            title = title.slice(0,6) + "...";
+        }
+        for (var i=0; i< goingId.length; i++) {
+            goingUsrId = goingId[i];
+            pushNotificationToDeviceByUserId(goingUsrId, Parse.User.current().get('name')+" updated the activity \"" +title+ "\".");
+        }
     };
     ParseEventEditSave(owner, title, location, time, visibility, description, errorObject, destID, displayFunction, eventId);
 }

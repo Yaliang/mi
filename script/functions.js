@@ -391,15 +391,30 @@ function pushNotificationToDeviceByUsername(username, message) {
 	// fetch user information
 	CacheGetProfileByUsername(username, function(obj,data){
 		// push notification
-		var name = obj.get('name');
 		var regId;
 		if (typeof(obj.get('GCMId')) != "undefined") {
 			regId = obj.get('GCMId');
-			pushNotificationToDevice('gcm',regId, name+data.message);
+			pushNotificationToDevice('gcm',regId, data.message);
 		}
 		if (typeof(obj.get('APNId')) != "undefined") {
 			regId = obj.get('APNId');
-			pushNotificationToDevice('apn',regId, name+data.message);
+			pushNotificationToDevice('apn',regId, data.message);
+		}
+	}, {message: message});
+}
+
+function pushNotificationToDeviceByUserId(userid, message) {
+	// fetch user information
+	CacheGetProfileByUserId(userid, function(obj,data){
+		// push notification
+		var regId;
+		if (typeof(obj.get('GCMId')) != "undefined") {
+			regId = obj.get('GCMId');
+			pushNotificationToDevice('gcm',regId, data.message);
+		}
+		if (typeof(obj.get('APNId')) != "undefined") {
+			regId = obj.get('APNId');
+			pushNotificationToDevice('apn',regId, data.message);
 		}
 	}, {message: message});
 }
