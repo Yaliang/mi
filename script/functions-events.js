@@ -2,6 +2,7 @@
 function addInterestEvent(eventId){
     var displayFunction = function(object){
         var eventId = object.id;
+        var ownerUsername = object.get('owner');
         var interestNumber = 0;
         if (typeof(object.get("interestId")) != "undefined")
             interestNumber = object.get("interestId").length;
@@ -13,6 +14,9 @@ function addInterestEvent(eventId){
             oldElement.before(newElement);
             oldElement.remove();
         });
+
+        // push notification to owner
+        pushNotificationToDeviceByUsername(ownerUsername, " interested in your activity.");
     };
     ParseAddInterest(eventId, displayFunction);
 }
@@ -39,6 +43,7 @@ function addGoingEvent(eventId){
     var currentUser = Parse.User.current();
     var displayFunction = function(object){
         var eventId = object.id;
+        var ownerUsername = object.get('owner');
         var goingNumber = 0;
         if (typeof(object.get("goingId")) != "undefined")
             goingNumber = object.get("goingId").length;
@@ -50,6 +55,9 @@ function addGoingEvent(eventId){
             oldElement.before(newElement);
             oldElement.remove();
         });
+
+        // push notification to owner
+        pushNotificationToDeviceByUsername(ownerUsername, " wanna go with you!");
     };
     ParseAddGoing(eventId, displayFunction);
 }
@@ -532,12 +540,16 @@ function sendComment(){
     };
     var successFunction = function(object){
         var eventId = object.id;
+        var ownerUsername = object.get('owner');
         var commentNumber = object.get("commentNumber");
         updateEventDetail(eventId);
         $(".comment-statistics-"+eventId).each(function(){
             $(this).html(commentNumber.toString()+" Comments");
         });
         $("#my-comment-statistics-"+eventId).html(commentNumber.toString()+" Comments");
+
+        // push notification to owner
+        pushNotificationToDeviceByUsername(ownerUsername, " comments on your activity.");
     };
     ParseAddEventComment(eventId, owner, content, errorFunction, successFunction);
 }
