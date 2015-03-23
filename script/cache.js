@@ -13,10 +13,10 @@ function rawLocalToCache(object) {
         createdAt: object.createdAt,
         updatedAt: object.updatedAt
     };
-    item['get'] = function(a) {
+    item["get"] = function(a) {
         return this.attributes[a];
     };
-    item['toJSON'] = function() {
+    item["toJSON"] = function() {
         return this.attributes;
     };
 
@@ -93,7 +93,7 @@ function cacheInitialization() {
 function CacheGetProfilePhoto(userId, displayFunction, data) {
     var cached = false;
     for (var i = 0; i < cachePhoto.length; i++) {
-        if (cachePhoto[i].get('userId') == userId) {
+        if (cachePhoto[i].get("userId") == userId) {
             displayFunction(cachePhoto[i], data);
             cached = true;
             break;
@@ -109,14 +109,14 @@ function CacheGetProfilePhotoByUsername(username, displayFunction, data) {
     var cached = false;
     var userId = null;
     for (var i = 0; i < cacheUser.length; i++) {
-        if (cacheUser[i].get('username') == username) {
+        if (cacheUser[i].get("username") == username) {
             userId = cacheUser[i].id;
             break;
         }
     }
     if (userId != null) {
         for (var i = 0; i < cachePhoto.length; i++) {
-            if (cachePhoto[i].get('userId') == userId) {
+            if (cachePhoto[i].get("userId") == userId) {
                 displayFunction(cachePhoto[i], data);
                 cached = true;
                 break;
@@ -135,7 +135,7 @@ function CacheUpdatePhoto(object){
     object = rawLocalToCache(JSON.parse(JSON.stringify(object)));
     var cached = false;
     for (var i = 0; i < cachePhoto.length; i++) {
-        if (cachePhoto[i].get('userId') == object.get('userId')) {
+        if (cachePhoto[i].get("userId") == object.get("userId")) {
             cachePhoto.splice(i, 1, object);
             cached = true;
             break;
@@ -151,7 +151,7 @@ function CacheUpdatePhoto(object){
 function CacheGetProfileByUsername(username, displayFunction, data){
     var cached = false;
     for (var i = 0; i < cacheUser.length; i++) {
-        if (cacheUser[i].get('username') == username) {
+        if (cacheUser[i].get("username") == username) {
             displayFunction(cacheUser[i], data);
             cached = true;
             break;
@@ -231,7 +231,7 @@ function CachePullMyFriend(userId, descendingOrderKey, displayFunction) {
             friends.push(cacheFriend[i]);
         }
     }
-    friends.sort(function(a, b){return a.get('name') - b.get('name')});
+    friends.sort(function(a, b){return a.get("name") - b.get("name")});
 
     displayFunction(friends);
 }
@@ -395,7 +395,7 @@ function CacheGetLastestMessage(groupId, displayFunction,data){
     var afterAt = null;
     var message = null;
     for (var i = 0; i < cacheMessage.length; i++) {
-        if ((cacheMessage[i].get('groupId') == groupId) && ((afterAt == null) || (Date.parse(cacheMessage[i].get("createdAt")) >= Date.parse(afterAt)))) {
+        if ((cacheMessage[i].get("groupId") == groupId) && ((afterAt == null) || (Date.parse(cacheMessage[i].get("createdAt")) >= Date.parse(afterAt)))) {
             message = cacheMessage[i];
             afterAt = message.get("createdAt");
         }
