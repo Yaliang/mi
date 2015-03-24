@@ -36,6 +36,9 @@ function getFriendOptionsButton(userId, option){
                             $("#"+prefixForGetFriendOptionsButton+friendId+" > .custom-corners-people-near-by > .ui-bar > .chat-friend").on("click",function(){
                                 startPrivateChat(friendId);
                             });
+
+                            // push notification to friend
+                            pushNotificationToDeviceByUserId(object.get('friend'), Parse.User.current().get("name")+" accepted your friend request!");
                         };
                         ParseAcceptFriendRequest(objectId, null, null, successFunction);
                     });
@@ -72,6 +75,9 @@ function sendFriendRequest(friendId) {
     var successFunction = function(object){
         var friendId = object.get("friend");
         $("#"+prefixForGetFriendOptionsButton+friendId+" > .custom-corners-people-near-by > .ui-bar > .send-friend-request").html("Request Sent");
+
+        // push notification to friend
+        pushNotificationToDeviceByUserId(object.get('friend'), Parse.User.current().get("name")+" wanna be your friend!");
     };
     ParseSendFriendRequest(currentUser.id, friendId, successFunction);
 }
