@@ -1,6 +1,5 @@
 $(document).ready(function (){
     initialElementEventSetting();
-
     cacheInitialization();
     loginByLocalStorage();
 });
@@ -68,12 +67,13 @@ function loginByLocalStorage(){
 }
 
 var pullNotificationRunning = false;
+
 function pullNotification(){
     var currentUser = Parse.User.current();
     pullNotificationRunning = true;
 
     if (currentUser == null){
-        pullNotificationRunning = false
+        pullNotificationRunning = false;
         return
     }
     // check new friend request
@@ -167,7 +167,6 @@ function login(){
 
     $.mobile.loading("show");
     ParseLogin(email, password, errorObject, destID, customFunction);
-    //$("#body-input-login-password").val("");
 }
 
 function logout(){
@@ -191,30 +190,22 @@ function initialElementEventSetting(){
         $("#footer-bar-send-comment").css("position","fixed");
         $("#footer-bar-send-comment").css("bottom","0");
     });
+
     $("#footer-bar-input-message-content").on("blur",function(){
         $("#footer-bar-input-message-content").prop("disabled", true);
         $("#footer-bar-send-message").css("position","fixed");
         $("#footer-bar-send-message").css("bottom","0");
     });
+
     $("#footer-bar-input-comment-content").prop("disabled", true);
     $("#footer-bar-input-message-content").prop("disabled", true);
     $("#footer-bar-form-message-chat").submit(function(event){
-        // sendToolbarActiveKeyboard({
-        //     id:"#footer-bar-input-message-content",
-        //     bar:"#footer-bar-send-message",
-        //     base:"#page-chat-messages"
-        // });
         event.preventDefault();
     });
+
     $("#footer-bar-form-comment").submit(function(event){
-        // sendToolbarActiveKeyboard({
-        //     id:"#footer-bar-input-comment-content",
-        //     bar:"#footer-bar-send-comment",
-        //     base:"#page-event-detail"
-        // });
         event.preventDefault();
     });
-    // finish
 
     $("#body-input-edit-profile-photo").on("blur change",function(){
         profilePhotoCrop();
@@ -222,12 +213,10 @@ function initialElementEventSetting(){
 
     $("#body-form-confirm-password").submit(function(event) {
         event.preventDefault();
-        changePassword("old",$("#body-input-old-password").val(),null);
     });
 
     $("#body-form-set-new-password").submit(function(event) {
         event.preventDefault();
-        changePassword("new",$("#body-input-set-new-password").val(),$("#body-input-confirm-new-password").val());
     });
 
     $("#body-input-set-new-password").focusout(function(){
@@ -241,20 +230,17 @@ function initialElementEventSetting(){
         event.preventDefault();
     });
 
-    
     $("#body-form-login").submit(function(event){
         event.preventDefault();
     });
     $("#body-form-signup").submit(function(event){
         event.preventDefault();
     });
-    
 
+    // check if the user has been logged in or not
     $(window).hashchange(function(){
         var preHash = currLocationHash;
         var currHash = window.location.hash;
-        //console.log("currHash:" + currHash);
-        //console.log("preHash:" + preHash);
 
         // in user session
         if (currHash == "#page-login" && (preHash != "#page-loading" && preHash != "#page-login" && preHash != "#page-signup")) {
@@ -268,6 +254,7 @@ function initialElementEventSetting(){
             currLocationHash = "#page-login";
         }
     });
+
     // add function when the page #page-chat-messages completed.
     $(document).on("pageshow","#page-chat-messages",function(){
         $("html body").animate({ scrollTop: $(document).height().toString()+"px" }, {
@@ -288,6 +275,7 @@ function initialElementEventSetting(){
     $(document).on("pagebeforehide","#page-chat-messages",function(){
         $("#footer-bar-send-message").hide();
     });
+
     // add function when the page #page-event-detail completed.
     $(document).on("pageshow","#page-event-detail",function(){
         $("#footer-bar-send-comment").css("position","fixed");
@@ -299,10 +287,12 @@ function initialElementEventSetting(){
             $(window).unbind("swiperight");
         })
     });
+
     $(document).on("pagebeforehide","#page-event-detail",function(){
         $("#footer-bar-send-comment").hide();
     });
 
+    // for page-change-my-password
     $(document).on("pagebeforeshow","#page-change-my-password",function(){
         $("#body-form-confirm-password").show();
         $("#body-form-set-new-password").hide();
@@ -358,7 +348,7 @@ function convertTime(rawTime){
     } else {
         showtime = "just now";
     }
-    return showtime
+    return showtime;
 }
 
 function sendToolbarActiveKeyboard(object){
@@ -366,13 +356,8 @@ function sendToolbarActiveKeyboard(object){
         duration: 300,
         complete : function(){
             $(object.id).prop("disabled", false);
-            // $(window).scroll(function(){
-            //     $(object.id).trigger("blur");
-            //     console.log("scroll happen");
-            // });
             $(object.bar).css("position","absolute");
             $(object.bar).css("bottom",($("body").height()-$(object.base).height()-44).toString()+"px");
-            
             $(object.id).trigger("focus");
         }
     });
@@ -380,10 +365,9 @@ function sendToolbarActiveKeyboard(object){
 
 function pushNotificationToDevice(platform,regId,message) {
     var request="id="+regId+"&message="+message;//{id: regId, message: message};
-    //console.log(request);
     $.post("https://yueme-push-server.herokuapp.com/"+platform,request)
         .done(function(data) {
-            //console.log(data);
+
         });
 }
 

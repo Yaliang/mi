@@ -1,5 +1,6 @@
 // edit and update my profile
 var refreshPreviewPhoto = false;
+
 function refreshPreviewCanvas(){
     profilePhotoCrop();
     if (refreshPreviewPhoto) {
@@ -70,7 +71,7 @@ function saveProfile(){
     else {
         var photo120 = null;
         var photo = null;
-    };
+    }
     var name = $("#body-input-edit-profile-name").val();
     var gender = $("#body-select-edit-profile-gender").val()=="on" ? true : false ;
     var birthdate = $("#body-input-edit-profile-birthdate").val();
@@ -133,7 +134,7 @@ function profilePhotoCrop(){
             default:
                 context.drawImage(image, sourceX, sourceY, sourceWidth, sourceHeight, destX, destY, destWidth, destHeight);
         }
-    }
+    };
     loadImage.parseMetaData(file,function (data) {
         if (typeof(data.exif) != "undefined"){
             var orientation = data.exif.get("Orientation");
@@ -163,6 +164,7 @@ function profilePhotoCrop(){
 }
 
 function changePassword(type, password, confirmPassword){
+    console.log("check");
     // check current password
     $.mobile.loading("show");
     if (type.localeCompare("old") == 0) {

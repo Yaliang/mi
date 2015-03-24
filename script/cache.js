@@ -131,7 +131,7 @@ function CacheGetProfilePhotoByUsername(username, displayFunction, data) {
 
 function CacheUpdatePhoto(object){
     if (typeof(object) == "undefined")
-        return
+        return;
     object = rawLocalToCache(JSON.parse(JSON.stringify(object)));
     var cached = false;
     for (var i = 0; i < cachePhoto.length; i++) {
@@ -180,7 +180,7 @@ function CacheGetProfileByUserId(userId, displayFunction, data){
 
 function CacheUpdateUser(object){
     if (typeof(object) == "undefined")
-        return
+        return;
     object = rawLocalToCache(JSON.parse(JSON.stringify(object)));
     var cached = false;
     for (var i = 0; i < cacheUser.length; i++) {
@@ -279,7 +279,7 @@ function CachePullMyChat(ownerId,displayFunction) {
 
 function CacheUpdateChat(object){
     if (typeof(object) == "undefined")
-        return
+        return;
     object = rawLocalToCache(JSON.parse(JSON.stringify(object)));
     var cached = false;
     for (var i = 0; i < cacheChat.length; i++) {
@@ -334,7 +334,6 @@ function CacheGetGroupId(memberId, successFunction){
         console.log("Group miss: "+memberId);
         ParseGetGroupId(memberId, successFunction);
     }
-
 }
 
 function CacheGetGroupMember(groupId, successFunction, data){

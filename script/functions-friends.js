@@ -1,5 +1,6 @@
 // general functions
 var prefixForGetFriendOptionsButton="";
+
 function getFriendOptionsButton(userId, option){
     if ((option)&&(option == 3)) {
         var startChatButton = "<div class='send-friend-request chat-friend' onclick=\"startPrivateChat('"+userId+"');\">Start Chat</div>";
@@ -71,7 +72,7 @@ function sendFriendRequest(friendId) {
     var successFunction = function(object){
         var friendId = object.get("friend");
         $("#"+prefixForGetFriendOptionsButton+friendId+" > .custom-corners-people-near-by > .ui-bar > .send-friend-request").html("Request Sent");
-    }
+    };
     ParseSendFriendRequest(currentUser.id, friendId, successFunction);
 }
 
@@ -122,6 +123,7 @@ function buildUserListElement(object, liIdPrefix, lat, lng, type) {
 
 // #page-people-near-by functions
 var geoWatchId;
+
 function listPeopleNearBy(){
     if (navigator.geolocation){
         geoWatchId = navigator.geolocation.watchPosition(showPeopleNearByList,showPeopleNearByListError);
@@ -199,7 +201,6 @@ function showPeopleNearByListError(error){
 }
 
 // #page-people-search
-
 function bindSearchAutocomplete(){
     $( "#body-list-search-user" ).on( "filterablebeforefilter", function ( e, data ) {
         var $ul = $( this );
@@ -220,12 +221,12 @@ function bindSearchAutocomplete(){
                             photo120 = "./content/png/Taylor-Swift.png";
                         }
                         $("#body-people-search-"+object.get("userId")+" > .custom-corners-people-near-by").css("backgroundImage","url('"+photo120+"')");
-                    }
+                    };
                     CacheGetProfilePhoto(userId, displayFunction);
                     prefixForGetFriendOptionsButton="body-people-search-";
                     getFriendOptionsButton(userId);
                 }
-            }
+            };
             ParseSearchUserByEmailAndName(value, limitNumber, "updatedAt", displayFunction);
         }
     });
@@ -324,7 +325,6 @@ function pullMyFriendList() {
 }
 
 // #page-display-user-profile
-
 function buildUserProfileDetailElement(object){
     var name = object.get("name");
     var gender = object.get("gender");
@@ -371,7 +371,7 @@ function displayUserProfile(userId){
     $("#body-user-profile").html("<div id='body-user-photo-"+userId+"' class='ui-user-profile-photo'></div>")
     var displayFunction= function(object, data){
         $("#body-user-photo-"+data.userId).after(buildUserProfileDetailElement(object));
-    }
+    };
     CacheGetProfileByUserId(userId, displayFunction, {userId: userId});
     var displayFunction= function(object, data){
         var photo120 = object.get("profilePhoto120");
@@ -379,6 +379,6 @@ function displayUserProfile(userId){
             photo120 = "./content/png/Taylor-Swift.png";
         }
         $("#body-user-photo-"+data.userId).html("<img src='"+photo120+"' height='100' width='100' style='border-radius: 3px;'>")
-    }
+    };
     CacheGetProfilePhoto(userId, displayFunction, {userId: userId})
 }

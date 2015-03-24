@@ -148,12 +148,12 @@ function buildUserEventElement(object){
     var id = object.id;
     var goingId = object.get("goingId");
     if (typeof(goingId) == "undefined") {
-        goingId = new Array;
+        goingId =     [];
     }
     var goingNumber = goingId.length;
     var interestId = object.get("interestId");
     if (typeof(interestId) == "undefined") {
-        interestId = new Array;
+        interestId =     [];
     }
     var interestNumber = interestId.length;
     var newElement = "";
@@ -194,6 +194,7 @@ function buildUserEventElement(object){
 }
 
 var currentLastEvent;
+
 function pullUserEvent(beforeAt){
     currentLastEvent = new Date;
     pullLastItem = -1;
@@ -216,7 +217,7 @@ function pullUserEvent(beforeAt){
             $(".ui-load-more-activity").html("No More Activities");
         for (var i=0; i <= objects.length-1; i++) {
             if (Date.parse(currentLastEvent) > Date.parse(objects[i].createdAt))
-                currentLastEvent = objects[i].createdAt
+                currentLastEvent = objects[i].createdAt;
             if ($("#body-event-"+objects[i].id).length == 0) {
                 var id = objects[i].id;
                 var holder = objects[i].get("owner");
@@ -228,12 +229,12 @@ function pullUserEvent(beforeAt){
                 var commentNumber = objects[i].get("commentNumber");
                 var goingId = objects[i].get("goingId");
                 if (typeof(goingId) == "undefined") {
-                    goingId = new Array;
+                    goingId = [];
                 }
                 var goingNumber = goingId.length;
                 var interestId = objects[i].get("interestId");
                 if (typeof(interestId) == "undefined") {
-                    interestId = new Array;
+                    interestId = [];
                 }
                 var interestNumber = interestId.length;
                 var holder = objects[i].get("owner");
@@ -306,7 +307,6 @@ function hiddenEventMoreOption(){
 }
 
 // #page-create-event functions
-
 function createUserEvent(){
     var currentUser = Parse.User.current();
     var owner = currentUser.getUsername();
@@ -392,7 +392,6 @@ function createUserEvent(){
 }
 
 // #page-event-detail functions
-
 function buildCommentInEventDetail(object){
     var commentId = object.id;
     var ownerName = object.get("ownerName");
@@ -419,12 +418,12 @@ function buildEventDetailElement(object){
     var holder = object.get("owner");
     var goingId = object.get("goingId");
     if (typeof(goingId) == "undefined") {
-        goingId = new Array;
+        goingId = [];
     }
     var goingNumber = goingId.length;
     var interestId = object.get("interestId");
     if (typeof(interestId) == "undefined") {
-        interestId = new Array;
+        interestId = [];
     }
     var interestNumber = interestId.length;
     var id = object.id;
@@ -494,10 +493,10 @@ function updateEventDetail(id){
                     photo120 = "./content/png/Taylor-Swift.png";
                 }
                 $("#comment-"+data.commentId).css("backgroundImage", "url("+photo120+")")
-            }
+            };
             CacheGetProfilePhotoByUsername(objects[i].get("owner"), displayFunction, {commentId: objects[i].id});
         }
-    }
+    };
     ParsePullEventComment(id, descendingOrderKey, displayFunction);
 }
 
@@ -575,12 +574,11 @@ function reportActivity(id){
         var id = object.id;
         $("#body-event-" + id).remove();
         $.mobile.changePage("#page-event");//window.location.hash = "#page-event";
-    }
+    };
     ParseUpdateReport(id, hiddenUserEvent); 
 }
 
 // #page-event-my-event functions
-
 function buildMyUserEventElement(object){
     var owner = object.get("owner");
     var title = object.get("title");
@@ -594,7 +592,7 @@ function buildMyUserEventElement(object){
     var commentNumber = object.get("commentNumber");
     var goingId = object.get("goingId");
     if (typeof(goingId) == "undefined"){
-        goingId = new Array;
+        goingId = [];
     }
     var goingNumber = goingId.length;
     var id = object.id;
@@ -629,6 +627,7 @@ function buildMyUserEventElement(object){
 
 var selectedElement="";
 var animateDuration=150;
+
 function pullMyEvent(beforeAt){
     var currentUser = Parse.User.current();
     var owner = currentUser.getUsername();
@@ -644,7 +643,7 @@ function pullMyEvent(beforeAt){
                     interestNumber = object.get("interestId").length;
                 var goingId = objects[i].get("goingId");
                 if (typeof(goingId) == "undefined"){
-                    goingId = new Array;
+                    goingId =     [];
                 }
                 var goingNumber = goingId.length;
                 var id = objects[i].id;
@@ -652,7 +651,7 @@ function pullMyEvent(beforeAt){
                 $(".interest-statistics-"+id).each(function(){html(interestNumber.toString()+" Interests");});
                 $(".going-statistics-"+id).each(function(){html(goingNumber.toString()+" Goings");});
             }
-        };
+        }
     };
     ParsePullEvent({
         owner: owner,
@@ -688,7 +687,7 @@ function editMyEvent(eventId){
         $("#body-bottom-edit-event-save").on("click",function(){
             editSaveUserEvent(eventId);
         });
-    }
+    };
     ParsePullEvent({eventId: eventId, displayFunction: display});
 }
 

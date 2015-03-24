@@ -4,7 +4,7 @@ function startPrivateChat(friendId){
     $("#header-chat-message-title").html("");
     $("#footer-bar-input-message-content").val("");    
     
-    var memberId = new Array;
+    var memberId = [];
     memberId.push(friendId);
     memberId.push(Parse.User.current().id);
     var successFunction = function(object){
@@ -42,7 +42,6 @@ function startPrivateChat(friendId){
 }
 
 // #page-chat functions
-
 function buildElementInChatListPage(object){
     var chatId = object.id;
     var groupId = object.get("groupId");
@@ -162,7 +161,7 @@ function updateLastMessage(groupId, data){
                 data.parse = true;
                 updateLastMessage(groupId, data);
             }
-        }
+        };
         CacheGetLastestMessage(groupId, displayFunction, data);
     } else {
         var limitNum = 1;
@@ -183,7 +182,6 @@ function updateLastMessage(groupId, data){
 }
 
 // #page-chat-messages functions
-
 function buildElementInChatMessagesPage(object){
     var messageId = object.id;
     var senderId = object.get("senderId");
@@ -231,9 +229,9 @@ function sendMessage(){
                         pushNotificationToDevice("gcm",data.GCMId,message);
                     if ("APNId" in data)
                         pushNotificationToDevice("apn",data.APNId,message);
-                }
+                };
                 CacheGetProfileByUserId(data.senderId, displayFunction, data);
-            }
+            };
             var data = {senderId : senderId, message: text};
             CacheGetProfileByUserId(receiverId, displayFunction, data);
         };
@@ -258,7 +256,6 @@ function sendMessage(){
         if ($("#footer-bar-send-message").css("position") == "absolute") {
             $("#footer-bar-send-message").css("bottom", ($("body").height()-$("#page-chat-messages").height()-44).toString()+"px");
         }
-        
     };
 
     ParseAddChatMessage(senderId, groupId, text, displayFunction);
@@ -305,7 +302,7 @@ function updateChatMessage(object){
                         photo120 = "./content/png/Taylor-Swift.png";
                     }
                     $("#body-message-"+data.messageId).css("backgroundImage", "url("+photo120+")")
-                }
+                };
                 CacheGetProfilePhoto(objects[i].get("senderId"), displayFunction, {messageId: objects[i].id});
                 var groupId = objects[i].get("groupId");
                 ParseSetChatObjectAsRead(currentId, groupId, 1, function(){});
@@ -319,7 +316,6 @@ function updateChatMessage(object){
         if ($("#footer-bar-send-message").css("position") == "absolute") {
             $("#footer-bar-send-message").css("bottom", ($("body").height()-$("#page-chat-messages").height()-44).toString()+"px");
         }
-    }
+    };
     ParsePullChatMessage(groupId, limitNum, descendingOrderKey, beforeAt, displayFunction, null);
-
 }

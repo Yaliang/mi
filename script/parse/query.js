@@ -163,7 +163,6 @@ function ParseEventEditSave(owner, title, location, time, visibility, descriptio
                     errorObject.html("Error: " + error.code + " " + error.message);
                 }
             });
-
         }
     });
 }
@@ -262,8 +261,6 @@ function ParseAddEventComment(eventId, owner, content, errorFunction, successFun
         }
     });
 }
-
-
 
 function ParseUpdateEventCommentNumber(count, eventId, displayFunction){
     var UserEvent = Parse.Object.extend("UserEvent");
@@ -500,10 +497,6 @@ function ParseSendFriendRequest(ownerId, friendId, successFunction){
             }
         }
     })
-
-    
-
-    
 }
 
 function ParseAcceptFriendRequest(objectId, ownerId, friendId, successFunction){
@@ -562,7 +555,6 @@ function ParseAcceptFriendRequest(objectId, ownerId, friendId, successFunction){
                     })
                 }
             });
-            
         }
     })
 }
@@ -637,7 +629,6 @@ function ParseCheckFriend(ownerId, friendId, displayFunction) {
             CacheUpdateFriend(object);
         }
     })
-
 }
 
 function ParsePullMyFriend(ownerId, descendingOrderKey, displayFunction) {
@@ -673,7 +664,6 @@ function ParsePullAllFriendObjectById(ownerId){
             }
         }
     })
-
 }
 
 function ParseSearchUserByEmailAndName(string, limitNumber, descendingOrderKey, displayFunction){
@@ -948,7 +938,6 @@ function ParsePullUnreadChat(ownerId, descendingOrderKey, displayFunction){
 }
 
 // maintain cached array
-
 function ParseUpdateCache(className, updateIdList,lastUpdate){
     var ClassObject = Parse.Object.extend(className);
     var query = new Parse.Query(ClassObject);
@@ -1010,9 +999,7 @@ function ParseUpdateAPNId(regid, displayFunction){
 }
 
 // functions for database maintaining /never used in front-end script.
-
 function ParseUserNameFieldUpdate(i){
-    //console.log(i);
     var Comment = Parse.Object.extend("Comment");
     var query = new Parse.Query(Comment);
 
@@ -1055,6 +1042,7 @@ function ParseUserNameFieldUpdate(i){
 
 var refreshNumber=0;
 var ChatObjectSet;
+
 function ParseRefreshComment(){
     ParseUserNameFieldUpdate(refreshNumber);
     refreshNumber = refreshNumber+1;
@@ -1133,7 +1121,7 @@ function ParseCheckChatObject() {
                 })
             }
         }
-    })
+    });
 
     if (refreshNumber == ChatObjectSet.length - 1)
         return;
@@ -1143,7 +1131,9 @@ function ParseCheckChatObject() {
         ParseCheckChatObject();
     },5000)
 }
+
 var NoticeNewVersionObjects;
+
 function ParseNoticeNewVersion() {
     var User = Parse.Object.extend("User");
     var query = new Parse.Query(User);
