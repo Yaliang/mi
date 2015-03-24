@@ -15,18 +15,18 @@
     animation-duration: 0ms;
 }*/
 
-.custom-size-flipswitch-event-create-visibility.ui-flipswitch .ui-btn.ui-flipswitch-on {
+.custom-size-flipswitch-body-input-create-event-visibility.ui-flipswitch .ui-btn.ui-flipswitch-on {
     text-indent: -3.8em;
 }
 
-.custom-size-flipswitch-event-create-visibility.ui-flipswitch .ui-flipswitch-off {
+.custom-size-flipswitch-body-input-create-event-visibility.ui-flipswitch .ui-flipswitch-off {
     text-indent: 0.5em;
 }
 
-.custom-size-flipswitch-event-create-visibility.ui-flipswitch {
+.custom-size-flipswitch-body-input-create-event-visibility.ui-flipswitch {
     width: 6.875em;
 }
-.custom-size-flipswitch-event-create-visibility.ui-flipswitch.ui-flipswitch-active {
+.custom-size-flipswitch-body-input-create-event-visibility.ui-flipswitch.ui-flipswitch-active {
     padding-left: 5em;
     width: 1.875em;
 }
@@ -221,7 +221,7 @@ a {
     font-weight: 300!important;
 }
 
-#event {
+#footer-navigation-bar-event {
     background: url("./content/material-design/png/list88-blank-pink-192.png") 50% 30% no-repeat;
     background-size: 32px 32px;
 }
@@ -230,7 +230,7 @@ a {
     background-image: url("./content/material-design/png/list88-solid-pink-192.png")!important;
 }
 
-#friend {
+#footer-navigation-bar-friend {
     background: url("./content/material-design/png/user157-blank-pink-192.png") 50% 30% no-repeat;
     background-size: 32px 32px;
 }
@@ -243,7 +243,7 @@ a {
     background-image: url("./content/material-design/png/user157-solid-pink-192.png")!important;
 }
 
-#chat {
+#footer-navigation-bar-chat {
     background: url("./content/material-design/png/sms5-blank-pink-192.png") 50% 30% no-repeat;
     background-size: 32px 32px;
 }
@@ -256,7 +256,7 @@ a {
     background-image: url("./content/material-design/png/sms5-solid-pink-192.png")!important;
 }
 
-#setting {
+#footer-navigation-bar-setting {
     background: url("./content/material-design/png/settings49-blank-pink-192.png") 50% 30% no-repeat;
     background-size: 32px 32px;
 }
@@ -333,14 +333,14 @@ a {
     background-size: 40px 40px;
 }
 
-#ui-icon-custom-right-top-more {
+.ui-header-event-more-option {
     height: 16px;
     width: 28px;
     background: url('./content/material-design/png/ellipsis1-blank-pink-72.png') 50% 50% no-repeat!important;
     background-size: 36px 36px!important;
 }
 
-#ui-icon-custom-right-top-more-active {
+.ui-header-event-more-option-active {
     height: 16px;
     width: 28px;
     background: url('./content/material-design/png/ellipsis1-pink-72.png') 50% 50% no-repeat!important;
@@ -544,7 +544,7 @@ a {
     color: #7B7B7B;
 }
 
-.ui-comment-content{
+.ui-footer-bar-input-comment-content{
     clear: both;
     padding-top: 0.4em;
     padding-bottom: 0.4em;
@@ -653,7 +653,7 @@ textarea {
     margin-left: 1em;
 }
 
-#profile-edit-photo{
+#body-input-edit-profile-photo{
     width: 120px;
     height: 120px;
 }

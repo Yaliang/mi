@@ -17,7 +17,7 @@ function ParseSignup(username, password, email, name, errorObject, destID, custo
             $.mobile.loading("hide");
             //errorObject.html("Error: " + error.code + " " + error.message);
             errorObject.html(error.message);
-            $("#signup-password").val("");
+            $("#body-input-signup-password").val("");
         }
     });
 }
@@ -47,7 +47,7 @@ function ParseLogin(username, password, errorObject, destID, customFunction) {
         },
         error: function(user, error){
             $.mobile.loading("hide");
-            $("#login-password").val("");
+            $("#body-input-login-password").val("");
             var query = new Parse.Query(Parse.User);
             query.equalTo("username", username);
             query.find({

@@ -212,7 +212,7 @@ function CacheCheckFriend(friendId, ownerId, displayFunction){
 }
 
 function CachePullNewFriendRequest(userId, descendingOrderKey, displayFunction) {
-    var requests = ;
+    var requests = [];
 
     for (var i = 0; i < cacheFriend.length; i++) {
         if ((cacheFriend[i].get("friend") == userId) && (cacheFriend[i].get("valid") == false)) {

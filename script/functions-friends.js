@@ -152,29 +152,29 @@ function showPeopleNearByList(position){
     var latitudeLimit = 1;
     var longitudeLimit = 1;
     var descendingOrderKey = "updatedAt";
-    if ($("#people-near-by-list").length == 0) {
-        $("#page-people-near-by > .ui-content").html("<ul id='people-near-by-list' data-role='listview' data-inset='true' class='ui-listview ui-listview-inset ui-corner-all ui-shadow'></ul>");
+    if ($("#body-people-near-by-list").length == 0) {
+        $("#page-people-near-by > .ui-content").html("<ul id='body-people-near-by-list' data-role='listview' data-inset='true' class='ui-listview ui-listview-inset ui-corner-all ui-shadow'></ul>");
     }
     var displayFunction = function(lat,lng,objects){
         for (var i = objects.length-1; i >= 0; i--) {
-            if ($("#people-near-by-list > #near-by-"+objects[i].id).length == 0) {
-                var newElement = buildUserListElement(objects[i], "near-by-", lat, lng, "people-near-by-list");
+            if ($("#body-people-near-by-list > #body-near-by-"+objects[i].id).length == 0) {
+                var newElement = buildUserListElement(objects[i], "body-near-by-", lat, lng, "body-people-near-by-list");
                 var userId = objects[i].id;
-                $("#people-near-by-list").prepend(newElement);
+                $("#body-people-near-by-list").prepend(newElement);
                 var displayFunction = function(object){
                     var photo120 = object.get("profilePhoto120");
                     if (typeof(photo120) == "undefined") {
                         photo120 = "./content/png/Taylor-Swift.png";
                     }
-                    $("#near-by-"+object.get("userId")+" > .custom-corners-people-near-by").css("backgroundImage","url('"+photo120+"')");
+                    $("#body-near-by-"+object.get("userId")+" > .custom-corners-people-near-by").css("backgroundImage","url('"+photo120+"')");
                 };
                 CacheGetProfilePhoto(userId, displayFunction);
-                prefixForGetFriendOptionsButton="near-by-";
+                prefixForGetFriendOptionsButton="body-near-by-";
                 getFriendOptionsButton(userId);
             } else {
                 var latitude = objects[i].get("latitude");
                 var longitude = objects[i].get("longitude");
-                $("#near-by-"+objects[i].id+" > .custom-corners-people-near-by > .ui-bar-a > .people-near-by-list-distance").html(getDistance(latitude, longitude, lat, lng) + "km, "+convertTime(objects[i].updatedAt));
+                $("#body-near-by-"+objects[i].id+" > .custom-corners-people-near-by > .ui-bar-a > .people-near-by-list-distance").html(getDistance(latitude, longitude, lat, lng) + "km, "+convertTime(objects[i].updatedAt));
             }
         }
     };
@@ -201,7 +201,7 @@ function showPeopleNearByListError(error){
 // #page-people-search
 
 function bindSearchAutocomplete(){
-    $( "#user-autocomplete-list" ).on( "filterablebeforefilter", function ( e, data ) {
+    $( "#body-list-search-user" ).on( "filterablebeforefilter", function ( e, data ) {
         var $ul = $( this );
         var $input = $( data.input );
         var value = $input.val();
@@ -211,18 +211,18 @@ function bindSearchAutocomplete(){
             var displayFunction = function(objects){
                 var html = "";
                 for (var i=0; i<objects.length; i++) {
-                    var newElement = buildUserListElement(objects[i], "people-search-", null, null, "people-near-by-list");
+                    var newElement = buildUserListElement(objects[i], "body-people-search-", null, null, "body-people-near-by-list");
                     var userId = objects[i].id;
-                    $( "#user-autocomplete-list" ).append(newElement);
+                    $( "#body-list-search-user" ).append(newElement);
                     var displayFunction = function(object){
                         var photo120 = object.get("profilePhoto120");
                         if (typeof(photo120) == "undefined") {
                             photo120 = "./content/png/Taylor-Swift.png";
                         }
-                        $("#people-search-"+object.get("userId")+" > .custom-corners-people-near-by").css("backgroundImage","url('"+photo120+"')");
+                        $("#body-people-search-"+object.get("userId")+" > .custom-corners-people-near-by").css("backgroundImage","url('"+photo120+"')");
                     }
                     CacheGetProfilePhoto(userId, displayFunction);
-                    prefixForGetFriendOptionsButton="people-search-";
+                    prefixForGetFriendOptionsButton="body-people-search-";
                     getFriendOptionsButton(userId);
                 }
             }
@@ -232,40 +232,40 @@ function bindSearchAutocomplete(){
 }
 
 function unbindSearchAutocomplete(){
-    $( "#user-autocomplete-list" ).unbind( "filterablebeforefilter" );
-    $( "#user-autocomplete-list" ).html("");
-    $( "#user-autocomplete-input" ).val("");
+    $( "#body-list-search-user" ).unbind( "filterablebeforefilter" );
+    $( "#body-list-search-user" ).html("");
+    $( "#body-input-user-autocomplete" ).val("");
 }
 
 // #page-friend functions
 function pullMyFriendRequests() {
-    $("#page-my-friend-requests > .ui-content").html("<ul id='friend-requests-list' class='ui-listview ui-listview-inset ui-corner-all ui-shadow'></ul>");
+    $("#page-my-friend-requests > .ui-content").html("<ul id='body-friend-requests-list' class='ui-listview ui-listview-inset ui-corner-all ui-shadow'></ul>");
     var descendingOrderKey = "createdAt";
     var displayFunction = function(objects){
         if (objects.length == 0) {
             $("#page-my-friend-requests > .ui-content").addClass("ui-hidden-accessible");
-            $("#new-friend-requests-btn").addClass("ui-hidden-accessible");
+            $("#body-new-friend-requests-btn").addClass("ui-hidden-accessible");
         } else {
             $("#page-my-friend-requests > .ui-content").removeClass("ui-hidden-accessible");
-            $("#new-friend-requests-btn").removeClass("ui-hidden-accessible");
+            $("#body-new-friend-requests-btn").removeClass("ui-hidden-accessible");
         }
         for (var i=0; i<objects.length; i++) {
             var friendId = objects[i].get("owner");
             var objectId = objects[i].id;
             var displayFunction = function(userObject, data) {
-                var newElement = buildUserListElement(userObject, "new-friend-request-", null, null, "people-near-by-list");
+                var newElement = buildUserListElement(userObject, "body-new-friend-request-", null, null, "body-people-near-by-list");
                 var objectId = data.friendObject.id;
                 var friendId = data.friendObject.get("owner");
-                $( "#friend-requests-list" ).append(newElement);
+                $( "#body-friend-requests-list" ).append(newElement);
                 var displayFunction = function(object, data){
                     var photo120 = object.get("profilePhoto120");
                     if (typeof(photo120) == "undefined") {
                         photo120 = "./content/png/Taylor-Swift.png";
                     }
-                    $("#new-friend-request-"+data.friendId+" > .custom-corners-people-near-by").css("backgroundImage","url('"+photo120+"')");
+                    $("#body-new-friend-request-"+data.friendId+" > .custom-corners-people-near-by").css("backgroundImage","url('"+photo120+"')");
                 };
                 CacheGetProfilePhoto(friendId, displayFunction, {friendId: friendId});
-                prefixForGetFriendOptionsButton="new-friend-request-";
+                prefixForGetFriendOptionsButton="body-new-friend-request-";
                 getFriendOptionsButton(friendId);
             };
             CacheGetProfileByUserId(friendId, displayFunction, {friendObject:objects[i]});
@@ -276,15 +276,15 @@ function pullMyFriendRequests() {
 }
 
 function pullMyFriendList() {
-    $( "#friend-list" ).html("");
+    $( "#body-friend-list" ).html("");
     // check if there is new friend requests. If none, hide the button to transfer request list page
     var displayFunction = function(objects){
         if (objects.length == 0) {
             $("#page-my-friend-requests > .ui-content").addClass("ui-hidden-accessible");
-            $("#new-friend-requests-btn").addClass("ui-hidden-accessible");
+            $("#body-new-friend-requests-btn").addClass("ui-hidden-accessible");
         } else {
             $("#page-my-friend-requests > .ui-content").removeClass("ui-hidden-accessible");
-            $("#new-friend-requests-btn").removeClass("ui-hidden-accessible");
+            $("#body-new-friend-requests-btn").removeClass("ui-hidden-accessible");
         }
     };
 
@@ -299,21 +299,21 @@ function pullMyFriendList() {
         for (var i=0; i<objects.length; i++) {
             var friendId = objects[i].get("friend");
             var objectId = objects[i].id;
-            $("#friend-list").append("<li id='friend-list-"+friendId+"' style='cursor:pointer' onclick=\"startPrivateChat('"+friendId+"');\"></li>");
+            $("#body-friend-list").append("<li id='body-friend-list-"+friendId+"' style='cursor:pointer' onclick=\"startPrivateChat('"+friendId+"');\"></li>");
             var displayFunction = function(userObject, data) {
                 var newElement = buildUserListElement(userObject, null, null, null, "friend-list");
                 var objectId = data.friendObject.id;
                 var friendId = data.friendObject.get("friend");
-                $( "#friend-list-"+userObject.id ).append(newElement);
+                $( "#body-friend-list-"+userObject.id ).append(newElement);
                 var displayFunction = function(object, data){
                     var photo120 = object.get("profilePhoto120");
                     if (typeof(photo120) == "undefined") {
                         photo120 = "./content/png/Taylor-Swift.png";
                     }
-                    $("#friend-list-"+data.friendId+">.custom-people-in-friend-list").css("backgroundImage","url('"+photo120+"')");
+                    $("#body-friend-list-"+data.friendId+">.custom-people-in-friend-list").css("backgroundImage","url('"+photo120+"')");
                 };
                 CacheGetProfilePhoto(friendId, displayFunction, {friendId : friendId});
-                prefixForGetFriendOptionsButton="friend-list-";
+                prefixForGetFriendOptionsButton="body-friend-list-";
                 //getFriendOptionsButton(friendId, 3);
             };
             CacheGetProfileByUserId(friendId, displayFunction, {friendObject:objects[i]});
@@ -368,9 +368,9 @@ function buildUserProfileDetailElement(object){
 }
 
 function displayUserProfile(userId){
-    $("#user-profile").html("<div id='user-photo-"+userId+"' class='ui-user-profile-photo'></div>")
+    $("#body-user-profile").html("<div id='body-user-photo-"+userId+"' class='ui-user-profile-photo'></div>")
     var displayFunction= function(object, data){
-        $("#user-photo-"+data.userId).after(buildUserProfileDetailElement(object));
+        $("#body-user-photo-"+data.userId).after(buildUserProfileDetailElement(object));
     }
     CacheGetProfileByUserId(userId, displayFunction, {userId: userId});
     var displayFunction= function(object, data){
@@ -378,7 +378,7 @@ function displayUserProfile(userId){
         if (typeof(photo120) == "undefined") {
             photo120 = "./content/png/Taylor-Swift.png";
         }
-        $("#user-photo-"+data.userId).html("<img src='"+photo120+"' height='100' width='100' style='border-radius: 3px;'>")
+        $("#body-user-photo-"+data.userId).html("<img src='"+photo120+"' height='100' width='100' style='border-radius: 3px;'>")
     }
     CacheGetProfilePhoto(userId, displayFunction, {userId: userId})
 }

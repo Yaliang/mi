@@ -99,23 +99,23 @@ function pullUserEventHolderInfo(holder, elementIdBase){
         var userId = object.id;
         var elementIdBase = data.elementIdBase;
 
-        $("#"+data.elementIdBase+" > .custom-corners > .ui-bar").click(function(){
+        $("#body-event-"+data.elementIdBase+" > .custom-corners > .ui-bar").click(function(){
             displayUserProfile(userId);
         });
-        $("#"+elementIdBase+"-owner-name").html(name);
+        $("#body-top-bar-event-"+elementIdBase+"-owner-name").html(name);
         if (typeof(gender) == "undefined") {
             //$("#"+eventId+"-owner-gender").html(gender.toString());
         } else if (gender) {
-            $("#"+elementIdBase+"-owner-gender").css("backgroundImage","url('./content/customicondesign-line-user-black/png/male-white-20.png')");
-            $("#"+elementIdBase+"-owner-gender").css("backgroundColor","#8970f1");
+            $("#body-top-bar-event-"+elementIdBase+"-owner-gender").css("backgroundImage","url('./content/customicondesign-line-user-black/png/male-white-20.png')");
+            $("#body-top-bar-event-"+elementIdBase+"-owner-gender").css("backgroundColor","#8970f1");
         } else {
-            $("#"+elementIdBase+"-owner-gender").css("backgroundImage","url('./content/customicondesign-line-user-black/png/female1-white-20.png')");
-            $("#"+elementIdBase+"-owner-gender").css("backgroundColor","#f46f75");
+            $("#body-top-bar-event-"+elementIdBase+"-owner-gender").css("backgroundImage","url('./content/customicondesign-line-user-black/png/female1-white-20.png')");
+            $("#body-top-bar-event-"+elementIdBase+"-owner-gender").css("backgroundColor","#f46f75");
         }
         
         pullLastItem = pullLastItem - 1;
         if (pullLastItem == 0) {
-            $("#event-content").removeClass("ui-hidden-accessible");
+            $("#body-event-content-list").removeClass("ui-hidden-accessible");
             $.mobile.loading("hide");
         }
 
@@ -124,10 +124,10 @@ function pullUserEventHolderInfo(holder, elementIdBase){
             if (typeof(photo120) == "undefined") {
                 photo120 = "./content/png/Taylor-Swift.png";
             }
-            $("#"+data.elementIdBase+" > .custom-corners").css("backgroundImage","url('"+photo120+"')");
+            $("#body-event-"+data.elementIdBase+" > .custom-corners").css("backgroundImage","url('"+photo120+"')");
             pullLastItem = pullLastItem - 1;
             if (pullLastItem == 0) {
-                $("#event-content").removeClass("ui-hidden-accessible");
+                $("#body-event-content-list").removeClass("ui-hidden-accessible");
                 $.mobile.loading("hide");
             }
         };
@@ -157,11 +157,11 @@ function buildUserEventElement(object){
     }
     var interestNumber = interestId.length;
     var newElement = "";
-    newElement = newElement + "<div id=\'"+id+"\'>";
+    newElement = newElement + "<div id=\'body-event-"+id+"\'>";
     newElement = newElement + "<div class='custom-corners-public custom-corners'>";
     newElement = newElement + "<div class='ui-bar ui-bar-a' style='cursor:pointer' onclick=\"$.mobile.changePage(\'#page-display-user-profile\');\">";
-    newElement = newElement + "<div><strong id=\'"+id+"-owner-name\'></strong></div>";
-    newElement = newElement + "<div id=\'"+id+"-owner-gender\' class=\'ui-icon-custom-gender\'></div>";
+    newElement = newElement + "<div><strong id=\'body-top-bar-event-"+id+"-owner-name\'></strong></div>";
+    newElement = newElement + "<div id=\'body-top-bar-event-"+id+"-owner-gender\' class=\'ui-icon-custom-gender\'></div>";
     newElement = newElement + "</div>";
     newElement = newElement + "<div class='ui-body ui-body-a' style='cursor:pointer' onclick=\"$.mobile.changePage(\'#page-event-detail\');updateEventDetail('"+id+"')\">";
     newElement = newElement + "<p class='ui-custom-event-title'>" + title + "</p>";
@@ -201,7 +201,7 @@ function pullUserEvent(beforeAt){
     var descendingOrderKey = "createdAt";
     //var ascendingOrderKey = "createdAt";
     if (typeof(beforeAt) == "undefined") {
-        $("#event-content").addClass("ui-hidden-accessible");
+        $("#body-event-content-list").addClass("ui-hidden-accessible");
         setTimeout(function(){
             if (pullLastItem != 0) {
                 $.mobile.loading("show");
@@ -217,7 +217,7 @@ function pullUserEvent(beforeAt){
         for (var i=0; i <= objects.length-1; i++) {
             if (Date.parse(currentLastEvent) > Date.parse(objects[i].createdAt))
                 currentLastEvent = objects[i].createdAt
-            if ($("#"+objects[i].id).length == 0) {
+            if ($("#body-event-"+objects[i].id).length == 0) {
                 var id = objects[i].id;
                 var holder = objects[i].get("owner");
                 var newElement = buildUserEventElement(objects[i]);
@@ -266,23 +266,24 @@ function pullUserEvent(beforeAt){
 }
 
 function displayEventMoreOption(){
-    $("#event-page-right-top-option-1").unbind("click");
-    $("#event-page-right-top-option-2").unbind("click");
-    $("#ui-icon-custom-right-top-more").attr("id","ui-icon-custom-right-top-more-active");
+    $("#header-create-new-event-option").unbind("click");
+    $("#header-list-my-event").unbind("click");
+    $("#header-event-more-option").removeClass("ui-header-event-more-option");
+    $("#header-event-more-option").addClass("ui-header-event-more-option-active");
     $(window).unbind("scroll");
-    $("#event-page-right-top-option-1").on("click",function(){
+    $("#header-create-new-event-option").on("click",function(){
         var date = new Date().toISOString();
         var timeRes = date.split(":");
         time = timeRes[0]+":"+timeRes[1];
-        $("#event-create-startTime").val(time);
-        $("#event-create-endTime").val(time);
+        $("#body-input-create-event-startTime").val(time);
+        $("#body-input-create-event-endTime").val(time);
 
-        $("#event-create-button").on("click",function(){
+        $("#body-bottom-create-event-btn").on("click",function(){
             createUserEvent();
         });
         hiddenEventMoreOption();
     });
-    $("#event-page-right-top-option-2").on("click",function(){
+    $("#header-list-my-event").on("click",function(){
         pullMyEvent();
         hiddenEventMoreOption();
     });
@@ -295,9 +296,10 @@ function displayEventMoreOption(){
 }
 
 function hiddenEventMoreOption(){
-    $("#event-page-right-top-option-1").unbind("click");
-    $("#event-page-right-top-option-2").unbind("click");
-    $("#ui-icon-custom-right-top-more-active").attr("id","ui-icon-custom-right-top-more");
+    $("#header-create-new-event-option").unbind("click");
+    $("#header-list-my-event").unbind("click");
+    $("#header-event-more-option").removeClass("ui-header-event-more-option-active");
+    $("#header-event-more-option").addClass("ui-header-event-more-option");
     $(window).unbind("scroll");
     $(".options-hidden-cover-layer").hide();
     $(".event-page-right-top-options").fadeOut("fast");
@@ -309,24 +311,24 @@ function createUserEvent(){
     var currentUser = Parse.User.current();
     var owner = currentUser.getUsername();
 
-    var title = $("#event-create-title").val();
-    var location = $("#event-create-location").val();
-    var startTime = $("#event-create-startTime").val().replace("T", " ");
-    var endTime = $("#event-create-endTime").val().replace("T", " ");
+    var title = $("#body-input-create-event-title").val();
+    var location = $("#body-input-create-event-location").val();
+    var startTime = $("#body-input-create-event-startTime").val().replace("T", " ");
+    var endTime = $("#body-input-create-event-endTime").val().replace("T", " ");
 
     var errorHandler = function(item) {
-        $("#event-create-" + item).focus().parent().addClass("ui-custom-event-create-focus");
-        if ($("#event-create-" + item + "-alert").length == 0) {
-            $("#event-create-" + item).parent().after("<p id="event-create-" + item + "-alert" class="event-create-alert">*Field required</p>");
+        $("#body-input-create-event-" + item).focus().parent().addClass("ui-custom-event-create-focus");
+        if ($("#body-input-create-event-" + item + "-alert").length == 0) {
+            $("#body-input-create-event-" + item).parent().after("<p id='body-input-create-event-" + item + "-alert' class='event-create-alert'>*Field required</p>");
         }
 
         setTimeout(function(){
-            $("#event-create-" + item).focus().parent().removeClass("ui-custom-event-create-focus");
+            $("#body-input-create-event-" + item).focus().parent().removeClass("ui-custom-event-create-focus");
         }, 500);
 
-        $("#event-create-" + item).change(function(){
-            $("#event-create-" + item + "-alert").remove();
-            $("#event-create-" + item).unbind("change");
+        $("#body-input-create-event-" + item).change(function(){
+            $("#body-input-create-event-" + item + "-alert").remove();
+            $("#body-input-create-event-" + item).unbind("change");
         });
     };
 
@@ -350,7 +352,7 @@ function createUserEvent(){
         return;
     }
 
-    $("#event-create-button").unbind("click");
+    $("#body-bottom-create-event-btn").unbind("click");
 
     var index1 = startTime.indexOf(":");
     var index2 = startTime.lastIndexOf(":");
@@ -366,23 +368,23 @@ function createUserEvent(){
 
     var time = startTime + " -- " + endTime;
 
-    var visibility = $("#event-create-visibility").val()=="on" ? true : false ;
-    var description = $("#event-create-description").val();
-    var errorObject = $("#event-create-error");
+    var visibility = $("#body-input-create-event-visibility").val()=="on" ? true : false ;
+    var description = $("#body-input-create-event-description").val();
+    var errorObject = $("#body-create-event-error");
     var destID = "#page-event";
     var displayFunction = function(object){
-        $("#event-create-title").val("");
-        $("#event-create-location").val("");
-        $("#event-create-start-time").val("");
-        $("#event-create-end-time").val("");
-        $("#event-create-description").val("");
-        $("#event-create-visibility").val("on").flipswitch("refresh");
-        $("#event-create-error").html("");
+        $("#body-input-create-event-title").val("");
+        $("#body-input-create-event-location").val("");
+        $("#body-input-create-event-startTime").val("");
+        $("#body-input-create-event-endTime").val("");
+        $("#body-input-create-event-description").val("");
+        $("#body-input-create-event-visibility").val("on").flipswitch("refresh");
+        $("#body-create-event-error").html("");
         //pullUserEvent();
         var id = object.id;
         var holder = object.get("owner");
         var newElement = buildUserEventElement(object);
-        $("#event-content").prepend(newElement);
+        $("#body-event-content-list").prepend(newElement);
         // display event holder's name | not the email one
         pullUserEventHolderInfo(holder, id);
     };
@@ -401,7 +403,7 @@ function buildCommentInEventDetail(object){
     newElement += "<div id='comment-"+commentId+"' class='ui-custom-comment-left'>";
     newElement += "<div class='ui-comment-owner'>"+ownerName+"</div>";
     newElement += "<div class='ui-comment-time'>"+convertTime(time)+"</div>";
-    newElement += "<div class='ui-comment-content'>"+text+"</div>";
+    newElement += "<div class='ui-footer-bar-input-comment-content'>"+text+"</div>";
     newElement += "</div>";
 
     return newElement;
@@ -427,11 +429,11 @@ function buildEventDetailElement(object){
     var interestNumber = interestId.length;
     var id = object.id;
     var newElement = "";
-    newElement = newElement + "<div id=\'event-detail-"+id+"\'>";
+    newElement = newElement + "<div id=\'body-event-detail-"+id+"\'>";
     newElement = newElement + "<div class='custom-corners-public custom-corners'>";
     newElement = newElement + "<div class='ui-bar ui-bar-a' style='cursor:pointer' onclick=\"$.mobile.changePage(\'#page-display-user-profile\');\">";
-    newElement = newElement + "<div><strong id=\'event-detail-"+id+"-owner-name\'></strong></div>";
-    newElement = newElement + "<div id=\'event-detail-"+id+"-owner-gender\' class=\'ui-icon-custom-gender\'></div>";
+    newElement = newElement + "<div><strong id=\'body-top-bar-event-detail-"+id+"-owner-name\'></strong></div>";
+    newElement = newElement + "<div id=\'body-top-bar-event-detail-"+id+"-owner-gender\' class=\'ui-icon-custom-gender\'></div>";
     newElement = newElement + "</div>";
     newElement = newElement + "<div class='ui-body ui-body-a'>";
     newElement = newElement + "<p class='ui-custom-event-title'>" + title + "</p>";
@@ -464,15 +466,15 @@ function buildEventDetailElement(object){
 
 // update the detail of event when the user clicked to the page-event-detail
 function updateEventDetail(id){
-    $("#event-detail-content").html("");
-    $("#event-id-label").html(id);
+    $("#body-content-event-detail").html("");
+    $("#footer-bar-event-id-label").html(id);
     var descendingOrderKey = "createdAt";
     var displayFunction = function(object){
         var id = object[0].id;
         var holder = object[0].get("owner");
-        $("#event-detail-content").prepend(buildEventDetailElement(object[0]));
+        $("#body-content-event-detail").prepend(buildEventDetailElement(object[0]));
         // display event holder's name | not the email one
-        pullUserEventHolderInfo(holder, "event-detail-"+id);
+        pullUserEventHolderInfo(holder, "detail-"+id);
         $(".ui-custom-report").on("click",function(){
             reportActivity(id);
         });
@@ -480,12 +482,12 @@ function updateEventDetail(id){
     ParseSelectEvent(id, displayFunction);
 
     var displayFunction = function(objects) {
-        $("#event-detail-content").append("<div id='event-commnets-list' class='ui-custom-comment-container'></div>")
+        $("#body-content-event-detail").append("<div id='body-content-bottom-event-commnets-list' class='ui-custom-comment-container'></div>")
 
         for (var i=0; i<=objects.length-1; i++) {
 
             var newElement = buildCommentInEventDetail(objects[i]);
-            $("#event-commnets-list").append(newElement);
+            $("#body-content-bottom-event-commnets-list").append(newElement);
             var displayFunction = function(object, data) {
                 var photo120 = object.get("profilePhoto120");
                 if (typeof(photo120) == "undefined") {
@@ -500,11 +502,11 @@ function updateEventDetail(id){
 }
 
 function displayEventDetailMoreOption(){
-    $("#page-event-detail-more-option").css("position","fixed");
-    $("#page-event-detail-more-option").css("bottom",(-$("#page-event-detail-more-option").height()).toString()+"px");
-    $("#page-event-detail-more-option").show();
+    $("#body-bottom-event-detail-more-option").css("position","fixed");
+    $("#body-bottom-event-detail-more-option").css("bottom",(-$("#body-bottom-event-detail-more-option").height()).toString()+"px");
+    $("#body-bottom-event-detail-more-option").show();
     $("body").append("<div class='ui-gray-cover' style='position:fixed; width:100%; height:100%; opacity:0; background-color:#000; z-index:4' onclick='hideEventDetailMoreOption()'><div>")
-    $("#page-event-detail-more-option").animate({
+    $("#body-bottom-event-detail-more-option").animate({
         bottom: "0px"
     },300);
     $(".ui-gray-cover").animate({
@@ -513,10 +515,10 @@ function displayEventDetailMoreOption(){
 }
 
 function hideEventDetailMoreOption(){
-    $("#page-event-detail-more-option").animate({
-        bottom: (-$("#page-event-detail-more-option").height()).toString()+"px"
+    $("#body-bottom-event-detail-more-option").animate({
+        bottom: (-$("#body-bottom-event-detail-more-option").height()).toString()+"px"
     },300,function(){
-        $("#page-event-detail-more-option").hide();
+        $("#body-bottom-event-detail-more-option").hide();
     });
     $(".ui-gray-cover").animate({
         opacity: 0
@@ -527,13 +529,15 @@ function hideEventDetailMoreOption(){
 
 // send comment to database
 function sendComment(){
-    var eventId = $("#event-id-label").html();
+    var eventId = $("#footer-bar-event-id-label").html();
     var currentUser = Parse.User.current();
     var owner = currentUser.getUsername();
-    var content = $("#comment-content").val();
+    var content = $("#footer-bar-input-comment-content").val();
+    console.log(eventId);
+    console.log(content);
     if (content == "")
         return;
-    $("#comment-content").val("");
+    $("#footer-bar-input-comment-content").val("");
     if (content.length==0)
         return;
     var errorFunction = function(error){
@@ -554,7 +558,6 @@ function sendComment(){
         $(".comment-statistics-"+eventId).each(function(){
             $(this).html(commentNumber.toString()+" Comments");
         });
-        $("#my-comment-statistics-"+eventId).html(commentNumber.toString()+" Comments");
 
         // push notification to owner
         var title = object.get("title");
@@ -570,7 +573,7 @@ function sendComment(){
 function reportActivity(id){
     var hiddenUserEvent = function(object){
         var id = object.id;
-        $("#" + id).remove();
+        $("#body-event-" + id).remove();
         $.mobile.changePage("#page-event");//window.location.hash = "#page-event";
     }
     ParseUpdateReport(id, hiddenUserEvent); 
@@ -596,7 +599,7 @@ function buildMyUserEventElement(object){
     var goingNumber = goingId.length;
     var id = object.id;
     var newElement = "";
-    newElement += "<div id='my-"+id+"'>";
+    newElement += "<div id='body-my-event-"+id+"'>";
     newElement += "<div class='custom-corners custom-corners-public'>";
     newElement += "<div class='ui-body ui-body-a' style='border-top-width: 0; margin-top: 0;'>";
     newElement += "<p class='ui-custom-event-title'>" + title + "</p>";
@@ -616,7 +619,7 @@ function buildMyUserEventElement(object){
     newElement += "<div class='ui-footer ui-bar-custom'>"
     newElement += "<div class='ui-custom-float-left'><a href='#page-event-detail' data-transition='slide' class='ui-btn ui-bar-btn-custom ui-mini ui-icon-custom-comment' id='my-comment-button-"+id+"' onclick=\"updateEventDetail('"+id+"'); setCurrLocationHash('#page-event-delete')\">"+"Detail"+"</a></div>";
     newElement += "<div class='ui-custom-float-left'><a href='#page-event-delete' data-transition='slideup' class='ui-btn ui-bar-btn-custom ui-mini ui-icon-custom-delete' id='my-comment-button-"+id+"' onclick=\"deleteMyEvent('"+id+"'); setCurrLocationHash('#page-event-delete')\">"+"Delete"+"</a></div>";
-    newElement += "<div class='ui-custom-float-left'><a href='#page-event-edit' data-transition='slide' class='ui-btn ui-bar-btn-custom ui-mini ui-icon-custom-edit' id='my-comment-button-"+id+"' onclick=\"editMyEvent('"+id+"'); setCurrLocationHash('#page-event-delete')\">"+"Edit"+"</a></div>";
+    newElement += "<div class='ui-custom-float-left'><a href='#page-edit-event' data-transition='slide' class='ui-btn ui-bar-btn-custom ui-mini ui-icon-custom-edit' id='my-comment-button-"+id+"' onclick=\"editMyEvent('"+id+"'); setCurrLocationHash('#page-event-delete')\">"+"Edit"+"</a></div>";
     newElement += "</div>";
     newElement += "</div>";
     newElement += "</div>";
@@ -632,12 +635,12 @@ function pullMyEvent(beforeAt){
     var descendingOrderKey = "createdAt";
     var displayFunction = function(objects){
         for (var i=objects.length-1; i >= 0; i--) {
-            if ($("#my-event-content > #my-"+objects[i].id).length == 0) {
-                $("#my-event-content").prepend(buildMyUserEventElement(objects[i]));
+            if ($("#body-my-event-list > #body-my-event-"+objects[i].id).length == 0) {
+                $("#body-my-event-list").prepend(buildMyUserEventElement(objects[i]));
             } else {
                 var commentNumber = objects[i].get("commentNumber");
                 var interestNumber = 0;
-                if (typeof(object.get("interestId")) != "undefined")
+                if (typeof(objects[i].get("interestId")) != "undefined")
                     interestNumber = object.get("interestId").length;
                 var goingId = objects[i].get("goingId");
                 if (typeof(goingId) == "undefined"){
@@ -662,9 +665,9 @@ function pullMyEvent(beforeAt){
 function deleteMyEvent(eventId){
     $(".ui-custom-delete-confirm").click(function(){
         var displayFunction = function(eventId){
-            $("#my-"+eventId).slideUp("fast", function(){
-                $("#"+eventId).remove();
-                $("#my-"+eventId).remove();
+            $("#body-my-event-"+eventId).slideUp("fast", function(){
+                $("#body-event-"+eventId).remove();
+                $("#body-my-event-"+eventId).remove();
             });
         };
         ParseDeleteEvent(eventId, displayFunction);
@@ -673,16 +676,16 @@ function deleteMyEvent(eventId){
 
 function editMyEvent(eventId){
     var display = function(objs){
-        $("#event-edit-title").val(objs[0].get("title"));
-        $("#event-edit-location").val(objs[0].get("location"));
+        $("#body-input-edit-event-title").val(objs[0].get("title"));
+        $("#body-input-edit-event-location").val(objs[0].get("location"));
         var time = objs[0].get("time").split(" -- ");
-        $("#event-edit-startTime").val(time[0].replace(" ", "T"));
-        $("#event-edit-endTime").val(time[1].replace(" ", "T"));
+        $("#body-input-edit-event-startTime").val(time[0].replace(" ", "T"));
+        $("#body-input-edit-event-endTime").val(time[1].replace(" ", "T"));
         if(objs[0].get("visibility") == false){
-            $("#event-edit-visibility").val("Friends");
+            $("#body-select-edit-event-visibility").val("Friends");
         }
-        $("#event-edit-description").val(objs[0].get("description"));
-        $("#event-editsave-button").on("click",function(){
+        $("#body-input-edit-event-description").val(objs[0].get("description"));
+        $("#body-bottom-edit-event-save").on("click",function(){
             editSaveUserEvent(eventId);
         });
     }
@@ -693,24 +696,24 @@ function editSaveUserEvent(eventId){
     var currentUser = Parse.User.current();
     var owner = currentUser.getUsername();
 
-    var title = $("#event-edit-title").val();
-    var location = $("#event-edit-location").val();
-    var startTime = $("#event-edit-startTime").val().replace("T", " ");
-    var endTime = $("#event-edit-endTime").val().replace("T", " ");
+    var title = $("#body-input-edit-event-title").val();
+    var location = $("#body-input-edit-event-location").val();
+    var startTime = $("#body-input-edit-event-startTime").val().replace("T", " ");
+    var endTime = $("#body-input-edit-event-endTime").val().replace("T", " ");
 
     var errorHandler = function(item) {
-        $("#event-edit-" + item).focus().parent().addClass("ui-custom-event-edit-focus");
-        if ($("#event-edit-" + item + "-alert").length == 0) {
-            $("#event-edit-" + item).parent().after("<p id='event-edit-" + item + "-alert' class='event-edit-alert'>*Field required</p>");
+        $("#body-input-event-edit-" + item).focus().parent().addClass("ui-custom-event-edit-focus");
+        if ($("#body-input-event-edit-" + item + "-alert").length == 0) {
+            $("#body-input-event-edit-" + item).parent().after("<p id='body-input-event-edit-" + item + "-alert' class='event-edit-alert'>*Field required</p>");
         }
 
         setTimeout(function(){
-            $("#event-edit-" + item).focus().parent().removeClass("ui-custom-event-edit-focus");
+            $("#body-input-event-edit-" + item).focus().parent().removeClass("ui-custom-event-edit-focus");
         }, 500);
 
-        $("#event-edit-" + item).change(function(){
-            $("#event-edit-" + item + "-alert").remove();
-            $("#event-edit-" + item).unbind("change");
+        $("#body-input-event-edit-" + item).change(function(){
+            $("#body-input-event-edit-" + item + "-alert").remove();
+            $("#body-input-event-edit-" + item).unbind("change");
         });
     };
 
@@ -734,7 +737,7 @@ function editSaveUserEvent(eventId){
         return;
     }
 
-    $("#event-edit-button").unbind("click");
+    $("#body-bottom-edit-event-save").unbind("click");
 
     var index1 = startTime.indexOf(":");
     var index2 = startTime.lastIndexOf(":");
@@ -750,39 +753,40 @@ function editSaveUserEvent(eventId){
 
     var time = startTime + " -- " + endTime;
 
-    var visibility = $("#event-edit-visibility").val()=="on" ? true : false ;
-    var description = $("#event-edit-description").val();
-    var errorObject = $("#event-edit-error");
+    var visibility = $("#body-select-edit-event-visibility").val()=="on" ? true : false ;
+    var description = $("#body-input-edit-event-description").val();
+    var errorObject = $("#body-edit-event-error");
     var destID = "#page-event-my-event";
     var displayFunction = function(object){
-        // clear page-event-edit
-        $("#event-edit-title").val("");
-        $("#event-edit-location").val("");
+        // clear page-edit-event
+        $("#body-input-edit-event-title").val("");
+        $("#body-input-edit-event-location").val("");
         $("#event-edit-start-time").val("");
         $("#event-edit-end-time").val("");
-        $("#event-edit-description").val("");
-        $("#event-edit-visibility").val("on").flipswitch("refresh");
-        $("#event-edit-error").html("");
+        $("#body-input-edit-event-description").val("");
+        $("#body-select-edit-event-visibility").val("on").flipswitch("refresh");
+        $("#body-edit-event-error").html("");
         // rebuilt element in page-event-my-event
         var id = object.id;
         var newElement = buildMyUserEventElement(object);
-        var oldElement = $("#my-"+id);
+        var oldElement = $("#body-my-event"+id);
         oldElement.before(newElement);
         oldElement.remove();
         // rebuilt element in page-event
         var id = object.id;
         var holder = object.get("owner");
         var newElement = buildUserEventElement(object);
-        var oldElement = $("#"+id);
+        var oldElement = $("#body-event"+id);
         oldElement.before(newElement);
         oldElement.remove();
         // display event holder's name | not the email one
         pullUserEventHolderInfo(holder, id);
 
         // push notification to users who are on the going list
-        var goingId = object.get("goingId");
-        if (typeof(goingId) == "undefined") {
-            goingId == new Array;
+        if (typeof(object.get("goingId")) == "undefined") {
+            var goingId = [];
+        } else {
+            var goingId = object.get("goingId");
         }
         var goingUsrId;
         var title = object.get("title");

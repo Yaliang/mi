@@ -82,12 +82,12 @@ function pullNotification(){
             jQuery("[id=friend]") .each(function(){
                 $(this).addClass("friend-notification-custom");
             });
-            $("#new-friend-requests-btn").html("<span>New Friend Requests</span><span id='new-friend-requests-number' class='ui-li-count'>"+objects.length.toString()+"</span>");
+            $("#body-new-friend-requests-btn").html("<span>New Friend Requests</span><span id='body-new-friend-requests-number' class='ui-li-count'>"+objects.length.toString()+"</span>");
         } else {
             jQuery("[id=friend]") .each(function(){
                 $(this).removeClass("friend-notification-custom");
             });
-            $("#new-friend-requests-btn").html("<span>New Friend Requests</span>");
+            $("#body-new-friend-requests-btn").html("<span>New Friend Requests</span>");
         }
     };
     ParsePullUnreadFriendRequest(currentUser.id, displayFunction);
@@ -106,7 +106,7 @@ function pullNotification(){
             });
         }
         if ($( ":mobile-pagecontainer" ).pagecontainer( "getActivePage" )[0].id == "page-chat-messages") {
-            var groupId = $("#group-id-label").html();
+            var groupId = $("#footer-bar-group-id-label").html();
             for (var i=0; i<objects.length; i++) {
                 if (groupId == objects[i].get("groupId")) {
                     updateChatMessage(objects[i]);
@@ -132,13 +132,13 @@ function pullNotification(){
 }
 
 function signup(){
-    var name = $("#signup-name").val();
-    var email = $("#signup-email").val();
-    var password = $("#signup-password").val();
-    var errorObject = $("#signup-error");
+    var name = $("#body-input-signup-name").val();
+    var email = $("#body-input-signup-email").val();
+    var password = $("#body-input-signup-password").val();
+    var errorObject = $("#body-signup-error");
     var destID = "#page-event";
     var customFunction = function(object){
-        $("#signup-password").val("");
+        $("#body-input-signup-password").val("");
         pullUserEvent();
         if (!pullNotificationRunning) {
             pullNotification();
@@ -151,12 +151,12 @@ function signup(){
 
 function login(){
     cacheInitialization();
-    var email = $("#login-email").val();
-    var password = $("#login-password").val();
-    var errorObject = $("#login-error");
+    var email = $("#body-input-login-email").val();
+    var password = $("#body-input-login-password").val();
+    var errorObject = $("#body-login-error");
     var destID = "#page-event";
     var customFunction = function(){
-        $("#login-password").val("");
+        $("#body-input-login-password").val("");
         pullUserEvent();
         if (!pullNotificationRunning) {
             pullNotification();
@@ -167,16 +167,16 @@ function login(){
 
     $.mobile.loading("show");
     ParseLogin(email, password, errorObject, destID, customFunction);
-    //$("#login-password").val("");
+    //$("#body-input-login-password").val("");
 }
 
 function logout(){
     var currentUser = Parse.User.current();
     var email = currentUser.getUsername();
     ParseRemoveCurrentBridgeitId();
-    $("#login-email").val(email);
-    $("#login-error").html("");
-    $("#signup-error").html("");
+    $("#body-input-login-email").val(email);
+    $("#body-login-error").html("");
+    $("#body-signup-error").html("");
     localStorage.clear();
     cacheClear();
     $("#page-chat > .ui-content").html("");
@@ -186,66 +186,66 @@ function logout(){
 
 function initialElementEventSetting(){
     // set comment and message send bar diable
-    $("#comment-content").on("blur",function(){
-        $("#comment-content").prop("disabled", true);
-        $("#send-comment-bar").css("position","fixed");
-        $("#send-comment-bar").css("bottom","0");
+    $("#footer-bar-input-comment-content").on("blur",function(){
+        $("#footer-bar-input-comment-content").prop("disabled", true);
+        $("#footer-bar-send-comment").css("position","fixed");
+        $("#footer-bar-send-comment").css("bottom","0");
     });
-    $("#message-content").on("blur",function(){
-        $("#message-content").prop("disabled", true);
-        $("#send-message-bar").css("position","fixed");
-        $("#send-message-bar").css("bottom","0");
+    $("#footer-bar-input-message-content").on("blur",function(){
+        $("#footer-bar-input-message-content").prop("disabled", true);
+        $("#footer-bar-send-message").css("position","fixed");
+        $("#footer-bar-send-message").css("bottom","0");
     });
-    $("#comment-content").prop("disabled", true);
-    $("#message-content").prop("disabled", true);
-    $("#message-chat-form").submit(function(event){
+    $("#footer-bar-input-comment-content").prop("disabled", true);
+    $("#footer-bar-input-message-content").prop("disabled", true);
+    $("#footer-bar-form-message-chat").submit(function(event){
         // sendToolbarActiveKeyboard({
-        //     id:"#message-content",
-        //     bar:"#send-message-bar",
+        //     id:"#footer-bar-input-message-content",
+        //     bar:"#footer-bar-send-message",
         //     base:"#page-chat-messages"
         // });
         event.preventDefault();
     });
-    $("#comment-form").submit(function(event){
+    $("#footer-bar-form-comment").submit(function(event){
         // sendToolbarActiveKeyboard({
-        //     id:"#comment-content",
-        //     bar:"#send-comment-bar",
+        //     id:"#footer-bar-input-comment-content",
+        //     bar:"#footer-bar-send-comment",
         //     base:"#page-event-detail"
         // });
         event.preventDefault();
     });
     // finish
 
-    $("#profile-edit-photo").on("blur change",function(){
+    $("#body-input-edit-profile-photo").on("blur change",function(){
         profilePhotoCrop();
     });
 
-    $("#setting-confirm-password").submit(function(event) {
+    $("#body-form-confirm-password").submit(function(event) {
         event.preventDefault();
-        changePassword("old",$("#setting-old-password").val(),null);
+        changePassword("old",$("#body-input-old-password").val(),null);
     });
 
-    $("#setting-set-new-password").submit(function(event) {
+    $("#body-form-set-new-password").submit(function(event) {
         event.preventDefault();
-        changePassword("new",$("#setting-new-password").val(),$("#setting-new-password-confirmation").val());
+        changePassword("new",$("#body-input-set-new-password").val(),$("#body-input-confirm-new-password").val());
     });
 
-    $("#setting-new-password").focusout(function(){
+    $("#body-input-set-new-password").focusout(function(){
         if ($(this).val().length < 6){
             var errorMessage = "Password should be at least 6 characters. Please reenter password.";
-            $("#setting-set-new-password-error").html(errorMessage);
+            $("#body-set-new-password-error").html(errorMessage);
         }
     });
 
-    $("#event-create-form").submit(function(event) {
+    $("#body-form-create-event").submit(function(event) {
         event.preventDefault();
     });
 
     
-    $("#login-form").submit(function(event){
+    $("#body-form-login").submit(function(event){
         event.preventDefault();
     });
-    $("#signup-form").submit(function(event){
+    $("#body-form-signup").submit(function(event){
         event.preventDefault();
     });
     
@@ -273,9 +273,9 @@ function initialElementEventSetting(){
         $("html body").animate({ scrollTop: $(document).height().toString()+"px" }, {
             duration: 500,
             complete : function(){
-                $("#send-message-bar").css("position","fixed");
-                $("#send-message-bar").css("bottom","0");
-                $("#send-message-bar").show();
+                $("#footer-bar-send-message").css("position","fixed");
+                $("#footer-bar-send-message").css("bottom","0");
+                $("#footer-bar-send-message").show();
                 $(window).on("swiperight",function(){
                     window.history.back();
                     setCurrLocationHash("#page-event");
@@ -286,13 +286,13 @@ function initialElementEventSetting(){
     });
 
     $(document).on("pagebeforehide","#page-chat-messages",function(){
-        $("#send-message-bar").hide();
+        $("#footer-bar-send-message").hide();
     });
     // add function when the page #page-event-detail completed.
     $(document).on("pageshow","#page-event-detail",function(){
-        $("#send-comment-bar").css("position","fixed");
-        $("#send-comment-bar").css("bottom","0");
-        $("#send-comment-bar").show();
+        $("#footer-bar-send-comment").css("position","fixed");
+        $("#footer-bar-send-comment").css("bottom","0");
+        $("#footer-bar-send-comment").show();
         $(window).on("swiperight",function(){
             window.history.back();
             setCurrLocationHash("#page-event");
@@ -300,24 +300,23 @@ function initialElementEventSetting(){
         })
     });
     $(document).on("pagebeforehide","#page-event-detail",function(){
-        $("#send-comment-bar").hide();
+        $("#footer-bar-send-comment").hide();
     });
 
     $(document).on("pagebeforeshow","#page-change-my-password",function(){
-        $("#setting-confirm-password").show();
-        $("#setting-set-new-password").hide();
-        $("#setting-confirm-password-btn").show();
-        $("#setting-set-new-password-btn").hide();
-        $("#setting-old-password").val("");
-        $("#setting-new-password").val("");
-        $("#setting-new-password-confirmation").val("");
-        $("#setting-confirm-password-error").html("");
-        $("#setting-set-new-password-error").html("");
-        $("#setting-change-my-password-title").html("Password");
+        $("#body-form-confirm-password").show();
+        $("#body-form-set-new-password").hide();
+        $("#body-confirm-password-btn").show();
+        $("#body-set-new-password-btn").hide();
+        $("#body-input-old-password").val("");
+        $("#body-input-set-new-password").val("");
+        $("#body-input-confirm-new-password").val("");
+        $("#body-confirm-password-error").html("");
+        $("#body-set-new-password-error").html("");
     });
 
     $(document).on("pageshow","#page-change-my-password", function(){
-        $("#setting-old-password").focus();
+        $("#body-input-old-password").focus();
     });
 }
 
