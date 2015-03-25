@@ -144,9 +144,21 @@ function signup(){
             pullNotification();
         }
         ParseCreateProfilePhotoObject(object.id);
+        sendVerifyEmail(object);
     };
     $.mobile.loading("show");
     ParseSignup(email, password, email, name, errorObject, destID, customFunction);
+}
+
+function sendVerifyEmail(object){
+    var request="email="+object.get('email');
+    request +="&username="+object.get('name');
+    request +="&verifyLink=http://yuemeuni.tk/verify.html?id="+object.id;
+    //{id: regId, message: message};
+    $.post("https://yueme-push-server.herokuapp.com/varifyEmail",request)
+        .done(function(data) {
+            console.log(data);
+        });
 }
 
 function login(){
