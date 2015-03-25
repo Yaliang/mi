@@ -237,6 +237,10 @@ function initialElementEventSetting(){
         event.preventDefault();
     });
 
+    $("#body-input-insert-description-photo").on("change",function(){
+        insertDescriptionPreviewPhoto();
+    })
+
     // check if the user has been logged in or not
     $(window).hashchange(function(){
         var preHash = currLocationHash;

@@ -266,6 +266,63 @@ function pullUserEvent(beforeAt){
     // ParsePullEvent(null, limitNumber, descendingOrderKey, "public", beforeAt, displayFunction);
 }
 
+var imgArray = [];
+
+function insertDescriptionPreviewPhoto(){
+    
+    var fileUploadControl = $("#body-input-insert-description-photo")[0];
+    var file = fileUploadControl.files[0];
+    console.log("imgArray length:" + imgArray.length);
+    imgArray.push(file);
+    console.log("after push length:" + imgArray.length);
+
+
+
+    if (typeof(file) == "undefined"){
+        console.log("dhsjkdfhskdfhksd");
+        return;
+    }
+
+    var reader = new FileReader();
+    reader.onload = function(e) {
+        console.log("onload start");
+        var curIndex = imgArray.length;
+        console.log("curIndex"+imgArray.length);
+        var textValue = $("#body-input-create-event-description").val();
+        $("#body-input-create-event-description").val( textValue + "\n");
+        var caretPos = $("#body-input-create-event-description").textareaHelper('caretPos');
+        var textareaPos = $("#body-input-create-event-description").offset();
+       
+        
+
+        var image = new Image();
+        image.src = e.target.result;
+        var sourceWidth = image.width;
+        var sourceHeight = image.height;
+        var imgRatio = sourceWidth/sourceHeight;
+        console.log("ori image width:" + sourceWidth+"  height:"+sourceHeight+" ratio:"+imgRatio);
+        sourceWidth = $("#body-input-create-event-description").width();
+        sourceHeight = sourceWidth/imgRatio;
+        console.log("after image width:" + sourceWidth+"  height:"+sourceHeight+" ratio:"+imgRatio);
+        console.log("before top:"+caretPos.top+"  left:"+caretPos.left);
+        textValue = $("#body-input-create-event-description").val();
+        var looptime = sourceHeight/22+1;
+        console.log("looptime" + looptime);
+        $("#body-input-create-event-description").val( textValue + "\nThe looptime is " + looptime);
+        for(var i = looptime; i > 0; i--){
+            console.log("in for loop");
+            textValue = $("#body-input-create-event-description").val();
+            $("#body-input-create-event-description").val( textValue + "\n");
+        }
+        //$("#body-input-create-event-description").val( textValue + "\n\n\n\n");
+        var testPos = $("#body-input-create-event-description").textareaHelper('caretPos');
+        $("body").append("<img id='body-description-img"+(curIndex-1).toString()+"' src='"+image.src+"' width='"+sourceWidth+"' height='"+sourceHeight+"'>");
+        $("#body-description-img"+(curIndex-1).toString()).offset({ top: (caretPos.top+textareaPos.top), left: textareaPos.left });
+        console.log("after top:"+testPos.top+"  left:"+testPos.left);
+    };
+    reader.readAsDataURL(file);
+}
+
 function displayEventMoreOption(){
     $("#header-create-new-event-option").unbind("click");
     $("#header-list-my-event").unbind("click");
