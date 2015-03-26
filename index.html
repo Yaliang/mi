@@ -190,16 +190,16 @@
         <div class="nav-glyphish-example" data-role="footer" data-position="fixed" data-tap-toggle="false">
             <div class="nav-glyphish-example" data-role="navbar" data-grid="c">
             <ul>
-                <li><a class="event-active-custom" id="footer-navigation-bar-event" data-transition="none" href="#page-event"
+                <li><a class="event-active-custom footer-navigation-bar-event" data-transition="none" href="#page-event"
                        onclick="pullUserEvent();setCurrLocationHash('#page-event')">Activities</a></li>
 
-                <li><a  id="footer-navigation-bar-friend" data-transition="none" href="#page-friend"
+                <li><a  class="footer-navigation-bar-friend" data-transition="none" href="#page-friend"
                        onclick="pullMyFriendList();setCurrLocationHash('#page-friend')">Friends</a></li>
 
-                <li><a id="footer-navigation-bar-chat" data-transition="none" href="#page-chat"
+                <li><a class="footer-navigation-bar-chat" data-transition="none" href="#page-chat"
                        onclick="pullMyChat();setCurrLocationHash('#page-chat')">Chats</a></li>
 
-                <li><a id="footer-navigation-bar-setting" data-transition="none" href="#page-setting"
+                <li><a class="footer-navigation-bar-setting" data-transition="none" href="#page-setting"
                        onclick="setCurrLocationHash('#page-setting')">Settings</a></li>
             </ul>
             </div>
@@ -336,7 +336,7 @@
 
         <div class="ui-page-detail-more-option-bottom" id="body-bottom-event-detail-more-option">
             <a class="ui-btn report-btn" data-transition="slideup" href="#page-event-report"
-               onclick="hideEventDetailMoreOption()">Report</a>
+               onclick="hideEventDetailMoreOption()">Report Abuse</a>
             <div class="ui-btn ui-more-option-cancel-btn" onclick="hideEventDetailMoreOption()">Cancel</div>
         </div>
 
@@ -346,19 +346,19 @@
     <div id="page-event-report" data-role="page" data-title="Yueme">
 
         <div data-role="header" data-theme="b">
-             <h1>Report Activity</h1>
+             <h1>Report Abuse</h1>
         </div>
 
         <div class="ui-content" role="main">
             <br>
 
             <div align = "center" style="font-family: 'Open Sans';">
-                Are you sure to report this activity? You might not be able to cancel this action.
+                Are you sure to report this user? You might not be able to cancel this action.
             </div>
 
             <br>
             <a  class="ui-btn ui-shadow ui-corner-all ui-btn-a ui-custom-report" data-rel="back">Confirm</a>
-            <a  class="ui-btn ui-shadow ui-corner-all ui-btn-a" data-rel="back" onclick="$('#footer-bar-send-comment').fadeIn();">Cancel</a>
+            <a  class="ui-btn ui-shadow ui-corner-all ui-btn-a" data-rel="back">Cancel</a>
         </div>
 
     </div><!-- /page -->
@@ -407,16 +407,16 @@
         <div class="nav-glyphish-example" data-role="footer" data-position="fixed" data-tap-toggle="false">
             <div class="nav-glyphish-example" data-role="navbar" data-grid="c">
                 <ul>
-                    <li><a id="footer-navigation-bar-event" data-transition="none" href="#page-event"
+                    <li><a class="footer-navigation-bar-event" data-transition="none" href="#page-event"
                            onclick="pullUserEvent();setCurrLocationHash('#page-event')">Activities</a></li>
 
-                    <li><a class="friend-active-custom" id="footer-navigation-bar-friend" data-transition="none" href="#page-friend"
+                    <li><a class="friend-active-custom footer-navigation-bar-friend" data-transition="none" href="#page-friend"
                            onclick="pullMyFriendList();setCurrLocationHash('#page-friend')">Friends</a></li>
 
-                    <li><a id="footer-navigation-bar-chat" data-transition="none" href="#page-chat"
+                    <li><a class="footer-navigation-bar-chat" data-transition="none" href="#page-chat"
                            onclick="pullMyChat();setCurrLocationHash('#page-chat')">Chats</a></li>
 
-                    <li><a id="footer-navigation-bar-setting" data-transition="none" href="#page-setting"
+                    <li><a class="footer-navigation-bar-setting" data-transition="none" href="#page-setting"
                            onclick="setCurrLocationHash('#page-setting')">Settings</a></li>
                 </ul>
             </div>
@@ -494,16 +494,16 @@
         <div class="nav-glyphish-example" data-role="footer" data-position="fixed" data-tap-toggle="false">
             <div class="nav-glyphish-example" data-role="navbar" data-grid="c">
                 <ul>
-                    <li><a id="footer-navigation-bar-event" data-transition="none" href="#page-event"
+                    <li><a class="footer-navigation-bar-event" data-transition="none" href="#page-event"
                            onclick="pullUserEvent();setCurrLocationHash('#page-event')">Activities</a></li>
 
-                    <li><a id="footer-navigation-bar-friend" data-transition="none" href="#page-friend"
+                    <li><a class="footer-navigation-bar-friend" data-transition="none" href="#page-friend"
                            onclick="pullMyFriendList();setCurrLocationHash('#page-friend')">Friends</a></li>
 
-                    <li><a class="chat-active-custom" id="footer-navigation-bar-chat" data-transition="none" href="#page-chat"
+                    <li><a class="chat-active-custom footer-navigation-bar-chat" data-transition="none" href="#page-chat"
                            onclick="pullMyChat();setCurrLocationHash('#page-chat')">Chats</a></li>
 
-                    <li><a id="footer-navigation-bar-setting" data-transition="none" href="#page-setting"
+                    <li><a class="footer-navigation-bar-setting" data-transition="none" href="#page-setting"
                            onclick="setCurrLocationHash('#page-setting')">Settings</a></li>
                 </ul>
             </div>
@@ -543,16 +543,16 @@
         <div class="nav-glyphish-example" data-role="footer" data-position="fixed" data-tap-toggle="false">
             <div class="nav-glyphish-example" data-role="navbar" data-grid="c">
                 <ul>
-                    <li><a id="footer-navigation-bar-event" data-transition="none" href="#page-event"
+                    <li><a class="footer-navigation-bar-event" data-transition="none" href="#page-event"
                            onclick="pullUserEvent();setCurrLocationHash('#page-event')">Activities</a></li>
 
-                    <li><a id="footer-navigation-bar-friend" data-transition="none" href="#page-friend"
+                    <li><a class="footer-navigation-bar-friend" data-transition="none" href="#page-friend"
                            onclick="pullMyFriendList();setCurrLocationHash('#page-friend')">Friends</a></li>
 
-                    <li><a id="footer-navigation-bar-chat" data-transition="none" href="#page-chat"
+                    <li><a class="footer-navigation-bar-chat" data-transition="none" href="#page-chat"
                            onclick="pullMyChat();setCurrLocationHash('#page-chat')">Chats</a></li>
 
-                    <li><a class="setting-active-custom" id="footer-navigation-bar-setting" data-transition="none" href="#page-setting"
+                    <li><a class="setting-active-custom footer-navigation-bar-setting" data-transition="none" href="#page-setting"
                            onclick="setCurrLocationHash('#page-setting')">Settings</a></li>
                 </ul>
             </div>
@@ -680,7 +680,9 @@
         </form>
 
     </div>
+
     <div class="ui-hidden-accessible" id="photo-orientation"></div>
+
 </body>
 
 </html>

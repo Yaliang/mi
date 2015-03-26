@@ -23,17 +23,20 @@ function getFriendOptionsButton(userId, option){
                     var rejectFriendRequestButton = "<div class='reject-friend-request'>Reject</div>";
                     $("#"+prefixForGetFriendOptionsButton+ownerId+" > .custom-corners-people-near-by > .ui-bar").append(acceptFriendRequestButton+rejectFriendRequestButton);
                     $("#"+prefixForGetFriendOptionsButton+ownerId+" > .custom-corners-people-near-by > .ui-bar > .accept-friend-request").on("click",function(){
-                        // when click accept friend request
+                        // when accepting friend request
                         $("#"+prefixForGetFriendOptionsButton+ownerId+" > .custom-corners-people-near-by > .ui-bar > .accept-friend-request").unbind("click");
                         $("#"+prefixForGetFriendOptionsButton+ownerId+" > .custom-corners-people-near-by > .ui-bar > .reject-friend-request").unbind("click");
+
                         var successFunction = function(object){
                             var objectId = object.id;
                             var friendId = object.get("friend");
                             $("#"+prefixForGetFriendOptionsButton+friendId+" > .custom-corners-people-near-by > .ui-bar > .reject-friend-request").remove();
-                            $("#"+prefixForGetFriendOptionsButton+friendId+" > .custom-corners-people-near-by > .ui-bar > .accept-friend-request").addClass("chat-friend");
-                            $("#"+prefixForGetFriendOptionsButton+friendId+" > .custom-corners-people-near-by > .ui-bar > .accept-friend-request").removeClass("accept-friend-request");
-                            $("#"+prefixForGetFriendOptionsButton+friendId+" > .custom-corners-people-near-by > .ui-bar > .chat-friend").html("Start Chat");
-                            $("#"+prefixForGetFriendOptionsButton+friendId+" > .custom-corners-people-near-by > .ui-bar > .chat-friend").on("click",function(){
+                            $("#"+prefixForGetFriendOptionsButton+friendId+" > .custom-corners-people-near-by > .ui-bar > .accept-friend-request").addClass("chat-friend").removeClass("accept-friend-request");
+                            $("#"+prefixForGetFriendOptionsButton+friendId+" > .custom-corners-people-near-by > .ui-bar > .chat-friend").html("Start Chat").on("click",function(){
+                                startPrivateChat(friendId);
+                            });
+
+                            $("#body-bottom-button-send-request").html("Start Chat").unbind("click").on("click",function(){
                                 startPrivateChat(friendId);
                             });
 
@@ -44,17 +47,22 @@ function getFriendOptionsButton(userId, option){
                     });
 
                     $("#"+prefixForGetFriendOptionsButton+ownerId+" > .custom-corners-people-near-by > .ui-bar > .reject-friend-request").on("click",function(){
-                        // when click reject friend request
+                        // when rejecting friend request
                         var successFunction = function(friendId){
                             $("#"+prefixForGetFriendOptionsButton+friendId).slideUp("fast", function(){
                                 $("#"+prefixForGetFriendOptionsButton+friendId).remove();
                             });
-                        }
+
+                            $("#body-bottom-button-send-request").html("Send Friend Request").unbind("click").on("click",function(){
+                                sendFriendRequest(ownerId);
+                            });
+                        };
                         ParseRejectFriendRequest(objectId, null, ownerId, successFunction);
                     });
                 }
             };
             CacheCheckFriend(ownerId, friendId, displayFunction);
+            
         } else {
             var valid = object.get("valid");
             if (valid) {
@@ -72,9 +80,12 @@ function getFriendOptionsButton(userId, option){
 function sendFriendRequest(friendId) {
     var currentUser = Parse.User.current();
     $("#"+prefixForGetFriendOptionsButton+friendId+" > .custom-corners-people-near-by > .ui-bar > .send-friend-request").unbind("click");
+    $("#body-bottom-button-send-request").unbind("click");
+
     var successFunction = function(object){
         var friendId = object.get("friend");
         $("#"+prefixForGetFriendOptionsButton+friendId+" > .custom-corners-people-near-by > .ui-bar > .send-friend-request").html("Request Sent");
+        $("#body-bottom-button-send-request").html("Friend Request Sent");
 
         // push notification to friend
         pushNotificationToDeviceByUserId(object.get('friend'), Parse.User.current().get("name")+" wanna be your friend!");
@@ -176,7 +187,7 @@ function showPeopleNearByList(position){
                     }
                     $("#body-near-by-"+object.get("userId")+" > .custom-corners-people-near-by").css("backgroundImage","url('"+photo120+"')");
                 };
-                CacheGetProfilePhoto(userId, displayFunction);
+                CacheGetProfilePhotoByUserId(userId, displayFunction);
                 prefixForGetFriendOptionsButton="body-near-by-";
                 getFriendOptionsButton(userId);
             } else {
@@ -228,7 +239,7 @@ function bindSearchAutocomplete(){
                         }
                         $("#body-people-search-"+object.get("userId")+" > .custom-corners-people-near-by").css("backgroundImage","url('"+photo120+"')");
                     };
-                    CacheGetProfilePhoto(userId, displayFunction);
+                    CacheGetProfilePhotoByUserId(userId, displayFunction);
                     prefixForGetFriendOptionsButton="body-people-search-";
                     getFriendOptionsButton(userId);
                 }
@@ -271,7 +282,7 @@ function pullMyFriendRequests() {
                     }
                     $("#body-new-friend-request-"+data.friendId+" > .custom-corners-people-near-by").css("backgroundImage","url('"+photo120+"')");
                 };
-                CacheGetProfilePhoto(friendId, displayFunction, {friendId: friendId});
+                CacheGetProfilePhotoByUserId(friendId, displayFunction, {friendId: friendId});
                 prefixForGetFriendOptionsButton="body-new-friend-request-";
                 getFriendOptionsButton(friendId);
             };
@@ -298,7 +309,7 @@ function pullMyFriendList() {
     CachePullNewFriendRequest(Parse.User.current().id, "updatedAt", displayFunction);
 
     var descendingOrderKey = "createdAt";
-    var displayFunction = function(objects){
+    displayFunction = function(objects){
         // sort user list
         objects.sort(function(a, b){return a.get("name") - b.get("name")});
 
@@ -319,7 +330,7 @@ function pullMyFriendList() {
                     }
                     $("#body-friend-list-"+data.friendId+">.custom-people-in-friend-list").css("backgroundImage","url('"+photo120+"')");
                 };
-                CacheGetProfilePhoto(friendId, displayFunction, {friendId : friendId});
+                CacheGetProfilePhotoByUserId(friendId, displayFunction, {friendId : friendId});
                 prefixForGetFriendOptionsButton="body-friend-list-";
                 //getFriendOptionsButton(friendId, 3);
             };
@@ -328,63 +339,4 @@ function pullMyFriendList() {
     };
 
     CachePullMyFriend(Parse.User.current().id, descendingOrderKey, displayFunction);
-}
-
-// #page-display-user-profile
-function buildUserProfileDetailElement(object){
-    var name = object.get("name");
-    var gender = object.get("gender");
-    var birthdate = object.get("birthdate");
-    var school = object.get("school");
-    var interest = object.get("interest");
-    var location = object.get("location");
-    var motto = object.get("motto");
-    var major = object.get("major");
-    // var latitude = object.get('latitude');
-    // var longitude = object.get('longitude');
-    var newElement = "";
-
-    newElement += "<div class='ui-user-profile-name'>"+name+"</div>";
-    newElement += "<div class='ui-icon-custom-gender ui-user-profile-gender' style='";
-    if (typeof(gender) == 'undefined') {
-        //$("#"+eventId+"-owner-gender").html(gender.toString());
-    } else if (gender) {
-        newElement += "background-image:url("+"./content/customicondesign-line-user-black/png/male-white-20.png"+");";
-        newElement += "background-color:"+"#8970f1"+";";
-    } else {
-        newElement += "background-image:url("+"./content/customicondesign-line-user-black/png/female1-white-20.png"+");";
-        newElement += "background-color:"+"#f46f75"+";";
-    }
-
-    newElement += "'></div>";
-    if ((typeof(birthdate) != "undefined") && (birthdate))
-        newElement += "<div class='ui-user-profile-list'><div class='ui-profile-label'>Birthday</div><div class='ui-profile-item'>"+birthdate+"</div></div>";    
-    if ((typeof(location) != "undefined") && (location))
-        newElement += "<div class='ui-user-profile-list'><div class='ui-profile-label'>Region</div><div class='ui-profile-item'>"+location+"</div></div>";
-    if ((typeof(school) != "undefined") && (school))
-        newElement += "<div class='ui-user-profile-list'><div class='ui-profile-label'>Education</div><div class='ui-profile-item'>"+school+"</div></div>";
-    if ((typeof(major) != "undefined") && (major))
-        newElement += "<div class='ui-user-profile-list'><div class='ui-profile-label'>Major</div><div class='ui-profile-item'>"+major+"</div></div>";
-    if ((typeof(interest) != "undefined") && (interest))
-        newElement += "<div class='ui-user-profile-list'><div class='ui-profile-label'>Interest</div><div class='ui-profile-item'>"+interest+"</div></div>";
-    if ((typeof(motto) != "undefined") && (motto))
-        newElement += "<div class='ui-user-profile-list'><div class='ui-profile-label'>Motto</div><div class='ui-profile-item'>"+motto+"</div></div>";
-
-    return newElement;
-}
-
-function displayUserProfile(userId){
-    $("#body-user-profile").html("<div id='body-user-photo-"+userId+"' class='ui-user-profile-photo'></div>")
-    var displayFunction= function(object, data){
-        $("#body-user-photo-"+data.userId).after(buildUserProfileDetailElement(object));
-    };
-    CacheGetProfileByUserId(userId, displayFunction, {userId: userId});
-    var displayFunction= function(object, data){
-        var photo120 = object.get("profilePhoto120");
-        if (typeof(photo120) == "undefined") {
-            photo120 = "./content/png/Taylor-Swift.png";
-        }
-        $("#body-user-photo-"+data.userId).html("<img src='"+photo120+"' height='100' width='100' style='border-radius: 3px;'>")
-    };
-    CacheGetProfilePhoto(userId, displayFunction, {userId: userId})
 }

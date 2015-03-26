@@ -131,7 +131,7 @@ function pullUserEventHolderInfo(holder, elementIdBase){
                 $.mobile.loading("hide");
             }
         };
-        CacheGetProfilePhoto(userId, displayFunction, data);
+        CacheGetProfilePhotoByUserId(userId, displayFunction, data);
     };
     CacheGetProfileByUsername(holder, displayFunction, {elementIdBase : elementIdBase});
     //ParseGetProfile(holder, displayFunction, eventId);
@@ -193,6 +193,112 @@ function buildUserEventElement(object){
     return newElement;
 }
 
+// #page-display-user-profile
+function buildUserProfileDetailElement(object){
+    var name = object.get("name");
+    var gender = object.get("gender");
+    var birthdate = object.get("birthdate");
+    var school = object.get("school");
+    var interest = object.get("interest");
+    var location = object.get("location");
+    var motto = object.get("motto");
+    var major = object.get("major");
+    // var latitude = object.get('latitude');
+    // var longitude = object.get('longitude');
+    var newElement = "";
+
+    newElement += "<div class='ui-user-profile-name'>"+name+"</div>";
+    newElement += "<div class='ui-icon-custom-gender ui-user-profile-gender' style='";
+    if (typeof(gender) == 'undefined') {
+        //$("#"+eventId+"-owner-gender").html(gender.toString());
+    } else if (gender) {
+        newElement += "background-image:url("+"./content/customicondesign-line-user-black/png/male-white-20.png"+");";
+        newElement += "background-color:"+"#8970f1"+";";
+    } else {
+        newElement += "background-image:url("+"./content/customicondesign-line-user-black/png/female1-white-20.png"+");";
+        newElement += "background-color:"+"#f46f75"+";";
+    }
+
+    newElement += "'></div>";
+    if ((typeof(birthdate) != "undefined") && (birthdate))
+        newElement += "<div class='ui-user-profile-list'><div class='ui-profile-label'>Birthday</div><div class='ui-profile-item'>"+birthdate+"</div></div>";
+    if ((typeof(location) != "undefined") && (location))
+        newElement += "<div class='ui-user-profile-list'><div class='ui-profile-label'>Region</div><div class='ui-profile-item'>"+location+"</div></div>";
+    if ((typeof(school) != "undefined") && (school))
+        newElement += "<div class='ui-user-profile-list'><div class='ui-profile-label'>Education</div><div class='ui-profile-item'>"+school+"</div></div>";
+    if ((typeof(major) != "undefined") && (major))
+        newElement += "<div class='ui-user-profile-list'><div class='ui-profile-label'>Major</div><div class='ui-profile-item'>"+major+"</div></div>";
+    if ((typeof(interest) != "undefined") && (interest))
+        newElement += "<div class='ui-user-profile-list'><div class='ui-profile-label'>Interest</div><div class='ui-profile-item'>"+interest+"</div></div>";
+    if ((typeof(motto) != "undefined") && (motto))
+        newElement += "<div class='ui-user-profile-list'><div class='ui-profile-label'>Motto</div><div class='ui-profile-item'>"+motto+"</div></div>";
+
+    newElement += "<br>";
+    newElement += "<div class='ui-btn' id='body-bottom-button-send-request' style='clear: both'></div>";
+    newElement += "<div class='ui-btn' id='body-bottom-button-report-abuse' style='clear: both'></div>";
+    newElement += "<br>";
+
+    return newElement;
+}
+
+function displayUserProfile(userId){
+    $("#body-user-profile").html("<div id='body-user-photo-"+userId+"' class='ui-user-profile-photo'></div>");
+    var displayFunction= function(object, data){
+        $("#body-user-photo-"+data.userId).after(buildUserProfileDetailElement(object));
+    };
+    CacheGetProfileByUserId(userId, displayFunction, {userId: userId});
+
+    displayFunction= function(object, data){
+        var photo120 = object.get("profilePhoto120");
+        if (typeof(photo120) == "undefined") {
+            photo120 = "./content/png/Taylor-Swift.png";
+        }
+        $("#body-user-photo-"+data.userId).html("<img src='"+photo120+"' height='100' width='100' style='border-radius: 3px;'>")
+    };
+    CacheGetProfilePhotoByUserId(userId, displayFunction, {userId: userId});
+
+    displayFunction = function(ownerId, friendId, cacheFriendObject) {
+        if (ownerId !== friendId) {
+            if (typeof(cacheFriendObject) == "undefined") {
+                var displayFunction1 = function(ownerId, friendId, cacheFriendObject) {
+                    if (typeof(cacheFriendObject) == "undefined") {
+                        $("#body-bottom-button-send-request").html("Send Friend Request").on("click", function(){
+                            sendFriendRequest(ownerId);
+                        });
+                    } else {
+                        $("#body-bottom-button-send-request").html("Friend Request Received").on("click", function(){
+                            pullMyFriendRequests();
+                            $.mobile.changePage("#page-my-friend-requests");
+                            setCurrLocationHash("#page-my-friend-requests");
+                        });
+                    }
+                };
+                CacheCheckFriend(ownerId, friendId, displayFunction1);
+
+            } else {
+                var valid = cacheFriendObject.get("valid");
+
+                if (valid) {
+                    $("#body-bottom-button-send-request").html("Start Chat").on("click", function(){
+                        startPrivateChat(friendId);
+                    });
+                } else {
+                    $("#body-bottom-button-send-request").html("Friend Request Sent");
+                }
+            }
+
+            $("#body-bottom-button-report-abuse").html("Report Abuse").on("click", function(){
+                $.mobile.changePage("#page-event-report");
+            });
+
+        } else {
+            $("#body-bottom-button-send-request").hide();
+            $("#body-bottom-button-report-abuse").hide();
+        }
+    };
+    CacheCheckFriend(userId, Parse.User.current().id, displayFunction);
+}
+
 var currentLastEvent;
 
 function pullUserEvent(beforeAt){
@@ -237,8 +343,8 @@ function pullUserEvent(beforeAt){
                     interestId = [];
                 }
                 var interestNumber = interestId.length;
-                var holder = objects[i].get("owner");
-                var id = objects[i].id;
+                holder = objects[i].get("owner");
+                id = objects[i].id;
                 $(".comment-statistics-"+id).each(function(){
                     $(this).html(commentNumber.toString()+" Comments");
                 });
@@ -425,7 +531,7 @@ function createUserEvent(){
 
     var time = startTime + " -- " + endTime;
 
-    var visibility = $("#body-input-create-event-visibility").val()=="on" ? true : false ;
+    var visibility = $("#body-input-create-event-visibility").val()=="on";
     var description = $("#body-input-create-event-description").val();
     var errorObject = $("#body-create-event-error");
     var destID = "#page-event";
