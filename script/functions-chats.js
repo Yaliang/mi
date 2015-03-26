@@ -26,7 +26,7 @@ function startPrivateChat(friendId){
                         }
                         $("#body-message-"+data.messageId).css("backgroundImage", "url("+photo120+")")
                     };
-                    CacheGetProfilePhoto(objects[i].get("senderId"), displayFunction, {messageId: objects[i].id});
+                    CacheGetProfilePhotoByUserId    (objects[i].get("senderId"), displayFunction, {messageId: objects[i].id});
                 }
                 $.mobile.changePage( "#page-chat-messages");
                 
@@ -85,7 +85,7 @@ function pullMyChat(){
                                 }
                                 $("#body-chat-"+data.chatId).css("backgroundImage", "url("+photo120+")")
                             };
-                            CacheGetProfilePhoto(data.friendId, displayFunction, data);
+                            CacheGetProfilePhotoByUserId    (data.friendId, displayFunction, data);
                             $("#body-chat-"+data.chatId).unbind("click");
                             $("#body-chat-"+data.chatId).on("click",function(){
                                 startPrivateChat(data.friendId);
@@ -245,7 +245,7 @@ function sendMessage(){
             }
             $("#body-message-"+data.messageId).css("backgroundImage","url('"+photo120+"')");
         };
-        CacheGetProfilePhoto(senderId, displayFunction, {messageId : messageId});
+        CacheGetProfilePhotoByUserId    (senderId, displayFunction, {messageId : messageId});
         //$('#footer-bar-send-message').css("bottom",($("body").height()-$("#page-chat-messages").height()-44).toString()+"px");
         
         $("html body").animate({ scrollTop: $(document).height().toString()+"px" }, {
@@ -303,7 +303,7 @@ function updateChatMessage(object){
                     }
                     $("#body-message-"+data.messageId).css("backgroundImage", "url("+photo120+")")
                 };
-                CacheGetProfilePhoto(objects[i].get("senderId"), displayFunction, {messageId: objects[i].id});
+                CacheGetProfilePhotoByUserId(objects[i].get("senderId"), displayFunction, {messageId: objects[i].id});
                 var groupId = objects[i].get("groupId");
                 ParseSetChatObjectAsRead(currentId, groupId, 1, function(){});
             }

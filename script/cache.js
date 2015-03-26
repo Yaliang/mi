@@ -90,7 +90,7 @@ function cacheInitialization() {
 }
 
 // functions of cachedPhoto
-function CacheGetProfilePhoto(userId, displayFunction, data) {
+function CacheGetProfilePhotoByUserId(userId, displayFunction, data) {
     var cached = false;
     for (var i = 0; i < cachePhoto.length; i++) {
         if (cachePhoto[i].get("userId") == userId) {
