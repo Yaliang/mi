@@ -803,10 +803,10 @@ function pullMyEvent(beforeAt){
                 var commentNumber = objects[i].get("commentNumber");
                 var interestNumber = 0;
                 if (typeof(objects[i].get("interestId")) != "undefined")
-                    interestNumber = object.get("interestId").length;
+                    interestNumber = objects[i].get("interestId").length;
                 var goingId = objects[i].get("goingId");
                 if (typeof(goingId) == "undefined"){
-                    goingId =     [];
+                    goingId = [];
                 }
                 var goingNumber = goingId.length;
                 var id = objects[i].id;
