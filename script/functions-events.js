@@ -854,9 +854,9 @@ function pullMyEvent(beforeAt){
                 }
                 var goingNumber = goingId.length;
                 var id = objects[i].id;
-                $(".comment-statistics-"+id).each(function(){html(commentNumber.toString()+" Comments");});
-                $(".interest-statistics-"+id).each(function(){html(interestNumber.toString()+" Interests");});
-                $(".going-statistics-"+id).each(function(){html(goingNumber.toString()+" Goings");});
+                $(".comment-statistics-"+id).each(function(){$(this).html(commentNumber.toString()+" Comments");});
+                $(".interest-statistics-"+id).each(function(){$(this).html(interestNumber.toString()+" Interests");});
+                $(".going-statistics-"+id).each(function(){$(this).html(goingNumber.toString()+" Goings");});
             }
         }
     };
