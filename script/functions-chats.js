@@ -41,6 +41,10 @@ function startPrivateChat(friendId){
     updateChatTitle(friendId, "header-chat-message-title");
 }
 
+function startGroupChat(){
+    
+}
+
 // #page-chat functions
 function buildElementInChatListPage(object){
     var chatId = object.id;

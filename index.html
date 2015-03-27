@@ -535,10 +535,12 @@
     <!-- Page for adding participant to the group chat -->
     <div id="page-add-participants" data-role="page" data-title="Yueme">
 
-        <div data-role="header">
+        <div data-role="header" data-position="fixed" data-tap-toggle="false" >
             <h1>Friends</h1>
             <a class="ui-btn-left ui-btn ui-btn-inline ui-corner-all" data-rel="back" href="#page-chat-messages"
                onclick="">Back</a>
+            <a class="ui-btn-right ui-btn ui-btn-inline ui-corner-all" id="header-add-participant-for-group-chat" href="#page-chat-messages"
+               onclick="">OK</a>
         </div><!-- /header -->
 
         <div role="main" class="ui-content">
