@@ -20,7 +20,7 @@ function addInterestEvent(eventId){
         if (title.length>10) {
             title = title.slice(0,6) + "...";
         }
-        pushNotificationToDeviceByUsername(ownerUsername, Parse.User.current().get("name")+" interested in your activity \""+title+"\".");
+        pushNotificationToDeviceByUsername(ownerUsername, Parse.User.current().get("name")+" interested in your activity \'"+title+"\'.");
     };
     ParseAddInterest(eventId, displayFunction);
 }
@@ -65,7 +65,7 @@ function addGoingEvent(eventId){
         if (title.length>10) {
             title = title.slice(0,6) + "...";
         }
-        pushNotificationToDeviceByUsername(ownerUsername, Parse.User.current().get("name")+" wanna go with you in activity \""+title+"\"!");
+        pushNotificationToDeviceByUsername(ownerUsername, Parse.User.current().get("name")+" wanna go with you in activity \'"+title+"\'!");
     };
     ParseAddGoing(eventId, displayFunction);
 }
@@ -562,7 +562,7 @@ function buildCommentInEventDetail(object){
     var time = object.createdAt;
 
     var newElement = "";
-    newElement += "<div id='comment-"+commentId+"' class='ui-custom-comment-left'>";
+    newElement += "<div id='comment-"+commentId+"' class='ui-custom-comment-left' onclick='replyCommentToUser({id:\""+object.get('owner')+"\", name:\""+ownerName+"\"})'>";
     newElement += "<div class='ui-comment-owner'>"+ownerName+"</div>";
     newElement += "<div class='ui-comment-time'>"+convertTime(time)+"</div>";
     newElement += "<div class='ui-footer-bar-input-comment-content'>"+text+"</div>";
@@ -630,6 +630,8 @@ function buildEventDetailElement(object){
 function updateEventDetail(id){
     $("#body-content-event-detail").html("");
     $("#footer-bar-event-id-label").html(id);
+
+    // display the UserEvent object info
     var descendingOrderKey = "createdAt";
     var displayFunction = function(object){
         var id = object[0].id;
@@ -643,13 +645,15 @@ function updateEventDetail(id){
     };
     ParseSelectEvent(id, displayFunction);
 
+
+    // display the comments in this event
     var displayFunction = function(objects) {
         $("#body-content-event-detail").append("<div id='body-content-bottom-event-commnets-list' class='ui-custom-comment-container'></div>")
-
         for (var i=0; i<=objects.length-1; i++) {
-
+            // build the comment content
             var newElement = buildCommentInEventDetail(objects[i]);
             $("#body-content-bottom-event-commnets-list").append(newElement);
+            // build the user's profile photo
             var displayFunction = function(object, data) {
                 var photo120 = object.get("profilePhoto120");
                 if (typeof(photo120) == "undefined") {
@@ -657,7 +661,7 @@ function updateEventDetail(id){
                 }
                 $("#comment-"+data.commentId).css("backgroundImage", "url("+photo120+")")
             };
-            CacheGetProfilePhotoByUsername(objects[i].get("owner"), displayFunction, {commentId: objects[i].id});
+            CacheGetProfilePhotoByUserId(objects[i].get("owner"), displayFunction, {commentId: objects[i].id});
         }
     };
     ParsePullEventComment(id, descendingOrderKey, displayFunction);
@@ -693,16 +697,29 @@ function hideEventDetailMoreOption(){
     });
 }
 
+// set the comment reply to specific user and trigger the focus of send toolbar
+function replyCommentToUser(replyTo) {
+    $("#footer-bar-reply-to-id-label").html(replyTo.id);
+    $("#footer-bar-input-comment-content").attr("placeholder","@"+replyTo.name);
+    $("#footer-bar-form-comment > .custom-block-a").click();
+}
+
 // send comment to database
 function sendComment(){
     var eventId = $("#footer-bar-event-id-label").html();
+    var replyToUserId = $("#footer-bar-reply-to-id-label").html();
+    var replyToUserName = $("#footer-bar-input-comment-content").attr("placeholder");
+    if (typeof(replyToUserId) == "undefined") {
+        replyToUserId = "";
+    }
     var currentUser = Parse.User.current();
-    var owner = currentUser.getUsername();
+    var owner = currentUser.id;
     var content = $("#footer-bar-input-comment-content").val();
-    console.log(eventId);
-    console.log(content);
     if (content == "")
         return;
+    if (replyToUserId.length > 0) {
+        content = replyToUserName + "  " + content;
+    }
     $("#footer-bar-input-comment-content").val("");
     if (content.length==0)
         return;
@@ -716,23 +733,46 @@ function sendComment(){
         });
         setTimeout( function(){$.mobile.loading( "hide" );}, 2000);
     };
-    var successFunction = function(object){
+    var successFunction = function(object, option){
         var eventId = object.id;
-        var ownerUsername = object.get("owner");
+        var ownerName = object.get("owner");
+        var replyToUserId = option.replyToUserId;
         var commentNumber = object.get("commentNumber");
         updateEventDetail(eventId);
         $(".comment-statistics-"+eventId).each(function(){
             $(this).html(commentNumber.toString()+" Comments");
         });
 
-        // push notification to owner
         var title = object.get("title");
         if (title.length>10) {
             title = title.slice(0,6) + "...";
         }
-        pushNotificationToDeviceByUsername(ownerUsername, Parse.User.current().get("name")+" commented on your activity \""+title+"\".");
+
+        // push notification to the user been replyed
+        if (typeof(replyToUserId) != "undefined" && replyToUserId != null) {
+            pushNotificationToDeviceByUserId(replyToUserId, 
+                Parse.User.current().get("name")+" replyed your comment on activity \'"+title+"\'.")
+        }
+
+        // push notification to owner
+        var displayFunction = function(object, data) {
+            if (object.id.localeCompare(data.replyToUserId) != 0) {
+                pushNotificationToDeviceByUserId(object.id, 
+                    Parse.User.current().get("name")+" commented on your activity \'"+title+"\'.");
+            };
+        }
+        CacheGetProfileByUsername(ownerName, displayFunction, {replyToUserId: replyToUserId});
+
+        $("#footer-bar-input-comment-content").blur();
     };
-    ParseAddEventComment(eventId, owner, content, errorFunction, successFunction);
+    if (replyToUserId.length == 0) {
+        replyToUserId = null;
+    }
+    ParseAddEventComment(eventId, owner, content, {
+        replyToUserId: replyToUserId,
+        errorFunction: errorFunction, 
+        successFunction: successFunction,
+    });
 }
 
 //report inapproperiate activity
@@ -961,7 +1001,7 @@ function editSaveUserEvent(eventId){
         }
         for (var i=0; i< goingId.length; i++) {
             goingUsrId = goingId[i];
-            pushNotificationToDeviceByUserId(goingUsrId, Parse.User.current().get("name")+" updated the activity \"" +title+ "\".");
+            pushNotificationToDeviceByUserId(goingUsrId, Parse.User.current().get("name")+" updated the activity \'" +title+ "\'.");
         }
     };
     ParseEventEditSave(owner, title, location, time, visibility, description, errorObject, destID, displayFunction, eventId);
