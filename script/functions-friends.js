@@ -360,6 +360,7 @@ function pullFriendListForAddingParticipants(){
             var friendId = objects[i].get("friend");
             var objectId = objects[i].id;
             $("#body-add-participants-list").append("<li id='body-add-participants-list-"+friendId+"' class='ui-friend-list-line'></li>");
+            $("#body-add-participants-list-"+friendId).click({id: friendId},selectANewPariticipant);
             var displayFunction = function(userObject, data) {
                 var newElement = buildUserListElement(userObject, "body-add-participants-people-", null, null, "add-participant-list");
                 var objectId = data.friendObject.id;
@@ -385,6 +386,7 @@ function pullFriendListForAddingParticipants(){
         var successFunction = function(object, data){
             var memberId = object.get("memberId");
             for (var i=0; i<memberId.length; i++) {
+                $("#body-add-participants-list-"+memberId).unbind("click");
                 $("#body-add-participants-people-"+memberId).removeClass("ui-add-participant-unchecked");
                 $("#body-add-participants-people-"+memberId).addClass("ui-add-participant-checked");
             }
@@ -393,4 +395,18 @@ function pullFriendListForAddingParticipants(){
     };
 
     CachePullMyFriend(Parse.User.current().id, descendingOrderKey, displayFunction);
+}
+
+function selectANewPariticipant(event) {
+    var id = event.data.id;
+    $("#body-add-participants-list-"+id).children(".ui-add-participant-unchecked").removeClass("ui-add-participant-unchecked").addClass("ui-add-participant-checked");
+    $("#body-add-participants-list-"+id).unbind("click");
+    $("#body-add-participants-list-"+id).click({id: id},removeANewPariticipant);
+}
+
+function removeANewPariticipant(event) {
+    var id = event.data.id;
+    $("#body-add-participants-list-"+id).children(".ui-add-participant-checked").removeClass("ui-add-participant-checked").addClass("ui-add-participant-unchecked");
+    $("#body-add-participants-list-"+id).unbind("click");
+    $("#body-add-participants-list-"+id).click({id: id},selectANewPariticipant);
 }
