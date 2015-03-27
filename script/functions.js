@@ -201,8 +201,10 @@ function initialElementEventSetting(){
         $("#footer-bar-input-comment-content").prop("disabled", true);
         $("#footer-bar-send-comment").css("position","fixed");
         $("#footer-bar-send-comment").css("bottom","0");
-        $("#footer-bar-input-comment-content").attr("placeholder","");
-        $("#footer-bar-reply-to-id-label").html("");
+        if ($("#footer-bar-input-comment-content").val().length == 0) {
+            $("#footer-bar-input-comment-content").attr("placeholder","");
+            $("#footer-bar-reply-to-id-label").html("");
+        }
     });
 
     $("#footer-bar-input-message-content").on("blur",function(){
