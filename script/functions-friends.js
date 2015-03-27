@@ -348,7 +348,9 @@ function pullMyFriendList() {
 
 var newGroupChatMemberArray = {memberId:[], prevNum:0, newNum:0};
 function pullFriendListForAddingParticipants(){
-    $( "#body-add-participants-list" ).html("");
+    $("#body-add-participants-list").html("");
+    $("#header-add-participant-for-group-chat").html("OK");
+    $("#header-add-participant-for-group-chat").unbind("click");
     var groupId = $("#footer-bar-group-id-label").html();
 
     // pull the friend list
@@ -385,10 +387,10 @@ function pullFriendListForAddingParticipants(){
         // check if them have been in the group
         // get the current users in chat
         var groupId = $("#footer-bar-group-id-label").html();
-        console.log(groupId);
         var successFunction = function(object, data){
             var memberId = object.get("memberId");
-            newGroupChatMemberArray.memberId = memberId;
+            console.log(memberId);
+            newGroupChatMemberArray.memberId = $.merge([], memberId);
             newGroupChatMemberArray.prevNum = memberId.length;
             newGroupChatMemberArray.newNum = 0;
             for (var i=0; i<memberId.length; i++) {

@@ -42,7 +42,7 @@ function startPrivateChat(friendId){
 }
 
 function startGroupChat(){
-    
+    console.log("startGroupChat");
 }
 
 // #page-chat functions
