@@ -243,7 +243,7 @@ function ParsePullEventComment(eventId, descendingOrderKey, displayFunction) {
     });
 }
 
-function ParseAddEventComment(eventId, owner, content, errorFunction, successFunction) {
+function ParseAddEventComment(eventId, owner, content, option) {
     var Comment = Parse.Object.extend("Comment");
     var comment = new Comment;
     var currentUser = Parse.User.current();
@@ -252,17 +252,20 @@ function ParseAddEventComment(eventId, owner, content, errorFunction, successFun
     comment.set("owner",owner);
     comment.set("ownerName",currentUser.get("name"));
     comment.set("content",content);
+    if (("replyToUserId" in option) && (option.replyToUserId != null)) {
+        comment.set("replyToUserId", option.replyToUserId);
+    }
     comment.save(null, {
         success: function(comment) {
-            ParseUpdateEventCommentNumber(1, eventId, successFunction);
+            ParseUpdateEventCommentNumber(1, eventId, option);
         },
         error: function(comment, error){
-            errorFunction("Error: " + error.code + " " + error.message);
+            option.errorFunction("Error: " + error.code + " " + error.message);
         }
     });
 }
 
-function ParseUpdateEventCommentNumber(count, eventId, displayFunction){
+function ParseUpdateEventCommentNumber(count, eventId, option){
     var UserEvent = Parse.Object.extend("UserEvent");
     var query = new Parse.Query(UserEvent);
     
@@ -271,9 +274,15 @@ function ParseUpdateEventCommentNumber(count, eventId, displayFunction){
             userEvent.increment("commentNumber",count);
             userEvent.save(null, {
                 success: function(userEvent){
-                    displayFunction(userEvent);
+                    option.successFunction(userEvent,option);
+                },
+                error: function(comment, error){
+                    option.errorFunction("Error: " + error.code + " " + error.message);
                 }
             });
+        },
+        error: function(comment, error){
+            option.errorFunction("Error: " + error.code + " " + error.message);
         }
     });
 }
@@ -1007,10 +1016,10 @@ function ParseUserNameFieldUpdate(i){
     query.find({
         success: function(comments){
                 var query = new Parse.Query(Parse.User);
-                var email = comments[i].get("owner");
+                var userid = comments[i].get("owner");
                 var objectId = comments[i].id;
                 //console.log(email);
-                query.equalTo("username", email);
+                query.equalTo("obejctId", userid);
                 query.find({
                     success: function(user){
                         var ownerName = user[0].get("name");
@@ -1044,13 +1053,34 @@ var refreshNumber=0;
 var ChatObjectSet;
 
 function ParseRefreshComment(){
-    ParseUserNameFieldUpdate(refreshNumber);
+    ParseOwnerFieldUpdate();
     refreshNumber = refreshNumber+1;
-    if (refreshNumber == 100)
+    if (refreshNumber == 293)
         return;
     setTimeout(function(){
         ParseRefreshComment();
-    }, 5000);
+    }, 1000);
+}
+
+function ParseOwnerFieldUpdate(){
+    var Comment = Parse.Object.extend("Comment");
+    var query = new Parse.Query(Comment);
+
+    query.descending("createdAt");
+    query.find({
+        success: function(objects) {
+            var username = objects[refreshNumber].get("owner");
+            var displayFunction = function(object, data){
+                data.comment.set("owner", object.id);
+                data.comment.save(null, {
+                    success: function(object) {
+                        console.log(object.get('owner'));
+                    }
+                });
+            }
+            CacheGetProfileByUsername(username, displayFunction, {comment: objects[refreshNumber]});
+        }
+    });
 }
 
 function ParsePhotoClassCreateBaseUserObject(i){

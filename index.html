@@ -328,7 +328,7 @@
             <a class="ui-btn-left ui-btn ui-btn-inline ui-corner-all" data-rel="back" href="#page-event"
                onclick="$('#footer-bar-send-comment').fadeOut(); setCurrLocationHash('#page-event')">Back</a>
 
-            <a class="ui-btn-right ui-btn ui-btn-inline ui-corner-all" id="header-event-detail-more-option" href="#"
+            <a class="ui-btn-right ui-btn ui-btn-inline ui-corner-all ui-header-event-more-option" id="header-event-detail-more-option" href="#"
                onclick="displayEventDetailMoreOption()"></a>
         </div><!-- /header -->
 
@@ -646,9 +646,9 @@
 
         <form id="footer-bar-form-comment">
             <label class="ui-hidden-accessible" id="footer-bar-event-id-label"></label>
-
+            <label class="ui-hidden-accessible" id="footer-bar-reply-to-id-label"></label>
             <div class="custom-block-a"
-                 onclick="sendToolbarActiveKeyboard({id:'#footer-bar-input-comment-content',bar:'#footer-bar-send-comment',base:'#page-event-detail'});">
+                 onclick="sendToolbarActiveKeyboard({id:'#footer-bar-input-comment-content',bar:'#footer-bar-send-comment',base:'#page-event-detail',bias:2});">
                 <div class="ui-input-text ui-shadow-inset ui-focus ui-body-inherit ui-corner-all">
                     <input id="footer-bar-input-comment-content" type="text" name="commentcontent" value="">
                 </div>
@@ -668,7 +668,7 @@
             <label class="ui-hidden-accessible" id="footer-bar-group-id-label"></label>
 
             <div class="custom-block-a"
-                 onclick="sendToolbarActiveKeyboard({id:'#footer-bar-input-message-content',bar:'#footer-bar-send-message',base:'#page-chat-messages'});">
+                 onclick="sendToolbarActiveKeyboard({id:'#footer-bar-input-message-content',bar:'#footer-bar-send-message',base:'#page-chat-messages',bias:-44});">
                 <div class="ui-input-text ui-shadow-inset ui-focus ui-body-inherit ui-corner-all">
                     <input id="footer-bar-input-message-content" type="text" name="messagecontent" value="">
                 </div>
