@@ -273,12 +273,12 @@ function initialElementEventSetting(){
 
     // add function when the page #page-chat-messages completed.
     $(document).on("pageshow","#page-chat-messages",function(){
+        $("#footer-bar-send-message").css("position","fixed");
+        $("#footer-bar-send-message").css("bottom","0");
+        $("#footer-bar-send-message").show();
         $("html body").animate({ scrollTop: $(document).height().toString()+"px" }, {
             duration: 500,
             complete : function(){
-                $("#footer-bar-send-message").css("position","fixed");
-                $("#footer-bar-send-message").css("bottom","0");
-                $("#footer-bar-send-message").show();
                 $(window).on("swiperight",function(){
                     window.history.back();
                     setCurrLocationHash("#page-event");
@@ -373,7 +373,7 @@ function sendToolbarActiveKeyboard(object){
         complete : function(){
             $(object.id).prop("disabled", false);
             $(object.bar).css("position","absolute");
-            $(object.bar).css("bottom",($("body").height()-$(object.base).height()-44).toString()+"px");
+            $(object.bar).css("bottom",($("body").height()-$(object.base).height()+object.bias).toString()+"px");
             $(object.id).trigger("focus");
         }
     });
