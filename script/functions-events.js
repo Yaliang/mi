@@ -664,6 +664,8 @@ function updateEventDetail(id){
 }
 
 function displayEventDetailMoreOption(){
+    $("#header-event-detail-more-option").removeClass("ui-header-event-more-option");
+    $("#header-event-detail-more-option").addClass("ui-header-event-more-option-active");
     $("#body-bottom-event-detail-more-option").css("position","fixed");
     $("#body-bottom-event-detail-more-option").css("bottom",(-$("#body-bottom-event-detail-more-option").height()).toString()+"px");
     $("#body-bottom-event-detail-more-option").show();
@@ -677,6 +679,8 @@ function displayEventDetailMoreOption(){
 }
 
 function hideEventDetailMoreOption(){
+    $("#header-event-detail-more-option").addClass("ui-header-event-more-option");
+    $("#header-event-detail-more-option").removeClass("ui-header-event-more-option-active");
     $("#body-bottom-event-detail-more-option").animate({
         bottom: (-$("#body-bottom-event-detail-more-option").height()).toString()+"px"
     },300,function(){
