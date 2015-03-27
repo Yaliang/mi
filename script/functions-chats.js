@@ -326,7 +326,7 @@ function displayChatMessageMoreOption(){
     $("#body-bottom-chat-message-more-option").css("position","fixed");
     $("#body-bottom-chat-message-more-option").css("bottom",(-$("#body-bottom-chat-message-more-option").height()).toString()+"px");
     $("#body-bottom-chat-message-more-option").show();
-    $("body").append("<div class='ui-gray-cover' style='position:fixed; width:100%; height:100%; opacity:0; background-color:#000; z-index:1001' onclick='hideEventDetailMoreOption()'><div>")
+    $("body").append("<div class='ui-gray-cover' style='position:fixed; width:100%; height:100%; opacity:0; background-color:#000; z-index:1001' onclick='hideChatMessageMoreOption()'><div>")
     $("#body-bottom-chat-message-more-option").animate({
         bottom: "0px"
     },300);
