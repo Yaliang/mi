@@ -102,9 +102,13 @@ function buildUserListElement(object, liIdPrefix, lat, lng, type) {
     var updatedAt = object.updatedAt;
     var newElement = "";
     if (liIdPrefix != null) {
-        newElement += "<li id='"+liIdPrefix+userId+"'>";
+        newElement += "<li id='"+liIdPrefix+userId+"'";
+        if (type.localeCompare("add-participant-list") == 0) {
+            newElement += " class='ui-add-participant-unchecked'";
+        }
+        newElement += ">";
     }
-    if (type.localeCompare("friend-list") == 0){
+    if (type.localeCompare("friend-list") == 0 || type.localeCompare("add-participant-list") == 0){
         newElement += "<div class='custom-people-in-friend-list custom-corners'>"
     } else {//if (type.localeCompare("people-near-by-list") == 0) {
         newElement += "<div class='custom-corners-people-near-by custom-corners'>"
@@ -317,7 +321,7 @@ function pullMyFriendList() {
         for (var i=0; i<objects.length; i++) {
             var friendId = objects[i].get("friend");
             var objectId = objects[i].id;
-            $("#body-friend-list").append("<li id='body-friend-list-"+friendId+"' style='cursor:pointer' onclick=\"startPrivateChat('"+friendId+"');\"></li>");
+            $("#body-friend-list").append("<li id='body-friend-list-"+friendId+"' class='ui-friend-list-line' onclick=\"startPrivateChat('"+friendId+"');\"></li>");
             var displayFunction = function(userObject, data) {
                 var newElement = buildUserListElement(userObject, null, null, null, "friend-list");
                 var objectId = data.friendObject.id;
@@ -336,6 +340,56 @@ function pullMyFriendList() {
             };
             CacheGetProfileByUserId(friendId, displayFunction, {friendObject:objects[i]});
         }
+    };
+
+    CachePullMyFriend(Parse.User.current().id, descendingOrderKey, displayFunction);
+}
+
+function pullFriendListForAddingParticipants(){
+    $( "#body-add-participants-list" ).html("");
+    var groupId = $("#footer-bar-group-id-label").html();
+
+    // pull the friend list
+    var descendingOrderKey = "createdAt";
+    displayFunction = function(objects){
+        // sort user list
+        objects.sort(function(a, b){return a.get("name") - b.get("name")});
+
+        // display them
+        for (var i=0; i<objects.length; i++) {
+            var friendId = objects[i].get("friend");
+            var objectId = objects[i].id;
+            $("#body-add-participants-list").append("<li id='body-add-participants-list-"+friendId+"' class='ui-friend-list-line'></li>");
+            var displayFunction = function(userObject, data) {
+                var newElement = buildUserListElement(userObject, "body-add-participants-people-", null, null, "add-participant-list");
+                var objectId = data.friendObject.id;
+                var friendId = data.friendObject.get("friend");
+                $( "#body-add-participants-list-"+userObject.id ).append(newElement);
+                var displayFunction = function(object, data){
+                    var photo120 = object.get("profilePhoto120");
+                    if (typeof(photo120) == "undefined") {
+                        photo120 = "./content/png/Taylor-Swift.png";
+                    }
+                    $("#body-add-participants-people-"+data.friendId+">.custom-people-in-friend-list").css("backgroundImage","url('"+photo120+"')");
+                };
+                CacheGetProfilePhotoByUserId(friendId, displayFunction, {friendId : friendId});
+                prefixForGetFriendOptionsButton="body-add-participants-list-";
+                //getFriendOptionsButton(friendId, 3);
+            };
+            CacheGetProfileByUserId(friendId, displayFunction, {friendObject:objects[i]});
+        }
+
+        // check if them have been in the group
+        // get the current users in chat
+        var groupId = $("#footer-bar-group-id-label").html();
+        var successFunction = function(object, data){
+            var memberId = object.get("memberId");
+            for (var i=0; i<memberId.length; i++) {
+                $("#body-add-participants-people-"+memberId).removeClass("ui-add-participant-unchecked");
+                $("#body-add-participants-people-"+memberId).addClass("ui-add-participant-checked");
+            }
+        }
+        CacheGetGroupMember(groupId, successFunction, {});
     };
 
     CachePullMyFriend(Parse.User.current().id, descendingOrderKey, displayFunction);

@@ -702,7 +702,26 @@ textarea {
     background: 0.8em 0.6em no-repeat;
     background-size: 42px 42px;
     margin: 0;
+}
+
+.ui-friend-list-line {
+    cursor:pointer;
+    border-width: 0;
     border-bottom-width: 1px;
+    border-style: solid;
+    border-color: #ddd;
+}
+
+.ui-add-participant-unchecked {
+    padding-left: 36px;
+    background: url("./content/material-design/png/tick7-red-36-unchecked.png") 1em 50% no-repeat;
+    background-size: 20px 20px;
+}
+
+.ui-add-participant-checked {
+    padding-left: 36px;
+    background: url("./content/material-design/png/tick7-red-36-checked.png") 1em 50% no-repeat;
+    background-size: 20px 20px;
 }
 
 .ui-custom-listview {
