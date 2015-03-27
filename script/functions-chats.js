@@ -319,3 +319,33 @@ function updateChatMessage(object){
     };
     ParsePullChatMessage(groupId, limitNum, descendingOrderKey, beforeAt, displayFunction, null);
 }
+
+function displayChatMessageMoreOption(){
+    $("#header-chat-message-more-option").removeClass("ui-header-more-option");
+    $("#header-chat-message-more-option").addClass("ui-header-more-option-active");
+    $("#body-bottom-chat-message-more-option").css("position","fixed");
+    $("#body-bottom-chat-message-more-option").css("bottom",(-$("#body-bottom-chat-message-more-option").height()).toString()+"px");
+    $("#body-bottom-chat-message-more-option").show();
+    $("body").append("<div class='ui-gray-cover' style='position:fixed; width:100%; height:100%; opacity:0; background-color:#000; z-index:1001' onclick='hideEventDetailMoreOption()'><div>")
+    $("#body-bottom-chat-message-more-option").animate({
+        bottom: "0px"
+    },300);
+    $(".ui-gray-cover").animate({
+        opacity: 0.3
+    },300);
+}
+
+function hideChatMessageMoreOption(){
+    $("#header-chat-message-more-option").addClass("ui-header-more-option");
+    $("#header-chat-message-more-option").removeClass("ui-header-more-option-active");
+    $("#body-bottom-chat-message-more-option").animate({
+        bottom: (-$("#body-bottom-chat-message-more-option").height()).toString()+"px"
+    },300,function(){
+        $("#body-bottom-chat-message-more-option").hide();
+    });
+    $(".ui-gray-cover").animate({
+        opacity: 0
+    },300, function(){
+        $(".ui-gray-cover").remove();
+    });
+}
