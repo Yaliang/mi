@@ -79,12 +79,12 @@ function pullNotification(){
     // check new friend request
     var displayFunction = function(objects){
         if ((typeof(objects)!="undefined")&&(objects.length > 0)) {
-            jQuery("[id=friend]") .each(function(){
+            $(".footer-navigation-bar-friend").each(function(){
                 $(this).addClass("friend-notification-custom");
             });
             $("#body-new-friend-requests-btn").html("<span>New Friend Requests</span><span id='body-new-friend-requests-number' class='ui-li-count'>"+objects.length.toString()+"</span>");
         } else {
-            jQuery("[id=friend]") .each(function(){
+            $(".footer-navigation-bar-friend").each(function(){
                 $(this).removeClass("friend-notification-custom");
             });
             $("#body-new-friend-requests-btn").html("<span>New Friend Requests</span>");
@@ -94,14 +94,14 @@ function pullNotification(){
 
     var displayFunction = function(objects){
         if ((typeof(objects)!="undefined")&&(objects.length > 0)) {
-            jQuery("[id=chat]") .each(function(){
+            $(".footer-navigation-bar-chat").each(function(){
                 $(this).addClass("chat-notification-custom");
             });
             if ($( ":mobile-pagecontainer" ).pagecontainer( "getActivePage" )[0].id == "page-chat") {
                 pullMyChat();
             }
         } else {
-            jQuery("[id=chat]") .each(function(){
+            $(".footer-navigation-bar-chat").each(function(){
                 $(this).removeClass("chat-notification-custom");
             });
         }
