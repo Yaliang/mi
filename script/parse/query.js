@@ -788,6 +788,36 @@ function ParseSetChatObjectAsRead(ownerId, groupId, count, successFunction){
     })
 }
 
+function ParseInitializeChatObjectInGroup(obj){
+    //obj = {groupId:groupId, ownerId:memberId[i]});
+    var Chat = Parse.Object.extend("Chat");
+    var query = new Parse.Query(Chat);
+
+    query.equalTo("ownerId",obj.ownerId);
+    query.equalTo("groupId",obj.groupId);
+    query.first({
+        success: function(object) {
+            if (typeof(object) == "undefined") {
+                var Chat = Parse.Object.extend("Chat");
+                var chat = new Chat;
+                chat.set("ownerId", obj.ownerId);
+                chat.set("groupId", obj.groupId);
+                chat.set("hidden", false);
+                chat.set("unreadNum",0);
+                chat.save(null, {
+                    success: function(object) {
+                        CacheUpdateChat(object);
+                        obj.successFunction(object);
+                    }
+                });
+            } else {
+                CacheUpdateChat(object);
+                obj.successFunction(object);
+            }
+        }
+    })
+}
+
 function ParsePullChatMessage(groupId, limitNum, descendingOrderKey, beforeAt, displayFunction, data) {
     var Message = Parse.Object.extend("Message");
     var query = new Parse.Query(Message);

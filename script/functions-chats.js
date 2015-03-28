@@ -26,10 +26,9 @@ function startPrivateChat(friendId){
                         }
                         $("#body-message-"+data.messageId).css("backgroundImage", "url("+photo120+")")
                     };
-                    CacheGetProfilePhotoByUserId    (objects[i].get("senderId"), displayFunction, {messageId: objects[i].id});
+                    CacheGetProfilePhotoByUserId(objects[i].get("senderId"), displayFunction, {messageId: objects[i].id});
                 }
                 $.mobile.changePage( "#page-chat-messages");
-                
             };
             //CachePullChatMessage(groupId, limitNum, null, displayFunction);
             ParsePullChatMessage(groupId, limitNum, descendingOrderKey, null, displayFunction, null)
@@ -41,8 +40,72 @@ function startPrivateChat(friendId){
     updateChatTitle(friendId, "header-chat-message-title");
 }
 
-function startGroupChat(){
-    console.log("startGroupChat");
+function startGroupChat(groupId){
+    // clear the current chat 
+    $("#page-chat-messages > .ui-content").html("");
+    $("#header-chat-message-title").html("");
+    $("#footer-bar-input-message-content").val("");
+
+    // build new chat
+    var successFunction = function(object){
+        var memberId = object.get("memberId");
+        for (var i=0; i<memberId.length; i++) {
+            updateChatTitle(memberId[i], "header-chat-message-title");
+        }
+        var groupId = object.id;
+        var currentId = Parse.User.current().id;
+        $("#footer-bar-group-id-label").html(groupId);
+        var successFunction = function(object){
+            var groupId = object.get("groupId");
+            var limitNum = 15;
+            var descendingOrderKey = "createdAt";
+            var displayFunction = function(objects, data){
+                for (var i=objects.length-1; i>=0; i--) {
+                    var newElement = buildElementInChatMessagesPage(objects[i]);
+                    $("#page-chat-messages > .ui-content").append(newElement);
+                    var displayFunction = function(object, data) {
+                        var photo120 = object.get("profilePhoto120");
+                        if (typeof(photo120) == "undefined") {
+                            photo120 = "./content/png/Taylor-Swift.png";
+                        }
+                        $("#body-message-"+data.messageId).css("backgroundImage", "url("+photo120+")")
+                    };
+                    CacheGetProfilePhotoByUserId(objects[i].get("senderId"), displayFunction, {messageId: objects[i].id});
+                }
+                $.mobile.changePage( "#page-chat-messages");
+                
+            };
+            //CachePullChatMessage(groupId, limitNum, null, displayFunction);
+            ParsePullChatMessage(groupId, limitNum, descendingOrderKey, null, displayFunction, null)
+        };
+        ParseSetChatObjectAsRead(currentId, groupId, null, successFunction);
+    };
+    CacheGetGroupMember(groupId,successFunction);
+    // CacheGetGroupId(newGroupChatMemberArray.memberId,successFunction);
+}
+
+var chatsInitializationNumber = 0;
+function createGroupChat() {
+    var successFunction = function(object){
+        var groupId = object.id;
+        var memberId = object.get("memberId");
+        chatsInitializationNumber = memberId.length
+        var successFunction = function(object) {
+            var groupId = object.get("groupId");
+            chatsInitializationNumber--;
+            if (chatsInitializationNumber == 0) {
+                startGroupChat(groupId);
+            }
+        }
+        for (var i=0; i<memberId.length; i++) {
+            ParseInitializeChatObjectInGroup({
+                groupId:groupId, 
+                ownerId:memberId[i],
+                successFunction:successFunction
+            });
+        }
+    }
+    CacheGetGroupId(newGroupChatMemberArray.memberId,successFunction);
 }
 
 // #page-chat functions
@@ -78,23 +141,37 @@ function pullMyChat(){
                 var groupId = objects[i].get("groupId");
                 var successFunction = function(object, data){
                     var memberId = object.get("memberId");
-                    for (var i=0; i<memberId.length; i++) {
-                        if (memberId[i] != Parse.User.current().id) {
-                            updateChatTitle(memberId[i], "body-chat-"+data.chatId+"> .chat-list-title", 2);
-                            data["friendId"] = memberId[i];
-                            var displayFunction = function(object, data) {
-                                var photo120 = object.get("profilePhoto120");
-                                if (typeof(photo120) == "undefined") {
-                                    photo120 = "./content/png/Taylor-Swift.png";
-                                }
-                                $("#body-chat-"+data.chatId).css("backgroundImage", "url("+photo120+")")
-                            };
-                            CacheGetProfilePhotoByUserId    (data.friendId, displayFunction, data);
-                            $("#body-chat-"+data.chatId).unbind("click");
-                            $("#body-chat-"+data.chatId).on("click",function(){
-                                startPrivateChat(data.friendId);
-                            });
+                    var groupId = object.id;
+                    if (memberId.length == 2) {
+                        // this is a private chat
+                        for (var i=0; i<memberId.length; i++) {
+                            if (memberId[i] != Parse.User.current().id) {
+                                updateChatTitle(memberId[i], "body-chat-"+data.chatId+"> .chat-list-title", 2);
+                                data["friendId"] = memberId[i];
+                                var displayFunction = function(object, data) {
+                                    var photo120 = object.get("profilePhoto120");
+                                    if (typeof(photo120) == "undefined") {
+                                        photo120 = "./content/png/Taylor-Swift.png";
+                                    }
+                                    $("#body-chat-"+data.chatId).css("backgroundImage", "url("+photo120+")")
+                                };
+                                CacheGetProfilePhotoByUserId(data.friendId, displayFunction, data);
+                                $("#body-chat-"+data.chatId).unbind("click");
+                                $("#body-chat-"+data.chatId).on("click",function(){
+                                    startPrivateChat(data.friendId);
+                                });
+                            }
                         }
+                    } else {
+                        // this is a group chat
+                        for (var i=0; i<memberId.length; i++) {
+                            updateChatTitle(memberId[i], "body-chat-"+data.chatId+"> .chat-list-title");
+                        }
+                        $("#body-chat-"+data.chatId).css("backgroundImage", "url(./content/png/groupchat.png)")
+                        $("#body-chat-"+data.chatId).unbind("click");
+                        $("#body-chat-"+data.chatId).on("click",function(){
+                            startGroupChat(groupId);
+                        });
                     }
                 };
                 CacheGetGroupMember(groupId, successFunction, data);
@@ -249,7 +326,7 @@ function sendMessage(){
             }
             $("#body-message-"+data.messageId).css("backgroundImage","url('"+photo120+"')");
         };
-        CacheGetProfilePhotoByUserId    (senderId, displayFunction, {messageId : messageId});
+        CacheGetProfilePhotoByUserId(senderId, displayFunction, {messageId : messageId});
         //$('#footer-bar-send-message').css("bottom",($("body").height()-$("#page-chat-messages").height()-44).toString()+"px");
         
         $("html body").animate({ scrollTop: $(document).height().toString()+"px" }, {
@@ -267,21 +344,44 @@ function sendMessage(){
 
 function updateChatTitle(friendId, id, option){
     var displayFunction= function(ownerId, friendId, object) {
-        var alias = object.get("alias");
-        if (typeof(alias) == "undefined") {
-            var displayFunction = function(user){
-                if ((option)&&(option == 2)) {
-                    $("#"+id).html(user.get("name"));
-                } else {
-                    $("#"+id).append(user.get("name"));
-                }
-            };
-            CacheGetProfileByUserId(friendId, displayFunction)
+        if (typeof(object) == "undefined") {
+            // is not the friend of current user
         } else {
-            if ((option)&&(option == 2)) {
-                $("#"+id).html(alias);
+            // is the friend of current user
+            var alias = object.get("alias");
+            if (typeof(alias) == "undefined") {
+                var displayFunction = function(user){
+                    if ((option)&&(option == 2)) {
+                        $("#"+id).html(user.get("name"));
+                    } else {
+                        var titleString = $("#"+id).html();
+                        if (titleString.length > 0) {
+                            titleString += ", "+user.get("name");
+                        } else {
+                            titleString += user.get("name");
+                        }
+                        if (titleString.length > 15) {
+                            titleString = titleString.substring(0,13)+"...";
+                        }
+                        $("#"+id).html(titleString);
+                    }
+                };
+                CacheGetProfileByUserId(friendId, displayFunction)
             } else {
-                $("#"+id).append(alias);
+                if ((option)&&(option == 2)) {
+                    $("#"+id).html(alias);
+                } else {
+                    var titleString = $("#"+id).html();
+                    if (titleString.length > 0) {
+                        titleString += ", "+alias;
+                    } else {
+                        titleString += alias;
+                    }
+                    if (titleString.length > 15) {
+                        titleString = titleString.substring(0,13)+"...";
+                    }
+                    $("#"+id).html(titleString);
+                }
             }
         }
     };
@@ -352,4 +452,33 @@ function hideChatMessageMoreOption(){
     },300, function(){
         $(".ui-gray-cover").remove();
     });
+}
+
+function selectANewPariticipant(event) {
+    var id = event.data.id;
+    newGroupChatMemberArray.memberId.push(id);
+    newGroupChatMemberArray.newNum++;
+    $("#header-add-participant-for-group-chat").html("OK("+newGroupChatMemberArray.newNum+")");
+    $("#header-add-participant-for-group-chat").unbind("click").click(createGroupChat);
+    $("#body-add-participants-list-"+id).children(".ui-add-participant-unchecked").removeClass("ui-add-participant-unchecked").addClass("ui-add-participant-checked");
+    $("#body-add-participants-list-"+id).unbind("click");
+    $("#body-add-participants-list-"+id).click({id: id},removeANewPariticipant);
+}
+
+function removeANewPariticipant(event) {
+    var id = event.data.id;
+    newGroupChatMemberArray.memberId = jQuery.grep(newGroupChatMemberArray, function(value) {
+      return value != id;
+    });
+    newGroupChatMemberArray.newNum--;
+    if (newGroupChatMemberArray.newNum > 0) {
+        $("#header-add-participant-for-group-chat").html("OK("+newGroupChatMemberArray.newNum+")");
+        $("#header-add-participant-for-group-chat").unbind("click").click(createGroupChat);
+    } else {
+        $("#header-add-participant-for-group-chat").html("OK");
+        $("#header-add-participant-for-group-chat").unbind("click");
+    }
+    $("#body-add-participants-list-"+id).children(".ui-add-participant-checked").removeClass("ui-add-participant-checked").addClass("ui-add-participant-unchecked");
+    $("#body-add-participants-list-"+id).unbind("click");
+    $("#body-add-participants-list-"+id).click({id: id},selectANewPariticipant);
 }
