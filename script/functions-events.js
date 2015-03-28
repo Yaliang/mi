@@ -177,9 +177,9 @@ function buildUserEventElement(object){
     newElement = newElement + "<div class='ui-footer ui-bar-custom'>";
     newElement = newElement + "<div class='ui-custom-float-left'><a href='#page-event-detail' data-transition='slide' class='ui-btn ui-bar-btn-custom ui-mini ui-icon-custom-comment' id='comment-button-"+id+"' onclick=\"updateEventDetail('"+id+"')\">"+"Detail"+"</a></div>";
     if (interestId.indexOf(Parse.User.current().id) < 0) {
-        newElement += "<div class='ui-custom-float-left'><a href='#' class='ui-btn ui-bar-btn-custom ui-mini ui-icon-custom-favor-false interest-button-"+id+"' onclick='addInterestEvent(\""+id+"\")'>"+"Interest"+"</a></div>"
+        newElement += "<div class='ui-custom-float-left'><a href='#' class='ui-btn ui-bar-btn-custom ui-mini ui-icon-custom-favor-false interest-button-"+id+"' onclick='addInterestEvent(\""+id+"\")'>"+"Interest"+"</a></div>";
     } else {
-        newElement += "<div class='ui-custom-float-left'><a href='#' class='ui-btn ui-bar-btn-custom ui-mini ui-icon-custom-favor-true interest-button-"+id+"' onclick='removeInterestEvent(\""+id+"\")'>"+"Interest"+"</a></div>"
+        newElement += "<div class='ui-custom-float-left'><a href='#' class='ui-btn ui-bar-btn-custom ui-mini ui-icon-custom-favor-true interest-button-"+id+"' onclick='removeInterestEvent(\""+id+"\")'>"+"Interest"+"</a></div>";
     }
     if (goingId.indexOf(Parse.User.current().id) < 0) {
         newElement = newElement + "<div class='ui-custom-float-left'><a href='#' class='ui-btn ui-bar-btn-custom ui-mini ui-icon-custom-going-false going-button-"+id+"' onclick='addGoingEvent(\""+id+"\")'>"+"Going"+"</a></div>";
@@ -331,6 +331,7 @@ function pullUserEvent(beforeAt){
                 $(".ui-load-more-activity").before(newElement);
                 // display event holder's name | not the email one
                 pullUserEventHolderInfo(holder, id);
+
             } else {
                 var commentNumber = objects[i].get("commentNumber");
                 var goingId = objects[i].get("goingId");
@@ -647,7 +648,7 @@ function updateEventDetail(id){
 
 
     // display the comments in this event
-    var displayFunction = function(objects) {
+    displayFunction = function(objects) {
         $("#body-content-event-detail").append("<div id='body-content-bottom-event-commnets-list' class='ui-custom-comment-container'></div>")
         for (var i=0; i<=objects.length-1; i++) {
             // build the comment content
@@ -673,7 +674,7 @@ function displayEventDetailMoreOption(){
     $("#body-bottom-event-detail-more-option").css("position","fixed");
     $("#body-bottom-event-detail-more-option").css("bottom",(-$("#body-bottom-event-detail-more-option").height()).toString()+"px");
     $("#body-bottom-event-detail-more-option").show();
-    $("body").append("<div class='ui-gray-cover' style='position:fixed; width:100%; height:100%; opacity:0; background-color:#000; z-index:4' onclick='hideEventDetailMoreOption()'><div>")
+    $("body").append("<div class='ui-gray-cover' style='position:fixed; width:100%; height:100%; opacity:0; background-color:#000; z-index:4' onclick='hideEventDetailMoreOption()'><div>");
     $("#body-bottom-event-detail-more-option").animate({
         bottom: "0px"
     },300);
@@ -821,7 +822,7 @@ function buildMyUserEventElement(object){
     }
     newElement += "<div class='event-statistics comment-statistics-"+id+"'>" + commentNumber + " Comments</div><div class='event-statistics interest-statistics-"+id+"'>" + interestNumber + " Interests</div><div class='event-statistics going-statistics-"+id+"'>" + goingNumber + " Goings</div>";
     newElement += "</div>";
-    newElement += "<div class='ui-footer ui-bar-custom'>"
+    newElement += "<div class='ui-footer ui-bar-custom'>";
     newElement += "<div class='ui-custom-float-left'><a href='#page-event-detail' data-transition='slide' class='ui-btn ui-bar-btn-custom ui-mini ui-icon-custom-comment' id='my-comment-button-"+id+"' onclick=\"updateEventDetail('"+id+"'); setCurrLocationHash('#page-event-delete')\">"+"Detail"+"</a></div>";
     newElement += "<div class='ui-custom-float-left'><a href='#page-event-delete' data-transition='slideup' class='ui-btn ui-bar-btn-custom ui-mini ui-icon-custom-delete' id='my-comment-button-"+id+"' onclick=\"deleteMyEvent('"+id+"'); setCurrLocationHash('#page-event-delete')\">"+"Delete"+"</a></div>";
     newElement += "<div class='ui-custom-float-left'><a href='#page-edit-event' data-transition='slide' class='ui-btn ui-bar-btn-custom ui-mini ui-icon-custom-edit' id='my-comment-button-"+id+"' onclick=\"editMyEvent('"+id+"'); setCurrLocationHash('#page-event-delete')\">"+"Edit"+"</a></div>";

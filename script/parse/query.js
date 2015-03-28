@@ -235,7 +235,7 @@ function ParsePullEventComment(eventId, descendingOrderKey, displayFunction) {
     var comment = Parse.Object.extend("Comment");
     var query = new Parse.Query(comment);
     query.equalTo("eventId",eventId);
-    query.descending(descendingOrderKey);
+    query.ascending(descendingOrderKey);
     query.find({
         success: function(comments) {
             displayFunction(comments);
