@@ -334,7 +334,7 @@
 
         <div class="ui-content" id="body-content-event-detail" role="main"></div><!-- /content -->
 
-        <div class="ui-page-detail-more-option-bottom" id="body-bottom-event-detail-more-option">
+        <div class="ui-page-more-option-bottom" id="body-bottom-event-detail-more-option">
             <a class="ui-btn report-btn" data-transition="slideup" href="#page-event-report"
                onclick="hideEventDetailMoreOption()">Report Abuse</a>
             <div class="ui-btn ui-more-option-cancel-btn" onclick="hideEventDetailMoreOption()">Cancel</div>
@@ -518,11 +518,36 @@
             <h1 id="header-chat-message-title"></h1>
             <a class="ui-btn-left ui-btn ui-btn-inline ui-corner-all" data-rel="back" href="#page-chat"
                onclick="pullMyChat(); $('#footer-bar-send-message').fadeOut();setCurrLocationHash('#page-chat')">Back</a>
+            <a class="ui-btn-right ui-btn ui-btn-inline ui-corner-all ui-header-more-option" id="header-chat-message-more-option" href="#"
+               onclick="displayChatMessageMoreOption()"></a>
         </div><!-- /header -->
 
         <div class="ui-content" style="margin-bottom:100px" role="main"></div><!-- /content -->
 
+        <div class="ui-page-more-option-bottom" id="body-bottom-chat-message-more-option">
+            <a class="ui-btn" data-transition="slideup" href="#page-add-participants"
+               onclick="hideChatMessageMoreOption();pullFriendListForAddingParticipants();">Add Participants</a>
+            <div class="ui-btn ui-more-option-cancel-btn" onclick="hideChatMessageMoreOption()">Cancel</div>
+        </div>
+
     </div><!-- /page -->
+
+    <!-- Page for adding participant to the group chat -->
+    <div id="page-add-participants" data-role="page" data-title="Yueme">
+
+        <div data-role="header" data-position="fixed" data-tap-toggle="false" >
+            <h1>Friends</h1>
+            <a class="ui-btn-left ui-btn ui-btn-inline ui-corner-all" data-rel="back" href="#page-chat-messages"
+               onclick="">Back</a>
+            <a class="ui-btn-right ui-btn ui-btn-inline ui-corner-all" id="header-add-participant-for-group-chat" data-rel="back" href="#page-chat-messages"
+               onclick="">OK</a>
+        </div><!-- /header -->
+
+        <div role="main" class="ui-content">
+            <ul class="ui-custom-listview ui-listview ui-listview-inset ui-corner-all ui-shadow" id="body-add-participants-list"></ul>
+        </div><!-- /content -->
+
+    </div>
 
     <!-- Page for displaying setting options -->
     <div id="page-setting" data-role="page" data-title="Yueme">
