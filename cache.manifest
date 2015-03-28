@@ -1,4 +1,5 @@
 CACHE MANIFEST
+# Cache manifest version 1.22.0
 # If you change the version number in this comment,
 # the cache manifest is no longer byte-for-byte
 # identical.
@@ -18,12 +19,14 @@ http://fonts.googleapis.com/css?family=Open+Sans:400,300,700
 ./script/functions-friends.js
 ./script/functions-chats.js
 ./script/functions-settings.js
+./script/textarea-helper-master/textarea-helper.js
 # images
 ./content/png/apple-touch-startup-image-320x460.png
 ./content/png/apple-touch-startup-image-640x920.png
 ./content/png/apple-touch-startup-image-640x1096.png
 ./content/png/apple-touch-startup-image-748x1024.png
 ./content/png/Taylor-Swift.png
+./content/png/groupchat.png
 ./content/material-design/png/rubbish-black-36.png
 ./content/material-design/png/rubbish-red-36.png
 ./content/material-design/png/clock100-solid-pink-20.png

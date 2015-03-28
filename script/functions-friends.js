@@ -405,31 +405,3 @@ function pullFriendListForAddingParticipants(){
     CachePullMyFriend(Parse.User.current().id, descendingOrderKey, displayFunction);
 }
 
-function selectANewPariticipant(event) {
-    var id = event.data.id;
-    newGroupChatMemberArray.memberId.push(id);
-    newGroupChatMemberArray.newNum++;
-    $("#header-add-participant-for-group-chat").html("OK("+newGroupChatMemberArray.newNum+")");
-    $("#header-add-participant-for-group-chat").unbind("click").click(startGroupChat);
-    $("#body-add-participants-list-"+id).children(".ui-add-participant-unchecked").removeClass("ui-add-participant-unchecked").addClass("ui-add-participant-checked");
-    $("#body-add-participants-list-"+id).unbind("click");
-    $("#body-add-participants-list-"+id).click({id: id},removeANewPariticipant);
-}
-
-function removeANewPariticipant(event) {
-    var id = event.data.id;
-    newGroupChatMemberArray.memberId = jQuery.grep(newGroupChatMemberArray, function(value) {
-      return value != id;
-    });
-    newGroupChatMemberArray.newNum--;
-    if (newGroupChatMemberArray.newNum > 0) {
-        $("#header-add-participant-for-group-chat").html("OK("+newGroupChatMemberArray.newNum+")");
-        $("#header-add-participant-for-group-chat").unbind("click").click(startGroupChat);
-    } else {
-        $("#header-add-participant-for-group-chat").html("OK");
-        $("#header-add-participant-for-group-chat").unbind("click");
-    }
-    $("#body-add-participants-list-"+id).children(".ui-add-participant-checked").removeClass("ui-add-participant-checked").addClass("ui-add-participant-unchecked");
-    $("#body-add-participants-list-"+id).unbind("click");
-    $("#body-add-participants-list-"+id).click({id: id},selectANewPariticipant);
-}
