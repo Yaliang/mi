@@ -257,6 +257,10 @@ function initialElementEventSetting(){
         insertDescriptionPreviewPhoto();
     })
 
+    $("#body-form-set-group-name").submit(function(event){
+        event.preventDefault();
+    })
+
     // check if the user has been logged in or not
     $(window).hashchange(function(){
         var preHash = currLocationHash;
