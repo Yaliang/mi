@@ -416,7 +416,7 @@ function pullParticipantsListInGroup(){
     var successFunction = function(object, data){
         var memberId = object.get("memberId");
         for (var i=0; i<memberId.length; i++) {
-            $("#body-group-participants-list").append("<li id='body-group-participants-list-"+memberId[i]+"' class='ui-friend-list-line'></li>");
+            $("#body-group-participants-list").append("<li id='body-group-participants-list-"+memberId[i]+"'></li>");
             $("#body-group-participants-list-"+memberId[i]).click({id: memberId[i]},function(e){
                 displayUserProfile(e.data.id);
             });

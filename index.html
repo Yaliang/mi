@@ -563,9 +563,30 @@
         </div><!-- /header -->
 
         <div role="main" class="ui-content">
-            <ul class="ui-custom-listview ui-listview ui-listview-inset ui-corner-all ui-shadow" id="body-group-participants-list"></ul>
-            <div class="ui-btn" id="body-group-name"></div>
-            <div class="ui-btn" >Leave Group</div>
+            <a class="ui-btn" id="body-group-participants-list-toggle" style="margin-bottom:0" onclick="groupParticipantsListToggle()">Collapse List</a>
+            <ul class="ui-custom-listview ui-listview ui-listview-inset ui-corner-all ui-shadow" id="body-group-participants-list" style="margin-top:0" ></ul>
+            <a data-transition="slideup" href="#page-set-group-name" class="ui-btn" id="body-group-name"></a>
+            <a data-transition="slideup" href="#" class="ui-btn" >Leave Group</a>
+        </div><!-- /content -->
+
+    </div>
+
+    <!-- Page for setting group name-->
+    <div id="page-set-group-name" data-role="page" data-title="Yueme">
+
+        <div data-role="header" data-position="fixed" data-tap-toggle="false" >
+            <h1>Group</h1>
+            <a class="ui-btn-left ui-btn ui-btn-inline ui-corner-all" data-rel="back" href="#page-group-profile"
+               onclick="">Back</a>
+            <a class="ui-btn-right ui-btn ui-btn-inline ui-corner-all" href="#"
+               onclick="saveGroupName()">Save</a>
+        </div><!-- /header -->
+
+        <div role="main" class="ui-content">
+            <form id="body-form-set-group-name">
+                <input id="body-input-set-group-name" placeholder="Group Name">
+                <button class="ui-hidden-accessible" onclick="saveGroupName();"></button>
+            </form>
         </div><!-- /content -->
 
     </div>
