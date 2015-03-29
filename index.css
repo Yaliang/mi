@@ -674,7 +674,6 @@ textarea {
 }
 
 .people-near-by-list-distance {
-    clear: both;
     font-size: .75em;
     font-weight: 400;
     display: block;
