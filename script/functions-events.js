@@ -250,7 +250,6 @@ function displayUserProfile(userId){
                 if (typeof(cacheFriendObject) == "undefined") {
                     var displayFunction2 = function(ownerId, friendId, cacheFriendObject) {
                         if (typeof(cacheFriendObject) == "undefined") {
-                            console.log($("#body-bottom-button-send-request"));
                             $("#body-bottom-button-send-request").html("Send Friend Request").on("click", function(){
                                 sendFriendRequest(ownerId);
                             });
