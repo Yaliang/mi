@@ -513,3 +513,17 @@ function removeANewPariticipant(event) {
     $("#body-add-participants-list-"+id).unbind("click");
     $("#body-add-participants-list-"+id).click({id: id},selectANewPariticipant);
 }
+
+function pullGroupPrifle(){
+    var groupId = $("#footer-bar-group-id-label").html();
+    pullParticipantsListInGroup();
+    var displayFunction = function(object) {
+        var groupName = object.get("groupName");
+        if (typeof(groupName) == "undefined") {
+            groupName = "Not Set";
+        }
+        $("#body-group-name").html("<font style='padding-right:1em'>Group Name:</font><font style='color:#AAA'>"+groupName+"</font>");
+
+    }
+    CacheGetGroupMember(groupId,displayFunction)
+}
