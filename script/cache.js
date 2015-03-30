@@ -1,30 +1,11 @@
-/* cached variables for current user --
- * cacheUser:     an array of objects
- *
- * cachePhoto:    an array of objects
- *
- * cacheFriend:   an array of objects that represent users that are connected to current user, including users
- *                that are friends of current user, users that have received friend requests from current user
- *                but have not accepted yet, users that have sent friend requests to current user but have not
- *                been accepted.
- *
- * cacheChat:     an array of objects
- *
- * cacheMessage:  an array of objects
- *
- * cacheGroup:    an array of objects
- */
-var cacheUser = [];
 var cachePhoto = [];
+var cacheUser = [];
 var cacheFriend = [];
 var cacheChat = [];
-var cacheMessage = [];
 var cacheGroup = [];
+var cacheMessage = [];
 var cacheVersion = "1.0.2";
 
-/* this function is designed to convert the raw data in the local storage to a more readable format so they can be
- * stored in the cache we defined above.
- */
 function rawLocalToCache(object) {
     var item = {
         id: object.objectId, 
@@ -42,8 +23,6 @@ function rawLocalToCache(object) {
     return item;
 }
 
-/* this function is designed to clear the cahce when user logs out.
- */
 function cacheClear() {
     cachePhoto = [];
     cacheUser = [];
@@ -53,16 +32,15 @@ function cacheClear() {
     cacheMessage = [];
 }
 
-/* this function is designed to reload the cache from local storage and update its contents.
- */
+// reload from localStorage and update
 function cacheInitialization() {
-    cacheUser = [];
     cachePhoto = [];
+    cacheUser = [];
     cacheFriend = [];
     cacheChat = [];
-    cacheMessage = [];
     cacheGroup = [];
-    var cachedList = ["User", "Photo", "Friend", "Chat", "Message", "Group"];
+    cacheMessage = [];
+    var cachedList = ["Photo", "User", "Friend", "Chat", "Group", "Message"];
     var rawData;
     var lastUpdate;
     var objectList;
@@ -71,7 +49,7 @@ function cacheInitialization() {
         localStorage.clear();
         localStorage.cacheVersion = cacheVersion;        
     }
-    for (var n = 0; n < cachedList.length; n++) {
+    for (var n = 0; n< cachedList.length; n++) {
         rawData = [];
         lastUpdate = 0;
         objectList = [];
@@ -97,19 +75,18 @@ function cacheInitialization() {
                 lastUpdate = Date.parse(rawObject.updatedAt);
         }
         lastUpdate = new Date(lastUpdate);
+        //console.log(lastUpdate.toJSON());
         switch (cachedList[n]){
-            case "User":    cacheUser = objectList;    break;
             case "Photo":   cachePhoto = objectList;   break;
+            case "User":    cacheUser = objectList;    break;
             case "Friend":  cacheFriend = objectList;  break;
             case "Chat":    cacheChat = objectList;    break;
-            case "Message": cacheMessage = objectList; break;
             case "Group":   cacheGroup = objectList;   break;
+            case "Message": cacheMessage = objectList; break;
             default:
         }
         ParseUpdateCache(cachedList[n], updateIdList, lastUpdate);
     }
-
-    console.log(cacheChat);
 }
 
 // functions of cachedPhoto
@@ -123,7 +100,7 @@ function CacheGetProfilePhotoByUserId(userId, displayFunction, data) {
         }
     }
     if (!cached) {
-        //console.log("Photo miss: "+userId);
+        console.log("Photo miss: "+userId);
         ParseGetProfilePhoto(userId, displayFunction, data);
     }
 }
@@ -138,7 +115,7 @@ function CacheGetProfilePhotoByUsername(username, displayFunction, data) {
         }
     }
     if (userId != null) {
-        for (i = 0; i < cachePhoto.length; i++) {
+        for (var i = 0; i < cachePhoto.length; i++) {
             if (cachePhoto[i].get("userId") == userId) {
                 displayFunction(cachePhoto[i], data);
                 cached = true;
@@ -147,7 +124,7 @@ function CacheGetProfilePhotoByUsername(username, displayFunction, data) {
         }
     }
     if (!cached) {
-        //console.log("Photo miss: "+username);
+        console.log("Photo miss: "+username);
         ParseGetProfilePhotoByUsername(username, displayFunction, data);
     }
 }
@@ -181,7 +158,7 @@ function CacheGetProfileByUsername(username, displayFunction, data){
         }
     }
     if (!cached) {
-        //console.log("User miss: "+username);
+        console.log("User miss: "+username);
         ParseGetProfileByUsername(username, displayFunction, data);
     }
 }
@@ -196,7 +173,7 @@ function CacheGetProfileByUserId(userId, displayFunction, data){
         }
     }
     if (!cached) {
-        //console.log("User miss: "+userId);
+        console.log("User miss: "+userId);
         ParseGetProfileByUserId(userId, displayFunction, data);
     }
 }
