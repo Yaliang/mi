@@ -1,220 +1,53 @@
+/* this function does the preparation work after the web document is loaded.
+ * initialElementEventSetting:  initialization for certain elements, see the function for details;
+ * cacheInitialization:  initialization of the cache, see the function for details;
+ * loginByLocalStorage:  try to log into user session using the local storage, see the function for details.
+ */
 $(document).ready(function (){
     initialElementEventSetting();
     cacheInitialization();
     loginByLocalStorage();
 });
 
-var currLocationHash = "#page-loading"; // the location hash for current page
+/* this variable keeps track of the location hash of current page.
+ */
+var currLocationHash = "#page-loading";
 
+/* this variable indicates whether the "pullNotification" function is running or not.
+ */
+var pullNotificationRunning = false;
+
+/* this function sets the location hash of current page to the variable "currLocationHash";
+ *  remember doing this whenever the location hash changes.
+ */
 function setCurrLocationHash(locationHash){
     currLocationHash = locationHash;
 }
 
-function loginByLocalStorage(){
-    var currentUser = Parse.User.current();
-    if (currentUser) {
-        var successFunction = function() {
-            setCurrLocationHash("#page-event");
-            $.mobile.changePage("#page-event"); // window.location.hash = "#page-event";
-            $.mobile.loading("show");
-            pullUserEvent();
-            if (!pullNotificationRunning) {
-                setTimeout(function(){
-                    pullNotification();
-                },5000);
-            }
-            ParsePullAllFriendObjectById(Parse.User.current().id);
-            ParsePullMyChat(Parse.User.current().id,"updatedAt",function(){});
-        };
-        var errorFunction = function() {
-            setCurrLocationHash("#page-login");
-            $.mobile.changePage("#page-login"); // window.location.hash = "#page-login";
-        };
-        ParseUpdateCurrentUser(successFunction, errorFunction);
-    } else {
-        //window.location.hash = "#page-login";
-        var window_width = $(window).width();
-        var window_height = $(window).height();
-        if (window_width/window_height > 1) {
-            $(".loading-page-image").append("<div class='loading-page-button-top'>Join Us.</div>");
-            $(".loading-page-button-top").css("marginLeft", Math.round(($(".loading-page-image").width()-93-44)/2).toString()+"px");
-        } else {
-            $(".loading-page-image").append("<div class='loading-page-button-bottom'>Join Us.</div>");            
-            $(".loading-page-button-bottom").css("marginLeft", Math.round(($(".loading-page-image").width()-93-44)/2).toString()+"px");
-        }
-        $("#page-loading").click(function(){
-            setCurrLocationHash("#page-login");
-            $.mobile.changePage("#page-login"); //window.location.hash = "page-login";
-            $("#page-loading").unbind("click");
-            $("#page-loading").unbind("swiperight");
-            $("#page-loading").unbind("swipeleft");
-        });
-        $("#page-loading").on("swiperight",function(){
-            setCurrLocationHash("#page-login");
-            $.mobile.changePage("#page-login"); //window.location.hash = "page-login";
-            $("#page-loading").unbind("click");
-            $("#page-loading").unbind("swiperight");
-            $("#page-loading").unbind("swipeleft");
-        });
-        $("#page-loading").on("swipeleft",function(){
-            setCurrLocationHash("#page-login");
-            $.mobile.changePage("#page-login"); //window.location.hash = "page-login";
-            $("#page-loading").unbind("click");
-            $("#page-loading").unbind("swiperight");
-            $("#page-loading").unbind("swipeleft");
-        });
-    }
-}
-
-var pullNotificationRunning = false;
-
-function pullNotification(){
-    var currentUser = Parse.User.current();
-    pullNotificationRunning = true;
-
-    if (currentUser == null){
-        pullNotificationRunning = false;
-        return
-    }
-    // check new friend request
-    var displayFunction = function(objects){
-        if ((typeof(objects)!="undefined")&&(objects.length > 0)) {
-            $(".footer-navigation-bar-friend").each(function(){
-                $(this).addClass("friend-notification-custom");
-            });
-            $("#body-new-friend-requests-btn").html("<span>New Friend Requests</span><span id='body-new-friend-requests-number' class='ui-li-count'>"+objects.length.toString()+"</span>");
-        } else {
-            $(".footer-navigation-bar-friend").each(function(){
-                $(this).removeClass("friend-notification-custom");
-            });
-            $("#body-new-friend-requests-btn").html("<span>New Friend Requests</span>");
-        }
-    };
-    ParsePullUnreadFriendRequest(currentUser.id, displayFunction);
-
-    var displayFunction = function(objects){
-        if ((typeof(objects)!="undefined")&&(objects.length > 0)) {
-            $(".footer-navigation-bar-chat").each(function(){
-                $(this).addClass("chat-notification-custom");
-            });
-            if ($( ":mobile-pagecontainer" ).pagecontainer( "getActivePage" )[0].id == "page-chat") {
-                pullMyChat();
-            }
-        } else {
-            $(".footer-navigation-bar-chat").each(function(){
-                $(this).removeClass("chat-notification-custom");
-            });
-        }
-        if ($( ":mobile-pagecontainer" ).pagecontainer( "getActivePage" )[0].id == "page-chat-messages") {
-            var groupId = $("#footer-bar-group-id-label").html();
-            for (var i=0; i<objects.length; i++) {
-                if (groupId == objects[i].get("groupId")) {
-                    updateChatMessage(objects[i]);
-                }
-            }
-        }
-    };
-
-    // if ($( ":mobile-pagecontainer" ).pagecontainer( "getActivePage" )[0].id == "page-chat") {
-    //     pullMyChat();
-    // } else {
-    ParsePullUnreadChat(currentUser.id, "updatedAt", displayFunction);
-    // }
-
-    // auto redirect if stop at loading page
-    if ($( ":mobile-pagecontainer" ).pagecontainer( "getActivePage" )[0].id == "page-loading") {
-        loginByLocalStorage();
-    }    
-
-    setTimeout(function(){
-        pullNotification();
-    }, 2000)
-}
-
-function signup(){
-    var name = $("#body-input-signup-name").val();
-    var email = $("#body-input-signup-email").val();
-    var password = $("#body-input-signup-password").val();
-    var errorObject = $("#body-signup-error");
-    var destID = "#page-event";
-    var customFunction = function(object){
-        $("#body-input-signup-password").val("");
-        pullUserEvent();
-        if (!pullNotificationRunning) {
-            pullNotification();
-        }
-        ParseCreateProfilePhotoObject(object.id);
-        sendVerifyEmail(object);
-    };
-    $.mobile.loading("show");
-    ParseSignup(email, password, email, name, errorObject, destID, customFunction);
-}
-
-function sendVerifyEmail(object){
-    var request="email="+object.get('email');
-    request +="&username="+object.get('name');
-    request +="&verifyLink=http://yuemeuni.tk/verify.html?id="+object.id;
-    //{id: regId, message: message};
-    $.post("https://yueme-push-server.herokuapp.com/varifyEmail",request)
-        .done(function(data) {
-            console.log(data);
-        });
-}
-
-function login(){
-    cacheInitialization();
-    var email = $("#body-input-login-email").val();
-    var password = $("#body-input-login-password").val();
-    var errorObject = $("#body-login-error");
-    var destID = "#page-event";
-    var customFunction = function(){
-        $("#body-input-login-password").val("");
-        pullUserEvent();
-        if (!pullNotificationRunning) {
-            pullNotification();
-        }
-        ParsePullAllFriendObjectById(Parse.User.current().id);
-        ParsePullMyChat(Parse.User.current().id,"updatedAt",function(){});
-    };
-
-    $.mobile.loading("show");
-    ParseLogin(email, password, errorObject, destID, customFunction);
-}
-
-function logout(){
-    var currentUser = Parse.User.current();
-    var email = currentUser.getUsername();
-    ParseRemoveCurrentBridgeitId();
-    $("#body-input-login-email").val(email);
-    $("#body-login-error").html("");
-    $("#body-signup-error").html("");
-    localStorage.clear();
-    cacheClear();
-    $("#page-chat > .ui-content").html("");
-    var destID = "#page-login";
-    ParseLogout(destID);
-}
-
+/* this function is designed to initialize certain elements in the document, such as attaching events handlers,
+ * preventing default events, showing default display, etc.
+ */
 function initialElementEventSetting(){
-    // set comment and message send bar diable
-    $("#footer-bar-input-comment-content").on("blur",function(){
-        $("#footer-bar-input-comment-content").prop("disabled", true);
-        $("#footer-bar-send-comment").css("position","fixed");
-        $("#footer-bar-send-comment").css("bottom","0");
-        if ($("#footer-bar-input-comment-content").val().length == 0) {
+    // set comment and message send bar disable
+    var $footerBarInputCommentContent = $("#footer-bar-input-comment-content");
+    $footerBarInputCommentContent.on("blur",function(){
+        $footerBarInputCommentContent.prop("disabled", true);
+        $("#footer-bar-send-comment").css("position","fixed").css("bottom","0");
+        if ($footerBarInputCommentContent.val().length == 0) {
             $("#footer-bar-input-comment-content").attr("placeholder","");
             $("#footer-bar-reply-to-id-label").html("");
         }
     });
 
-    $("#footer-bar-input-message-content").on("blur",function(){
-        $("#footer-bar-input-message-content").prop("disabled", true);
-        $("#footer-bar-send-message").css("position","fixed");
-        $("#footer-bar-send-message").css("bottom","0");
+    var $footerBarInputMessageContent = $("#footer-bar-input-message-content");
+    $footerBarInputMessageContent.on("blur",function(){
+        $footerBarInputMessageContent.prop("disabled", true);
+        $("#footer-bar-send-message").css("position","fixed").css("bottom","0");
     });
 
-    $("#footer-bar-input-comment-content").prop("disabled", true);
-    $("#footer-bar-input-message-content").prop("disabled", true);
+    $footerBarInputCommentContent.prop("disabled", true);
+    $footerBarInputMessageContent.prop("disabled", true);
+
     $("#footer-bar-form-message-chat").submit(function(event){
         event.preventDefault();
     });
@@ -249,13 +82,14 @@ function initialElementEventSetting(){
     $("#body-form-login").submit(function(event){
         event.preventDefault();
     });
+
     $("#body-form-signup").submit(function(event){
         event.preventDefault();
     });
 
     $("#body-input-insert-description-photo").on("change",function(){
         insertDescriptionPreviewPhoto();
-    })
+    });
 
     // check if the user has been logged in or not
     $(window).hashchange(function(){
@@ -264,22 +98,21 @@ function initialElementEventSetting(){
 
         // in user session
         if (currHash == "#page-login" && (preHash != "#page-loading" && preHash != "#page-login" && preHash != "#page-signup")) {
-            $.mobile.changePage("#page-event"); // window.location.hash = "#page-event";
+            $.mobile.changePage("#page-event");
             currLocationHash = "#page-event";
         }
 
         // out of user session
         if (currHash == "#page-setting" && (preHash == "#page-loading" || preHash == "#page-login" || preHash == "#page-signup")) {
-            $.mobile.changePage("#page-login"); // window.location.hash = "#page-login";
+            $.mobile.changePage("#page-login");
             currLocationHash = "#page-login";
         }
     });
 
     // add function when the page #page-chat-messages completed.
     $(document).on("pageshow","#page-chat-messages",function(){
-        $("#footer-bar-send-message").css("position","fixed");
-        $("#footer-bar-send-message").css("bottom","0");
-        $("#footer-bar-send-message").show();
+        $("#footer-bar-send-message").css("position","fixed").css("bottom","0").show();
+
         $("html body").animate({ scrollTop: $(document).height().toString()+"px" }, {
             duration: 500,
             complete : function(){
@@ -298,9 +131,7 @@ function initialElementEventSetting(){
 
     // add function when the page #page-event-detail completed.
     $(document).on("pageshow","#page-event-detail",function(){
-        $("#footer-bar-send-comment").css("position","fixed");
-        $("#footer-bar-send-comment").css("bottom","0");
-        $("#footer-bar-send-comment").show();
+        $("#footer-bar-send-comment").css("position","fixed").css("bottom","0").show();
         $(window).on("swiperight",function(){
             window.history.back();
             setCurrLocationHash("#page-event");
@@ -330,14 +161,230 @@ function initialElementEventSetting(){
     });
 }
 
-// convert ISO time format to relative time
+/* this function tries to log into user session by local storage
+ * currentUser: object representing current user from the Parse server
+ * if currentUser is valid, then the function tries to restore the user session and update the events, friend and chat info;
+ * else the function will direct the user to the loading page for transition to login/sign-up pages.
+ */
+function loginByLocalStorage(){
+    var currentUser = Parse.User.current();
+
+    if (currentUser) {
+        var successFunction = function() {
+            setCurrLocationHash("#page-event");
+            $.mobile.changePage("#page-event");
+            $.mobile.loading("show");
+            pullUserEvent();
+            if (!pullNotificationRunning) {
+                setTimeout(function(){
+                    pullNotification();
+                },5000);
+            }
+            ParsePullAllFriendObjectById(Parse.User.current().id);
+            ParsePullMyChat(Parse.User.current().id,"updatedAt",function(){});
+        };
+        var errorFunction = function() {
+            setCurrLocationHash("#page-login");
+            $.mobile.changePage("#page-login");
+        };
+
+        // this function will call the Parse API to communicate with Parse server
+        ParseUpdateCurrentUser(successFunction, errorFunction);
+
+    } else {
+        var window_width = $(window).width();
+        var window_height = $(window).height();
+        if (window_width/window_height > 1) {
+            var $loadingPageImage = $(".loading-page-image");
+            $loadingPageImage.append("<div class='loading-page-button-top'>Join Us.</div>");
+            $(".loading-page-button-top").css("marginLeft", Math.round(($loadingPageImage.width()-93-44)/2).toString()+"px");
+        } else {
+            $loadingPageImage.append("<div class='loading-page-button-bottom'>Join Us.</div>");
+            $(".loading-page-button-bottom").css("marginLeft", Math.round(($loadingPageImage.width()-93-44)/2).toString()+"px");
+        }
+
+        var $pageLoading = $("#page-loading");
+        $pageLoading.click(function(){
+            setCurrLocationHash("#page-login");
+            $.mobile.changePage("#page-login");
+            //$pageLoading.unbind("click");
+            //$pageLoading.unbind("swiperight");
+            //$pageLoading.unbind("swipeleft");
+        });
+
+        $pageLoading.on("swiperight",function(){
+            setCurrLocationHash("#page-login");
+            $.mobile.changePage("#page-login");
+            //$pageLoading.unbind("click");
+            //$pageLoading.unbind("swiperight");
+            //$pageLoading.unbind("swipeleft");
+        });
+
+        $pageLoading.on("swipeleft",function(){
+            setCurrLocationHash("#page-login");
+            $.mobile.changePage("#page-login");
+            //$pageLoading.unbind("click");
+            //$pageLoading.unbind("swiperight");
+            //$pageLoading.unbind("swipeleft");
+        });
+    }
+}
+
+/* this function is designed to check repeatedly the possible new friend requests and new chatting messages during
+ * user session at a time interval of 2 seconds. If the user session is not valid, this function sets the
+ * pullNotificationRunning flag to false and returns.
+ */
+function pullNotification(){
+    var currentUser = Parse.User.current();
+
+    if (currentUser == null){
+        pullNotificationRunning = false;
+        return
+    }
+
+    pullNotificationRunning = true;
+
+    // check new friend requests
+    var displayFunction = function(objects){
+        if ((typeof(objects)!="undefined")&&(objects.length > 0)) {
+            $(".footer-navigation-bar-friend").each(function(){
+                $(this).addClass("friend-notification-custom");
+            });
+            $("#body-new-friend-requests-btn").html("<span>New Friend Requests</span><span id='body-new-friend-requests-number' class='ui-li-count'>"+objects.length.toString()+"</span>");
+        } else {
+            $(".footer-navigation-bar-friend").each(function(){
+                $(this).removeClass("friend-notification-custom");
+            });
+            $("#body-new-friend-requests-btn").html("<span>New Friend Requests</span>");
+        }
+    };
+    ParsePullUnreadFriendRequest(currentUser.id, displayFunction);
+
+    // check new chatting messages
+    displayFunction = function(objects){
+        if ((typeof(objects)!="undefined")&&(objects.length > 0)) {
+            $(".footer-navigation-bar-chat").each(function(){
+                $(this).addClass("chat-notification-custom");
+            });
+            if ($( ":mobile-pagecontainer" ).pagecontainer( "getActivePage" )[0].id == "page-chat") {
+                pullMyChat();
+            }
+        } else {
+            $(".footer-navigation-bar-chat").each(function(){
+                $(this).removeClass("chat-notification-custom");
+            });
+        }
+        if ($( ":mobile-pagecontainer" ).pagecontainer( "getActivePage" )[0].id == "page-chat-messages") {
+            var groupId = $("#footer-bar-group-id-label").html();
+            for (var i=0; i<objects.length; i++) {
+                if (groupId == objects[i].get("groupId")) {
+                    updateChatMessage(objects[i]);
+                }
+            }
+        }
+    };
+    ParsePullUnreadChat(currentUser.id, "updatedAt", displayFunction);
+
+    // auto redirect if stop at loading page
+    if ($(":mobile-pagecontainer").pagecontainer("getActivePage")[0].id == "page-loading") {
+        loginByLocalStorage();
+    }    
+
+    setTimeout(function(){
+        pullNotification();
+    }, 2000)
+}
+
+/* this function is designed to sign up new users with username, email and password. If successful, it will login and
+ * direct the user to the "Activities" page and send a verification email to the user email account.
+ */
+function signup(){
+    var name = $("#body-input-signup-name").val();
+    var email = $("#body-input-signup-email").val();
+    var password = $("#body-input-signup-password").val();
+    var errorObject = $("#body-signup-error");
+    var destID = "#page-event";
+    var customFunction = function(object){
+        $("#body-input-signup-password").val("");
+        pullUserEvent();
+        if (!pullNotificationRunning) {
+            pullNotification();
+        }
+        ParseCreateProfilePhotoObject(object.id);
+        sendVerifyEmail(object);
+    };
+
+    // this shows the default JQuery loading icon (spinning arrow)
+    $.mobile.loading("show");
+
+    // this function will communicate with the Parse server to sign up new users
+    ParseSignup(email, password, email, name, errorObject, destID, customFunction);
+}
+
+/* this function sends a verification email to the user email account provided at sign-up phase.
+ */
+function sendVerifyEmail(object){
+    var request="email="+object.get('email');
+    request +="&username="+object.get('name');
+    request +="&verifyLink=http://yuemeuni.tk/verify.html?id="+object.id;
+    $.post("https://yueme-push-server.herokuapp.com/varifyEmail",request).done(function(data) {
+            console.log(data);
+    });
+}
+
+/* this function is designed to login the user by email and password. If successful, it will login and
+ * direct the user to the "Activities" page.
+ */
+function login(){
+    cacheInitialization();
+    var email = $("#body-input-login-email").val();
+    var password = $("#body-input-login-password").val();
+    var errorObject = $("#body-login-error");
+    var destID = "#page-event";
+    var customFunction = function(){
+        $("#body-input-login-password").val("");
+        pullUserEvent();
+        if (!pullNotificationRunning) {
+            pullNotification();
+        }
+        ParsePullAllFriendObjectById(Parse.User.current().id);
+        ParsePullMyChat(Parse.User.current().id,"updatedAt",function(){});
+    };
+
+    $.mobile.loading("show");
+
+    // this function will communicate with the Parse server to login the user
+    ParseLogin(email, password, errorObject, destID, customFunction);
+}
+
+/* this function is designed to logout and end the user session. If successful, it will direct the user
+ * to the login page.
+ */
+function logout(){
+    var currentUser = Parse.User.current();
+    var email = currentUser.getUsername();
+    ParseRemoveCurrentBridgeitId();
+    $("#body-input-login-email").val(email);
+    $("#body-login-error").html("");
+    $("#body-signup-error").html("");
+    localStorage.clear();
+    cacheClear();
+    $("#page-chat > .ui-content").html("");
+    var destID = "#page-login";
+
+    // this function will communicate with the Parse server to logout the user
+    ParseLogout(destID);
+}
+
+/* this function is designed to convert ISO time format to relative time
+ */
 function convertTime(rawTime){
     var minutes = 1000 * 60;
     var hours = minutes * 60;
     var days = hours * 24;
     var years = days * 365;
     var currentTime = new Date();
-    var time = currentTime.getTime()-Date.parse(rawTime.toString());
+    var time = currentTime.getTime() - Date.parse(rawTime.toString());
     if (time < 0) {
         time = 0;
     }
@@ -371,26 +418,30 @@ function convertTime(rawTime){
     return showtime;
 }
 
+/* this function is designed to ...
+ */
 function sendToolbarActiveKeyboard(object){
     $("html body").animate({ scrollTop: $(document).height().toString()+"px" }, {
         duration: 300,
         complete : function(){
             $(object.id).prop("disabled", false);
             $(object.bar).css("position","absolute");
-            $(object.bar).css("bottom",($("body").height()-$(object.base).height()+object.bias).toString()+"px");
+            $(object.bar).css("bottom",($("body").height() - $(object.base).height()+object.bias).toString()+"px");
             $(object.id).trigger("focus");
         }
     });
 }
 
+/* this function is designed to send notifications to users' devices
+ */
 function pushNotificationToDevice(platform,regId,message) {
-    var request="id="+regId+"&message="+message;//{id: regId, message: message};
-    $.post("https://yueme-push-server.herokuapp.com/"+platform,request)
-        .done(function(data) {
-
-        });
+    var request="id="+regId+"&message="+message;
+    $.post("https://yueme-push-server.herokuapp.com/"+platform,request).done(function(data) {
+    });
 }
 
+/* this function is designed to send notifications to users' devices by user name
+ */
 function pushNotificationToDeviceByUsername(username, message) {
     // fetch user information
     CacheGetProfileByUsername(username, function(obj,data){
@@ -407,6 +458,8 @@ function pushNotificationToDeviceByUsername(username, message) {
     }, {message: message});
 }
 
+/* this function is designed to send notifications to users' devices by user Id
+ */
 function pushNotificationToDeviceByUserId(userid, message) {
     // fetch user information
     CacheGetProfileByUserId(userid, function(obj,data){
