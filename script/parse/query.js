@@ -157,7 +157,7 @@ function ParseEventEditSave(owner, title, location, time, visibility, descriptio
             userEvent.save(null, {
                 success: function(userEvent) {
                     displayFunction(userEvent);
-                    $.mobile.changePage(destID); //            window.location.hash = destID;
+                    $.mobile.changePage(destID);
                 },
                 error: function(userEvent, error){
                     errorObject.html("Error: " + error.code + " " + error.message);
@@ -1124,7 +1124,7 @@ function ParseOwnerFieldUpdate(){
                         console.log(object.get('owner'));
                     }
                 });
-            }
+            };
             CacheGetProfileByUsername(username, displayFunction, {comment: objects[refreshNumber]});
         }
     });

@@ -1,4 +1,4 @@
-/* this function does the preparation work after the web document is loaded.
+/* This function does the preparation work after the web document is loaded.
  * initialElementEventSetting:  initialization for certain elements, see the function for details;
  * cacheInitialization:  initialization of the cache, see the function for details;
  * loginByLocalStorage:  try to log into user session using the local storage, see the function for details.
@@ -9,22 +9,22 @@ $(document).ready(function (){
     loginByLocalStorage();
 });
 
-/* this variable keeps track of the location hash of current page.
+/* This variable keeps track of the location hash of current page.
  */
 var currLocationHash = "#page-loading";
 
-/* this variable indicates whether the "pullNotification" function is running or not.
+/* This variable indicates whether the "pullNotification" function is running or not.
  */
 var pullNotificationRunning = false;
 
-/* this function sets the location hash of current page to the variable "currLocationHash";
+/* This function sets the location hash of current page to the variable "currLocationHash";
  *  remember doing this whenever the location hash changes.
  */
 function setCurrLocationHash(locationHash){
     currLocationHash = locationHash;
 }
 
-/* this function is designed to initialize certain elements in the document, such as attaching events handlers,
+/* This function is designed to initialize certain elements in the document, such as attaching events handlers,
  * preventing default events, showing default display, etc.
  */
 function initialElementEventSetting(){
@@ -165,7 +165,7 @@ function initialElementEventSetting(){
     });
 }
 
-/* this function tries to log into user session by local storage
+/* This function tries to log into user session by local storage
  * currentUser: object representing current user from the Parse server
  * if currentUser is valid, then the function tries to restore the user session and update the events, friend and chat info;
  * else the function will direct the user to the loading page for transition to login/sign-up pages.
@@ -234,7 +234,7 @@ function loginByLocalStorage(){
     }
 }
 
-/* this function is designed to check repeatedly the possible new friend requests and new chatting messages during
+/* This function is designed to check repeatedly the possible new friend requests and new chatting messages during
  * user session at a time interval of 2 seconds. If the user session is not valid, this function sets the
  * pullNotificationRunning flag to false and returns.
  */
@@ -249,7 +249,7 @@ function pullNotification(){
     pullNotificationRunning = true;
 
     // check new friend requests
-    var displayFunction = function(objects){
+    var displayFunction = function(objects){ // objects: Friend objects
         if ((typeof(objects)!="undefined")&&(objects.length > 0)) {
             $(".footer-navigation-bar-friend").each(function(){
                 $(this).addClass("friend-notification-custom");
@@ -265,7 +265,7 @@ function pullNotification(){
     ParsePullUnreadFriendRequest(currentUser.id, displayFunction);
 
     // check new chatting messages
-    displayFunction = function(objects){
+    displayFunction = function(objects){  // objects: Chat objects
         if ((typeof(objects)!="undefined")&&(objects.length > 0)) {
             $(".footer-navigation-bar-chat").each(function(){
                 $(this).addClass("chat-notification-custom");
@@ -299,7 +299,7 @@ function pullNotification(){
     }, 2000)
 }
 
-/* this function is designed to sign up new users with username, email and password. If successful, it will login and
+/* This function is designed to sign up new users with username, email and password. If successful, it will login and
  * direct the user to the "Activities" page and send a verification email to the user email account.
  */
 function signup(){
@@ -325,7 +325,7 @@ function signup(){
     ParseSignup(email, password, email, name, errorObject, destID, customFunction);
 }
 
-/* this function sends a verification email to the user email account provided at sign-up phase.
+/* This function sends a verification email to the user email account provided at sign-up phase.
  */
 function sendVerifyEmail(object){
     var request="email="+object.get('email');
@@ -336,7 +336,7 @@ function sendVerifyEmail(object){
     });
 }
 
-/* this function is designed to login the user by email and password. If successful, it will login and
+/* This function is designed to login the user by email and password. If successful, it will login and
  * direct the user to the "Activities" page.
  */
 function login(){
@@ -361,7 +361,7 @@ function login(){
     ParseLogin(email, password, errorObject, destID, customFunction);
 }
 
-/* this function is designed to logout and end the user session. If successful, it will direct the user
+/* This function is designed to logout and end the user session. If successful, it will direct the user
  * to the login page.
  */
 function logout(){
@@ -378,7 +378,7 @@ function logout(){
     ParseLogout(destID);
 }
 
-/* this function is designed to convert ISO time format to relative time
+/* This function is designed to convert ISO time format to relative time
  */
 function convertTime(rawTime){
     var minutes = 1000 * 60;
@@ -429,7 +429,7 @@ function convertTime(rawTime){
     return showtime;
 }
 
-/* this function is designed to ...
+/* This function is designed to ...
  */
 function sendToolbarActiveKeyboard(object){
     $("html body").animate({ scrollTop: $(document).height().toString()+"px" }, {
@@ -443,7 +443,7 @@ function sendToolbarActiveKeyboard(object){
     });
 }
 
-/* this function is designed to send notifications to users' devices
+/* This function is designed to send notifications to users' devices
  */
 function pushNotificationToDevice(platform,regId,message) {
     var request="id="+regId+"&message="+message;
@@ -451,7 +451,7 @@ function pushNotificationToDevice(platform,regId,message) {
     });
 }
 
-/* this function is designed to send notifications to users' devices by user name
+/* This function is designed to send notifications to users' devices by user name
  */
 function pushNotificationToDeviceByUsername(username, message) {
     // fetch user information
@@ -469,7 +469,7 @@ function pushNotificationToDeviceByUsername(username, message) {
     }, {message: message});
 }
 
-/* this function is designed to send notifications to users' devices by user Id
+/* This function is designed to send notifications to users' devices by user Id
  */
 function pushNotificationToDeviceByUserId(userid, message) {
     // fetch user information
