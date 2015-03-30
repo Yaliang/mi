@@ -114,7 +114,7 @@ function pullUserEventHolderInfo(holder, elementIdBase){
         });
         $("#body-top-bar-event-"+elementIdBase+"-owner-name").html(name);
 
-        if (gender != null) {
+        if (typeof(gender) != "undefined") {
             var $ownerGenderImage = $("#body-top-bar-event-"+elementIdBase+"-owner-gender");
             if (gender) {
                 $ownerGenderImage.css("backgroundImage","url('./content/customicondesign-line-user-black/png/male-white-20.png')").css("backgroundColor","#8970f1");
@@ -221,7 +221,7 @@ function buildUserProfileDetailElement(object){
 
     newElement += "<div class='ui-user-profile-name'>"+name+"</div>";
     newElement += "<div class='ui-icon-custom-gender ui-user-profile-gender' style='";
-    if (gender != null) {
+    if (typeof(gender) != "undefined") {
         if (gender) {
             newElement += "background-image:url("+"./content/customicondesign-line-user-black/png/male-white-20.png"+");";
             newElement += "background-color:"+"#8970f1"+";";
