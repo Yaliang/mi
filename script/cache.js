@@ -53,7 +53,7 @@ function cacheClear() {
     cacheGroup = [];
 }
 
-/* this function is designed to reload the cache from local storage and update its contents.
+/* this function is designed to update the cache from local storage.
  */
 function cacheInitialization() {
     cacheUser = [];
@@ -108,84 +108,10 @@ function cacheInitialization() {
         }
         ParseUpdateCache(cachedList[n], updateIdList, lastUpdate);
     }
-
-    console.log(cacheChat);
 }
 
-// functions of cachedPhoto
-function CacheGetProfilePhotoByUserId(userId, displayFunction, data) {
-    var cached = false;
-    for (var i = 0; i < cachePhoto.length; i++) {
-        if (cachePhoto[i].get("userId") == userId) {
-            displayFunction(cachePhoto[i], data);
-            cached = true;
-            break;
-        }
-    }
-    if (!cached) {
-        //console.log("Photo miss: "+userId);
-        ParseGetProfilePhoto(userId, displayFunction, data);
-    }
-}
-
-function CacheGetProfilePhotoByUsername(username, displayFunction, data) {
-    var cached = false;
-    var userId = null;
-    for (var i = 0; i < cacheUser.length; i++) {
-        if (cacheUser[i].get("username") == username) {
-            userId = cacheUser[i].id;
-            break;
-        }
-    }
-    if (userId != null) {
-        for (i = 0; i < cachePhoto.length; i++) {
-            if (cachePhoto[i].get("userId") == userId) {
-                displayFunction(cachePhoto[i], data);
-                cached = true;
-                break;
-            }
-        }
-    }
-    if (!cached) {
-        //console.log("Photo miss: "+username);
-        ParseGetProfilePhotoByUsername(username, displayFunction, data);
-    }
-}
-
-function CacheUpdatePhoto(object){
-    if (typeof(object) == "undefined")
-        return;
-    object = rawLocalToCache(JSON.parse(JSON.stringify(object)));
-    var cached = false;
-    for (var i = 0; i < cachePhoto.length; i++) {
-        if (cachePhoto[i].get("userId") == object.get("userId")) {
-            cachePhoto.splice(i, 1, object);
-            cached = true;
-            break;
-        }
-    }
-    if (!cached) {
-        cachePhoto.push(object);
-    }
-    localStorage.cachePhoto = JSON.stringify(cachePhoto);
-}
-
-// functions of cachedUser
-function CacheGetProfileByUsername(username, displayFunction, data){
-    var cached = false;
-    for (var i = 0; i < cacheUser.length; i++) {
-        if (cacheUser[i].get("username") == username) {
-            displayFunction(cacheUser[i], data);
-            cached = true;
-            break;
-        }
-    }
-    if (!cached) {
-        //console.log("User miss: "+username);
-        ParseGetProfileByUsername(username, displayFunction, data);
-    }
-}
-
+/* this function is designed to get the cached user profile by user Id.
+ */
 function CacheGetProfileByUserId(userId, displayFunction, data){
     var cached = false;
     for (var i = 0; i < cacheUser.length; i++) {
@@ -201,9 +127,75 @@ function CacheGetProfileByUserId(userId, displayFunction, data){
     }
 }
 
+/* this function is designed to get the cached user profile by user name.
+ */
+function CacheGetProfileByUsername(username, displayFunction, data){
+    var cached = false;
+    for (var i = 0; i < cacheUser.length; i++) {
+        if (cacheUser[i].get("username") == username) {
+            displayFunction(cacheUser[i], data);
+            cached = true;
+            break;
+        }
+    }
+    if (!cached) {
+        //console.log("User miss: "+username);
+        ParseGetProfileByUsername(username, displayFunction, data);
+    }
+}
+
+/* this function is designed to get the cached user profile photo by user Id.
+ */
+function CacheGetProfilePhotoByUserId(userId, displayFunction, data) {
+    var cached = false;
+    for (var i = 0; i < cachePhoto.length; i++) {
+        if (cachePhoto[i].get("userId") == userId) {
+            displayFunction(cachePhoto[i], data);
+            cached = true;
+            break;
+        }
+    }
+    if (!cached) {
+        //console.log("Photo miss: "+userId);
+        ParseGetProfilePhoto(userId, displayFunction, data);
+    }
+}
+
+/* this function is designed to get the cached user profile photo by user name.
+ */
+function CacheGetProfilePhotoByUsername(username, displayFunction, data) {
+    var cached = false;
+    var userId = null;
+    for (var i = 0; i < cacheUser.length; i++) {
+        if (cacheUser[i].get("username") == username) {
+            userId = cacheUser[i].id;
+            break;
+        }
+    }
+
+    if (userId != null) {
+        for (i = 0; i < cachePhoto.length; i++) {
+            if (cachePhoto[i].get("userId") == userId) {
+                displayFunction(cachePhoto[i], data);
+                cached = true;
+                break;
+            }
+        }
+    }
+
+    if (!cached) {
+        //console.log("Photo miss: "+username);
+        ParseGetProfilePhotoByUsername(username, displayFunction, data);
+    }
+}
+
+/* this function is designed to update the cached user.
+ */
 function CacheUpdateUser(object){
-    if (typeof(object) == "undefined")
+    if (typeof(object) == "undefined") {
         return;
+    }
+
     object = rawLocalToCache(JSON.parse(JSON.stringify(object)));
     var cached = false;
     for (var i = 0; i < cacheUser.length; i++) {
@@ -219,7 +211,43 @@ function CacheUpdateUser(object){
     localStorage.cacheUser = JSON.stringify(cacheUser);
 }
 
-// functions of cachedFriend
+/* this function is designed to update the cached user profile photo.
+ */
+function CacheUpdatePhoto(object){
+    if (typeof(object) == "undefined") {
+        return;
+    }
+
+    object = rawLocalToCache(JSON.parse(JSON.stringify(object)));
+    var cached = false;
+    for (var i = 0; i < cachePhoto.length; i++) {
+        if (cachePhoto[i].get("userId") == object.get("userId")) {
+            cachePhoto.splice(i, 1, object);
+            cached = true;
+            break;
+        }
+    }
+    if (!cached) {
+        cachePhoto.push(object);
+    }
+    localStorage.cachePhoto = JSON.stringify(cachePhoto);
+}
+
+/* this function is designed to check whether two users are friends or not.
+ * Note: there are four cases regarding friendship between two users:
+ * 1. they are friends -- cacheFriend[i] object will not be null and "valid" field will be true;
+ * 2. ownerId has sent a friend request to friendId but has not been accepted -- cacheFriend[i] object
+ *                       will not be null but "valid" field will be false;
+ * 3. ownerId has received a friend request from friendId but has not accepted -- cacheFriend[i] object
+ *                       will be null and "valid" field will be false; but if you switch the friendId and
+ *                       ownerId, you will get case 2.
+ * 4. they are not friends and no friend request has been sent or received: cacheFriend[i] object will be
+ *                       null and "valid" field will be false;
+ *
+ * CacheCheckFriend function can only tell if cacheFriend[i] object is null or not. If it's not null, then
+ * you still need to check if "valid" field is true or not; but if it is null, then you need to switch
+ * friendId and ownerId to check if friendId has sent a friend request to ownerId.
+ */
 function CacheCheckFriend(friendId, ownerId, displayFunction){
     var cached = false;
     for (var i = 0; i < cacheFriend.length; i++) {
@@ -234,6 +262,8 @@ function CacheCheckFriend(friendId, ownerId, displayFunction){
     }
 }
 
+/* this function is designed to pull up new friend requests and show it.
+ */
 function CachePullNewFriendRequest(userId, descendingOrderKey, displayFunction) {
     var requests = [];
 
@@ -246,6 +276,8 @@ function CachePullNewFriendRequest(userId, descendingOrderKey, displayFunction) 
     displayFunction(requests);
 }
 
+/* this function is designed to show the user's friends in natural order.
+ */
 function CachePullMyFriend(userId, descendingOrderKey, displayFunction) {
     var friends = [];
 
@@ -259,9 +291,13 @@ function CachePullMyFriend(userId, descendingOrderKey, displayFunction) {
     displayFunction(friends);
 }
 
+/* this function is designed to update the cached friend.
+ */
 function CacheUpdateFriend(object){
-    if (typeof(object) == "undefined")
+    if (typeof(object) == "undefined") {
         return;
+    }
+
     object = rawLocalToCache(JSON.parse(JSON.stringify(object)));
     var cached = false;
     for (var i = 0; i < cacheFriend.length; i++) {
@@ -277,6 +313,8 @@ function CacheUpdateFriend(object){
     localStorage.cacheFriend = JSON.stringify(cacheFriend);
 }
 
+/* this function is designed to remove a particular friend object from cacheFriend list.
+ */
 function CacheRemoveFriend(object) {
     for (var i = 0; i < cacheFriend.length; i++) {
         if (cacheFriend[i].id == object.id) {
@@ -287,7 +325,9 @@ function CacheRemoveFriend(object) {
     localStorage.cacheFriend = JSON.stringify(cacheFriend);
 }
 
-// functions of cachedChat
+/* this function is designed to pull up my chatting messages and show them by the order when they are
+ * updated.
+ */
 function CachePullMyChat(ownerId,displayFunction) {
     var chats = [];
     for (var i = 0;  i<cacheChat.length; i++) {
@@ -300,7 +340,9 @@ function CachePullMyChat(ownerId,displayFunction) {
     displayFunction(chats);
 }
 
-function CacheGetChatByGroupId(ownerId,groupId,displayFunction, data) {
+/* this function is designed to get the chat message by its group Id.
+ */
+function CacheGetChatByGroupId(ownerId, groupId, displayFunction, data) {
     var chat;
     for (var i = 0;  i<cacheChat.length; i++) {
         if ((cacheChat[i].get("ownerId") == ownerId) && (cacheChat[i].get("groupId") == groupId) && (cacheChat[i].get("hidden") == false)) {
@@ -312,6 +354,8 @@ function CacheGetChatByGroupId(ownerId,groupId,displayFunction, data) {
     displayFunction(chat, data);
 }
 
+/* this function is designed to update the cached chatting messages.
+ */
 function CacheUpdateChat(object){
     if (typeof(object) == "undefined")
         return;
@@ -330,7 +374,8 @@ function CacheUpdateChat(object){
     localStorage.cacheChat = JSON.stringify(cacheChat);
 }
 
-// functions of cachedGroup
+/* this function is designed to ...
+ */
 function CacheSetGroupMemberChatObjectReadFalse(senderId, groupId, text, notificationFunction){
     var cached = false;
     for (var i = 0; i < cacheGroup.length; i++) {
@@ -341,11 +386,13 @@ function CacheSetGroupMemberChatObjectReadFalse(senderId, groupId, text, notific
         }
     }
     if (!cached) {
-        console.log("Group miss: "+groupId);
+        //console.log("Group miss: "+groupId);
         ParseSetGroupMemberChatObjectReadFalse(senderId, groupId, text, notificationFunction);
     }
 }
 
+/* this function is designed to get the cached group Id by its member Id.
+ */
 function CacheGetGroupId(memberId, successFunction){
     var cached = false;
     for (var i = 0; i < cacheGroup.length; i++) {
@@ -366,11 +413,13 @@ function CacheGetGroupId(memberId, successFunction){
     }
 
     if (!cached) {
-        console.log("Group miss: "+memberId);
+        //console.log("Group miss: "+memberId);
         ParseGetGroupId(memberId, successFunction);
     }
 }
 
+/* this function is designed to get the cached group by its Id.
+ */
 function CacheGetGroupMember(groupId, successFunction, data){
     var cached = false;
     for (var i = 0; i < cacheGroup.length; i++) {
@@ -381,11 +430,13 @@ function CacheGetGroupMember(groupId, successFunction, data){
         }
     }
     if (!cached) {
-        console.log("Group miss: "+groupId);
+        //console.log("Group miss: "+groupId);
         ParseGetGroupMember(groupId, successFunction, data)
     }
 }
 
+/* this function is designed to update the cached group.
+ */
 function CacheUpdateGroup(object){
     if (typeof(object) == "undefined")
         return;
@@ -404,7 +455,8 @@ function CacheUpdateGroup(object){
     localStorage.cacheGroup = JSON.stringify(cacheGroup);
 }
 
-// functions for Message
+/* this function is designed to pull up the group chat messages.
+ */
 function CachePullChatMessage(groupId, limitNum, beforeAt, displayFunction){
     var messages = [];
     for (var i = 0; i < cacheMessage.length; i++) {
@@ -425,6 +477,8 @@ function CachePullChatMessage(groupId, limitNum, beforeAt, displayFunction){
     }
 }
 
+/* this function is designed to show the latest chat message in the group chat.
+ */
 function CacheGetLastestMessage(groupId, displayFunction,data){
     var afterAt = null;
     var message = null;
@@ -437,9 +491,13 @@ function CacheGetLastestMessage(groupId, displayFunction,data){
     displayFunction(message,data);
 }
 
+/* this function is designed to update the cached message.
+ */
 function CacheUpdateMessage(object){
-    if (typeof(object) == "undefined")
+    if (typeof(object) == "undefined") {
         return;
+    }
+
     object = rawLocalToCache(JSON.parse(JSON.stringify(object)));
     var cached = false;
     for (var i = 0; i < cacheMessage.length; i++) {

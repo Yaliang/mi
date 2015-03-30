@@ -349,6 +349,7 @@ function pullMyFriendList() {
 
 
 var newGroupChatMemberArray = {memberId:[], prevNum:0, newNum:0};
+
 function pullFriendListForAddingParticipants(){
     $("#body-add-participants-list").html("");
     $("#header-add-participant-for-group-chat").html("OK");
@@ -400,7 +401,7 @@ function pullFriendListForAddingParticipants(){
                 $("#body-add-participants-people-"+memberId[i]).removeClass("ui-add-participant-unchecked");
                 $("#body-add-participants-people-"+memberId[i]).addClass("ui-add-participant-checked");
             }
-        }
+        };
         CacheGetGroupMember(groupId, successFunction, {});
     };
 
