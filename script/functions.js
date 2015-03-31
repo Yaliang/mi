@@ -255,6 +255,8 @@ function pullNotification(){
                 $(this).addClass("friend-notification-custom");
             });
             $("#body-new-friend-requests-btn").html("<span>New Friend Requests</span><span id='body-new-friend-requests-number' class='ui-li-count'>"+objects.length.toString()+"</span>");
+            $("#page-my-friend-requests > .ui-content").removeClass("ui-hidden-accessible");
+            $("#body-new-friend-requests-btn").removeClass("ui-hidden-accessible");
         } else {
             $(".footer-navigation-bar-friend").each(function(){
                 $(this).removeClass("friend-notification-custom");

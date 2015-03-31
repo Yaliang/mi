@@ -269,11 +269,20 @@ function displayUserProfile(userId){
                                 sendFriendRequest(ownerId);
                             });
                         } else {
-                            $("#body-bottom-button-send-request").html("Friend Request Received").on("click", function(){
-                                pullMyFriendRequests();
-                                $.mobile.changePage("#page-my-friend-requests");
-                                setCurrLocationHash("#page-my-friend-requests");
+                            $("#body-bottom-button-send-request").after("<div class='ui-btn' id='body-bottom-button-response-request-accept' style='clear: both'></div>"
+                                + "<div class='ui-btn' id='body-bottom-button-response-request-reject' style='clear: both'></div>").remove();
+                            $("#body-bottom-button-response-request-accept").html("Accept Request").on("click",function(){
+                                acceptFriendRequest(object.id);
                             });
+                            $("#body-bottom-button-response-request-reject").html("Reject Request").on("click",function(){
+                                rejectFriendRequest(object.id, ownerId);
+                            });
+
+                            // $("#body-bottom-button-send-request").html("Friend Request Received").on("click", function(){
+                            //     pullMyFriendRequests();
+                            //     $.mobile.changePage("#page-my-friend-requests");
+                            //     setCurrLocationHash("#page-my-friend-requests");
+                            // });
                         }
                     };
                     CacheCheckFriend(ownerId, friendId, displayFunction2);

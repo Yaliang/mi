@@ -101,6 +101,49 @@ function sendFriendRequest(friendId) {
     ParseSendFriendRequest(currentUser.id, friendId, successFunction);
 }
 
+/* This function is designed to accept friend request.
+ */
+function acceptFriendRequest(requestObjectId) {
+
+    // when accepting friend request
+    // unbind the click event
+    $("#body-bottom-button-response-request-accept").unbind("click");
+    $("#body-bottom-button-response-request-reject").unbind("click");
+
+    var successFunction = function(object){
+        // get the current user's "friend" data
+        var objectId = object.id;
+        var friendId = object.get("friend");
+        $("#body-bottom-button-response-request-accept").before("<div class='ui-btn' id='body-bottom-button-send-request' style='clear: both'></div>");
+        $("#body-bottom-button-response-request-accept").remove();
+        $("#body-bottom-button-response-request-reject").remove();
+        $("#body-bottom-button-send-request").html("Start Chat").unbind("click").on("click",function(){
+            startPrivateChat(friendId);
+        });
+
+        // push notification to friend
+        pushNotificationToDeviceByUserId(object.get('friend'), Parse.User.current().get("name")+" accepted your friend request!");
+    };
+    ParseAcceptFriendRequest(requestObjectId, null, null, successFunction);
+
+}
+
+/* This function is designed to reject friend request.
+ */
+function rejectFriendRequest(requestObjectId, friendId) {
+    // when rejecting friend request
+    var successFunction = function(friendId){
+        $("#body-bottom-button-response-request-accept").before("<div class='ui-btn' id='body-bottom-button-send-request' style='clear: both'></div>");
+        $("#body-bottom-button-response-request-accept").remove();
+        $("#body-bottom-button-response-request-reject").remove();
+
+        $("#body-bottom-button-send-request").html("Send Friend Request").unbind("click").on("click",function(){
+            sendFriendRequest(friendId);
+        });
+    };
+    ParseRejectFriendRequest(requestObjectId, null, friendId, successFunction);
+}
+
 /* This function is designed to build up elements for the list displaying users, such as after a near-by user search.
  */
 function buildUserListElement(object, liIdPrefix, lat, lng, type) {
@@ -311,7 +354,7 @@ function pullMyFriendRequests() {
                     if (typeof(photo120) == "undefined") {
                         photo120 = "./content/png/Taylor-Swift.png";
                     }
-                    $("#body-new-friend-request-"+data.friendId+" > .custom-corners-people-near-by").css("backgroundImage","url('"+photo120+"')");
+                    $("#body-new-friend-request-"+data.friendId+" > .custom-people-in-friend-list").css("backgroundImage","url('"+photo120+"')");
                 };
                 CacheGetProfilePhotoByUserId(friendId, displayFunction2, {friendId: friendId});
                 prefixForGetFriendOptionsButton="body-new-friend-request-";
