@@ -312,48 +312,51 @@ function sendMessage(){
 
     var $footerBarInputMessageContent = $("#footer-bar-input-message-content");
 
-    if ($footerBarInputMessageContent.val() == "") {
+    var text = $footerBarInputMessageContent.val();
+    if (text == "") {
         return;
     }
 
     $footerBarInputMessageContent.val("");
 
-    var displayFunction= function(object){  // object: single Message object
+    var displayFunction = function(object){  // object: single Message object
         var messageId = object.id;
         var senderId = object.get("senderId");
         var groupId = object.get("groupId");
         var text = object.get("text");
         var notificationFunction = function(senderId,text,receiverId){
-            var displayFunction = function(object,data){
+            var displayFunction1 = function(object,data){
                 if (typeof(object.get("GCMId")) != "undefined") {
                     data.GCMId = object.get("GCMId");
                 }
                 if (typeof(object.get("APNId")) != "undefined") {
                     data.APNId = object.get("APNId");
                 }
-                var displayFunction = function(object,data){
+                var displayFunction2 = function(object,data){
                     var message = object.get("name")+": " + data.message;
                     if ("GCMId" in data)
                         pushNotificationToDevice("gcm",data.GCMId,message);
                     if ("APNId" in data)
                         pushNotificationToDevice("apn",data.APNId,message);
                 };
-                CacheGetProfileByUserId(data.senderId, displayFunction, data);
+                CacheGetProfileByUserId(data.senderId, displayFunction2, data);
             };
             var data = {senderId : senderId, message: text};
-            CacheGetProfileByUserId(receiverId, displayFunction, data);
+            CacheGetProfileByUserId(receiverId, displayFunction1, data);
         };
         CacheSetGroupMemberChatObjectReadFalse(senderId, groupId, text, notificationFunction);
+
         var newElement = buildElementInChatMessagesPage(object);
         $("#page-chat-messages > .ui-content").append(newElement);
-        var displayFunction = function(object, data){
+
+        var displayFunction3 = function(object, data){
             var photo120 = object.get("profilePhoto120");
             if (typeof(photo120) == "undefined") {
                 photo120 = "./content/png/Taylor-Swift.png";
             }
             $("#body-message-"+data.messageId).css("backgroundImage","url('"+photo120+"')");
         };
-        CacheGetProfilePhotoByUserId(senderId, displayFunction, {messageId : messageId});
+        CacheGetProfilePhotoByUserId(senderId, displayFunction3, {messageId : messageId});
         //$('#footer-bar-send-message').css("bottom",($("body").height()-$("#page-chat-messages").height()-44).toString()+"px");
         
         $("html body").animate({ scrollTop: $(document).height().toString()+"px" }, {
