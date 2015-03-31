@@ -1,4 +1,4 @@
-/* This function does the preparation work after the web document is loaded.
+/* This function call does the preparation work after the web document is loaded.
  * initialElementEventSetting:  initialization for certain elements, see the function for details;
  * cacheInitialization:  initialization of the cache, see the function for details;
  * loginByLocalStorage:  try to log into user session using the local storage, see the function for details.
@@ -34,7 +34,7 @@ function initialElementEventSetting(){
         $footerBarInputCommentContent.prop("disabled", true);
         $("#footer-bar-send-comment").css("position","fixed").css("bottom","0");
         if ($footerBarInputCommentContent.val().length == 0) {
-            $("#footer-bar-input-comment-content").attr("placeholder","");
+            $("#footer-bar-input-comment-content").attr("placeholder","comment...");
             $("#footer-bar-reply-to-id-label").html("");
         }
     });

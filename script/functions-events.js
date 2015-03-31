@@ -682,8 +682,8 @@ function updateEventDetail(id){
         var id = objects[0].id;
         var holder = objects[0].get("owner");
         $("#body-content-event-detail").prepend(buildEventDetailElement(objects[0]));
-
         pullUserEventHolderInfo(holder, "detail-"+id); // display event owner's name, not the username (which is an email address)
+
         $(".ui-custom-report").on("click",function(){
             reportActivity(id);
         });
@@ -692,11 +692,12 @@ function updateEventDetail(id){
 
     // display the comments in this event
     displayFunction = function(objects) { // objects: an array of Comment objects
-        $("#body-content-event-detail").append("<div id='body-content-bottom-event-commnets-list' class='ui-custom-comment-container'></div>")
+        $("#body-content-event-detail").append("<div id='body-content-bottom-event-comments-list' class='ui-custom-comment-container'></div>");
         for (var i=0; i<=objects.length-1; i++) {
             // build the comment content
             var newElement = buildCommentInEventDetail(objects[i]);
-            $("#body-content-bottom-event-commnets-list").append(newElement);
+            $("#body-content-bottom-event-comments-list").append(newElement);
+            
             // build the user's profile photo
             var displayFunction1 = function(object, data) {  // object: single cachePhoto[i] object
                 var photo120 = object.get("profilePhoto120");
@@ -757,13 +758,12 @@ function replyCommentToUser(replyTo) {
 function sendComment(){
     var eventId = $("#footer-bar-event-id-label").html();
     var replyToUserId = $("#footer-bar-reply-to-id-label").html();
-
-    var $footerBarInputCommentContent = $("#footer-bar-input-comment-content");
-
-    var replyToUserName = $footerBarInputCommentContent.attr("placeholder");
     if (typeof(replyToUserId) == "undefined") {
         replyToUserId = "";
     }
+
+    var $footerBarInputCommentContent = $("#footer-bar-input-comment-content");
+    var replyToUserName = $footerBarInputCommentContent.attr("placeholder");
 
     var currentUser = Parse.User.current();
     var owner = currentUser.id;
@@ -807,10 +807,10 @@ function sendComment(){
             title = title.slice(0,6) + "...";
         }
 
-        // push notification to the user been replyed
+        // push notification to the user been replied
         if (typeof(replyToUserId) != "undefined" && replyToUserId != null) {
             pushNotificationToDeviceByUserId(replyToUserId, 
-                Parse.User.current().get("name")+" replyed your comment on activity \'"+title+"\'.")
+                Parse.User.current().get("name")+" replied your comment on activity \'"+title+"\'.")
         }
 
         // push notification to owner
