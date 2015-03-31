@@ -157,7 +157,7 @@ function CacheGetProfilePhotoByUserId(userId, displayFunction, data) {
     }
     if (!cached) {
         //console.log("Photo miss: "+userId);
-        ParseGetProfilePhoto(userId, displayFunction, data);
+        ParseGetProfilePhotoByUserId(userId, displayFunction, data);
     }
 }
 
