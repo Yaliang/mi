@@ -157,7 +157,7 @@ function ParseEventEditSave(owner, title, location, time, visibility, descriptio
             userEvent.save(null, {
                 success: function(userEvent) {
                     displayFunction(userEvent);
-                    $.mobile.changePage(destID); //            window.location.hash = destID;
+                    $.mobile.changePage(destID);
                 },
                 error: function(userEvent, error){
                     errorObject.html("Error: " + error.code + " " + error.message);
@@ -520,13 +520,13 @@ function ParseAcceptFriendRequest(objectId, ownerId, friendId, successFunction){
     }
     query.first({
         success:function(object){
-            // update current user"s friend data
+            // update friend's friend data
             object.set("valid",true);
             object.set("read",true);
             object.save(null, {
                 success: function(object){
                     CacheUpdateFriend(object);
-                    // try to update frient"s data
+                    // try to update current user's data
                     var ownerId = object.get("friend");
                     var friendId = object.get("owner");
                     var query = new Parse.Query(Friend);
@@ -1124,7 +1124,7 @@ function ParseOwnerFieldUpdate(){
                         console.log(object.get('owner'));
                     }
                 });
-            }
+            };
             CacheGetProfileByUsername(username, displayFunction, {comment: objects[refreshNumber]});
         }
     });

@@ -589,10 +589,6 @@ a {
     padding-top: 0.8em;
     font-weight: bold;
     float: left;
-    max-width: 80%;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
 }
 
 .chat-last-time {
@@ -600,8 +596,6 @@ a {
     padding-right: 1em;
     float: right;
     font-size: 0.8em;
-    font-weight: bold;
-    color: #AAA;
 }
 
 .chat-last-time-right-blank {
@@ -637,7 +631,6 @@ textarea {
     color: #f2f1dc!important; 
     margin-top: 40px;
     text-shadow: 0 0 0!important;
-    border-color: #F67E7E!important;
 }
 
 .event-statistics {
@@ -689,10 +682,10 @@ textarea {
     overflow: hidden;
     white-space: nowrap;
     /* margin-top: 30px; */
-    float: left;
+    float: right;
     margin-top: 0.4em;
     margin-bottom: 0.1em;
-    margin-left: 0.6em;
+    margin-left: 0;
     margin-right: 0.3em;
     line-height: 21px;
 }
@@ -931,14 +924,6 @@ textarea {
     background-color: #F67E7E!important;
     color: white!important;
     margin-top: 0
-    border-color: #F67E7E!important;
-}
-
-.alert-btn{
-    background-color: #F67E7E!important;
-    color: white!important;
-    margin-top: 0
-    border-color: #F67E7E!important;
 }
 
 .ui-more-option-cancel-btn {
