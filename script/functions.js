@@ -28,6 +28,9 @@ function setCurrLocationHash(locationHash){
  * preventing default events, showing default display, etc.
  */
 function initialElementEventSetting(){
+    // instantiate the FastClick object for removing the 300ms delay in jQuery mobile
+    FastClick.attach(document.body);
+
     // set comment and message send bar disable
     var $footerBarInputCommentContent = $("#footer-bar-input-comment-content");
     $footerBarInputCommentContent.on("blur",function(){
@@ -163,6 +166,8 @@ function initialElementEventSetting(){
     $(document).on("pageshow","#page-change-my-password", function(){
         $("#body-input-old-password").focus();
     });
+
+
 }
 
 /* This function tries to log into user session by local storage
