@@ -198,8 +198,8 @@ function loginByLocalStorage(){
     } else {
         var window_width = $(window).width();
         var window_height = $(window).height();
+        var $loadingPageImage = $(".loading-page-image");
         if (window_width/window_height > 1) {
-            var $loadingPageImage = $(".loading-page-image");
             $loadingPageImage.append("<div class='loading-page-button-top'>Join Us.</div>");
             $(".loading-page-button-top").css("marginLeft", Math.round(($loadingPageImage.width()-93-44)/2).toString()+"px");
         } else {
