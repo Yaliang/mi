@@ -438,7 +438,7 @@ function pullFriendListForAddingParticipants(){
             var friendId = objects[i].get("friend");
             var objectId = objects[i].id;
             $("#body-add-participants-list").append("<li id='body-add-participants-list-"+friendId+"' class='ui-friend-list-line'></li>");
-            $("#body-add-participants-list-"+friendId).click({id: friendId},selectANewPariticipant);
+            $("#body-add-participants-list-"+friendId).click({id: friendId},selectANewParticipantv);
             var displayFunction1 = function(userObject, data) { // userObject: single cacheUser[i] object
                 var newElement = buildUserListElement(userObject, "body-add-participants-people-", null, null, "add-participant-list");
                 var objectId = data.friendObject.id;
@@ -502,9 +502,9 @@ function pullParticipantsListInGroup(){
                     $("#body-group-participants-people-"+data.userId+">.custom-people-in-friend-list").css("backgroundImage","url('"+photo120+"')");
                 };
                 CacheGetProfilePhotoByUserId(userObject.id, displayFunction, {userId : userObject.id});
-            }
+            };
             CacheGetProfileByUserId(memberId[i],displayFunction);
         }
-    }
+    };
     CacheGetGroupMember(groupId, successFunction, {});
 }

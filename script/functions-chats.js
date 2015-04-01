@@ -197,25 +197,22 @@ function pullMyChat(){
                 chatId = objects[i].id;
                 groupId = objects[i].get("groupId");
                 data = {chatId: chatId};
-                var unreadNum = objects[i].get("unreadNum");
+
                 // move the element to top of the list
                 var element = $("#body-chat-"+data.chatId);
                 $("#page-chat > .ui-content").prepend(element);
+
                 // update unread number label
-                var unreadNum_Current;
-                if ($("#body-chat-"+data.chatId+"> .ui-li-count").length > 0) {
-                    unreadNum_Current = parseInt($("#body-chat-"+data.chatId+"> .ui-li-count").html());
-                } else {
-                    unreadNum_Current = 0;
-                }
-                if ((unreadNum != unreadNum_Current) && (unreadNum > 0)){
-                    if ($("#body-chat-"+data.chatId+"> .ui-li-count").length > 0) {
-                        $("#body-chat-"+data.chatId+"> .ui-li-count").html(unreadNum.toString());
+                var unreadNum = objects[i].get("unreadNum");
+                var $bodyChat = $("#body-chat-"+data.chatId+"> .ui-li-count");
+                if (unreadNum > 0) {
+                    if ($bodyChat.length > 0) {
+                        $bodyChat.html(unreadNum.toString());
                     } else {
-                        $("#body-chat-"+data.chatId).append("<span class='ui-li-count'>"+unreadNum.toString()+"</span>");
+                        element.append("<span class='ui-li-count'>"+unreadNum.toString()+"</span>");
                     }
                 } else {
-                    if (($("#body-chat-"+data.chatId+"> .ui-li-count").length > 0) && (unreadNum == 0)) {
+                    if ($bodyChat.length > 0) {
                         $("#body-chat-"+data.chatId+"> .ui-li-count").remove();                        
                         $("#body-chat-"+data.chatId+"> .chat-last-time").removeClass("chat-last-time-right-blank");
                     }
@@ -411,7 +408,7 @@ function updateChatTitle(friendId, id, option){
                     }
 
                     if (titleString.length > 15) {
-                        titleString = titleString.substring(0,13)+"...";
+                        titleString = titleString.substring(0,15)+"...";
                     }
                     $id.html(titleString);
                 }
@@ -530,7 +527,7 @@ function hideChatMessageMoreOption(){
 
 /* This function is designed to add new users to a group chat.
  */
-function selectANewPariticipant(event) {
+function selectANewParticipant(event) {
     var id = event.data.id;
     newGroupChatMemberArray.memberId.push(id);
     newGroupChatMemberArray.newNum++;
@@ -555,12 +552,12 @@ function removeANewParticipant(event) {
     }
     $("#body-add-participants-list-"+id).children(".ui-add-participant-checked")
         .removeClass("ui-add-participant-checked").addClass("ui-add-participant-unchecked")
-        .unbind("click").click({id: id},selectANewPariticipant);
+        .unbind("click").click({id: id},selectANewParticipant);
 }
 
 /* This function is designed to pull up the profile for a group.
  */
-function pullGroupPrifle(){
+function pullGroupProfile(){
     var groupId = $("#footer-bar-group-id-label").html();
     $("#body-group-participants-list-toggle").html("Collapse List");
     $("#body-group-participants-list").show();
