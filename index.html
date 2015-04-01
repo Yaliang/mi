@@ -480,7 +480,7 @@
     <!-- Page for displaying the chat list -->
     <div id="page-chat" data-role="page" data-title="Yueme">
 
-        <div data-role="header" data-position="fixed" data-tap-toggle="false" >
+        <div data-role="header" data-position="fixed" data-tap-toggle="false">
             <h1>Chats</h1>
         </div><!-- /header -->
 
@@ -509,7 +509,7 @@
     <!-- Page for displaying the messages of a chat -->
     <div id="page-chat-messages" data-role="page" data-title="Yueme" data-add-back-btn="true">
 
-        <div data-role="header" data-position="fixed" data-tap-toggle="false" >
+        <div data-role="header" data-position="fixed" data-tap-toggle="false">
             <h1 id="header-chat-message-title"></h1>
             <a class="ui-btn-left ui-btn ui-btn-inline ui-corner-all" data-rel="back" href="#page-chat"
                onclick="pullMyChat(); $('#footer-bar-send-message').fadeOut();setCurrLocationHash('#page-chat')">Back</a>
@@ -538,7 +538,7 @@
     <!-- Page for adding participant to the group chat -->
     <div id="page-add-participants" data-role="page" data-title="Yueme">
 
-        <div data-role="header" data-position="fixed" data-tap-toggle="false" >
+        <div data-role="header" data-position="fixed" data-tap-toggle="false">
             <h1>Friends</h1>
             <a class="ui-btn-left ui-btn ui-btn-inline ui-corner-all" data-rel="back" href="#page-chat-messages"
                onclick="">Back</a>
@@ -555,7 +555,7 @@
     <!-- Page for group profile of a group chat -->
     <div id="page-group-profile" data-role="page" data-title="Yueme">
 
-        <div data-role="header" data-position="fixed" data-tap-toggle="false" >
+        <div data-role="header" data-position="fixed" data-tap-toggle="false">
             <h1>Group</h1>
             <a class="ui-btn-left ui-btn ui-btn-inline ui-corner-all" data-rel="back" href="#page-chat-messages"
                onclick="">Back</a>
@@ -563,9 +563,9 @@
 
         <div role="main" class="ui-content">
             <a class="ui-btn" id="body-group-participants-list-toggle" style="margin-bottom:0" onclick="groupParticipantsListToggle()">Collapse List</a>
-            <ul class="ui-custom-listview ui-listview ui-listview-inset ui-corner-all ui-shadow" id="body-group-participants-list" style="margin-top:0" ></ul>
-            <a data-transition="slideup" href="#page-set-group-name" class="ui-btn" id="body-group-name"></a>
-            <a data-transition="slideup" href="#" class="ui-btn" >Leave Group</a>
+            <ul class="ui-custom-listview ui-listview ui-listview-inset ui-corner-all ui-shadow" id="body-group-participants-list" style="margin-top:0"></ul>
+            <a class="ui-btn" id="body-group-name" data-transition="slideup" href="#page-set-group-name"></a>
+            <a class="ui-btn" data-transition="slideup" href="#page-chat">Leave Group</a>
         </div><!-- /content -->
 
     </div>
@@ -573,7 +573,7 @@
     <!-- Page for setting group name-->
     <div id="page-set-group-name" data-role="page" data-title="Yueme">
 
-        <div data-role="header" data-position="fixed" data-tap-toggle="false" >
+        <div data-role="header" data-position="fixed" data-tap-toggle="false">
             <h1>Group</h1>
             <a class="ui-btn-left ui-btn ui-btn-inline ui-corner-all" data-rel="back" href="#page-group-profile"
                onclick="">Back</a>

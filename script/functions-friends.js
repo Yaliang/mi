@@ -104,7 +104,6 @@ function sendFriendRequest(friendId) {
 /* This function is designed to accept friend request.
  */
 function acceptFriendRequest(requestObjectId) {
-
     // when accepting friend request
     // unbind the click event
     $("#body-bottom-button-response-request-accept").unbind("click");
@@ -114,8 +113,7 @@ function acceptFriendRequest(requestObjectId) {
         // get the current user's "friend" data
         var objectId = object.id;
         var friendId = object.get("friend");
-        $("#body-bottom-button-response-request-accept").before("<div class='ui-btn' id='body-bottom-button-send-request' style='clear: both'></div>");
-        $("#body-bottom-button-response-request-accept").remove();
+        $("#body-bottom-button-response-request-accept").before("<div class='ui-btn' id='body-bottom-button-send-request' style='clear: both'></div>").remove();
         $("#body-bottom-button-response-request-reject").remove();
         $("#body-bottom-button-send-request").html("Start Chat").unbind("click").on("click",function(){
             startPrivateChat(friendId);
@@ -125,7 +123,6 @@ function acceptFriendRequest(requestObjectId) {
         pushNotificationToDeviceByUserId(object.get('friend'), Parse.User.current().get("name")+" accepted your friend request!");
     };
     ParseAcceptFriendRequest(requestObjectId, null, null, successFunction);
-
 }
 
 /* This function is designed to reject friend request.
@@ -133,8 +130,7 @@ function acceptFriendRequest(requestObjectId) {
 function rejectFriendRequest(requestObjectId, friendId) {
     // when rejecting friend request
     var successFunction = function(friendId){
-        $("#body-bottom-button-response-request-accept").before("<div class='ui-btn' id='body-bottom-button-send-request' style='clear: both'></div>");
-        $("#body-bottom-button-response-request-accept").remove();
+        $("#body-bottom-button-response-request-accept").before("<div class='ui-btn' id='body-bottom-button-send-request' style='clear: both'></div>").remove();
         $("#body-bottom-button-response-request-reject").remove();
 
         $("#body-bottom-button-send-request").html("Send Friend Request").unbind("click").on("click",function(){
@@ -195,7 +191,8 @@ function buildUserListElement(object, liIdPrefix, lat, lng, type) {
     return newElement;
 }
 
-/* This variable...
+/* This variable represents the current position of a user
+ * and continues to get updated as the user moves (like the GPS in a car)
  */
 var geoWatchId;
 
@@ -416,7 +413,7 @@ function pullMyFriendList() {
     CachePullMyFriend(Parse.User.current().id, descendingOrderKey, displayFunction);
 }
 
-/* This variable ...
+/* This variable holds an array of temporary users for creating or adding users to a group chat.
  */
 var newGroupChatMemberArray = {memberId:[], prevNum:0, newNum:0};
 
@@ -463,7 +460,7 @@ function pullFriendListForAddingParticipants(){
         var groupId = $("#footer-bar-group-id-label").html();
         var successFunction = function(object, data){  // object: single cacheGroup[i] object
             var memberId = object.get("memberId");
-            console.log(memberId);
+            //console.log(memberId);
             newGroupChatMemberArray.memberId = $.merge([], memberId);
             newGroupChatMemberArray.prevNum = memberId.length;
             newGroupChatMemberArray.newNum = 0;

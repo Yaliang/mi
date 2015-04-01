@@ -357,8 +357,10 @@ function CacheGetChatByGroupId(ownerId, groupId, displayFunction, data) {
 /* This function is designed to update the cached chatting messages.
  */
 function CacheUpdateChat(object){
-    if (typeof(object) == "undefined")
+    if (typeof(object) == "undefined") {
         return;
+    }
+
     object = rawLocalToCache(JSON.parse(JSON.stringify(object)));
     var cached = false;
     for (var i = 0; i < cacheChat.length; i++) {
