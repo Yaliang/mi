@@ -321,6 +321,14 @@ a {
     width: 35px!important;
 }
 
+.ui-icon-custom-add-image{
+    background: url("./content/material-design/png/add182-pink-36.png");
+    background-size: 20px 20px;
+    text-align: left!important;
+    padding-left: 25px!important;
+    width: 35px!important;
+}
+
 .ui-state-disabled {
     opacity: 1!important;
 }
@@ -658,6 +666,10 @@ textarea {
     height: 120px;
 }
 
+#body-input-insert-description-photo{
+    width: 30px;
+    height: 30px;
+}
 .people-near-by-list-distance {
     clear: both;
     font-size: .75em;

@@ -240,6 +240,10 @@ function initialElementEventSetting(){
     $("#body-input-insert-description-photo").on("change",function(){
         insertDescriptionPreviewPhoto();
     })
+    $("#body-input-create-event-description").on("keyup keypress",function(e){
+        if (listenKeyup)
+            deleteDescriptionPreviewPhoto(e);
+    })
 
     // check if the user has been logged in or not
     $(window).hashchange(function(){

@@ -269,58 +269,102 @@ function pullUserEvent(beforeAt){
 var imgArray = [];
 
 function insertDescriptionPreviewPhoto(){
-    
     var fileUploadControl = $("#body-input-insert-description-photo")[0];
     var file = fileUploadControl.files[0];
-    console.log("imgArray length:" + imgArray.length);
-    imgArray.push(file);
-    console.log("after push length:" + imgArray.length);
-
-
-
     if (typeof(file) == "undefined"){
-        console.log("dhsjkdfhskdfhksd");
         return;
     }
+    imgArray.push({file: file});
 
     var reader = new FileReader();
     reader.onload = function(e) {
-        console.log("onload start");
-        var curIndex = imgArray.length;
-        console.log("curIndex"+imgArray.length);
+        var curIndex = imgArray.length-1;
         var textValue = $("#body-input-create-event-description").val();
         $("#body-input-create-event-description").val( textValue + "\n");
         var caretPos = $("#body-input-create-event-description").textareaHelper('caretPos');
         var textareaPos = $("#body-input-create-event-description").offset();
        
-        
-
         var image = new Image();
         image.src = e.target.result;
         var sourceWidth = image.width;
         var sourceHeight = image.height;
         var imgRatio = sourceWidth/sourceHeight;
-        console.log("ori image width:" + sourceWidth+"  height:"+sourceHeight+" ratio:"+imgRatio);
-        sourceWidth = $("#body-input-create-event-description").width();
+        sourceWidth = 400; //$("#body-input-create-event-description").width();
         sourceHeight = sourceWidth/imgRatio;
-        console.log("after image width:" + sourceWidth+"  height:"+sourceHeight+" ratio:"+imgRatio);
-        console.log("before top:"+caretPos.top+"  left:"+caretPos.left);
         textValue = $("#body-input-create-event-description").val();
-        var looptime = sourceHeight/22+1;
-        console.log("looptime" + looptime);
-        $("#body-input-create-event-description").val( textValue + "\nThe looptime is " + looptime);
+        var looptime = sourceHeight/22-1;
+        $("#body-input-create-event-description").val( textValue + "<<>>IIIIMMMMMGGGG<<>>"+curIndex.toString()+"\n");
         for(var i = looptime; i > 0; i--){
-            console.log("in for loop");
             textValue = $("#body-input-create-event-description").val();
             $("#body-input-create-event-description").val( textValue + "\n");
         }
-        //$("#body-input-create-event-description").val( textValue + "\n\n\n\n");
         var testPos = $("#body-input-create-event-description").textareaHelper('caretPos');
-        $("body").append("<img id='body-description-img"+(curIndex-1).toString()+"' src='"+image.src+"' width='"+sourceWidth+"' height='"+sourceHeight+"'>");
-        $("#body-description-img"+(curIndex-1).toString()).offset({ top: (caretPos.top+textareaPos.top), left: textareaPos.left });
-        console.log("after top:"+testPos.top+"  left:"+testPos.left);
+        $("body").append("<img id='body-description-img"+curIndex.toString()+"' src='"+image.src+"' width='"+sourceWidth+"' height='"+sourceHeight+"'>");
+        $("#body-description-img"+curIndex.toString()).offset({ top: (caretPos.top+textareaPos.top), left: textareaPos.left});
+        var imageObject = imgArray[curIndex];
+        imageObject["width"] = sourceWidth;
+        imageObject["height"] = sourceHeight;
+        imageObject["top"] = caretPos.top;
+        imageObject["left"] = caretPos.left;
+        var fileUploadControl = $("#body-input-insert-description-photo").val("").clone(true);
+        $("#body-input-create-event-description").trigger(jQuery.Event("keyup", {keyCode: $.ui.keyCode.ENTER, which: $.ui.keyCode.ENTER }));
+        $("#body-input-create-event-description").textareaHelper('destroy');
     };
     reader.readAsDataURL(file);
+}
+
+var listenKeyup = true;
+var goingToDelete = false;
+
+function deleteDescriptionPreviewPhoto(e){
+
+    listenKeyup = false;
+    var curIndex = imgArray.length-1;
+    if(curIndex < 0){
+        listenKeyup = true;
+        return;
+    }
+    var caretPos = $("#body-input-create-event-description").textareaHelper('caretPos');
+    var curImageObject = imgArray[curIndex];
+    var deleteRangeTop = curImageObject.top + curImageObject.height;
+    var deleteRangeLeft = curImageObject.left + curImageObject.width;
+
+    if(goingToDelete == true && e.which == 8){ // && caretPos.left < deleteRangeLeft
+        console.log("keycode space");
+        textValue = $("#body-input-create-event-description").val();
+
+        var deleteStrIndex = textValue.indexOf("\n<<>>IIIIMMMMMGGGG<<>>"+curIndex.toString()); 
+        $("#body-input-create-event-description").val(textValue.substring(0,deleteStrIndex));
+        $("#body-description-img"+curIndex.toString()).remove();
+        imgArray.pop();
+        //caretPos = $("#body-input-create-event-description").textareaHelper('caretPos');
+
+        goingToDelete = false;
+        $("#body-input-create-event-description").textareaHelper('destroy');
+        listenKeyup = true;
+        return;
+    }
+
+
+    while (1) {
+        console.log("in while");
+        if(caretPos.left < deleteRangeLeft && caretPos.top <= deleteRangeTop){
+            var textValue = $("#body-input-create-event-description").val();
+            $("#body-input-create-event-description").val( textValue + " "); 
+            //$("#body-input-create-event-description").trigger(jQuery.Event("keyup", {keyCode: $.ui.keyCode.SPACE, which: $.ui.keyCode.SPACE}));
+            $("#body-input-create-event-description").keyup();
+
+            caretPos = $("#body-input-create-event-description").textareaHelper('caretPos');
+            goingToDelete = true;
+        }
+        else{
+            console.log(goingToDelete);
+            break;
+        }
+    }
+
+    $("#body-input-create-event-description").textareaHelper('destroy');
+    listenKeyup = true;
 }
 
 function displayEventMoreOption(){
