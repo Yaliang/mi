@@ -427,7 +427,7 @@ function insertDescriptionPreviewPhoto(){
         var sourceWidth = image.width;
         var sourceHeight = image.height;
         var imgRatio = sourceWidth/sourceHeight;
-        sourceWidth = 400; //$("#body-input-create-event-description").width();
+        sourceWidth = $("#body-input-create-event-description").width()/2; //400;
         sourceHeight = sourceWidth/imgRatio;
         textValue = $("#body-input-create-event-description").val();
         var looptime = sourceHeight/22-1;
@@ -438,7 +438,7 @@ function insertDescriptionPreviewPhoto(){
         }
         var testPos = $("#body-input-create-event-description").textareaHelper('caretPos');
         $("body").append("<img id='body-description-img"+curIndex.toString()+"' src='"+image.src+"' width='"+sourceWidth+"' height='"+sourceHeight+"'>");
-        $("#body-description-img"+curIndex.toString()).offset({ top: (caretPos.top+textareaPos.top), left: textareaPos.left});
+        $("#body-description-img"+curIndex.toString()).offset({ top: (caretPos.top+textareaPos.top), left: textareaPos.left+8});
         var imageObject = imgArray[curIndex];
         imageObject["width"] = sourceWidth;
         imageObject["height"] = sourceHeight;
