@@ -1165,7 +1165,7 @@ function shareEvents(object){
     //   console.log("****" + $(".share-btn").attr("href"));
     // createSharePage(object);
 
-    var eventLink = window.location.hostname + "/share.html?id="+object.id;
+    var eventLink = window.location.hostname + "/mi/share.html?id="+object.id;
     //var eventLink = window.location.pathname.split( '/' )[0] +  "/share.html?id="+object.id;
     console.log(window.location.href);
     console.log(eventLink);
