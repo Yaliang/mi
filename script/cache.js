@@ -331,7 +331,7 @@ function CacheRemoveFriend(friendObject) {
 function CachePullMyChat(ownerId,displayFunction) {
     var chats = [];
     for (var i = 0;  i<cacheChat.length; i++) {
-        if ((cacheChat[i].get("ownerId") == ownerId) && (cacheChat[i].get("hidden") == false)) {
+        if ((cacheChat[i].get("ownerId") == ownerId) && !(cacheChat[i].get("hidden"))) {
             chats.push(cacheChat[i]);
         }
     }

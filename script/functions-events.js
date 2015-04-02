@@ -774,8 +774,10 @@ function updateEventDetail(id){
  */
 function displayEventDetailMoreOption(){
     $("#header-event-detail-more-option").removeClass("ui-header-event-more-option").addClass("ui-header-event-more-option-active");
+
     var $bodyBottomEventDetailMoreOption = $("#body-bottom-event-detail-more-option");
     $bodyBottomEventDetailMoreOption.css("position","fixed").css("bottom",(-$bodyBottomEventDetailMoreOption.height()).toString()+"px").show();
+
     $("body").append("<div class='ui-gray-cover' style='position:fixed; width:100%; height:100%; opacity:0; background-color:#000; z-index:4' onclick='hideEventDetailMoreOption()'><div>");
     $bodyBottomEventDetailMoreOption.animate({
         bottom: "0px"
@@ -783,8 +785,6 @@ function displayEventDetailMoreOption(){
     $(".ui-gray-cover").animate({
         opacity: 0.3
     },300);
-    $("#header-event-detail-more-option").removeClass("ui-header-event-more-option");
-    $("#header-event-detail-more-option").addClass("ui-header-event-more-option-active");
 }
 
 /* This function is designed to hide unnecessary options on event detail page.
@@ -798,13 +798,12 @@ function hideEventDetailMoreOption(){
     },300,function(){
         $bodyBottomEventDetailMoreOption.hide();
     });
+
     $(".ui-gray-cover").animate({
         opacity: 0
     },300, function(){
         $(".ui-gray-cover").remove();
     });
-    $("#header-event-detail-more-option").addClass("ui-header-event-more-option");
-    $("#header-event-detail-more-option").removeClass("ui-header-event-more-option-active");
 }
 
 /* This function is designed to enable comment reply to a specific user and focus the comment input box
@@ -894,7 +893,7 @@ function sendComment(){
     ParseAddEventComment(eventId, owner, content, {
         replyToUserId: replyToUserId,
         errorFunction: errorFunction, 
-        successFunction: successFunction,
+        successFunction: successFunction
     });
 }
 
