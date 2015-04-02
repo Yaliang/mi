@@ -729,7 +729,7 @@ function updateEventDetail(id){
     // display the UserEvent object info
     var descendingOrderKey = "createdAt";
     var displayFunction = function(objects){  // objects: an array of UserEvent objects
-        shareEvents(object[0]);
+        shareEvents(objects[0]);
         var id = objects[0].id;
         var holder = objects[0].get("owner");
         $("#body-content-event-detail").prepend(buildEventDetailElement(objects[0]));
