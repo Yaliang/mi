@@ -1228,6 +1228,11 @@ function ParseHideChat(chatObjectId, ownerId, groupId, displayFunction) {
  *  The chat object is destroyed and will no longer be available in later use.
  *  If you want to hide the chat object instead of destroying it, see ParseHideChat.
  */
+
+/****************************************/
+/* This function need to be rewritten beacuse when destorying a chat object,
+/* the corresponding group object need to be update
+/****************************************/
 function ParseDeleteChat(chatObjectId, ownerId, groupId, displayFunction) {
     var Chat = Parse.Object.extend("Chat");
     var query = new Parse.Query(chat);
