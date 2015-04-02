@@ -228,7 +228,6 @@ function ParseUpdateReport(id, hiddenUserEvent){
     });
 }
 
-
 /* This function is designed to pull up user activities by calling Parse API "find" (instance method of Parse.Query
  * object, which is performed on UserEvent object. UserEvent is a customer-defined subclass of Parse.Object)
  */
@@ -533,7 +532,7 @@ function ParseSaveProfilePhoto(id, photo, photo120, displayFunction) {
                 
             });
         }
-    })
+    });
 }
 
 /* This function is designed to get user profile photo according to their Id by calling Parse API "first" (instance
@@ -550,7 +549,7 @@ function ParseGetProfilePhotoByUserId(userId, displayFunction, data) {
             displayFunction(object, data);
             CacheUpdatePhoto(object);
         }
-    })
+    });
 }
 
 /* This function is designed to get user profile photo according to their username by calling Parse API "first" (instance
@@ -566,7 +565,7 @@ function ParseGetProfilePhotoByUsername(username, displayFunction, data) {
         success: function(object){
             ParseGetProfilePhotoByUserId(object.id, displayFunction, data);
         }
-    })
+    });
 }
 
 /* This function is designed to pull up users according to their locations by calling Parse API "find"
@@ -617,25 +616,25 @@ function ParseSendFriendRequest(ownerId, friendId, successFunction){
                         successFunction(friend);
                         CacheUpdateFriend(friend);
                     }
-                })
+                });
 
             } else {
                 successFunction(object);
                 CacheUpdateFriend(object);
             }
         }
-    })
+    });
 }
 
 /* This function is designed to accept friend request by calling Parse API "first" (instance method of
  * Parse.Query object, which is performed on Friend object. Friend is a customer-defined subclass of Parse.Object)
  */
-function ParseAcceptFriendRequest(objectId, ownerId, friendId, successFunction){
+function ParseAcceptFriendRequest(friendObjectId, ownerId, friendId, successFunction){
     var Friend = Parse.Object.extend("Friend");
     var query = new Parse.Query(Friend);
 
-    if (objectId != null) {
-        query.equalTo("objectId",objectId);
+    if (friendObjectId != null) {
+        query.equalTo("objectId",friendObjectId);
     } else {
         query.equalTo("owner",ownerId);
         query.equalTo("friend",friendId);
@@ -672,7 +671,7 @@ function ParseAcceptFriendRequest(objectId, ownerId, friendId, successFunction){
                                         successFunction(object);
                                         CacheUpdateFriend(object);
                                     }
-                                })
+                                });
 
                             } else {
                                 // if existed
@@ -683,26 +682,25 @@ function ParseAcceptFriendRequest(objectId, ownerId, friendId, successFunction){
                                         successFunction(object);
                                         CacheUpdateFriend(object);
                                     }
-                                })
+                                });
                             }
                         }
-                    })
+                    });
                 }
             });
         }
-    })
+    });
 }
-
 
 /* This function is designed to reject friend request by calling Parse API "first" (instance method of
  * Parse.Query object, which is performed on Friend object. Friend is a customer-defined subclass of Parse.Object)
  */
-function ParseRejectFriendRequest(objectId, ownerId, friendId, successFunction){
+function ParseRejectFriendRequest(friendObjectId, ownerId, friendId, successFunction){
     var Friend = Parse.Object.extend("Friend");
     var query = new Parse.Query(Friend);
 
-    if (objectId != null) {
-        query.equalTo("objectId",objectId);
+    if (friendObjectId != null) {
+        query.equalTo("objectId",friendObjectId);
     } else {
         query.equalTo("owner",ownerId);
         query.equalTo("friend",friendId);
@@ -718,7 +716,7 @@ function ParseRejectFriendRequest(objectId, ownerId, friendId, successFunction){
                 }
             });
         }
-    })
+    });
 }
 
 /* This function is designed to pull up new friend request by calling Parse API "find" (instance method of
@@ -739,7 +737,7 @@ function ParsePullNewFriendRequest(userId, descendingOrderKey, displayFunction) 
                 CacheUpdateFriend(objects[i]);
             }
         }
-    })
+    });
 }
 
 /* This function is designed to pull up unread friend request by calling Parse API "find" (instance method of
@@ -759,7 +757,7 @@ function ParsePullUnreadFriendRequest(userId, displayFunction) {
                 CacheUpdateFriend(objects[i]);
             }
         }
-    })
+    });
 }
 
 /* This function is designed to check if two users are friends or not by calling Parse API "first" (instance method of
@@ -778,7 +776,7 @@ function ParseCheckFriend(ownerId, friendId, displayFunction) {
             displayFunction(ownerId, friendId, object);
             CacheUpdateFriend(object);
         }
-    })
+    });
 }
 
 /* This function is designed to pull up my friend list(those with friend requests accepted) by calling Parse API "find" (instance method of
@@ -799,7 +797,7 @@ function ParsePullMyFriend(ownerId, descendingOrderKey, displayFunction) {
                 CacheUpdateFriend(objects[i]);
             }
         }
-    })
+    });
 }
 
 /* This function is designed to pull up all of my friends(including those who have received my friend requests but have not accepted and
@@ -821,7 +819,7 @@ function ParsePullAllFriendObjectById(ownerId){
                 CacheUpdateFriend(objects[i]);
             }
         }
-    })
+    });
 }
 
 /* This function is designed to search users according their name and email by calling Parse API "find"
@@ -847,7 +845,7 @@ function ParseSearchUserByEmailAndName(string, limitNumber, descendingOrderKey, 
         success: function(objects){
             displayFunction(objects);
         }
-    })
+    });
 }
 
 /* This function is designed to set the friend request as read by calling Parse API "get" (instance method of
@@ -863,7 +861,7 @@ function ParseSetRequestRead(objectId){
             object.set("read",true);
             object.save();
         }
-    })
+    });
 }
 
 /* This function is designed to get the group Id by calling Parse API "first" (instance method of
@@ -887,13 +885,13 @@ function ParseGetGroupId(memberId, successFunction){
                         successFunction(object);
                         CacheUpdateGroup(object)
                     }
-                })
+                });
             } else {
                 successFunction(object);
                 CacheUpdateGroup(object)
             }
         }
-    })
+    });
 }
 
 /* This function is designed to get the group members by calling Parse API "get" (instance method of
@@ -928,9 +926,9 @@ function ParseSetGroupName(groupId, groupName, displayFunction){
                     displayFunction(object);
                     CacheUpdateGroup(object);
                 }
-            })
+            });
         }
-    })
+    });
 }
 
 /* This function is designed to set the chatting message as read by calling Parse API "first" (instance method of
@@ -976,7 +974,7 @@ function ParseSetChatObjectAsRead(ownerId, groupId, count, successFunction){
                 }
             }
         }
-    })
+    });
 }
 
 /* This function is designed to initialize a chatting message by calling Parse API "first" (instance method of
@@ -1010,7 +1008,7 @@ function ParseInitializeChatObjectInGroup(obj){
                 obj.successFunction(object);
             }
         }
-    })
+    });
 }
 
 /* This function is designed to pull up users' chatting messages by calling Parse API "find" (instance method of
@@ -1034,7 +1032,7 @@ function ParsePullChatMessage(groupId, limitNum, descendingOrderKey, beforeAt, d
                 CacheUpdateMessage(objects[i]);
             }
         }
-    })
+    });
 }
 
 /* This function is designed to pull up all chatting messages according to their group Id to update the local cache
@@ -1054,7 +1052,7 @@ function ParsePullAllMessageByGroupIdForCache(groupId, limitNum, beforeAt, displ
             }
             CachePullChatMessage(groupId, limitNum, beforeAt, displayFunction);
         }
-    })
+    });
 }
 
 /* This function is designed to save chatting messages by calling Parse API "save" (instance method of
@@ -1071,7 +1069,7 @@ function ParseAddChatMessage(senderId, groupId, text, displayFunction){
             displayFunction(object);
             CacheUpdateMessage(object)
         }
-    })
+    });
 }
 
 /* This function is designed to set and save chatting messages according to their group Id by calling Parse API "first" (instance method of
@@ -1116,7 +1114,7 @@ function ParseSetChatObjectReadFalseByCurrentIndexAndGroupId(senderId, memberId,
                     });
                 }
             }
-        })
+        });
     } else { // the sender is the owner
         // query.first method will return a single Chat object to be found
         query.first({
@@ -1129,9 +1127,9 @@ function ParseSetChatObjectReadFalseByCurrentIndexAndGroupId(senderId, memberId,
                             ParseSetChatObjectReadFalseByCurrentIndexAndGroupId(senderId, memberId, currentIndex+1, groupId, text, notificationFunction);
                         }
                     }
-                })
+                });
             }
-        })
+        });
     }
 }
 
@@ -1151,7 +1149,7 @@ function ParseSetGroupMemberChatObjectReadFalse(senderId, groupId, text, notific
             var memberId = object.get("memberId");
             ParseSetChatObjectReadFalseByCurrentIndexAndGroupId(senderId, memberId, 0, groupId, text, notificationFunction);
         }
-    })
+    });
 }
 
 /* This function is designed to pull up my chatting messages by calling Parse API "find" (instance method of
@@ -1172,7 +1170,7 @@ function ParsePullMyChat(ownerId,descendingOrderKey,displayFunction){
                 CacheUpdateChat(objects[i]);
             }
         }
-    })
+    });
 }
 
 /* This function is designed to pull up unread chatting messages by calling Parse API "find" (instance method of
@@ -1194,7 +1192,33 @@ function ParsePullUnreadChat(ownerId, descendingOrderKey, displayFunction){
                 CacheUpdateChat(objects[i]);
             }
         }
-    })
+    });
+}
+
+/* This function is designed to remove a chat object from the Parse server.
+ */
+function ParseRemoveChat(chatObjectId, ownerId, groupId, displayFunction) {
+    var Chat = Parse.Object.extend("Chat");
+    var query = new Parse.Query(chat);
+
+    if (chatObjectId != null) {
+        query.equalTo("objectId", chatObjectId);
+    } else {
+        query.equalTo("ownerId", ownerUd);
+        query.equalTo("groupId", groupId);
+    }
+
+    // query.first method will return a single Chat object to be found
+    query.first({
+        success:function(object){
+            CacheRemoveChat(object);
+            object.destroy({
+                 success:function(object){
+                     displayFunction();
+                 }
+            });
+        }
+    });
 }
 
 /* This function is designed to update the local cache by calling Parse API "find" (instance method of
@@ -1234,7 +1258,7 @@ function ParseUpdateCache(className, updateIdList,lastUpdate){
                 }
             }
         }
-    })
+    });
 }
 
 /* This function is designed to update and save user GCMID by calling Parse API "set" and "save" (instance method of
@@ -1248,7 +1272,7 @@ function ParseUpdateGCMId(regid, displayFunction){
             displayFunction(object);
             CacheUpdateUser(object);
         }
-    })
+    });
 }
 
 /* This function is designed to update and save user APNId by calling Parse API "set" and "save" (instance method of
@@ -1262,7 +1286,7 @@ function ParseUpdateAPNId(regid, displayFunction){
             displayFunction(object);
             CacheUpdateUser(object);
         }
-    })
+    });
 }
 
 /* This function is designed to update the name field in a comment by calling Parse API "find" (instance method of
@@ -1309,9 +1333,9 @@ function ParseUserNameFieldUpdate(i){
                     error: function(userEvent, error){
                         //console.log("Error: " + error.code + " " + error.message);
                     }
-                })
+                });
         }
-    })
+    });
 }
 
 /* This variable...
@@ -1388,9 +1412,9 @@ function ParsePhotoClassCreateBaseUserObject(i){
                 success: function() {
                     //console.log('success');
                 }
-            })
+            });
         }
-    })
+    });
 }
 
 /* This function is designed to refresh user profile photo by calling function "ParsePhotoClassCreateBaseUserObject"
@@ -1421,7 +1445,7 @@ function ParseClearChatWithoutMessage() {
             ChatObjectSet = objects;
             ParseCheckChatObject();
         }
-    })
+    });
 }
 
 /* This function is designed to check if a chat is empty by calling Parse API "first" (instance method of
@@ -1444,7 +1468,7 @@ function ParseCheckChatObject() {
                     success: function(){
                         //console.log("hidden:" + ChatObjectSet[refreshNumber].id)
                     }
-                })
+                });
             }
         }
     });
@@ -1478,7 +1502,7 @@ function ParseNoticeNewVersion() {
             NoticeNewVersionObjects = objects;
             SendNewVersionNotification(0);
         }
-    })
+    });
 }
 
 /* This function is designed to send notifications to users' devices that new versions of our app is available for update.

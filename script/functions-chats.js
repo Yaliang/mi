@@ -61,6 +61,7 @@ function startGroupChat(groupId){
         var groupId = object.id;
         var currentId = Parse.User.current().id;
         $("#footer-bar-group-id-label").html(groupId);
+
         var successFunction1 = function(object){  // object: single Chat object
             var groupId = object.get("groupId");
             var limitNum = 15;
@@ -69,6 +70,7 @@ function startGroupChat(groupId){
                 for (var i=objects.length-1; i>=0; i--) {
                     var newElement = buildElementInChatMessagesPage(objects[i]);
                     $("#page-chat-messages > .ui-content").append(newElement);
+
                     var displayFunction1 = function(object, data) {  // object: single cachePhoto[i] object
                         var photo120 = object.get("profilePhoto120");
                         if (typeof(photo120) == "undefined") {
@@ -79,7 +81,6 @@ function startGroupChat(groupId){
                     CacheGetProfilePhotoByUserId(objects[i].get("senderId"), displayFunction1, {messageId: objects[i].id});
                 }
                 $.mobile.changePage( "#page-chat-messages");
-                
             };
             //CachePullChatMessage(groupId, limitNum, null, displayFunction);
             ParsePullChatMessage(groupId, limitNum, descendingOrderKey, null, displayFunction, null)
@@ -90,7 +91,9 @@ function startGroupChat(groupId){
     // CacheGetGroupId(newGroupChatMemberArray.memberId,successFunction);
 }
 
-/* This variable ...
+/* This variable will be initialized with the total number of users in a group chat
+ * and decrement as the chat object for each user is built. When its value reaches 0,
+ * the group chat will be started.
  */
 var chatsInitializationNumber = 0;
 
@@ -100,14 +103,16 @@ function createGroupChat() {
     var successFunction = function(object){  // object: single cacheGroup[i] object
         var groupId = object.id;
         var memberId = object.get("memberId");
-        chatsInitializationNumber = memberId.length
-        var successFunction1 = function(object) {
+        chatsInitializationNumber = memberId.length;
+
+        var successFunction1 = function(object) {  // object: single Chat object
             var groupId = object.get("groupId");
             chatsInitializationNumber--;
             if (chatsInitializationNumber == 0) {
                 startGroupChat(groupId);
             }
         };
+
         for (var i=0; i<memberId.length; i++) {
             ParseInitializeChatObjectInGroup({
                 groupId:groupId, 
@@ -130,6 +135,7 @@ function buildElementInChatListPage(object){
     newElement += "<div class='chat-list-title'></div>";
     newElement += "<div class='chat-last-time'></div>";
     newElement += "<div class='chat-last-message'></div>";
+
     if (unreadNum > 0) {
         newElement += "<span class='ui-li-count'>"+unreadNum+"</span>";
     }
@@ -145,7 +151,7 @@ function pullMyChat(){
         pullNotification();
     }
     var ownerId = Parse.User.current().id;
-    var displayFunction = function(objects){ // objects: an array of Chat objects
+    var displayFunction = function(objects){ // objects: an array of Chat objects from cacheChat
         for (var i=objects.length-1; i>=0; i--) {
             if ($("#body-chat-"+objects[i].id).length == 0) {
                 var newElement = buildElementInChatListPage(objects[i]);
@@ -259,7 +265,7 @@ function updateLastMessage(groupId, data){
                 updateLastMessage(groupId, data);
             }
         };
-        CacheGetLastestMessage(groupId, displayFunction, data);
+        CacheGetLatestMessage(groupId, displayFunction, data);
 
     } else {
         var limitNum = 1;
@@ -373,34 +379,34 @@ function sendMessage(){
 
 /* This function is designed to update chatting message titles.
  */
-function updateChatTitle(friendId, id, option){
+function updateChatTitle(friendId, elementId, option){
     var displayFunction= function(ownerId, friendId, object) { // object: single cacheFriend[i] object
         if (typeof(object) != "undefined") {
-            // is the friend of current user
+            // user with friendId is a friend of current user
             var alias = object.get("alias");
-            var $id = $("#"+id);
+            var $elementId = $("#"+elementId);
 
             if (typeof(alias) == "undefined") {
-                var displayFunction1 = function(user){
+                var displayFunction1 = function(user){  // user: single cacheUser[i] object
                     if ((option)&&(option == 2)) {
-                        $id.html(user.get("name"));
+                        $elementId.html(user.get("name"));
                     } else {
-                        var titleString = $id.html();
+                        var titleString = $elementId.html();
                         if (titleString.length > 0) {
                             titleString += ", "+user.get("name");
                         } else {
                             titleString += user.get("name");
                         }
-                        $id.html(titleString);
+                        $elementId.html(titleString);
                     }
                 };
                 CacheGetProfileByUserId(friendId, displayFunction1)
 
             } else {
                 if ((option)&&(option == 2)) {
-                    $id.html(alias);
+                    $elementId.html(alias);
                 } else {
-                    var titleString = $id.html();
+                    var titleString = $elementId.html();
                     if (titleString.length > 0) {
                         titleString += ", "+alias;
                     } else {
@@ -410,7 +416,7 @@ function updateChatTitle(friendId, id, option){
                     if (titleString.length > 15) {
                         titleString = titleString.substring(0,15)+"...";
                     }
-                    $id.html(titleString);
+                    $elementId.html(titleString);
                 }
             }
         }
@@ -573,7 +579,7 @@ function pullGroupProfile(){
         }
         $("#body-group-name").html("<font style='padding-right:1em'>Group Name:</font><font style='color:#AAA'>"+groupName+"</font>");
     };
-    CacheGetGroupMember(groupId,displayFunction)
+    CacheGetGroupMember(groupId,displayFunction);
 }
 
 /* This function is designed to toggle user list in a group chat.
@@ -614,4 +620,10 @@ function saveGroupName(){
     ParseSetGroupName(groupId, groupName, displayFunction);
 
     $.mobile.back();
+}
+
+/* This function is designed to remove the selected chat in the chatting list of page-chat.
+ */
+function removeChat(chatObjectId) {
+
 }

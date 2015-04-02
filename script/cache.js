@@ -313,11 +313,11 @@ function CacheUpdateFriend(object){
     localStorage.cacheFriend = JSON.stringify(cacheFriend);
 }
 
-/* This function is designed to remove a particular friend object from cacheFriend list.
+/* This function is designed to remove the friend object from the cacheFriend list.
  */
-function CacheRemoveFriend(object) {
+function CacheRemoveFriend(friendObject) {
     for (var i = 0; i < cacheFriend.length; i++) {
-        if (cacheFriend[i].id == object.id) {
+        if (cacheFriend[i].id == friendObject.id) {
             cacheFriend.splice(i, 1);
             break;
         }
@@ -357,8 +357,10 @@ function CacheGetChatByGroupId(ownerId, groupId, displayFunction, data) {
 /* This function is designed to update the cached chatting messages.
  */
 function CacheUpdateChat(object){
-    if (typeof(object) == "undefined")
+    if (typeof(object) == "undefined") {
         return;
+    }
+
     object = rawLocalToCache(JSON.parse(JSON.stringify(object)));
     var cached = false;
     for (var i = 0; i < cacheChat.length; i++) {
@@ -372,6 +374,19 @@ function CacheUpdateChat(object){
         cacheChat.push(object);
     }
     localStorage.cacheChat = JSON.stringify(cacheChat);
+}
+
+/* This function is designed to remove the chat object from the cacheChat list.
+ */
+function CacheRemoveChat(chatObject) {
+    for (var i = 0; i < cacheChat.length; i++) {
+        if (cacheChat[i].id == chatObject.id) {
+            cacheChat.splice(i, 1);
+            break;
+        }
+    }
+
+    localStorage.cacheCat = JSON.stringify(cacheChat);
 }
 
 /* This function is designed to ...
@@ -479,7 +494,7 @@ function CachePullChatMessage(groupId, limitNum, beforeAt, displayFunction){
 
 /* This function is designed to show the latest chat message in the group chat.
  */
-function CacheGetLastestMessage(groupId, displayFunction,data){
+function CacheGetLatestMessage(groupId, displayFunction,data){
     var afterAt = null;
     var message = null;
     for (var i = 0; i < cacheMessage.length; i++) {
