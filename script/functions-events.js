@@ -729,6 +729,7 @@ function updateEventDetail(id){
     // display the UserEvent object info
     var descendingOrderKey = "createdAt";
     var displayFunction = function(objects){  // objects: an array of UserEvent objects
+        shareEvents(object[0]);
         var id = objects[0].id;
         var holder = objects[0].get("owner");
         $("#body-content-event-detail").prepend(buildEventDetailElement(objects[0]));
@@ -775,6 +776,8 @@ function displayEventDetailMoreOption(){
     $(".ui-gray-cover").animate({
         opacity: 0.3
     },300);
+    $("#header-event-detail-more-option").removeClass("ui-header-event-more-option");
+    $("#header-event-detail-more-option").addClass("ui-header-event-more-option-active");
 }
 
 /* This function is designed to hide unnecessary options on event detail page.
@@ -793,6 +796,8 @@ function hideEventDetailMoreOption(){
     },300, function(){
         $(".ui-gray-cover").remove();
     });
+    $("#header-event-detail-more-option").addClass("ui-header-event-more-option");
+    $("#header-event-detail-more-option").removeClass("ui-header-event-more-option-active");
 }
 
 /* This function is designed to enable comment reply to a specific user and focus the comment input box
@@ -1138,4 +1143,37 @@ function editSaveUserEvent(eventId){
         }
     };
     ParseEventEditSave(owner, title, location, time, visibility, description, errorObject, destID, displayFunction, eventId);
+}
+
+function shareEvents(object){
+     // var body = "<html><head><style></style></head><body> <div class = 'messagebody' style = 'background-color: #ffffff'></div>sgag</body></html>" ;
+    // var body = "<html><head><style>.messagebody{  max-width:320px;height: 320px;margin: 100 auto;color: #DAB84F;} "  +
+    //            ".eventtitle{font-size: 16px;} .event{font-size: 13px;}</style></head><body><div class = 'messagebody' style = 'background-image:url(\"letter320.png\"); background-color: #ffffff'>" ;
+    //     body += "<p align = center class = 'event' style='padding-top:110px'>Please join us!</p>";
+    //     body = body + "<p align = center class = 'eventtitle' style='padding-top:110px'><a href=\'"+ window.location.hostname + "/share.html?id="+object.id +"\'>" + object.get("title") + "</a></p>";
+    // var time = object.get("time").split(" -- ")[0];
+    // var date = time.substring(0, time.indexOf(" "));
+    // var hour = time.substring(time.indexOf(" ")+1, time.length);
+    //     body += "<p align = center class = 'event' >" + date + "</p>";
+    //     body += "<p align = center class = 'event' >" + hour + "</p>";
+    //     body += "<p align = center class = 'event' >" + object.get("location") + "</p>";
+    //     body += "</div></body></html>"
+
+    // var link = "mailto:?subject=There is a fantastic activity : " + object.get("title") + "&body="+ encodeURI(body);
+
+    // $(".share-btn").attr("href", link);
+    //   console.log("****" + $(".share-btn").attr("href"));
+    // createSharePage(object);
+
+    var eventLink = window.location.hostname + "/share.html?id="+object.id;
+    //var eventLink = window.location.pathname.split( '/' )[0] +  "/share.html?id="+object.id;
+    console.log(window.location.href);
+    console.log(eventLink);
+    var time = object.get("time").split(" -- ")[0];
+    var date = time.substring(0, time.indexOf(" "));
+    var hour = time.substring(time.indexOf(" ")+1, time.length);
+    var mailbody = "Please join us!\n\n Event: " + object.get("title") + "\nDate: " + date + " \nTime: " + hour;
+        mailbody += "\n See detail on this link: " + eventLink;
+    var mail = "mailto:?subject=There is a fantastic activity : " + object.get("title") + "&body="+ encodeURI(mailbody);
+    $(".share-btn").attr("href", mail);
 }
