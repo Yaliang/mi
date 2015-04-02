@@ -451,36 +451,43 @@ function insertDescriptionPreviewPhoto(){
     reader.readAsDataURL(file);
 }
 
+/* This variable...
+ */
 var listenKeyup = true;
+
+/* This variable...
+ */
 var goingToDelete = false;
+
 /* This function is designed to delete photo for preview in the description part
  * when creating a new user event.
  */
 function deleteDescriptionPreviewPhoto(e){
-
     listenKeyup = false;
     var curIndex = imgArray.length-1;
     if(curIndex < 0){
         listenKeyup = true;
         return;
     }
-    var caretPos = $("#body-input-create-event-description").textareaHelper('caretPos');
+
+    var $bodyInputCreateEventDescription = $("#body-input-create-event-description");
+    var caretPos = $bodyInputCreateEventDescription.textareaHelper('caretPos');
     var curImageObject = imgArray[curIndex];
     var deleteRangeTop = curImageObject.top + curImageObject.height;
     var deleteRangeLeft = curImageObject.left + curImageObject.width;
 
     if(goingToDelete == true && e.which == 8){ // && caretPos.left < deleteRangeLeft
         console.log("keycode space");
-        textValue = $("#body-input-create-event-description").val();
+        textValue = $bodyInputCreateEventDescription.val();
 
-        var deleteStrIndex = textValue.indexOf("\n<<>>IIIIMMMMMGGGG<<>>"+curIndex.toString()); 
-        $("#body-input-create-event-description").val(textValue.substring(0,deleteStrIndex));
+        var deleteStrIndex = textValue.indexOf("\n<<>>IIIIMMMMMGGGG<<>>"+curIndex.toString());
+        $bodyInputCreateEventDescription.val(textValue.substring(0,deleteStrIndex));
         $("#body-description-img"+curIndex.toString()).remove();
         imgArray.pop();
         //caretPos = $("#body-input-create-event-description").textareaHelper('caretPos');
 
         goingToDelete = false;
-        $("#body-input-create-event-description").textareaHelper('destroy');
+        $bodyInputCreateEventDescription.textareaHelper('destroy');
         listenKeyup = true;
         return;
     }
@@ -489,12 +496,12 @@ function deleteDescriptionPreviewPhoto(e){
     while (1) {
         console.log("in while");
         if(caretPos.left < deleteRangeLeft && caretPos.top <= deleteRangeTop){
-            var textValue = $("#body-input-create-event-description").val();
-            $("#body-input-create-event-description").val( textValue + " "); 
+            var textValue = $bodyInputCreateEventDescription.val();
+            $bodyInputCreateEventDescription.val( textValue + " ");
             //$("#body-input-create-event-description").trigger(jQuery.Event("keyup", {keyCode: $.ui.keyCode.SPACE, which: $.ui.keyCode.SPACE}));
-            $("#body-input-create-event-description").keyup();
+            $bodyInputCreateEventDescription.keyup();
 
-            caretPos = $("#body-input-create-event-description").textareaHelper('caretPos');
+            caretPos = $bodyInputCreateEventDescription.textareaHelper('caretPos');
             goingToDelete = true;
         }
         else{
@@ -503,7 +510,7 @@ function deleteDescriptionPreviewPhoto(e){
         }
     }
 
-    $("#body-input-create-event-description").textareaHelper('destroy');
+    $bodyInputCreateEventDescription.textareaHelper('destroy');
     listenKeyup = true;
 }
 
@@ -1145,6 +1152,8 @@ function editSaveUserEvent(eventId){
     ParseEventEditSave(owner, title, location, time, visibility, description, errorObject, destID, displayFunction, eventId);
 }
 
+/* This function is designed to share user event by email.
+ */
 function shareEvents(object){
      // var body = "<html><head><style></style></head><body> <div class = 'messagebody' style = 'background-color: #ffffff'></div>sgag</body></html>" ;
     // var body = "<html><head><style>.messagebody{  max-width:320px;height: 320px;margin: 100 auto;color: #DAB84F;} "  +
