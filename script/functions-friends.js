@@ -127,7 +127,7 @@ function acceptFriendRequest(requestObjectId) {
 
 /* This function is designed to reject friend request.
  */
-function rejectFriendRequest(requestObjectId, friendId) {
+function rejectFriendRequest(cachedFriendObjectId, friendId) {
     // when rejecting friend request
     var successFunction = function(friendId){
         $("#body-bottom-button-response-request-accept").before("<div class='ui-btn' id='body-bottom-button-send-request' style='clear: both'></div>").remove();
@@ -137,7 +137,7 @@ function rejectFriendRequest(requestObjectId, friendId) {
             sendFriendRequest(friendId);
         });
     };
-    ParseRejectFriendRequest(requestObjectId, null, friendId, successFunction);
+    ParseRejectFriendRequest(cachedFriendObjectId, null, friendId, successFunction);
 }
 
 /* This function is designed to build up elements for the list displaying users, such as after a near-by user search.

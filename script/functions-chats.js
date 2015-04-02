@@ -135,6 +135,7 @@ function buildElementInChatListPage(object){
     newElement += "<div class='chat-list-title'></div>";
     newElement += "<div class='chat-last-time'></div>";
     newElement += "<div class='chat-last-message'></div>";
+
     if (unreadNum > 0) {
         newElement += "<span class='ui-li-count'>"+unreadNum+"</span>";
     }
@@ -150,7 +151,7 @@ function pullMyChat(){
         pullNotification();
     }
     var ownerId = Parse.User.current().id;
-    var displayFunction = function(objects){ // objects: an array of Chat objects
+    var displayFunction = function(objects){ // objects: an array of Chat objects from cacheChat
         for (var i=objects.length-1; i>=0; i--) {
             if ($("#body-chat-"+objects[i].id).length == 0) {
                 var newElement = buildElementInChatListPage(objects[i]);
@@ -264,7 +265,7 @@ function updateLastMessage(groupId, data){
                 updateLastMessage(groupId, data);
             }
         };
-        CacheGetLastestMessage(groupId, displayFunction, data);
+        CacheGetLatestMessage(groupId, displayFunction, data);
 
     } else {
         var limitNum = 1;
@@ -619,4 +620,10 @@ function saveGroupName(){
     ParseSetGroupName(groupId, groupName, displayFunction);
 
     $.mobile.back();
+}
+
+/* This function is designed to remove the selected chat in the chatting list of page-chat.
+ */
+function removeChat(chatObjectId) {
+
 }

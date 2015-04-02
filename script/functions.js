@@ -119,7 +119,6 @@ function initialElementEventSetting(){
     // add function when the page #page-chat-messages completed.
     $(document).on("pageshow","#page-chat-messages",function(){
         $("#footer-bar-send-message").css("position","fixed").css("bottom","0").show();
-
         $("html body").animate({ scrollTop: $(document).height().toString()+"px" }, {
             duration: 500,
             complete : function(){
@@ -166,8 +165,6 @@ function initialElementEventSetting(){
     $(document).on("pageshow","#page-change-my-password", function(){
         $("#body-input-old-password").focus();
     });
-
-
 }
 
 /* This function tries to log into user session by local storage
