@@ -111,6 +111,8 @@
     <script src="./script/functions-friends.js"></script>
     <script src="./script/functions-chats.js"></script>
     <script src="./script/functions-settings.js"></script>
+    <script src="./script/textarea-helper-master/textarea-helper.js"></script>
+    <script type="application/javascript" src="./script/fastclick-master/lib/fastclick.js"></script>
 </head>
 
 <body>
@@ -189,16 +191,16 @@
         <div class="nav-glyphish-example" data-role="footer" data-position="fixed" data-tap-toggle="false">
             <div class="nav-glyphish-example" data-role="navbar" data-grid="c">
             <ul>
-                <li><a class="event-active-custom" id="footer-navigation-bar-event" data-transition="none" href="#page-event"
+                <li><a class="event-active-custom footer-navigation-bar-event" data-transition="none" href="#page-event"
                        onclick="pullUserEvent();setCurrLocationHash('#page-event')">Activities</a></li>
 
-                <li><a  id="footer-navigation-bar-friend" data-transition="none" href="#page-friend"
+                <li><a  class="footer-navigation-bar-friend" data-transition="none" href="#page-friend"
                        onclick="pullMyFriendList();setCurrLocationHash('#page-friend')">Friends</a></li>
 
-                <li><a id="footer-navigation-bar-chat" data-transition="none" href="#page-chat"
+                <li><a class="footer-navigation-bar-chat" data-transition="none" href="#page-chat"
                        onclick="pullMyChat();setCurrLocationHash('#page-chat')">Chats</a></li>
 
-                <li><a id="footer-navigation-bar-setting" data-transition="none" href="#page-setting"
+                <li><a class="footer-navigation-bar-setting" data-transition="none" href="#page-setting"
                        onclick="setCurrLocationHash('#page-setting')">Settings</a></li>
             </ul>
             </div>
@@ -226,8 +228,6 @@
         </div><!-- /header -->
 
         <div class="ui-content" id="body-my-event-list" role="main"></div><!-- /content -->
-
-        <div data-role="footer" data-position="fixed" data-tap-toggle="false"></div><!-- /footer -->
 
     </div><!-- /page -->
 
@@ -258,6 +258,9 @@
                 </select>
                 <label for="body-input-create-event-description">Description:</label>
                 <textarea id="body-input-create-event-description" name="eventdescription"></textarea>
+                <div class="ui-btn ui-icon-custom-add-image" id="body-create-event-description-insert-image"></div>
+                <input id="body-input-insert-description-photo" name="descriptionphoto" data-clear-btn="false" type="file"
+                       onclick="insertDescriptionPreviewPhoto();" value="">
             </form>
 
             <div id="body-create-event-preview"></div>
@@ -330,10 +333,9 @@
 
         <div class="ui-content" id="body-content-event-detail" role="main"></div><!-- /content -->
 
-        <div class="ui-page-detail-more-option-bottom" id="body-bottom-event-detail-more-option">
-            <a class="ui-btn share-btn" href="">Share via Email</a>
+        <div class="ui-page-more-option-bottom" id="body-bottom-event-detail-more-option">
             <a class="ui-btn report-btn" data-transition="slideup" href="#page-event-report"
-               onclick="hideEventDetailMoreOption()">Report</a>
+               onclick="hideEventDetailMoreOption()">Report Abuse</a>
             <div class="ui-btn ui-more-option-cancel-btn" onclick="hideEventDetailMoreOption()">Cancel</div>
         </div>
 
@@ -343,7 +345,7 @@
     <div id="page-event-report" data-role="page" data-title="Yueme">
 
         <div data-role="header" data-theme="b">
-             <h1>Report Activity</h1>
+             <h1>Report Abuse</h1>
         </div>
 
         <div class="ui-content" role="main">
@@ -355,7 +357,7 @@
 
             <br>
             <a  class="ui-btn ui-shadow ui-corner-all ui-btn-a ui-custom-report" data-rel="back">Confirm</a>
-            <a  class="ui-btn ui-shadow ui-corner-all ui-btn-a" data-rel="back" onclick="$('#footer-bar-send-comment').fadeIn();">Cancel</a>
+            <a  class="ui-btn ui-shadow ui-corner-all ui-btn-a" data-rel="back">Cancel</a>
         </div>
 
     </div><!-- /page -->
@@ -393,9 +395,7 @@
 
         <div role="main" class="ui-content">
             <a class="ui-btn" id="body-new-friend-requests-btn" href="#page-my-friend-requests"
-               onclick="pullMyFriendRequests();setCurrLocationHash('#page-my-friend-requests')">
-               New Friend Requests
-               <span class="ui-li-count" id="body-new-friend-requests-number"></span>
+               onclick="pullMyFriendRequests();setCurrLocationHash('#page-my-friend-requests')">New Friend Requests</span>
             </a>
 
             <ul class="ui-custom-listview ui-listview ui-listview-inset ui-corner-all ui-shadow" id="body-friend-list"></ul>
@@ -404,16 +404,16 @@
         <div class="nav-glyphish-example" data-role="footer" data-position="fixed" data-tap-toggle="false">
             <div class="nav-glyphish-example" data-role="navbar" data-grid="c">
                 <ul>
-                    <li><a id="footer-navigation-bar-event" data-transition="none" href="#page-event"
+                    <li><a class="footer-navigation-bar-event" data-transition="none" href="#page-event"
                            onclick="pullUserEvent();setCurrLocationHash('#page-event')">Activities</a></li>
 
-                    <li><a class="friend-active-custom" id="footer-navigation-bar-friend" data-transition="none" href="#page-friend"
+                    <li><a class="friend-active-custom footer-navigation-bar-friend" data-transition="none" href="#page-friend"
                            onclick="pullMyFriendList();setCurrLocationHash('#page-friend')">Friends</a></li>
 
-                    <li><a id="footer-navigation-bar-chat" data-transition="none" href="#page-chat"
+                    <li><a class="footer-navigation-bar-chat" data-transition="none" href="#page-chat"
                            onclick="pullMyChat();setCurrLocationHash('#page-chat')">Chats</a></li>
 
-                    <li><a id="footer-navigation-bar-setting" data-transition="none" href="#page-setting"
+                    <li><a class="footer-navigation-bar-setting" data-transition="none" href="#page-setting"
                            onclick="setCurrLocationHash('#page-setting')">Settings</a></li>
                 </ul>
             </div>
@@ -462,8 +462,6 @@
             <ul id="body-list-search-user" data-role="listview" data-inset="true" data-filter="true" data-input="#body-input-user-autocomplete"></ul>
         </div><!-- /content -->
 
-        <div data-role="footer" data-position="fixed" data-tap-toggle="false"></div><!-- /footer -->
-
     </div><!-- /page -->
 
     <!-- Page for displaying all new friend requests -->
@@ -482,7 +480,7 @@
     <!-- Page for displaying the chat list -->
     <div id="page-chat" data-role="page" data-title="Yueme">
 
-        <div data-role="header" data-position="fixed" data-tap-toggle="false" >
+        <div data-role="header" data-position="fixed" data-tap-toggle="false">
             <h1>Chats</h1>
         </div><!-- /header -->
 
@@ -491,16 +489,16 @@
         <div class="nav-glyphish-example" data-role="footer" data-position="fixed" data-tap-toggle="false">
             <div class="nav-glyphish-example" data-role="navbar" data-grid="c">
                 <ul>
-                    <li><a id="footer-navigation-bar-event" data-transition="none" href="#page-event"
+                    <li><a class="footer-navigation-bar-event" data-transition="none" href="#page-event"
                            onclick="pullUserEvent();setCurrLocationHash('#page-event')">Activities</a></li>
 
-                    <li><a id="footer-navigation-bar-friend" data-transition="none" href="#page-friend"
+                    <li><a class="footer-navigation-bar-friend" data-transition="none" href="#page-friend"
                            onclick="pullMyFriendList();setCurrLocationHash('#page-friend')">Friends</a></li>
 
-                    <li><a class="chat-active-custom" id="footer-navigation-bar-chat" data-transition="none" href="#page-chat"
+                    <li><a class="chat-active-custom footer-navigation-bar-chat" data-transition="none" href="#page-chat"
                            onclick="pullMyChat();setCurrLocationHash('#page-chat')">Chats</a></li>
 
-                    <li><a id="footer-navigation-bar-setting" data-transition="none" href="#page-setting"
+                    <li><a class="footer-navigation-bar-setting" data-transition="none" href="#page-setting"
                            onclick="setCurrLocationHash('#page-setting')">Settings</a></li>
                 </ul>
             </div>
@@ -511,15 +509,86 @@
     <!-- Page for displaying the messages of a chat -->
     <div id="page-chat-messages" data-role="page" data-title="Yueme" data-add-back-btn="true">
 
-        <div data-role="header" data-position="fixed" data-tap-toggle="false" >
+        <div data-role="header" data-position="fixed" data-tap-toggle="false">
             <h1 id="header-chat-message-title"></h1>
             <a class="ui-btn-left ui-btn ui-btn-inline ui-corner-all" data-rel="back" href="#page-chat"
                onclick="pullMyChat(); $('#footer-bar-send-message').fadeOut();setCurrLocationHash('#page-chat')">Back</a>
+            <a class="ui-btn-right ui-btn ui-btn-inline ui-corner-all ui-header-more-option" id="header-chat-message-more-option" href="#"
+               onclick="displayChatMessageMoreOption()"></a>
         </div><!-- /header -->
 
         <div class="ui-content" style="margin-bottom:100px" role="main"></div><!-- /content -->
 
+        <div class="ui-page-more-option-bottom" id="body-bottom-private-chat-message-more-option">
+            <a class="ui-btn" data-transition="slideup" href="#page-add-participants"
+               onclick="hideChatMessageMoreOption();pullFriendListForAddingParticipants();">Add Participants</a>
+            <div class="ui-btn ui-more-option-cancel-btn" onclick="hideChatMessageMoreOption()">Cancel</div>
+        </div>
+
+        <div class="ui-page-more-option-bottom" id="body-bottom-group-chat-message-more-option">
+            <a class="ui-btn" data-transition="slideup" href="#page-add-participants"
+               onclick="hideChatMessageMoreOption();pullFriendListForAddingParticipants();">Add Participants</a>
+            <a class="ui-btn" data-transition="slideup" href="#page-group-profile"
+               onclick="hideChatMessageMoreOption();pullGroupProfile();">Group Profile</a>
+            <div class="ui-btn ui-more-option-cancel-btn" onclick="hideChatMessageMoreOption()">Cancel</div>
+        </div>
+
     </div><!-- /page -->
+
+    <!-- Page for adding participant to the group chat -->
+    <div id="page-add-participants" data-role="page" data-title="Yueme">
+
+        <div data-role="header" data-position="fixed" data-tap-toggle="false">
+            <h1>Friends</h1>
+            <a class="ui-btn-left ui-btn ui-btn-inline ui-corner-all" data-rel="back" href="#page-chat-messages"
+               onclick="">Back</a>
+            <a class="ui-btn-right ui-btn ui-btn-inline ui-corner-all" id="header-add-participant-for-group-chat" data-rel="back" href="#page-chat-messages"
+               onclick="">OK</a>
+        </div><!-- /header -->
+
+        <div role="main" class="ui-content">
+            <ul class="ui-custom-listview ui-listview ui-listview-inset ui-corner-all ui-shadow" id="body-add-participants-list"></ul>
+        </div><!-- /content -->
+
+    </div>
+
+    <!-- Page for group profile of a group chat -->
+    <div id="page-group-profile" data-role="page" data-title="Yueme">
+
+        <div data-role="header" data-position="fixed" data-tap-toggle="false">
+            <h1>Group</h1>
+            <a class="ui-btn-left ui-btn ui-btn-inline ui-corner-all" data-rel="back" href="#page-chat-messages"
+               onclick="">Back</a>
+        </div><!-- /header -->
+
+        <div role="main" class="ui-content">
+            <a class="ui-btn" id="body-group-participants-list-toggle" style="margin-bottom:0" onclick="groupParticipantsListToggle()">Collapse List</a>
+            <ul class="ui-custom-listview ui-listview ui-listview-inset ui-corner-all ui-shadow" id="body-group-participants-list" style="margin-top:0"></ul>
+            <a class="ui-btn" id="body-group-name" data-transition="slideup" href="#page-set-group-name"></a>
+            <a class="ui-btn" data-transition="slideup" href="#page-chat">Leave Group</a>
+        </div><!-- /content -->
+
+    </div>
+
+    <!-- Page for setting group name-->
+    <div id="page-set-group-name" data-role="page" data-title="Yueme">
+
+        <div data-role="header" data-position="fixed" data-tap-toggle="false">
+            <h1>Group</h1>
+            <a class="ui-btn-left ui-btn ui-btn-inline ui-corner-all" data-rel="back" href="#page-group-profile"
+               onclick="">Back</a>
+            <a class="ui-btn-right ui-btn ui-btn-inline ui-corner-all" href="#"
+               onclick="saveGroupName()">Save</a>
+        </div><!-- /header -->
+
+        <div role="main" class="ui-content">
+            <form id="body-form-set-group-name">
+                <input id="body-input-set-group-name" placeholder="Group Name">
+                <button class="ui-hidden-accessible" onclick="saveGroupName();"></button>
+            </form>
+        </div><!-- /content -->
+
+    </div>
 
     <!-- Page for displaying setting options -->
     <div id="page-setting" data-role="page" data-title="Yueme">
@@ -540,16 +609,16 @@
         <div class="nav-glyphish-example" data-role="footer" data-position="fixed" data-tap-toggle="false">
             <div class="nav-glyphish-example" data-role="navbar" data-grid="c">
                 <ul>
-                    <li><a id="footer-navigation-bar-event" data-transition="none" href="#page-event"
+                    <li><a class="footer-navigation-bar-event" data-transition="none" href="#page-event"
                            onclick="pullUserEvent();setCurrLocationHash('#page-event')">Activities</a></li>
 
-                    <li><a id="footer-navigation-bar-friend" data-transition="none" href="#page-friend"
+                    <li><a class="footer-navigation-bar-friend" data-transition="none" href="#page-friend"
                            onclick="pullMyFriendList();setCurrLocationHash('#page-friend')">Friends</a></li>
 
-                    <li><a id="footer-navigation-bar-chat" data-transition="none" href="#page-chat"
+                    <li><a class="footer-navigation-bar-chat" data-transition="none" href="#page-chat"
                            onclick="pullMyChat();setCurrLocationHash('#page-chat')">Chats</a></li>
 
-                    <li><a class="setting-active-custom" id="footer-navigation-bar-setting" data-transition="none" href="#page-setting"
+                    <li><a class="setting-active-custom footer-navigation-bar-setting" data-transition="none" href="#page-setting"
                            onclick="setCurrLocationHash('#page-setting')">Settings</a></li>
                 </ul>
             </div>
@@ -577,7 +646,6 @@
                 <canvas class="profile-photo-preview" id="body-profile-photo-preview-canvas" width="120px" height="120px"></canvas>
                 <input id="body-input-edit-profile-photo" name="profilephoto" data-clear-btn="false" type="file"
                        onclick="refreshPreviewPhoto = true; refreshPreviewCanvas();" value="">
-                <div class="ui-hidden-accessible" id="photo-orientation"></div>
             </div>
 
             <form style="padding: 1em;">
@@ -644,11 +712,11 @@
 
         <form id="footer-bar-form-comment">
             <label class="ui-hidden-accessible" id="footer-bar-event-id-label"></label>
-
+            <label class="ui-hidden-accessible" id="footer-bar-reply-to-id-label"></label>
             <div class="custom-block-a"
-                 onclick="sendToolbarActiveKeyboard({id:'#footer-bar-input-comment-content',bar:'#footer-bar-send-comment',base:'#page-event-detail'});">
+                 onclick="sendToolbarActiveKeyboard({id:'#footer-bar-input-comment-content',bar:'#footer-bar-send-comment',base:'#page-event-detail',bias:2});">
                 <div class="ui-input-text ui-shadow-inset ui-focus ui-body-inherit ui-corner-all">
-                    <input id="footer-bar-input-comment-content" type="text" name="commentcontent" value="">
+                    <input id="footer-bar-input-comment-content" type="text" name="commentContent" value="" placeholder="comment...">
                 </div>
             </div>
 
@@ -666,9 +734,9 @@
             <label class="ui-hidden-accessible" id="footer-bar-group-id-label"></label>
 
             <div class="custom-block-a"
-                 onclick="sendToolbarActiveKeyboard({id:'#footer-bar-input-message-content',bar:'#footer-bar-send-message',base:'#page-chat-messages'});">
+                 onclick="sendToolbarActiveKeyboard({id:'#footer-bar-input-message-content',bar:'#footer-bar-send-message',base:'#page-chat-messages',bias:-44});">
                 <div class="ui-input-text ui-shadow-inset ui-focus ui-body-inherit ui-corner-all">
-                    <input id="footer-bar-input-message-content" type="text" name="messagecontent" value="">
+                    <input id="footer-bar-input-message-content" type="text" name="messagecontent" value="" placeholder="send message...">
                 </div>
             </div>
 
@@ -678,6 +746,8 @@
         </form>
 
     </div>
+
+    <div class="ui-hidden-accessible" id="photo-orientation"></div>
 
 </body>
 
