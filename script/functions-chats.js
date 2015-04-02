@@ -179,6 +179,15 @@ function pullMyChat(){
                                 CacheGetProfilePhotoByUserId(data.friendId, displayFunction, data);
                                 $("#body-chat-"+data.chatId).unbind("click").on("click",function(){
                                     startPrivateChat(data.friendId);
+                                }).on("taphold",function() {
+                                    $("#body-chat-" + data.chatId).css("background-color", "#FF704D");
+                                    $("#body-bottom-hiding-chat-confirm").on("click", function (){
+                                        removeChat(data.chatId);
+                                    });
+                                    $("#body-bottom-hiding-chat-cancel").on("click", function (){
+                                        hideHidingChatMoreOption(data.chatId);
+                                    });
+                                    displayHidingChatMoreOption(data.chatId);
                                 });
                             }
                         }
@@ -193,6 +202,15 @@ function pullMyChat(){
                         }
                         $("#body-chat-"+data.chatId).css("backgroundImage", "url(./content/png/groupchat.png)").unbind("click").on("click",function(){
                             startGroupChat(groupId);
+                        }).on("taphold",function() {
+                            $("#body-chat-" + data.chatId).css("background-color", "#FF704D");
+                            $("#body-bottom-hiding-chat-confirm").on("click", function (){
+                                removeChat(data.chatId);
+                            });
+                            $("#body-bottom-hiding-chat-cancel").on("click", function (){
+                                hideHidingChatMoreOption(data.chatId);
+                            });
+                            displayHidingChatMoreOption(data.chatId);
                         });
                     }
                 };
@@ -488,7 +506,7 @@ function displayChatMessageMoreOption(){
                 bottom: "0px"
             },300);
         }
-        $("body").append("<div class='ui-gray-cover' style='position:fixed; width:100%; height:100%; opacity:0; background-color:#000; z-index:1001' onclick='hideChatMessageMoreOption()'><div>")
+        $("body").append("<div class='ui-gray-cover' style='position:fixed; width:100%; height:100%; opacity:0; background-color:#000; z-index:1001' onclick='hideChatMessageMoreOption()'><div>");
         $(".ui-gray-cover").animate({
             opacity: 0.3
         },300);
@@ -529,6 +547,47 @@ function hideChatMessageMoreOption(){
     };
     
     CacheGetGroupMember(groupId, displayFunction, {});
+}
+
+/* This function is designed to show hidden options for deleting chat message in the chatting list.
+ */
+function displayHidingChatMoreOption(chatId){
+    $("#body-chat-" + chatId).addClass("chat-message-selected").removeClass("chat-message-deselected");
+    //console.log("selected");
+    var $bodyBottomHidingChatMoreOption = $("#body-bottom-hiding-chat-more-option");
+    $bodyBottomHidingChatMoreOption.css("position","fixed").css("bottom",(-$bodyBottomHidingChatMoreOption.height()).toString()+"px").show();
+
+    $("body").append("<div class='ui-gray-cover' style='position:fixed; width:100%; height:100%; opacity:0; background-color:#000; z-index:4'><div>");
+    $(".ui-gray-cover").on("click", function(){
+        console.log("cancel");
+        hideHidingChatMoreOption(chatId);
+    }).animate({
+        opacity: 0.0
+    },200);
+
+    $bodyBottomHidingChatMoreOption.animate({
+        bottom: "0px"
+    },200);
+}
+
+/* This function is designed to hide unnecessary options for deleting chat message in the chatting list.
+ */
+function hideHidingChatMoreOption(chatId){
+    //console.log("deselected");
+    var $bodyBottomHidingChatMoreOption = $("#body-bottom-hiding-chat-more-option");
+    $bodyBottomHidingChatMoreOption.animate({
+        bottom: (-$bodyBottomHidingChatMoreOption.height()).toString()+"px"
+    },300,function(){
+        $bodyBottomHidingChatMoreOption.hide();
+    });
+
+    $(".ui-gray-cover").animate({
+        opacity: 0
+    },300, function(){
+        $(".ui-gray-cover").remove();
+    });
+
+    $("#body-chat-" + chatId).addClass("chat-message-deselected").removeClass("chat-message-selected");
 }
 
 /* This function is designed to add new users to a group chat.
@@ -622,8 +681,16 @@ function saveGroupName(){
     $.mobile.back();
 }
 
-/* This function is designed to remove the selected chat in the chatting list of page-chat.
+/* This function is designed to hide the selected chat in the chatting list of page-chat.
+ * Note: This function only prevents the selected chat from showing in the chatting list.
+ * It does not destroy the corresponding chat object on the Parse server, instead it sets
+ * the hidden attribute of the chat object to be true.
  */
 function removeChat(chatObjectId) {
+    var displayFunction = function(object) {  // object: single Chat object
+        $("#body-chat-"+object.id).remove();
+        hideHidingChatMoreOption(object.id);
+    };
 
+    ParseHideChat(chatObjectId, null, null, displayFunction);
 }

@@ -627,6 +627,14 @@ a {
     white-space: nowrap;
 }
 
+.chat-message-selected {
+    background-color: #FF6666!important;
+}
+
+.chat-message-deselected {
+    background-color: initial!important;
+}
+
 textarea {
     resize: none!important;
 }
@@ -962,7 +970,6 @@ textarea {
         width: 768px;
     }
 }
-         
  
 /*<!-- iPad retina landscape startup image -->*/
 @media (device-width: 768px) and (device-height: 1024px) and (-webkit-device-pixel-ratio: 2) and (orientation: landscape) {

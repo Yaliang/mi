@@ -1195,9 +1195,45 @@ function ParsePullUnreadChat(ownerId, descendingOrderKey, displayFunction){
     });
 }
 
-/* This function is designed to remove a chat object from the Parse server.
+/* This function is designed to set the hidden attribute of the chat object from
+ * the Parse server to be true. The chat object is not destroyed and will be
+ * available in later use. If you want to destroy the chat object, see ParseDeleteChat.
  */
-function ParseRemoveChat(chatObjectId, ownerId, groupId, displayFunction) {
+function ParseHideChat(chatObjectId, ownerId, groupId, displayFunction) {
+    var Chat = Parse.Object.extend("Chat");
+    var query = new Parse.Query(Chat);
+
+    if (chatObjectId != null) {
+        query.equalTo("objectId", chatObjectId);
+    } else {
+        query.equalTo("ownerId", ownerUd);
+        query.equalTo("groupId", groupId);
+    }
+
+    // query.first method will return a single Chat object to be found
+    query.first({
+        success:function(object){
+            object.set("hidden", true);
+            object.save(null,{
+                success: function(object) {
+                    CacheUpdateChat(object);
+                    displayFunction(object);
+                }
+            });
+        }
+    });
+}
+
+/* This function is designed to delete the chat object from the Parse server.
+ *  The chat object is destroyed and will no longer be available in later use.
+ *  If you want to hide the chat object instead of destroying it, see ParseHideChat.
+ */
+
+/****************************************/
+/* This function need to be rewritten beacuse when destorying a chat object,
+/* the corresponding group object need to be update
+/****************************************/
+function ParseDeleteChat(chatObjectId, ownerId, groupId, displayFunction) {
     var Chat = Parse.Object.extend("Chat");
     var query = new Parse.Query(chat);
 
@@ -1211,7 +1247,7 @@ function ParseRemoveChat(chatObjectId, ownerId, groupId, displayFunction) {
     // query.first method will return a single Chat object to be found
     query.first({
         success:function(object){
-            CacheRemoveChat(object);
+            CacheDeteleChat(object);
             object.destroy({
                  success:function(object){
                      displayFunction();
