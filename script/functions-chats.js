@@ -622,7 +622,10 @@ function saveGroupName(){
     $.mobile.back();
 }
 
-/* This function is designed to remove the selected chat in the chatting list of page-chat.
+/* This function is designed to hide the selected chat in the chatting list of page-chat.
+ * Note: This function only prevents the selected chat from showing in the chatting list.
+ * It does not destroy the corresponding chat object on the Parse server, instead it sets
+ * the hidden attribute of the chat object to be true.
  */
 function removeChat(chatObjectId) {
 

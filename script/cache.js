@@ -376,9 +376,10 @@ function CacheUpdateChat(object){
     localStorage.cacheChat = JSON.stringify(cacheChat);
 }
 
-/* This function is designed to remove the chat object from the cacheChat list.
+/* This function is designed to delete the chat object from the cacheChat list.
+ * The chat object will no longer be available in later use.
  */
-function CacheRemoveChat(chatObject) {
+function CacheDeleteChat(chatObject) {
     for (var i = 0; i < cacheChat.length; i++) {
         if (cacheChat[i].id == chatObject.id) {
             cacheChat.splice(i, 1);
