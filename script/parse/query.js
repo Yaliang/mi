@@ -1201,7 +1201,7 @@ function ParsePullUnreadChat(ownerId, descendingOrderKey, displayFunction){
  */
 function ParseHideChat(chatObjectId, ownerId, groupId, displayFunction) {
     var Chat = Parse.Object.extend("Chat");
-    var query = new Parse.Query(chat);
+    var query = new Parse.Query(Chat);
 
     if (chatObjectId != null) {
         query.equalTo("objectId", chatObjectId);

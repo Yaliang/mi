@@ -692,5 +692,5 @@ function removeChat(chatObjectId) {
         hideHidingChatMoreOption(object.id);
     };
 
-    ParseHideChat(chatObjectId, Parse.User.current(), null, displayFunction);
+    ParseHideChat(chatObjectId, null, null, displayFunction);
 }
