@@ -1214,8 +1214,12 @@ function ParseHideChat(chatObjectId, ownerId, groupId, displayFunction) {
     query.first({
         success:function(object){
             object.set("hidden", true);
-            CacheUpdateChat(object);
-            displayFunction(object);
+            object.save(null,{
+                success: function(object) {
+                    CacheUpdateChat(object);
+                    displayFunction(object);
+                }
+            });
         }
     });
 }
