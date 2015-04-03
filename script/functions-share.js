@@ -97,8 +97,12 @@ function buildEventWithoutLogin(object){
     newElement = newElement + "<div class='event-statistics comment-statistics-"+id+"' style='clear:both'>" + commentNumber + " Comments</div><div class='event-statistics interest-statistics-"+id+"'>" + interestNumber + " Interests</div><div class='event-statistics going-statistics-"+id+"'>" + goingNumber + " Goings</div>";
     newElement = newElement + "</div>";
     newElement = newElement + "<div class='ui-footer ui-bar-custom'>";
-    newElement += "<div class='ui-custom-float-left'><a href='#' class='ui-btn ui-bar-btn-custom ui-mini ui-icon-custom-favor-true interest-button-"+id+"' onclick='removeInterestEvent(\""+id+"\")'>"+"Interest"+"</a></div>"
-    newElement = newElement + "<div class='ui-custom-float-left'><a href='#' class='ui-btn ui-bar-btn-custom ui-mini ui-icon-custom-going-true going-button-"+id+"' onclick='removeGoingEvent(\""+id+"\")'>"+"Going"+"</a></div>";
+    /**************************************************************************/
+    /* The following two buttons of interest or going should have same "onclick" event, which ask user to login or signup in order to "interest"/"going" this event
+    /* After the user successfully signup or login, it should display this event again, but with all functionalities.
+    /**************************************************************************/
+    newElement += "<div class='ui-custom-float-left'><a href='#' class='ui-btn ui-bar-btn-custom ui-mini ui-icon-custom-favor-true interest-button-"+id+"' onclick=''>"+"Interest"+"</a></div>"
+    newElement = newElement + "<div class='ui-custom-float-left'><a href='#' class='ui-btn ui-bar-btn-custom ui-mini ui-icon-custom-going-true going-button-"+id+"' onclick=''>"+"Going"+"</a></div>";
 
     newElement = newElement + "</div>";
     newElement = newElement + "</div>";

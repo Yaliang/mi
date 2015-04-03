@@ -201,6 +201,9 @@ function pullMyChat(){
                                 updateChatTitle(memberId[j], "body-chat-"+data.chatId+"> .chat-list-title");
                             }
                         } else {
+                            if (groupName.length > 16) {
+                                groupName = groupName.substring(0,16) + "...";
+                            }
                             $("#body-chat-"+data.chatId+"> .chat-list-title").html(groupName);
                         }
                         $("#body-chat-"+data.chatId).css("backgroundImage", "url(./content/png/groupchat.png)").unbind("click").on("click",function(){
@@ -411,36 +414,41 @@ function updateChatTitle(friendId, elementId, option){
 
             if (typeof(alias) == "undefined") {
                 var displayFunction1 = function(user){  // user: single cacheUser[i] object
+                    var title = "";
                     if ((option)&&(option == 2)) {
-                        $elementId.html(user.get("name"));
+                        title = user.get("name");
                     } else {
-                        var titleString = $elementId.html();
-                        if (titleString.length > 0) {
-                            titleString += ", "+user.get("name");
+                        title = $elementId.html();
+                        if (title.length > 0) {
+                            title += ", "+user.get("name");
                         } else {
-                            titleString += user.get("name");
+                            title += user.get("name");
                         }
-                        $elementId.html(titleString);
                     }
+                    if (title.length > 16) {
+                        title = title.substring(0,16)+"...";
+                    }
+                    $elementId.html(title);
                 };
                 CacheGetProfileByUserId(friendId, displayFunction1)
 
             } else {
+                var title = "";
                 if ((option)&&(option == 2)) {
-                    $elementId.html(alias);
+                   title = alias;
                 } else {
-                    var titleString = $elementId.html();
-                    if (titleString.length > 0) {
-                        titleString += ", "+alias;
+                    title = $elementId.html();
+                    if (title.length > 0) {
+                        title += ", "+alias;
                     } else {
-                        titleString += alias;
+                        title += alias;
                     }
-
-                    if (titleString.length > 15) {
-                        titleString = titleString.substring(0,15)+"...";
-                    }
-                    $elementId.html(titleString);
                 }
+
+                if (title.length > 16) {
+                    title = title.substring(0,16)+"...";
+                }
+                $elementId.html(title);
             }
         }
     };
@@ -639,6 +647,9 @@ function pullGroupProfile(){
             groupName = "Not Set";
             $("#body-input-set-group-name").val("");
         } else {
+            if (groupName.length > 15) {
+                groupName = groupName.substring(0, 15) + "...";
+            }
             $("#body-input-set-group-name").val(groupName);
         }
         $("#body-group-name").html("<font style='padding-right:1em'>Group Name:</font><font style='color:#AAA'>"+groupName+"</font>");
