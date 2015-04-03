@@ -178,7 +178,7 @@ function buildUserListElement(object, liIdPrefix, lat, lng, type) {
     newElement += "'></div>";
 
     if ((lat != null) && (lng != null)) {
-        newElement += "<div class='people-near-by-list-distance'>" + getDistance(latitude, longitude, lat, lng) + "km, "+convertTime(updatedAt)+"</div>";
+        newElement += "<div class='people-near-by-list-distance'>" + getDistance(latitude, longitude, lat, lng) + "km | "+convertTime(updatedAt)+"</div>";
     }
 
     newElement += "</div>";
