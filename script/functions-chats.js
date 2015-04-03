@@ -201,8 +201,8 @@ function pullMyChat(){
                                 updateChatTitle(memberId[j], "body-chat-"+data.chatId+"> .chat-list-title");
                             }
                         } else {
-                            if (groupName.length > 16) {
-                                groupName = groupName.substring(0,16) + "...";
+                            if (groupName.length > 15) {
+                                groupName = groupName.substring(0,15) + "...";
                             }
                             $("#body-chat-"+data.chatId+"> .chat-list-title").html(groupName);
                         }
@@ -425,8 +425,8 @@ function updateChatTitle(friendId, elementId, option){
                             title += user.get("name");
                         }
                     }
-                    if (title.length > 16) {
-                        title = title.substring(0,16)+"...";
+                    if (title.length > 15) {
+                        title = title.substring(0,15)+"...";
                     }
                     $elementId.html(title);
                 };
@@ -445,8 +445,8 @@ function updateChatTitle(friendId, elementId, option){
                     }
                 }
 
-                if (title.length > 16) {
-                    title = title.substring(0,16)+"...";
+                if (title.length > 15) {
+                    title = title.substring(0,15)+"...";
                 }
                 $elementId.html(title);
             }
