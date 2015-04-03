@@ -93,6 +93,7 @@ function initialElementEventSetting(){
     $("#body-input-insert-description-photo").on("change",function(){
         insertDescriptionPreviewPhoto();
     });
+
     $("#body-input-create-event-description").on("keyup keypress",function(e){
         if(listenKeyup)
             deleteDescriptionPreviewPhoto(e);
@@ -454,7 +455,7 @@ function convertTimeFormat(rawTime) {
     var oneDay = 24 * 60 * 60 * 1000;  // in milliseconds
 
     if (Math.floor(difference / oneDay) == 0) {
-        showTime = hour + ":" + minute;
+        showTime = hour + ":" + (minute < 10 ? "0" + minute : minute);
     } else if (Math.floor(difference / oneDay) == 1) {
         showTime = "Yesterday";
     } else {
