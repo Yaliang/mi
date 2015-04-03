@@ -29,7 +29,7 @@ function startPrivateChat(friendId){
                     };
                     CacheGetProfilePhotoByUserId(objects[i].get("senderId"), displayFunction1, {messageId: objects[i].id});
                 }
-                $.mobile.changePage( "#page-chat-messages");
+                $.mobile.changePage("#page-chat-messages");
             };
             ParsePullChatMessage(groupId, limitNum, descendingOrderKey, null, displayFunction, null)
         };
@@ -169,7 +169,7 @@ function pullMyChat(){
                             if (memberId[j] != Parse.User.current().id) {
                                 updateChatTitle(memberId[j], "body-chat-"+data.chatId+"> .chat-list-title", 2);
                                 data["friendId"] = memberId[j];
-                                var displayFunction = function(object, data) {
+                                var displayFunction = function(object, data) {  // object: single cachePhoto[i] object
                                     var photo120 = object.get("profilePhoto120");
                                     if (typeof(photo120) == "undefined") {
                                         photo120 = "./content/png/Taylor-Swift.png";
@@ -177,8 +177,11 @@ function pullMyChat(){
                                     $("#body-chat-"+data.chatId).css("backgroundImage", "url("+photo120+")")
                                 };
                                 CacheGetProfilePhotoByUserId(data.friendId, displayFunction, data);
+
                                 $("#body-chat-"+data.chatId).unbind("click").on("click",function(){
+                                    //$("#body-chat-"+data.chatId+"> .ui-li-count").remove();
                                     startPrivateChat(data.friendId);
+
                                 }).on("taphold",function() {
                                     $("#body-chat-" + data.chatId).css("background-color", "#FF704D");
                                     $("#body-bottom-hiding-chat-confirm").on("click", function (){
@@ -201,7 +204,9 @@ function pullMyChat(){
                             $("#body-chat-"+data.chatId+"> .chat-list-title").html(groupName);
                         }
                         $("#body-chat-"+data.chatId).css("backgroundImage", "url(./content/png/groupchat.png)").unbind("click").on("click",function(){
+                            $("#body-chat-"+data.chatId+"> .ui-li-count").remove();
                             startGroupChat(groupId);
+
                         }).on("taphold",function() {
                             $("#body-chat-" + data.chatId).css("background-color", "#FF704D");
                             $("#body-bottom-hiding-chat-confirm").on("click", function (){
