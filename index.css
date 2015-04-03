@@ -607,9 +607,8 @@ a {
     padding-top: 1em;
     padding-right: 1em;
     float: right;
-    font-size: 0.8em;
-    font-weight: bold;
-    color: #AAA;
+    font-size: 0.6em;
+    color: #828282;
 }
 
 .chat-last-time-right-blank {

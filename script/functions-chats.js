@@ -274,7 +274,7 @@ function updateLastMessage(groupId, data){
                 var text = object.get("text");
                 var time = object.get("createdAt");
                 $("#body-chat-"+data.chatId+"> .chat-last-message").html(text);
-                $("#body-chat-"+data.chatId+"> .chat-last-time").html(convertTime(time));    
+                $("#body-chat-"+data.chatId+"> .chat-last-time").html(convertTimeFormat(time));
                 if ($("#body-chat-"+data.chatId+"> .ui-li-count").length > 0) {                    
                     $("#body-chat-"+data.chatId+"> .chat-last-time").addClass("chat-last-time-right-blank");
                 }
@@ -293,7 +293,7 @@ function updateLastMessage(groupId, data){
                 var text = objects[0].get("text");
                 var time = objects[0].createdAt;
                 $("#body-chat-"+data.chatId+"> .chat-last-message").html(text);                            
-                $("#body-chat-"+data.chatId+"> .chat-last-time").html(convertTime(time));
+                $("#body-chat-"+data.chatId+"> .chat-last-time").html(convertTimeFormat(time));
                 if ($("#body-chat-"+data.chatId+"> .ui-li-count").length > 0) {
                     $("#body-chat-"+data.chatId+"> .chat-last-time").addClass("chat-last-time-right-blank");
                 }

@@ -386,55 +386,83 @@ function logout(){
     ParseLogout(destID);
 }
 
-/* This function is designed to convert ISO time format to relative time
+/* This function is designed to convert ISO time to relative time.
+ * It's used to show the time a user was active in the past from now.
+ * The maximum value is 30 days. The minimum step is 1 min.
  */
 function convertTime(rawTime){
     var minutes = 1000 * 60;
     var hours = minutes * 60;
     var days = hours * 24;
+    var months = days * 30;
     var years = days * 365;
     var currentTime = new Date();
     var time = currentTime.getTime() - Date.parse(rawTime.toString());
-    if (time < 0) {
-        time = 0;
-    }
+    time = Math.max(time, 0);
+
     var y = Math.floor(time / years);
     time = time - years * y;
+
+    var mon = Math.floor(time / months);
+    time = time - months * mon;
+
     var d = Math.floor(time / days);
     time = time - days * d;
+
     var h = Math.floor(time / hours);
     time = time - hours * h;
+
     var m = Math.floor(time / minutes);
-    var showtime;
-    if (y > 1) {
-        //showtime = y.toString()+" years ago";
-        showtime = y.toString()+"y";
-    } else if (y > 0) {
-        //showtime = y.toString()+" year ago";
-        showtime = y.toString()+"y";
-    } else if (d > 1) {
-        //showtime = d.toString()+" days ago";
-        showtime = d.toString()+"d";
-    } else if (d > 0) {
-        //showtime = d.toString()+" day ago";
-        showtime = d.toString()+"d";
-    } else if (h > 1) {
-        //showtime = h.toString()+" hours ago";
-        showtime = h.toString()+"h";
-    } else if (h > 0) {
-        //showtime = h.toString()+" hour ago";
-        showtime = h.toString()+"h";
-    } else if (m > 1) {
-        //showtime = m.toString()+" minutes ago";
-        showtime = m.toString()+"m";
+
+    var showtime = "";
+
+    if (y > 0) {
+        showtime = y.toString() + (y > 1 ? "years ago" : "year ago");
+        //showtime = y.toString()+"y";
+    }  else if (mon > 0) {
+        showtime = mon.toString()+ (mon > 1 ? "months ago" : "month ago");
+        //showtime = d.toString()+"d";
+    }else if (d > 0) {
+        showtime = d.toString()+ (d > 1 ? "days ago" : "day ago");
+        //showtime = d.toString()+"d";
+    }  else if (h > 0) {
+        showtime = h.toString()+ (h > 1 ? "hours ago" : "hour ago");
+        //showtime = h.toString()+"hour";
     } else if (m > 0) {
-        //showtime = m.toString()+" minute ago";
-        showtime = m.toString()+"m";
+        showtime = m.toString()+(m > 1 ? "mins ago" : "min ago");
+        //showtime = m.toString()+"m";
     } else {
-        //showtime = "just now";
-        showtime = "now";
+        showtime = "just now";
+        //showtime = "now";
     }
     return showtime;
+}
+
+/* This function is designed to convert ISO time format to month/date/year format.
+ * It's used to show the time a user was active in the past from now.
+ */
+function convertTimeFormat(rawTime) {
+    var time = new Date(rawTime);
+    var year = time.getFullYear();
+    var month = time.getMonth() + 1;
+    var date = time.getDate();
+    var hour = time.getHours();
+    var minute = time.getMinutes();
+
+    var showTime = "";
+
+    var difference = new Date().getTime() - Date.parse(rawTime);  // in milliseconds
+    var oneDay = 24 * 60 * 60 * 1000;  // in milliseconds
+
+    if (Math.floor(difference / oneDay) == 0) {
+        showTime = hour + ":" + minute;
+    } else if (Math.floor(difference / oneDay) == 1) {
+        showTime = "Yesterday";
+    } else {
+        showTime = month + "/" + date + "/" + (year % 2000);
+    }
+
+    return showTime;
 }
 
 /* This function is designed to ...
