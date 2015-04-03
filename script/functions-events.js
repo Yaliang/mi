@@ -1184,4 +1184,6 @@ function shareEvents(object){
         mailbody += "\n See detail on this link: " + eventLink;
     var mail = "mailto:?subject=There is a fantastic activity : " + object.get("title") + "&body="+ encodeURI(mailbody);
     $(".share-btn").attr("href", mail);
+    
+    // hideEventDetailMoreOption();
 }
