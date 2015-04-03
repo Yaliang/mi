@@ -583,13 +583,13 @@ a {
 
 .chat-list {
     position: relative;
-    height: 70px;
+    height: 65px;
     font-family: 'Open Sans';
     font-weight: 300!important;
     padding-left: 70px;
     border-bottom: 1px solid #ddd;
     cursor: pointer;
-    background: 0.8em 0.65em no-repeat;
+    background: 0.8em 0.6em no-repeat;
     background-size: 42px 42px;
 }
 
