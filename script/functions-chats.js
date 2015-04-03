@@ -179,7 +179,7 @@ function pullMyChat(){
                                 CacheGetProfilePhotoByUserId(data.friendId, displayFunction, data);
 
                                 $("#body-chat-"+data.chatId).unbind("click").on("click",function(){
-                                    //$("#body-chat-"+data.chatId+"> .ui-li-count").remove();
+                                    $("#body-chat-"+data.chatId+"> .ui-li-count").remove();
                                     startPrivateChat(data.friendId);
 
                                 }).on("taphold",function() {
