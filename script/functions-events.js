@@ -315,10 +315,17 @@ function displayUserProfile(userId){
 
     displayFunction= function(object, data){  // object: single cachePhoto[i] object
         var photo120 = object.get("profilePhoto120");
+        var photoRaw = object.get("profilePhoto");
         if (typeof(photo120) == "undefined") {
             photo120 = "./content/png/Taylor-Swift.png";
         }
-        $("#body-user-photo-"+data.userId).html("<img src='"+photo120+"' height='100' width='100' style='border-radius: 3px;'>")
+        if (typeof(photoRaw) == "undefined") {
+            photoRaw = "./content/png/Taylor-Swift-300.png";
+        }
+        $("#body-user-photo-"+data.userId).html("<img src='"+photo120+"' height='100' width='100' style='border-radius: 3px;' onclick='$(\".ui-black-cover\").fadeIn();$(\"#body-user-profile-full-screen-photo\").fadeIn();'>");
+        var htmlString = "<div class='ui-black-cover' style='display:none; position:fixed; width:100%; height:100%; opacity:1; background-color:#000; z-index:1001' onclick='$(\".ui-black-cover\").fadeOut();$(\"#body-user-profile-full-screen-photo\").fadeOut();'><div>";
+        htmlString += "<img src='"+photoRaw+"' style='max-height:100%; max-width:100%; height:auto; width:auto; position:absolute; top:-50%; bottom:-50%; left:-50%; right:-50%; margin:auto;' onclick='$(\".ui-black-cover\").fadeOut();$(\"#body-user-profile-full-screen-photo\").fadeOut();'>";
+        $("#body-user-profile-full-screen-photo").html(htmlString);
     };
     CacheGetProfilePhotoByUserId(userId, displayFunction, {userId: userId});
 }
