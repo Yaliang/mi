@@ -382,7 +382,6 @@ function pullMyFriendList() {
 
     var descendingOrderKey = "createdAt";
     displayFunction = function(objects){  // objects: an array of Friend objects
-
         // sort user list
         objects.sort(function(a, b){return a.get("name") - b.get("name")});
 
