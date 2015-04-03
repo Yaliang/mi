@@ -663,7 +663,7 @@ function buildCommentInEventDetail(object){
     var newElement = "";
     newElement += "<div id='comment-"+commentId+"' class='ui-custom-comment-left' onclick='replyCommentToUser({id:\""+object.get('owner')+"\", name:\""+ownerName+"\"})'>";
     newElement += "<div class='ui-comment-owner'>"+ownerName+"</div>";
-    newElement += "<div class='ui-comment-time'>"+convertTime(time)+"</div>";
+   // newElement += "<div class='ui-comment-time'>"+convertTime(time)+"</div>";
     newElement += "<div class='ui-footer-bar-input-comment-content'>"+text+"</div>";
     newElement += "</div>";
 
@@ -1184,6 +1184,6 @@ function shareEvents(object){
         mailbody += "\n See detail on this link: " + eventLink;
     var mail = "mailto:?subject=There is a fantastic activity : " + object.get("title") + "&body="+ encodeURI(mailbody);
     $(".share-btn").attr("href", mail);
-    
+
     // hideEventDetailMoreOption();
 }
