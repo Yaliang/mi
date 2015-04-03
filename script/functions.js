@@ -388,7 +388,6 @@ function logout(){
 
 /* This function is designed to convert ISO time to relative time.
  * It's used to show the time a user was active in the past from now.
- * The maximum value is 30 days. The minimum step is 1 min.
  */
 function convertTime(rawTime){
     var minutes = 1000 * 60;
@@ -417,19 +416,19 @@ function convertTime(rawTime){
     var showtime = "";
 
     if (y > 0) {
-        showtime = y.toString() + (y > 1 ? "years ago" : "year ago");
+        showtime = y.toString() + (y > 1 ? " years ago" : " year ago");
         //showtime = y.toString()+"y";
     }  else if (mon > 0) {
-        showtime = mon.toString()+ (mon > 1 ? "months ago" : "month ago");
+        showtime = mon.toString()+ (mon > 1 ? " months ago" : " month ago");
         //showtime = d.toString()+"d";
     }else if (d > 0) {
-        showtime = d.toString()+ (d > 1 ? "days ago" : "day ago");
+        showtime = d.toString()+ (d > 1 ? " days ago" : " day ago");
         //showtime = d.toString()+"d";
     }  else if (h > 0) {
-        showtime = h.toString()+ (h > 1 ? "hours ago" : "hour ago");
+        showtime = h.toString()+ (h > 1 ? " hours ago" : " hour ago");
         //showtime = h.toString()+"hour";
     } else if (m > 0) {
-        showtime = m.toString()+(m > 1 ? "mins ago" : "min ago");
+        showtime = m.toString()+(m > 1 ? " mins ago" : " min ago");
         //showtime = m.toString()+"m";
     } else {
         showtime = "just now";

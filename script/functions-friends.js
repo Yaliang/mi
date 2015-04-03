@@ -257,7 +257,7 @@ function showPeopleNearByList(position){
             } else {
                 var latitude = objects[i].get("latitude");
                 var longitude = objects[i].get("longitude");
-                $("#body-near-by-"+objects[i].id+" > .custom-people-in-friend-list > .ui-bar-a > .people-near-by-list-distance").html(getDistance(latitude, longitude, lat, lng) + "km, "+convertTime(objects[i].updatedAt));
+                $("#body-near-by-"+objects[i].id+" > .custom-people-in-friend-list > .ui-bar-a > .people-near-by-list-distance").html(getDistance(latitude, longitude, lat, lng) + "km | "+convertTime(objects[i].updatedAt));
             }
         }
     };
