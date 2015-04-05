@@ -95,11 +95,11 @@
 
         <form id="footer-bar-form-comment">
             <label class="ui-hidden-accessible" id="footer-bar-event-id-label"></label>
-
+            <label class="ui-hidden-accessible" id="footer-bar-reply-to-id-label"></label>
             <div class="custom-block-a"
-                 onclick="sendToolbarActiveKeyboard({id:'#footer-bar-input-comment-content',bar:'#footer-bar-send-comment',base:'#page-event-detail'});">
+                 onclick="sendToolbarActiveKeyboard({id:'#footer-bar-input-comment-content',bar:'#footer-bar-send-comment',base:'#page-event-detail',bias:2});">
                 <div class="ui-input-text ui-shadow-inset ui-focus ui-body-inherit ui-corner-all">
-                    <input id="footer-bar-input-comment-content" type="text" name="commentcontent" value="">
+                    <input id="footer-bar-input-comment-content" type="text" name="commentContent" value="" placeholder="comment...">
                 </div>
             </div>
 

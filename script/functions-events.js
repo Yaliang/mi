@@ -1191,7 +1191,7 @@ function shareEvents(object){
     var hour = time.substring(time.indexOf(" ")+1, time.length);
     /******************* modified by Yaliang ********/
     // var mailbody = "Please join us!\n\n Event: " + object.get("title") + "\nDate: " + date + " \nTime: " + hour;
-        // mailbody += "\n See detail on this link: " + eventLink;
+    //     mailbody += "\n See detail on this link: " + eventLink;
     var mailbody = "Please join us!\n\nEvent: " + object.get("title") + "\nDate: " + date + " \nTime: " + hour;
         mailbody += "\nSee detail on this link:\n\n" + eventLink;
     var mail = "mailto:?subject=There is a fantastic activity : " + object.get("title") + "&body="+ encodeURI(mailbody);

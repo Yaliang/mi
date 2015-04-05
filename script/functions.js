@@ -490,6 +490,10 @@ function sendToolbarActiveKeyboard(object){
             $(object.bar).css("position","absolute");
             $(object.bar).css("bottom",($("body").height() - $(object.base).height()+object.bias).toString()+"px");
             $(object.id).trigger("focus");
+            $(window).scroll(function() {
+                $(object.id).trigger("blur");
+                $(window).unbind("scroll");
+            });
         }
     });
 }
