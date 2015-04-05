@@ -252,8 +252,6 @@ function pullMyChat(){
             }
         }
         $(".ui-li-message-count").each(function(){
-            console.log($(this));
-            console.log("-"+$(this).css("width"));
             $(this).css("marginRight","-"+($(this).width()+8).toString()+"px");
         })
     };
