@@ -633,18 +633,21 @@ a {
 .ui-li-message-count {
     background-color: #f46f75;
     border-color: #f46f75;
+    border-radius: 19px;
     font-size: 15px;
     color: white;
-    border-radius: 50%;
+    float: left;
+    min-width: 19px;
 }
 
 .ui-li-friend-count {
     background-color: #f46f75;
     border-color: #f46f75;
+    border-radius: 19px;
     font-size: 15px;
     color: white;
     float: right;
-    border-radius: 50%;
+    min-width: 19px;
 }
 
 textarea {

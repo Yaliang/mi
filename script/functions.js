@@ -268,7 +268,7 @@ function pullNotification(){
             $(".footer-navigation-bar-friend").each(function(){
                 $(this).removeClass("friend-notification-custom");
             });
-            $("#body-new-friend-requests-btn").addClass("ui-hidden-accessible");
+            $("#body-new-friend-requests-btn").html("<span>New Friend Requests</span>");
         }
     };
     ParsePullUnreadFriendRequest(currentUser.id, displayFunction);
