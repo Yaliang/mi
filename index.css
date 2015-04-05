@@ -32,6 +32,7 @@
 }
 
 .ui-li-count {
+    margin-top: 0.45em;
     background-color: #f46f75;
     border-color: #f46f75;
     color: white;
@@ -611,9 +612,9 @@ a {
     color: #696969;
 }
 
-.chat-last-time-right-blank {
-    margin-right: 2em;
-}
+/*.chat-last-time-right-blank {*/
+    /*margin-right: 2em;*/
+/*}*/
 
 .chat-last-message {
     padding-top: 0.3em;

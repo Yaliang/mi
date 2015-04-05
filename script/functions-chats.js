@@ -42,7 +42,7 @@ function startPrivateChat(friendId){
 /* This function is designed to start a group chat with id = groupId.
  */
 function startGroupChat(groupId){
-    // clear the current chat 
+    // clear the current chat
     $("#page-chat-messages > .ui-content").html("");
     $("#header-chat-message-title").html("");
     $("#footer-bar-input-message-content").val("");
@@ -180,6 +180,7 @@ function pullMyChat(){
 
                                 $("#body-chat-"+data.chatId).unbind("click").on("click",function(){
                                     $("#body-chat-"+data.chatId+"> .ui-li-count").remove();
+                                    //$("#body-chat-"+data.chatId+"> .chat-last-time").removeClass("chat-last-time-right-blank");
                                     startPrivateChat(data.friendId);
 
                                 }).on("taphold",function() {
@@ -208,6 +209,7 @@ function pullMyChat(){
                         }
                         $("#body-chat-"+data.chatId).css("backgroundImage", "url(./content/png/groupchat.png)").unbind("click").on("click",function(){
                             $("#body-chat-"+data.chatId+"> .ui-li-count").remove();
+                            //$("#body-chat-"+data.chatId+"> .chat-last-time").removeClass("chat-last-time-right-blank");
                             startGroupChat(groupId);
 
                         }).on("taphold",function() {
@@ -245,28 +247,11 @@ function pullMyChat(){
                     }
                 } else {
                     if ($bodyChat.length > 0) {
-                        $("#body-chat-"+data.chatId+"> .ui-li-count").remove();                        
+                        $("#body-chat-"+data.chatId+"> .ui-li-count").remove();
                         $("#body-chat-"+data.chatId+"> .chat-last-time").removeClass("chat-last-time-right-blank");
                     }
                 }
                 updateLastMessage(groupId, data);
-                // update photo and title 
-                /*var groupId = objects[i].get('groupId');
-                var successFunction = function(object, data){
-                    var memberId = object.get("memberId");
-                    for (var i=0; i<memberId.length; i++) {
-                        if (memberId[i] != Parse.User.current().id) {
-                            updateChatTitle(memberId[i], "chat-"+data.chatId+"> .chat-list-title", 2);
-                            data['friendId'] = memberId[i];
-                            getCashedPhoto120(data.friendId,"#chat-"+data.chatId);
-                            $("#chat-"+data.chatId).unbind("click");
-                            $("#chat-"+data.chatId).on("click",function(){
-                                startPrivateChat(data.friendId);
-                            });
-                        }
-                    }
-                }
-                CacheGetGroupMember(groupId, successFunction, data);*/
             }
         }
     };
@@ -283,9 +268,9 @@ function updateLastMessage(groupId, data){
                 var time = object.get("createdAt");
                 $("#body-chat-"+data.chatId+"> .chat-last-message").html(text);
                 $("#body-chat-"+data.chatId+"> .chat-last-time").html(convertTimeFormat(time));
-                if ($("#body-chat-"+data.chatId+"> .ui-li-count").length > 0) {                    
-                    $("#body-chat-"+data.chatId+"> .chat-last-time").addClass("chat-last-time-right-blank");
-                }
+                //if ($("#body-chat-"+data.chatId+"> .ui-li-count").length > 0) {
+                //    $("#body-chat-"+data.chatId+"> .chat-last-time").addClass("chat-last-time-right-blank");
+                //}
             } else {
                 data.parse = true;
                 updateLastMessage(groupId, data);
@@ -302,9 +287,9 @@ function updateLastMessage(groupId, data){
                 var time = objects[0].createdAt;
                 $("#body-chat-"+data.chatId+"> .chat-last-message").html(text);                            
                 $("#body-chat-"+data.chatId+"> .chat-last-time").html(convertTimeFormat(time));
-                if ($("#body-chat-"+data.chatId+"> .ui-li-count").length > 0) {
-                    $("#body-chat-"+data.chatId+"> .chat-last-time").addClass("chat-last-time-right-blank");
-                }
+                //if ($("#body-chat-"+data.chatId+"> .ui-li-count").length > 0) {
+                //    $("#body-chat-"+data.chatId+"> .chat-last-time").addClass("chat-last-time-right-blank");
+                //}
             }
         };
         ParsePullChatMessage(groupId, limitNum, descendingOrderKey, null, displayFunction, data);
