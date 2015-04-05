@@ -261,14 +261,14 @@ function pullNotification(){
             $(".footer-navigation-bar-friend").each(function(){
                 $(this).addClass("friend-notification-custom");
             });
-            $("#body-new-friend-requests-btn").html("<span>New Friend Requests</span><span id='body-new-friend-requests-number' class='ui-li-count'>"
+            $("#body-new-friend-requests-btn").html("<span>New Friend Requests</span><span id='body-new-friend-requests-number' class='ui-li-friend-count'>"
                                                        +objects.length.toString()+"</span>").removeClass("ui-hidden-accessible");
             $("#page-my-friend-requests > .ui-content").removeClass("ui-hidden-accessible");
         } else {
             $(".footer-navigation-bar-friend").each(function(){
                 $(this).removeClass("friend-notification-custom");
             });
-            $("#body-new-friend-requests-btn").html("<span>New Friend Requests</span>");
+            $("#body-new-friend-requests-btn").addClass("ui-hidden-accessible");
         }
     };
     ParsePullUnreadFriendRequest(currentUser.id, displayFunction);
@@ -468,7 +468,7 @@ function convertTimeFormat(rawTime) {
     var oneDay = 24 * 60 * 60 * 1000;  // in milliseconds
 
     if (difference <= 0) {
-        showTime = hour + ":" + (minute < 10 ? "0" + minute : minute);
+        showTime = (hour < 10 ? "0" + hour : hour) + ":" + (minute < 10 ? "0" + minute : minute);
     } else if (Math.floor(difference / oneDay) <= 1) {
         showTime = "Yesterday";
     }  else if (Math.floor(difference / oneDay) <= 4) {

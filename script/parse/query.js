@@ -747,7 +747,7 @@ function ParsePullUnreadFriendRequest(userId, displayFunction) {
     var Friend = Parse.Object.extend("Friend");
     var query = new Parse.Query(Friend);
     query.equalTo("friend",userId);
-    query.equalTo("read",false);
+    query.equalTo("valid",false);
 
     // query.find method will return an array of Friend objects to be found
     query.find({
@@ -1060,7 +1060,7 @@ function ParsePullAllMessageByGroupIdForCache(groupId, limitNum, beforeAt, displ
  */
 function ParseAddChatMessage(senderId, groupId, text, displayFunction){
     var Message = Parse.Object.extend("Message");
-    var message = new Message;
+    var message = new Message();
     message.set("senderId",senderId);
     message.set("groupId", groupId);
     message.set("text", text);

@@ -68,7 +68,7 @@ function startGroupChat(groupId){
             var descendingOrderKey = "createdAt";
             var displayFunction = function(objects, data){  // objects: an array of Message objects
                 for (var i=objects.length-1; i>=0; i--) {
-                    var newElement = buildElementInChatMessagesPage(objects[i]);
+                    var newElement = buildElementInChatMessagesPage(objects[i], true);
                     $("#page-chat-messages > .ui-content").append(newElement);
 
                     var displayFunction1 = function(object, data) {  // object: single cachePhoto[i] object
@@ -80,7 +80,7 @@ function startGroupChat(groupId){
                     };
                     CacheGetProfilePhotoByUserId(objects[i].get("senderId"), displayFunction1, {messageId: objects[i].id});
                 }
-                $.mobile.changePage( "#page-chat-messages");
+                $.mobile.changePage("#page-chat-messages");
             };
             //CachePullChatMessage(groupId, limitNum, null, displayFunction);
             ParsePullChatMessage(groupId, limitNum, descendingOrderKey, null, displayFunction, null)
@@ -135,9 +135,8 @@ function buildElementInChatListPage(object){
     newElement += "<div class='chat-list-title'></div>";
     newElement += "<div class='chat-last-time'></div>";
     newElement += "<div class='chat-last-message'></div>";
-
     if (unreadNum > 0) {
-        newElement += "<span class='ui-li-count'>"+unreadNum+"</span>";
+        newElement += "<span class='ui-li-message-count'>"+unreadNum+"</span>";
     }
     newElement += "</div>";
 
@@ -159,6 +158,7 @@ function pullMyChat(){
                 var chatId = objects[i].id;
                 var data = {chatId: chatId};
                 var groupId = objects[i].get("groupId");
+
                 var successFunction = function(object, data){ // object: single cacheGroup[i] object
                     var memberId = object.get("memberId");
                     var groupId = object.id;
@@ -174,13 +174,12 @@ function pullMyChat(){
                                     if (typeof(photo120) == "undefined") {
                                         photo120 = "./content/png/Taylor-Swift.png";
                                     }
-                                    $("#body-chat-"+data.chatId).css("backgroundImage", "url("+photo120+")")
+                                    $("#body-chat-"+data.chatId).css("backgroundImage", "url("+photo120+")");
                                 };
                                 CacheGetProfilePhotoByUserId(data.friendId, displayFunction, data);
 
                                 $("#body-chat-"+data.chatId).unbind("click").on("click",function(){
-                                    $("#body-chat-"+data.chatId+"> .ui-li-count").remove();
-                                    //$("#body-chat-"+data.chatId+"> .chat-last-time").removeClass("chat-last-time-right-blank");
+                                    $("#body-chat-"+data.chatId+"> .ui-li-message-count").remove();
                                     startPrivateChat(data.friendId);
 
                                 }).on("taphold",function() {
@@ -208,8 +207,7 @@ function pullMyChat(){
                             $("#body-chat-"+data.chatId+"> .chat-list-title").html(groupName);
                         }
                         $("#body-chat-"+data.chatId).css("backgroundImage", "url(./content/png/groupchat.png)").unbind("click").on("click",function(){
-                            $("#body-chat-"+data.chatId+"> .ui-li-count").remove();
-                            //$("#body-chat-"+data.chatId+"> .chat-last-time").removeClass("chat-last-time-right-blank");
+                            $("#body-chat-"+data.chatId+"> .ui-li-message-count").remove();
                             startGroupChat(groupId);
 
                         }).on("taphold",function() {
@@ -237,17 +235,17 @@ function pullMyChat(){
                 $("#page-chat > .ui-content").prepend(element);
 
                 // update unread number label
+                var $bodyChatUnreadMessageCount = $("#body-chat-"+data.chatId+"> .ui-li-message-count");
                 var unreadNum = objects[i].get("unreadNum");
-                var $bodyChat = $("#body-chat-"+data.chatId+"> .ui-li-count");
                 if (unreadNum > 0) {
-                    if ($bodyChat.length > 0) {
-                        $bodyChat.html(unreadNum.toString());
+                    if ($bodyChatUnreadMessageCount.length > 0) {
+                        $bodyChatUnreadMessageCount.html(unreadNum.toString());
                     } else {
-                        element.append("<span class='ui-li-count'>"+unreadNum.toString()+"</span>");
+                        element.append("<span class='ui-li-message-count'>"+unreadNum.toString()+"</span>");
                     }
                 } else {
-                    if ($bodyChat.length > 0) {
-                        $("#body-chat-"+data.chatId+"> .ui-li-count").remove();
+                    if ($bodyChatUnreadMessageCount.length > 0) {
+                        $bodyChatUnreadMessageCount.remove();
                         $("#body-chat-"+data.chatId+"> .chat-last-time").removeClass("chat-last-time-right-blank");
                     }
                 }
@@ -261,16 +259,30 @@ function pullMyChat(){
 /* This function is designed to update the last chatting message for each chat.
  */
 function updateLastMessage(groupId, data){
-    if (($("#body-chat-"+data.chatId+"> .ui-li-count").length == 0) && (typeof(data.parse) == "undefined")) {
-        var displayFunction = function(object, data){  // object: single cacheMessage[i] object
+    var chatType = false;
+    var displayFunction = function(object){  // single cacheGroup[i] object
+        chatType = object.get("memberNum") > 2;
+    };
+    CacheGetGroupMember(groupId, displayFunction);
+
+    if (($("#body-chat-"+data.chatId+"> .ui-li-message-count").length == 0) && (typeof(data.parse) == "undefined")) {
+         displayFunction = function(object, data){  // object: single cacheMessage[i] object
             if (object != null) {
-                var text = object.get("text");
+                var text = "";
+                if (chatType && (Parse.User.current().id != object.get("senderId"))) {
+                    var displayFunction1 = function(object) {  // object: single cacheUser[i] object
+                        text += object.get("name") + ": ";
+                    };
+                    CacheGetProfileByUserId(object.get("senderId"), displayFunction1);
+                }
+
+                text += object.get("text");
+                if (text.length > 25) {
+                    text = text.substring(0, 25) + "...";
+                }
                 var time = object.get("createdAt");
                 $("#body-chat-"+data.chatId+"> .chat-last-message").html(text);
                 $("#body-chat-"+data.chatId+"> .chat-last-time").html(convertTimeFormat(time));
-                //if ($("#body-chat-"+data.chatId+"> .ui-li-count").length > 0) {
-                //    $("#body-chat-"+data.chatId+"> .chat-last-time").addClass("chat-last-time-right-blank");
-                //}
             } else {
                 data.parse = true;
                 updateLastMessage(groupId, data);
@@ -283,22 +295,31 @@ function updateLastMessage(groupId, data){
         var descendingOrderKey = "createdAt";
         displayFunction = function(objects, data){  // objects: an array of Message objects
             if (objects.length > 0) {
-                var text = objects[0].get("text");
+                var text = "";
+                if (chatType && (Parse.User.current().id != objects[0].get("senderId"))) {
+                    var displayFunction1 = function(object) {  // object: single cacheUser[i] object
+                        text += object.get("name") + ": ";
+                    };
+                    CacheGetProfileByUserId(objects[0].get("senderId"), displayFunction1);
+                }
+
+                text += objects[0].get("text");
+                if (text.length > 25) {
+                    text = text.substring(0, 25) + "...";
+                }
                 var time = objects[0].createdAt;
                 $("#body-chat-"+data.chatId+"> .chat-last-message").html(text);                            
                 $("#body-chat-"+data.chatId+"> .chat-last-time").html(convertTimeFormat(time));
-                //if ($("#body-chat-"+data.chatId+"> .ui-li-count").length > 0) {
-                //    $("#body-chat-"+data.chatId+"> .chat-last-time").addClass("chat-last-time-right-blank");
-                //}
             }
         };
         ParsePullChatMessage(groupId, limitNum, descendingOrderKey, null, displayFunction, data);
     }
 }
 
-/* This function is designed to build elements for chatting messages
+/* This function is designed to build elements for chatting messages.
+ * chatType can be true or false: true -- group chat; false -- private chat
  */
-function buildElementInChatMessagesPage(object){
+function buildElementInChatMessagesPage(object, chatType){
     var messageId = object.id;
     var senderId = object.get("senderId");
     var currentId = Parse.User.current().id;
@@ -312,6 +333,16 @@ function buildElementInChatMessagesPage(object){
         elementClass = "ui-custom-message-left";
     }
     newElement += "<div id='body-message-"+messageId+"' class='"+elementClass+"'>";
+
+    if (chatType && currentId != senderId) {
+        var displayFunction = function(object) {  // object: single cacheUser[i] object
+            var userName = object.get("name");
+            newElement += "<span class='body-message-username-in-group-chat'>"+userName+"</span>";
+        };
+
+        CacheGetProfileByUserId(senderId, displayFunction);
+    }
+
     newElement += "<p>"+text+"</p>";
     newElement += "</div>";
 
@@ -360,7 +391,13 @@ function sendMessage(){
         };
         CacheSetGroupMemberChatObjectReadFalse(senderId, groupId, text, notificationFunction);
 
-        var newElement = buildElementInChatMessagesPage(object);
+        var chatType = false;
+        var displayFunction1 = function(object){  // single cacheGroup[i] object
+            chatType = object.get("memberNum") > 2;
+        };
+        CacheGetGroupMember(object.get("groupId"), displayFunction1);
+
+        var newElement = buildElementInChatMessagesPage(object, chatType);
         $("#page-chat-messages > .ui-content").append(newElement);
 
         var displayFunction3 = function(object, data){
@@ -371,7 +408,6 @@ function sendMessage(){
             $("#body-message-"+data.messageId).css("backgroundImage","url('"+photo120+"')");
         };
         CacheGetProfilePhotoByUserId(senderId, displayFunction3, {messageId : messageId});
-        //$('#footer-bar-send-message').css("bottom",($("body").height()-$("#page-chat-messages").height()-44).toString()+"px");
         
         $("html body").animate({ scrollTop: $(document).height().toString()+"px" }, {
             duration: 750,
@@ -453,16 +489,22 @@ function updateChatMessage(object){
         var currentId = Parse.User.current().id;
         for (var i=objects.length-1; i>=0; i--) {
             if ($("#body-message-"+objects[i].id).length == 0) {
-                var newElement = buildElementInChatMessagesPage(objects[i]);
+                var chatType = false;
+                var displayFunction1 = function(object){  // single cacheGroup[i] object
+                    chatType = object.get("memberNum") > 2;
+                };
+                CacheGetGroupMember(objects[i].get("groupId"), displayFunction1);
+
+                var newElement = buildElementInChatMessagesPage(objects[i], chatType);
                 $("#page-chat-messages > .ui-content").append(newElement);
-                var displayFunction1 = function(object, data) { // object: single cachePhoto[i] object
+                var displayFunction2 = function(object, data) { // object: single cachePhoto[i] object
                     var photo120 = object.get("profilePhoto120");
                     if (typeof(photo120) == "undefined") {
                         photo120 = "./content/png/Taylor-Swift.png";
                     }
                     $("#body-message-"+data.messageId).css("backgroundImage", "url("+photo120+")")
                 };
-                CacheGetProfilePhotoByUserId(objects[i].get("senderId"), displayFunction1, {messageId: objects[i].id});
+                CacheGetProfilePhotoByUserId(objects[i].get("senderId"), displayFunction2, {messageId: objects[i].id});
                 var groupId = objects[i].get("groupId");
                 ParseSetChatObjectAsRead(currentId, groupId, 1, function(){});
             }

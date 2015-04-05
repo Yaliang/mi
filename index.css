@@ -26,16 +26,10 @@
 .custom-size-flipswitch-body-input-create-event-visibility.ui-flipswitch {
     width: 6.875em;
 }
+
 .custom-size-flipswitch-body-input-create-event-visibility.ui-flipswitch.ui-flipswitch-active {
     padding-left: 5em;
     width: 1.875em;
-}
-
-.ui-li-count {
-    margin-top: 0.45em;
-    background-color: #f46f75;
-    border-color: #f46f75;
-    color: white;
 }
 
 .ui-content {
@@ -489,7 +483,7 @@ a {
 }
 
 .ui-custom-message-right p {
-    margin: 0px;
+    margin: 0;
     padding-top: 15px;
     padding-bottom: 15px;
     padding-left: 10px;
@@ -519,7 +513,7 @@ a {
 }
 
 .ui-custom-message-left p {
-    margin: 0px;
+    margin: 0;
     padding-top: 15px;
     padding-bottom: 15px;
     padding-left: 10px;
@@ -533,6 +527,10 @@ a {
     border-radius: .3125em;
     background-color: #FFFFFF;
     text-shadow: 0 0 0;
+}
+
+.body-message-username-in-group-chat {
+    font-size: 10px;
 }
 
 .ui-custom-comment-container {
@@ -584,7 +582,7 @@ a {
 
 .chat-list {
     position: relative;
-    height: 65px;
+    height: 67px;
     font-family: 'Open Sans';
     font-weight: 300!important;
     padding-left: 70px;
@@ -604,20 +602,8 @@ a {
     white-space: nowrap;
 }
 
-.chat-last-time {
-    padding-top: 0.75em;
-    padding-right: 1em;
-    float: right;
-    font-size: 0.8em;
-    color: #696969;
-}
-
-/*.chat-last-time-right-blank {*/
-    /*margin-right: 2em;*/
-/*}*/
-
 .chat-last-message {
-    padding-top: 0.3em;
+    padding-top: 0.4em;
     float: left;
     color: #828282;
     clear: both;
@@ -627,12 +613,37 @@ a {
     white-space: nowrap;
 }
 
+.chat-last-time {
+    padding-top: 0.75em;
+    padding-right: 1em;
+    float: right;
+    font-size: 0.8em;
+    color: #696969;
+}
+
 .chat-message-selected {
     background-color: #D1D1D1!important;
 }
 
 .chat-message-deselected {
     background-color: initial!important;
+}
+
+.ui-li-message-count {
+    background-color: #f46f75;
+    border-color: #f46f75;
+    font-size: 15px;
+    color: white;
+    border-radius: 50%;
+}
+
+.ui-li-friend-count {
+    background-color: #f46f75;
+    border-color: #f46f75;
+    font-size: 15px;
+    color: white;
+    float: right;
+    border-radius: 50%;
 }
 
 textarea {
