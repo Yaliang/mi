@@ -1180,15 +1180,20 @@ function shareEvents(object){
     //   console.log("****" + $(".share-btn").attr("href"));
     // createSharePage(object);
 
-    var eventLink = window.location.hostname + "/mi/share.html?id="+object.id;
+    /******************* modified by Yaliang ********/
+    //var eventLink = window.location.hostname + "/mi/share.html?id="+object.id;
     //var eventLink = window.location.pathname.split( '/' )[0] +  "/share.html?id="+object.id;
+    var eventLink = "http://yuemeuni.tk/share.html?id="+object.id;
     console.log(window.location.href);
     console.log(eventLink);
     var time = object.get("time").split(" -- ")[0];
     var date = time.substring(0, time.indexOf(" "));
     var hour = time.substring(time.indexOf(" ")+1, time.length);
-    var mailbody = "Please join us!\n\n Event: " + object.get("title") + "\nDate: " + date + " \nTime: " + hour;
-        mailbody += "\n See detail on this link: " + eventLink;
+    /******************* modified by Yaliang ********/
+    // var mailbody = "Please join us!\n\n Event: " + object.get("title") + "\nDate: " + date + " \nTime: " + hour;
+        // mailbody += "\n See detail on this link: " + eventLink;
+    var mailbody = "Please join us!\n\nEvent: " + object.get("title") + "\nDate: " + date + " \nTime: " + hour;
+        mailbody += "\nSee detail on this link:\n\n" + eventLink;
     var mail = "mailto:?subject=There is a fantastic activity : " + object.get("title") + "&body="+ encodeURI(mailbody);
     $(".share-btn").attr("href", mail);
 
