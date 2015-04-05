@@ -747,7 +747,7 @@ function ParsePullUnreadFriendRequest(userId, displayFunction) {
     var Friend = Parse.Object.extend("Friend");
     var query = new Parse.Query(Friend);
     query.equalTo("friend",userId);
-    query.equalTo("valid",false);
+    query.equalTo("read",false);
 
     // query.find method will return an array of Friend objects to be found
     query.find({

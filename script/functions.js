@@ -268,7 +268,7 @@ function pullNotification(){
             $(".footer-navigation-bar-friend").each(function(){
                 $(this).removeClass("friend-notification-custom");
             });
-            $("#body-new-friend-requests-btn").addClass("ui-hidden-accessible");
+            $("#body-new-friend-requests-btn").html("<span>New Friend Requests</span>");
         }
     };
     ParsePullUnreadFriendRequest(currentUser.id, displayFunction);
@@ -490,6 +490,10 @@ function sendToolbarActiveKeyboard(object){
             $(object.bar).css("position","absolute");
             $(object.bar).css("bottom",($("body").height() - $(object.base).height()+object.bias).toString()+"px");
             $(object.id).trigger("focus");
+            $(window).scroll(function() {
+                $(object.id).trigger("blur");
+                $(window).unbind("scroll");
+            });
         }
     });
 }

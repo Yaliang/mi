@@ -132,12 +132,13 @@ function buildElementInChatListPage(object){
     var unreadNum = object.get("unreadNum");
     var newElement = "";
     newElement += "<div id='body-chat-"+chatId+"' class='chat-list'>";
-    newElement += "<div class='chat-list-title'></div>";
-    newElement += "<div class='chat-last-time'></div>";
-    newElement += "<div class='chat-last-message'></div>";
     if (unreadNum > 0) {
         newElement += "<span class='ui-li-message-count'>"+unreadNum+"</span>";
     }
+    newElement += "<div class='chat-list-title'></div>";
+    newElement += "<div class='chat-last-time'></div>";
+    newElement += "<div class='chat-last-message'></div>";
+    
     newElement += "</div>";
 
     return newElement;
@@ -183,7 +184,6 @@ function pullMyChat(){
                                     startPrivateChat(data.friendId);
 
                                 }).on("taphold",function() {
-                                    $("#body-chat-" + data.chatId).css("background-color", "#FF704D");
                                     $("#body-bottom-hiding-chat-confirm").on("click", function (){
                                         removeChat(data.chatId);
                                     });
@@ -211,7 +211,6 @@ function pullMyChat(){
                             startGroupChat(groupId);
 
                         }).on("taphold",function() {
-                            $("#body-chat-" + data.chatId).css("background-color", "#FF704D");
                             $("#body-bottom-hiding-chat-confirm").on("click", function (){
                                 removeChat(data.chatId);
                             });
@@ -241,7 +240,7 @@ function pullMyChat(){
                     if ($bodyChatUnreadMessageCount.length > 0) {
                         $bodyChatUnreadMessageCount.html(unreadNum.toString());
                     } else {
-                        element.append("<span class='ui-li-message-count'>"+unreadNum.toString()+"</span>");
+                        element.prepend("<span class='ui-li-message-count'>"+unreadNum.toString()+"</span>");
                     }
                 } else {
                     if ($bodyChatUnreadMessageCount.length > 0) {
@@ -252,6 +251,9 @@ function pullMyChat(){
                 updateLastMessage(groupId, data);
             }
         }
+        $(".ui-li-message-count").each(function(){
+            $(this).css("marginRight","-"+($(this).width()+8).toString()+"px");
+        })
     };
     CachePullMyChat(ownerId,displayFunction);
 }

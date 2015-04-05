@@ -570,6 +570,7 @@ a {
     clear: both;
     padding-top: 0.4em;
     padding-bottom: 0.4em;
+    padding-right: 0.5em;
 }
 
 .ui-load-more-activity {
@@ -622,7 +623,7 @@ a {
 }
 
 .chat-message-selected {
-    background-color: #D1D1D1!important;
+    background-color: #ddd!important;
 }
 
 .chat-message-deselected {
@@ -632,18 +633,27 @@ a {
 .ui-li-message-count {
     background-color: #f46f75;
     border-color: #f46f75;
+    border-radius: 19px;
     font-size: 15px;
     color: white;
-    border-radius: 50%;
+    float: left;
+    padding-left: 4px;
+    padding-right: 4px;
+    min-width: 11px;
+    position: relative;
+    right: 27px;
+    top: 4px;
+    text-align: center;
 }
 
 .ui-li-friend-count {
     background-color: #f46f75;
     border-color: #f46f75;
+    border-radius: 19px;
     font-size: 15px;
     color: white;
     float: right;
-    border-radius: 50%;
+    min-width: 19px;
 }
 
 textarea {
