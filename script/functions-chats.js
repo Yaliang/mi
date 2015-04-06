@@ -264,9 +264,6 @@ function pullMyChat(){
 
 /* This function is designed to update the last chatting message for each chat.
  */
-/******************************************/
-/* reorganized by Yaliang
-/******************************************/
 function updateLastMessage(groupId, data){
     var isGroup = false;
     var displayFunction = function(object){  // single cacheGroup[i] object
@@ -275,16 +272,17 @@ function updateLastMessage(groupId, data){
             displayFunction = function(object, data){  // object: single cacheMessage[i] object
                 if (object != null) {
                     $("#body-chat-"+data.chatId+"> .chat-last-time").html(convertTimeFormat(object.get("createdAt")));
-                    var text = "";
                     if (isGroup && (Parse.User.current().id != object.get("senderId"))) {
                         var displayFunction1 = function(object, data) {  // object: single cacheUser[i] object
+                            var text = "";
                             text += object.get("name") + ": ";
-                            text += object.get("text");
+                            text += data.message_object.get("text");
                             $("#body-chat-"+data.chatId+"> .chat-last-message").html(text);
                         };
                         data["message_object"] = object;
                         CacheGetProfileByUserId(object.get("senderId"), displayFunction1, data);
                     } else {
+                        var text = "";
                         text += object.get("text");
                         $("#body-chat-"+data.chatId+"> .chat-last-message").html(text);
                     }
@@ -300,19 +298,20 @@ function updateLastMessage(groupId, data){
             displayFunction = function(objects, data){  // objects: an array of Message objects
                 if (objects.length > 0) {
                     $("#body-chat-"+data.chatId+"> .chat-last-time").html(convertTimeFormat(objects[0].createdAt));
-                    var text = "";
                     if (isGroup && (Parse.User.current().id != objects[0].get("senderId"))) {
                         var displayFunction1 = function(object) {  // object: single cacheUser[i] object
+                            var text = "";
                             text += object.get("name") + ": ";
-                            text += objects[0].get("text");
+                            text += data.message_object.get("text");
                             $("#body-chat-"+data.chatId+"> .chat-last-message").html(text);
                         };
+                        data["message_object"] = objects[0];
                         CacheGetProfileByUserId(objects[0].get("senderId"), displayFunction1);
                     } else {
+                        var text = "";
                         text += objects[0].get("text");
                         $("#body-chat-"+data.chatId+"> .chat-last-message").html(text);
                     }
-                                              
                 }
             };
             ParsePullChatMessage(groupId, limitNum, descendingOrderKey, null, displayFunction, data);
@@ -320,56 +319,6 @@ function updateLastMessage(groupId, data){
     };
     CacheGetGroupMember(groupId, displayFunction);
 }
-// function updateLastMessage(groupId, data){
-//     var chatType = false;
-//     var displayFunction = function(object){  // single cacheGroup[i] object
-//         chatType = object.get("memberNum") > 2;
-//     };
-//     CacheGetGroupMember(groupId, displayFunction);
-
-//     if (($("#body-chat-"+data.chatId+"> .ui-li-message-count").length == 0) && (typeof(data.parse) == "undefined")) {
-//          displayFunction = function(object, data){  // object: single cacheMessage[i] object
-//             if (object != null) {
-//                 var text = "";
-//                 if (chatType && (Parse.User.current().id != object.get("senderId"))) {
-//                     var displayFunction1 = function(object) {  // object: single cacheUser[i] object
-//                         text += object.get("name") + ": ";
-//                     };
-//                     CacheGetProfileByUserId(object.get("senderId"), displayFunction1);
-//                 }
-
-//                 text += object.get("text");
-//                 var time = object.get("createdAt");
-//                 $("#body-chat-"+data.chatId+"> .chat-last-message").html(text);
-//                 $("#body-chat-"+data.chatId+"> .chat-last-time").html(convertTimeFormat(time));
-//             } else {
-//                 data.parse = true;
-//                 updateLastMessage(groupId, data);
-//             }
-//         };
-//         CacheGetLatestMessage(groupId, displayFunction, data);
-
-//     } else {
-//         var limitNum = 1;
-//         var descendingOrderKey = "createdAt";
-//         displayFunction = function(objects, data){  // objects: an array of Message objects
-//             if (objects.length > 0) {
-//                 var text = "";
-//                 if (chatType && (Parse.User.current().id != objects[0].get("senderId"))) {
-//                     var displayFunction1 = function(object) {  // object: single cacheUser[i] object
-//                         text += object.get("name") + ": ";
-//                     };
-//                     text += objects[0].get("text");
-//                     CacheGetProfileByUserId(objects[0].get("senderId"), displayFunction1);
-//                 }
-//                 var time = objects[0].createdAt;
-//                 $("#body-chat-"+data.chatId+"> .chat-last-message").html(text);                            
-//                 $("#body-chat-"+data.chatId+"> .chat-last-time").html(convertTimeFormat(time));
-//             }
-//         };
-//         ParsePullChatMessage(groupId, limitNum, descendingOrderKey, null, displayFunction, data);
-//     }
-// }
 
 /* This function is designed to build elements for chatting messages.
  * chatType can be true or false: true -- group chat; false -- private chat
