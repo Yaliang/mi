@@ -133,7 +133,11 @@ function buildElementInChatListPage(object){
     var newElement = "";
     newElement += "<div id='body-chat-"+chatId+"' class='chat-list'>";
     if (unreadNum > 0) {
-        newElement += "<span class='ui-li-message-count'>"+unreadNum+"</span>";
+        var unreadNumLen = unreadNum.toString().length;
+        var unreadNumWidth = Math.max(9*unreadNumLen-1, 11);
+        var marginRight = "-"+(unreadNumWidth+8).toString()+"px";
+        var right = (unreadNumWidth+16).toString()+"px";
+        newElement += "<span class='ui-li-message-count' style='margin-right:"+marginRight+"; right:"+right+"'>"+unreadNum+"</span>";
     }
     newElement += "<div class='chat-list-title'></div>";
     newElement += "<div class='chat-last-time'></div>";
@@ -156,10 +160,6 @@ function pullMyChat(){
             if ($("#body-chat-"+objects[i].id).length == 0) {
                 var newElement = buildElementInChatListPage(objects[i]);
                 $("#page-chat > .ui-content").prepend(newElement);
-                $(".ui-li-message-count").each(function(){
-                    $(this).css("marginRight","-"+($(this).width()+8).toString()+"px");
-                    $(this).css("right",($(this).width()+18).toString()+"px");
-                })
                 var chatId = objects[i].id;
                 var data = {chatId: chatId};
                 var groupId = objects[i].get("groupId");
@@ -252,10 +252,6 @@ function pullMyChat(){
                 updateLastMessage(groupId, data);
             }
         }
-        $(".ui-li-message-count").each(function(){
-            $(this).css("marginRight","-"+($(this).width()+8).toString()+"px");
-            $(this).css("right",($(this).width()+18).toString()+"px");
-        })
     };
     CachePullMyChat(ownerId,displayFunction);
 }
