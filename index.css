@@ -474,9 +474,9 @@ a {
     background-size: 40px 40px;
     float: right;
     clear: both;
-    padding-right: 45px;
+    padding-right: 50px;
     margin-top: 10px;
-    margin-right: 5px;
+    margin-right: 10px;
     font-family: 'Open Sans';
     font-weight: 400!important;
     font-size: 15px;
@@ -504,9 +504,9 @@ a {
     background-size: 40px 40px;
     float: left;
     clear: both;
-    padding-left: 45px;
+    padding-left: 50px;
     margin-top: 10px;
-    margin-left: 5px;
+    margin-left: 10px;
     font-family: 'Open Sans';
     font-weight: 400!important;
     font-size: 15px;
@@ -531,8 +531,7 @@ a {
 
 .body-message-username-in-group-chat {
     font-size: 13px;
-    margin-top: 0.3em;
-    margin-bottom: 0.3em;
+    margin-top: -0.8em;
     line-height: 25px;
     padding-left: 0.3125em;
 }
@@ -590,10 +589,10 @@ a {
     height: 60px;
     font-family: 'Open Sans';
     font-weight: 300!important;
-    padding-left: 70px;
+    padding-left: 55px;
     border-bottom: 1px solid #ddd;
     cursor: pointer;
-    background: 0.8em 0.6em no-repeat;
+    background: 0.4em 0.6em no-repeat;
     background-size: 42px 42px;
 }
 
@@ -620,10 +619,11 @@ a {
 }
 
 .chat-last-time {
-    padding-top: 0.75em;
-    padding-right: 1em;
+    padding-top: 1em;
+    padding-right: 5px;
     float: right;
-    font-size: 0.8em;
+    font-size: 0.7em;
+    line-height: 1em;
     color: #696969;
 }
 
