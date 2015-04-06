@@ -238,10 +238,16 @@ function pullMyChat(){
                 var $bodyChatUnreadMessageCount = $("#body-chat-"+data.chatId+"> .ui-li-message-count");
                 var unreadNum = objects[i].get("unreadNum");
                 if (unreadNum > 0) {
+                    var unreadNumLen = unreadNum.toString().length;
+                    var unreadNumWidth = Math.max(9*unreadNumLen-1, 11);
+                    var marginRight = "-"+(unreadNumWidth+8).toString()+"px";
+                    var right = (unreadNumWidth+16).toString()+"px";
+                    var newUnreadMessageIcon = "<span class='ui-li-message-count' style='margin-right:"+marginRight+"; right:"+right+"'>"+unreadNum+"</span>";
                     if ($bodyChatUnreadMessageCount.length > 0) {
-                        $bodyChatUnreadMessageCount.html(unreadNum.toString());
+                        $bodyChatUnreadMessageCount.before(newUnreadMessageIcon);
+                        $bodyChatUnreadMessageCount.remove();
                     } else {
-                        element.prepend("<span class='ui-li-message-count'>"+unreadNum.toString()+"</span>");
+                        element.prepend(newUnreadMessageIcon);
                     }
                 } else {
                     if ($bodyChatUnreadMessageCount.length > 0) {
