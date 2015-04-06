@@ -418,22 +418,16 @@ function convertTime(rawTime){
 
     if (y > 0) {
         showtime = y.toString() + (y > 1 ? " years ago" : " year ago");
-        //showtime = y.toString()+"y";
     }  else if (mon > 0) {
         showtime = mon.toString()+ (mon > 1 ? " months ago" : " month ago");
-        //showtime = d.toString()+"d";
     }else if (d > 0) {
         showtime = d.toString()+ (d > 1 ? " days ago" : " day ago");
-        //showtime = d.toString()+"d";
     }  else if (h > 0) {
         showtime = h.toString()+ (h > 1 ? " hours ago" : " hour ago");
-        //showtime = h.toString()+"hour";
     } else if (m > 0) {
         showtime = m.toString()+(m > 1 ? " mins ago" : " min ago");
-        //showtime = m.toString()+"m";
     } else {
         showtime = "just now";
-        //showtime = "now";
     }
     return showtime;
 }
@@ -471,7 +465,7 @@ function convertTimeFormat(rawTime) {
         showTime = (hour < 10 ? "0" + hour : hour) + ":" + (minute < 10 ? "0" + minute : minute);
     } else if (Math.floor(difference / oneDay) <= 1) {
         showTime = "Yesterday";
-    }  else if (Math.floor(difference / oneDay) <= 4) {
+    }  else if (Math.floor(difference / oneDay) <= 3) {
         showTime = DAYOFWEEK[day];
     } else {
         showTime = (month + 1) + "/" + date + "/" + (year % 2000);

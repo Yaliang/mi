@@ -86,7 +86,6 @@ function cacheInitialization() {
             default:
         }
         if (rawData.length == 0)  {
-            //console.log("empty: "+cachedList[n]);
             continue;
         }
         for (var i=0; i < rawData.length; i++) {
@@ -122,7 +121,6 @@ function CacheGetProfileByUserId(userId, displayFunction, data){
         }
     }
     if (!cached) {
-        //console.log("User miss: "+userId);
         ParseGetProfileByUserId(userId, displayFunction, data);
     }
 }

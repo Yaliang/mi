@@ -320,6 +320,8 @@ function updateLastMessage(groupId, data){
                         text += objects[0].get("text");
                         $("#body-chat-"+data.chatId+"> .chat-last-message").html(text);
                     }
+                } else {
+                    $("#body-chat-"+data.chatId+"> .chat-last-time").html(convertTimeFormat(object.createdAt));
                 }
             };
             ParsePullChatMessage(groupId, limitNum, descendingOrderKey, null, displayFunction, data);
