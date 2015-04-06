@@ -597,7 +597,7 @@ a {
     padding-top: 0.5em;
     font-weight: bold;
     float: left;
-    max-width: 80%;
+    max-width: 75%;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
@@ -609,8 +609,8 @@ a {
     float: left;
     color: #828282;
     clear: both;
+    max-width: 97%;
     overflow: hidden;
-    width: 90%;
     text-overflow: ellipsis;
     white-space: nowrap;
 }
