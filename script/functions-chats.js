@@ -160,6 +160,10 @@ function pullMyChat(){
             if ($("#body-chat-"+objects[i].id).length == 0) {
                 var newElement = buildElementInChatListPage(objects[i]);
                 $("#page-chat > .ui-content").prepend(newElement);
+                $(".ui-li-message-count").each(function(){
+                    $(this).css("marginRight","-"+($(this).width()+8).toString()+"px");
+                    $(this).css("right",($(this).width()+18).toString()+"px");
+                })
                 var chatId = objects[i].id;
                 var data = {chatId: chatId};
                 var groupId = objects[i].get("groupId");
@@ -245,6 +249,10 @@ function pullMyChat(){
                     var newUnreadMessageIcon = "<span class='ui-li-message-count' style='margin-right:"+marginRight+"; right:"+right+"'>"+unreadNum+"</span>";
                     if ($bodyChatUnreadMessageCount.length > 0) {
                         $bodyChatUnreadMessageCount.before(newUnreadMessageIcon);
+                        $(".ui-li-message-count").each(function(){
+                            $(this).css("marginRight","-"+($(this).width()+8).toString()+"px");
+                            $(this).css("right",($(this).width()+18).toString()+"px");
+                        })
                         $bodyChatUnreadMessageCount.remove();
                     } else {
                         element.prepend(newUnreadMessageIcon);
