@@ -201,9 +201,6 @@ function pullMyChat(){
                                 updateChatTitle(memberId[j], "body-chat-"+data.chatId+"> .chat-list-title");
                             }
                         } else {
-                            if (groupName.length > 15) {
-                                groupName = groupName.substring(0,15) + "...";
-                            }
                             $("#body-chat-"+data.chatId+"> .chat-list-title").html(groupName);
                         }
                         $("#body-chat-"+data.chatId).css("backgroundImage", "url(./content/png/groupchat.png)").unbind("click").on("click",function(){
@@ -245,7 +242,7 @@ function pullMyChat(){
                 } else {
                     if ($bodyChatUnreadMessageCount.length > 0) {
                         $bodyChatUnreadMessageCount.remove();
-                        $("#body-chat-"+data.chatId+"> .chat-last-time").removeClass("chat-last-time-right-blank");
+                        //$("#body-chat-"+data.chatId+"> .chat-last-time").removeClass("chat-last-time-right-blank");
                     }
                 }
                 updateLastMessage(groupId, data);
@@ -279,9 +276,6 @@ function updateLastMessage(groupId, data){
                 }
 
                 text += object.get("text");
-                if (text.length > 25) {
-                    text = text.substring(0, 25) + "...";
-                }
                 var time = object.get("createdAt");
                 $("#body-chat-"+data.chatId+"> .chat-last-message").html(text);
                 $("#body-chat-"+data.chatId+"> .chat-last-time").html(convertTimeFormat(time));
@@ -302,12 +296,8 @@ function updateLastMessage(groupId, data){
                     var displayFunction1 = function(object) {  // object: single cacheUser[i] object
                         text += object.get("name") + ": ";
                     };
+                    text += objects[0].get("text");
                     CacheGetProfileByUserId(objects[0].get("senderId"), displayFunction1);
-                }
-
-                text += objects[0].get("text");
-                if (text.length > 25) {
-                    text = text.substring(0, 25) + "...";
                 }
                 var time = objects[0].createdAt;
                 $("#body-chat-"+data.chatId+"> .chat-last-message").html(text);                            
@@ -429,6 +419,8 @@ function sendMessage(){
 /* This function is designed to update chatting message titles.
  */
 function updateChatTitle(friendId, elementId, option){
+    if (friendId == Parse.User.current().id) 
+        return;
     var displayFunction= function(ownerId, friendId, object) { // object: single cacheFriend[i] object
         if (typeof(object) != "undefined") {
             // user with friendId is a friend of current user
@@ -448,9 +440,6 @@ function updateChatTitle(friendId, elementId, option){
                             title += user.get("name");
                         }
                     }
-                    if (title.length > 15) {
-                        title = title.substring(0,15)+"...";
-                    }
                     $elementId.html(title);
                 };
                 CacheGetProfileByUserId(friendId, displayFunction1)
@@ -468,11 +457,27 @@ function updateChatTitle(friendId, elementId, option){
                     }
                 }
 
-                if (title.length > 15) {
-                    title = title.substring(0,15)+"...";
-                }
                 $elementId.html(title);
             }
+        } else {
+            // user with friendId is not a friend of current user
+            var $elementId = $("#"+elementId);
+
+            var displayFunction1 = function(user){  // user: single cacheUser[i] object
+                var title = "";
+                if ((option)&&(option == 2)) {
+                    title = user.get("name");
+                } else {
+                    title = $elementId.html();
+                    if (title.length > 0) {
+                        title += ", "+user.get("name");
+                    } else {
+                        title += user.get("name");
+                    }
+                }
+                $elementId.html(title);
+            };
+            CacheGetProfileByUserId(friendId, displayFunction1);
         }
     };
     // get the Friend object, in order to get alias of friend.
@@ -676,12 +681,9 @@ function pullGroupProfile(){
             groupName = "Not Set";
             $("#body-input-set-group-name").val("");
         } else {
-            if (groupName.length > 15) {
-                groupName = groupName.substring(0, 15) + "...";
-            }
             $("#body-input-set-group-name").val(groupName);
         }
-        $("#body-group-name").html("<font style='padding-right:1em'>Group Name:</font><font style='color:#AAA'>"+groupName+"</font>");
+        $("#body-group-name").html("<font style='padding-right:1em; color:#333'>Group Name:</font><font style='color:#AAA'>"+groupName+"</font>");
     };
     CacheGetGroupMember(groupId,displayFunction);
 }
