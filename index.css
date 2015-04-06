@@ -492,6 +492,7 @@ a {
     border: 1px solid #E5E5E5;
     max-width: 60vw;
     min-width: 10vw;
+    word-wrap: break-word;
     /* word-break: break-all; */
     -webkit-border-radius: .3125em;
     border-radius: .3125em;
@@ -522,6 +523,7 @@ a {
     border: 1px solid #E5E5E5;
     max-width: 60vw;
     min-width: 10vw;
+    word-wrap: break-word;
     /*word-break: break-all;*/
     -webkit-border-radius: .3125em;
     border-radius: .3125em;
@@ -600,7 +602,7 @@ a {
     padding-top: 0.5em;
     font-weight: 400;
     float: left;
-    max-width: 70%;
+    max-width: 72%;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
