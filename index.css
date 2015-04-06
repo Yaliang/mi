@@ -475,7 +475,7 @@ a {
     float: right;
     clear: both;
     padding-right: 50px;
-    margin-top: 10px;
+    margin-top: 15px;
     margin-right: 10px;
     font-family: 'Open Sans';
     font-weight: 400!important;
@@ -492,7 +492,7 @@ a {
     border: 1px solid #E5E5E5;
     max-width: 60vw;
     min-width: 10vw;
-    word-break: break-all;
+    /* word-break: break-all; */
     -webkit-border-radius: .3125em;
     border-radius: .3125em;
     background-color: #F2F1DC;
@@ -505,7 +505,7 @@ a {
     float: left;
     clear: both;
     padding-left: 50px;
-    margin-top: 10px;
+    margin-top: 15px;
     margin-left: 10px;
     font-family: 'Open Sans';
     font-weight: 400!important;
@@ -522,7 +522,7 @@ a {
     border: 1px solid #E5E5E5;
     max-width: 60vw;
     min-width: 10vw;
-    word-break: break-all;
+    /*word-break: break-all;*/
     -webkit-border-radius: .3125em;
     border-radius: .3125em;
     background-color: #FFFFFF;
