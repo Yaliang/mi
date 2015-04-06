@@ -681,12 +681,9 @@ function pullGroupProfile(){
             groupName = "Not Set";
             $("#body-input-set-group-name").val("");
         } else {
-            if (groupName.length > 15) {
-                groupName = groupName.substring(0, 15) + "...";
-            }
             $("#body-input-set-group-name").val(groupName);
         }
-        $("#body-group-name").html("<font style='padding-right:1em'>Group Name:</font><font style='color:#AAA'>"+groupName+"</font>");
+        $("#body-group-name").html("<font style='padding-right:1em; color:#333'>Group Name:</font><font style='color:#AAA'>"+groupName+"</font>");
     };
     CacheGetGroupMember(groupId,displayFunction);
 }
