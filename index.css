@@ -471,12 +471,12 @@ a {
 
 .ui-custom-message-right {
     background: 100% 0 no-repeat;
-    background-size: 50px 50px;
+    background-size: 45px 45px;
     float: right;
     clear: both;
     padding-right: 60px;
     margin-top: 10px;
-    margin-right: 20px;
+    margin-right: 10px;
     font-family: 'Open Sans';
     font-weight: 400!important;
     font-size: 15px;
@@ -484,8 +484,8 @@ a {
 
 .ui-custom-message-right p {
     margin: 0;
-    padding-top: 15px;
-    padding-bottom: 15px;
+    padding-top: 12.5px;
+    padding-bottom: 12.5px;
     padding-left: 10px;
     padding-right: 10px;
     font-size: 15px;
@@ -501,12 +501,12 @@ a {
 
 .ui-custom-message-left {
     background: 0 0 no-repeat;
-    background-size: 50px 50px;
+    background-size: 45px 45px;
     float: left;
     clear: both;
     padding-left: 60px;
     margin-top: 10px;
-    margin-left: 20px;
+    margin-left: 10px;
     font-family: 'Open Sans';
     font-weight: 400!important;
     font-size: 15px;
@@ -514,8 +514,8 @@ a {
 
 .ui-custom-message-left p {
     margin: 0;
-    padding-top: 15px;
-    padding-bottom: 15px;
+    padding-top: 12.5px;
+    padding-bottom: 12.5px;
     padding-left: 10px;
     padding-right: 10px;
     font-size: 15px;
@@ -530,7 +530,11 @@ a {
 }
 
 .body-message-username-in-group-chat {
-    font-size: 10px;
+    font-size: 13px;
+    margin-top: 0.3em;
+    margin-bottom: 0.3em;
+    line-height: 25px;
+    padding-left: 0.3125em;
 }
 
 .ui-custom-comment-container {
