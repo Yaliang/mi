@@ -1,5 +1,5 @@
 CACHE MANIFEST
-# Cache manifest version 1.22.39
+# Cache manifest version 1.22.38
 # If you change the version number in this comment,
 # the cache manifest is no longer byte-for-byte
 # identical.
@@ -26,7 +26,7 @@ http://fonts.googleapis.com/css?family=Open+Sans:400,300,700
 ./content/png/apple-touch-startup-image-640x1096.png
 ./content/png/apple-touch-startup-image-748x1024.png
 ./content/png/Taylor-Swift.png
-./content/png/groupchat.png
+./content/png/Taylor_Swift_-_Red.png
 ./content/material-design/png/m-192.png
 ./content/material-design/png/rubbish-black-36.png
 ./content/material-design/png/rubbish-red-36.png

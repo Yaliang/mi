@@ -211,7 +211,7 @@ function pullMyChat(){
                         } else {
                             $("#body-chat-"+data.chatId+"> .chat-list-title").html(groupName);
                         }
-                        $("#body-chat-"+data.chatId).css("backgroundImage", "url(./content/png/groupchat.png)").unbind("click").on("click",function(){
+                        $("#body-chat-"+data.chatId).css("backgroundImage", "url(./content/png/Taylor_Swift_-_Red.png)").unbind("click").on("click",function(){
                             $("#body-chat-"+data.chatId+"> .ui-li-message-count").remove();
                             startGroupChat(groupId);
 
@@ -351,7 +351,7 @@ function buildElementInChatMessagesPage(object, chatType){
     if (chatType && currentId != senderId) {
         var displayFunction = function(object) {  // object: single cacheUser[i] object
             var userName = object.get("name");
-            newElement += "<span class='body-message-username-in-group-chat'>"+userName+"</span>";
+            newElement += "<div class='body-message-username-in-group-chat'>"+userName+"</div>";
         };
 
         CacheGetProfileByUserId(senderId, displayFunction);
@@ -515,27 +515,26 @@ function updateChatMessage(object){
     var descendingOrderKey = "createdAt";
 
     var displayFunction = function(objects, data) {  // objects: an array of Message objects
-        var currentId = Parse.User.current().id;
         for (var i=objects.length-1; i>=0; i--) {
             if ($("#body-message-"+objects[i].id).length == 0) {
-                var chatType = false;
-                var displayFunction1 = function(object){  // single cacheGroup[i] object
-                    chatType = object.get("memberNum") > 2;
+                var displayFunction1 = function(object, data){  // single cacheGroup[i] object
+                    var currentId = Parse.User.current().id;
+                    var isGroup = object.get("memberNum") > 2;
+                    var newElement = buildElementInChatMessagesPage(objects[i], isGroup);
+                    $("#page-chat-messages > .ui-content").append(newElement);
+                    var displayFunction2 = function(object, data) { // object: single cachePhoto[i] object
+                        var photo120 = object.get("profilePhoto120");
+                        if (typeof(photo120) == "undefined") {
+                            photo120 = "./content/png/Taylor-Swift.png";
+                        }
+                        $("#body-message-"+data.messageId).css("backgroundImage", "url("+photo120+")")
+                    };
+                    CacheGetProfilePhotoByUserId(objects[i].get("senderId"), displayFunction2, {messageId: objects[i].id});
+                    var groupId = data.message_object.get("groupId");
+                    ParseSetChatObjectAsRead(currentId, groupId, 1, function(){});
                 };
-                CacheGetGroupMember(objects[i].get("groupId"), displayFunction1);
-
-                var newElement = buildElementInChatMessagesPage(objects[i], chatType);
-                $("#page-chat-messages > .ui-content").append(newElement);
-                var displayFunction2 = function(object, data) { // object: single cachePhoto[i] object
-                    var photo120 = object.get("profilePhoto120");
-                    if (typeof(photo120) == "undefined") {
-                        photo120 = "./content/png/Taylor-Swift.png";
-                    }
-                    $("#body-message-"+data.messageId).css("backgroundImage", "url("+photo120+")")
-                };
-                CacheGetProfilePhotoByUserId(objects[i].get("senderId"), displayFunction2, {messageId: objects[i].id});
-                var groupId = objects[i].get("groupId");
-                ParseSetChatObjectAsRead(currentId, groupId, 1, function(){});
+                data['message_object'] = objects[i];
+                CacheGetGroupMember(objects[i].get("groupId"), displayFunction1, data);
             }
         }
         $("html body").animate({ scrollTop: $(document).height().toString()+"px" }, {
