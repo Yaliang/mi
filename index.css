@@ -583,7 +583,7 @@ a {
 
 .chat-list {
     position: relative;
-    height: 67px;
+    height: 60px;
     font-family: 'Open Sans';
     font-weight: 300!important;
     padding-left: 70px;
@@ -594,7 +594,7 @@ a {
 }
 
 .chat-list-title {
-    padding-top: 0.4em;
+    padding-top: 0.5em;
     font-weight: bold;
     float: left;
     max-width: 80%;
@@ -604,7 +604,8 @@ a {
 }
 
 .chat-last-message {
-    padding-top: 0.4em;
+    padding-top: 0.35em;
+    font-size: 0.9em;
     float: left;
     color: #828282;
     clear: both;

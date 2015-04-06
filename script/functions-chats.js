@@ -274,6 +274,8 @@ function updateLastMessage(groupId, data){
                     };
                     CacheGetProfileByUserId(object.get("senderId"), displayFunction1);
                 }
+
+                text += object.get("text");
                 var time = object.get("createdAt");
                 $("#body-chat-"+data.chatId+"> .chat-last-message").html(text);
                 $("#body-chat-"+data.chatId+"> .chat-last-time").html(convertTimeFormat(time));
@@ -294,6 +296,7 @@ function updateLastMessage(groupId, data){
                     var displayFunction1 = function(object) {  // object: single cacheUser[i] object
                         text += object.get("name") + ": ";
                     };
+                    text += objects[0].get("text");
                     CacheGetProfileByUserId(objects[0].get("senderId"), displayFunction1);
                 }
                 var time = objects[0].createdAt;
@@ -459,7 +462,7 @@ function updateChatTitle(friendId, elementId, option){
         } else {
             // user with friendId is not a friend of current user
             var $elementId = $("#"+elementId);
-            
+
             var displayFunction1 = function(user){  // user: single cacheUser[i] object
                 var title = "";
                 if ((option)&&(option == 2)) {

@@ -280,7 +280,7 @@ function pullNotification(){
                 $(this).addClass("chat-notification-custom");
             });
             if ($(":mobile-pagecontainer").pagecontainer("getActivePage")[0].id == "page-chat") {
-                pullMyChat();
+                //pullMyChat();
             }
         } else {
             $(".footer-navigation-bar-chat").each(function(){
