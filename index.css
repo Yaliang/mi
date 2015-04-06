@@ -589,21 +589,22 @@ a {
     height: 60px;
     font-family: 'Open Sans';
     font-weight: 300!important;
-    padding-left: 55px;
+    padding-left: 60px;
     border-bottom: 1px solid #ddd;
     cursor: pointer;
-    background: 0.4em 0.6em no-repeat;
+    background: 0.6em 0.6em no-repeat;
     background-size: 42px 42px;
 }
 
 .chat-list-title {
     padding-top: 0.5em;
-    font-weight: bold;
+    font-weight: 400;
     float: left;
-    max-width: 75%;
+    max-width: 70%;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
+    text-shadow: 1px 0 0 #2C2C2C;
 }
 
 .chat-last-message {
