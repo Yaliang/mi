@@ -275,16 +275,17 @@ function updateLastMessage(groupId, data){
             displayFunction = function(object, data){  // object: single cacheMessage[i] object
                 if (object != null) {
                     $("#body-chat-"+data.chatId+"> .chat-last-time").html(convertTimeFormat(object.get("createdAt")));
-                    var text = "";
                     if (isGroup && (Parse.User.current().id != object.get("senderId"))) {
                         var displayFunction1 = function(object, data) {  // object: single cacheUser[i] object
+                            var text = "";
                             text += object.get("name") + ": ";
-                            text += object.get("text");
+                            text += data.message_object.get("text");
                             $("#body-chat-"+data.chatId+"> .chat-last-message").html(text);
                         };
                         data["message_object"] = object;
                         CacheGetProfileByUserId(object.get("senderId"), displayFunction1, data);
                     } else {
+                        var text = "";
                         text += object.get("text");
                         $("#body-chat-"+data.chatId+"> .chat-last-message").html(text);
                     }
@@ -300,19 +301,20 @@ function updateLastMessage(groupId, data){
             displayFunction = function(objects, data){  // objects: an array of Message objects
                 if (objects.length > 0) {
                     $("#body-chat-"+data.chatId+"> .chat-last-time").html(convertTimeFormat(objects[0].createdAt));
-                    var text = "";
                     if (isGroup && (Parse.User.current().id != objects[0].get("senderId"))) {
                         var displayFunction1 = function(object) {  // object: single cacheUser[i] object
+                            var text = "";
                             text += object.get("name") + ": ";
-                            text += objects[0].get("text");
+                            text += data.message_object.get("text");
                             $("#body-chat-"+data.chatId+"> .chat-last-message").html(text);
                         };
+                        data["message_object"] = objects[0];
                         CacheGetProfileByUserId(objects[0].get("senderId"), displayFunction1);
                     } else {
+                        var text = "";
                         text += objects[0].get("text");
                         $("#body-chat-"+data.chatId+"> .chat-last-message").html(text);
                     }
-                                              
                 }
             };
             ParsePullChatMessage(groupId, limitNum, descendingOrderKey, null, displayFunction, data);
