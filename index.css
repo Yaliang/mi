@@ -471,12 +471,12 @@ a {
 
 .ui-custom-message-right {
     background: 100% 0 no-repeat;
-    background-size: 45px 45px;
+    background-size: 40px 40px;
     float: right;
     clear: both;
-    padding-right: 60px;
+    padding-right: 45px;
     margin-top: 10px;
-    margin-right: 10px;
+    margin-right: 5px;
     font-family: 'Open Sans';
     font-weight: 400!important;
     font-size: 15px;
@@ -484,14 +484,14 @@ a {
 
 .ui-custom-message-right p {
     margin: 0;
-    padding-top: 12.5px;
-    padding-bottom: 12.5px;
+    padding-top: 10px;
+    padding-bottom: 10px;
     padding-left: 10px;
     padding-right: 10px;
     font-size: 15px;
     border: 1px solid #E5E5E5;
-    max-width: 50vw;
-    min-width: 5vw;
+    max-width: 60vw;
+    min-width: 10vw;
     word-break: break-all;
     -webkit-border-radius: .3125em;
     border-radius: .3125em;
@@ -501,12 +501,12 @@ a {
 
 .ui-custom-message-left {
     background: 0 0 no-repeat;
-    background-size: 45px 45px;
+    background-size: 40px 40px;
     float: left;
     clear: both;
-    padding-left: 60px;
+    padding-left: 45px;
     margin-top: 10px;
-    margin-left: 10px;
+    margin-left: 5px;
     font-family: 'Open Sans';
     font-weight: 400!important;
     font-size: 15px;
@@ -514,14 +514,14 @@ a {
 
 .ui-custom-message-left p {
     margin: 0;
-    padding-top: 12.5px;
-    padding-bottom: 12.5px;
+    padding-top: 10px;
+    padding-bottom: 10px;
     padding-left: 10px;
     padding-right: 10px;
     font-size: 15px;
     border: 1px solid #E5E5E5;
-    max-width: 50vw;
-    min-width: 5vw;
+    max-width: 60vw;
+    min-width: 10vw;
     word-break: break-all;
     -webkit-border-radius: .3125em;
     border-radius: .3125em;
