@@ -977,11 +977,35 @@ function ParseSetChatObjectAsRead(ownerId, groupId, count, successFunction){
     });
 }
 
+/* This gunction is designed to change the memeber of a group
+ * The obj include (groupId, memeberId and successFunction)
+ * Create By Yaliang
+ */
+function ParseChangeGroupMember(obj){
+    //obj = {groupId:groupId, memeberId: newMemberList}
+    var Group = Parse.Object.extend("Group");
+    var query = new Parse.Query(Group);
+
+    // query.get method will return a single Group object to be got
+    query.get(obj.groupId,{
+        success: function(object){
+            object.set("memberId", obj.memberId);
+            object.set("memberNum", obj.memberId.length);
+            object.save(null,{
+                success: function(object){
+                    obj.successFunction(object);
+                    CacheUpdateGroup(object);
+                }
+            });
+        }
+    });
+}
+
 /* This function is designed to initialize a chatting message by calling Parse API "first" (instance method of
  * Parse.Query object, which is performed on Chat object. Chat is a customer-defined subclass of Parse.Object)
  */
 function ParseInitializeChatObjectInGroup(obj){
-    //obj = {groupId:groupId, ownerId:memberId[i]});
+    //obj = {groupId:groupId, ownerId:memberId[i]}
     var Chat = Parse.Object.extend("Chat");
     var query = new Parse.Query(Chat);
     query.equalTo("ownerId",obj.ownerId);

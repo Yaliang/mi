@@ -460,6 +460,7 @@ function pullFriendListForAddingParticipants(){
         var successFunction = function(object, data){  // object: single cacheGroup[i] object
             var memberId = object.get("memberId");
             //console.log(memberId);
+            newGroupChatMemberArray.groupId = object.id;
             newGroupChatMemberArray.memberId = $.merge([], memberId);
             newGroupChatMemberArray.prevNum = memberId.length;
             newGroupChatMemberArray.newNum = 0;

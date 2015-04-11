@@ -98,6 +98,7 @@ function startGroupChat(groupId){
 var chatsInitializationNumber = 0;
 
 /* This function is designed to create a group chat.
+ * modified by Yaliang at 4/11/2015
  */
 function createGroupChat() {
     var successFunction = function(object){  // object: single cacheGroup[i] object
@@ -121,7 +122,19 @@ function createGroupChat() {
             });
         }
     };
-    CacheGetGroupId(newGroupChatMemberArray.memberId,successFunction);
+    if (newGroupChatMemberArray.prevNum > 2) {
+        // when it was a group chat and add new participant(s)
+        // only change the current group
+        ParseChangeGroupMember({
+            groupId:newGroupChatMemberArray.groupId,
+            memberId:newGroupChatMemberArray.memberId,
+            successFunction:successFunction
+        });
+    } else {
+        // when it was a private chat and add new participant(s)
+        // create a new group
+        CacheGetGroupId(newGroupChatMemberArray.memberId,successFunction);
+    }
 }
 
 /* This function is designed to build up elements for the list of chats so they can be displayed on the Chats page.
@@ -136,7 +149,7 @@ function buildElementInChatListPage(object){
         var unreadNumLen = unreadNum.toString().length;
         var unreadNumWidth = Math.max(9*unreadNumLen-1, 11);
         var marginRight = "-"+(unreadNumWidth+8).toString()+"px";
-        var right = (unreadNumWidth+16).toString()+"px";
+        var right = (unreadNumWidth+9).toString()+"px";
         newElement += "<span class='ui-li-message-count' style='margin-right:"+marginRight+"; right:"+right+"'>"+unreadNum+"</span>";
     }
     newElement += "<div class='chat-list-title'></div>";
@@ -160,10 +173,10 @@ function pullMyChat(){
             if ($("#body-chat-"+objects[i].id).length == 0) {
                 var newElement = buildElementInChatListPage(objects[i]);
                 $("#page-chat > .ui-content").prepend(newElement);
-                $(".ui-li-message-count").each(function(){
-                    $(this).css("marginRight","-"+($(this).width()+8).toString()+"px");
-                    $(this).css("right",($(this).width()+18).toString()+"px");
-                })
+                // $(".ui-li-message-count").each(function(){
+                //     $(this).css("marginRight","-"+($(this).width()+8).toString()+"px");
+                //     $(this).css("right",($(this).width()+18).toString()+"px");
+                // })
                 var chatId = objects[i].id;
                 var data = {chatId: chatId};
                 var groupId = objects[i].get("groupId");
@@ -238,21 +251,35 @@ function pullMyChat(){
                 var element = $("#body-chat-"+data.chatId);
                 $("#page-chat > .ui-content").prepend(element);
 
-                // update unread number label
+                // update group name
+                var successFunction = function(object, data){ // object: single cacheGroup[i] object
+                    var memberId = object.get("memberId");
+                    var groupId = object.id;
+                    var groupName = object.get("groupName");
+                    if ((memberId.length > 2)&&(typeof(groupName) == "undefined")) {
+                        $("#body-chat-"+data.chatId+"> .chat-list-title").html("");
+                        for (j=0; j<memberId.length; j++) {
+                            updateChatTitle(memberId[j], "body-chat-"+data.chatId+"> .chat-list-title");
+                        }
+                    }
+                }
+                CacheGetGroupMember(groupId, successFunction, data);
+
+                // update unread number icon and last message
                 var $bodyChatUnreadMessageCount = $("#body-chat-"+data.chatId+"> .ui-li-message-count");
                 var unreadNum = objects[i].get("unreadNum");
                 if (unreadNum > 0) {
                     var unreadNumLen = unreadNum.toString().length;
                     var unreadNumWidth = Math.max(9*unreadNumLen-1, 11);
                     var marginRight = "-"+(unreadNumWidth+8).toString()+"px";
-                    var right = (unreadNumWidth+16).toString()+"px";
+                    var right = (unreadNumWidth+9).toString()+"px";
                     var newUnreadMessageIcon = "<span class='ui-li-message-count' style='margin-right:"+marginRight+"; right:"+right+"'>"+unreadNum+"</span>";
                     if ($bodyChatUnreadMessageCount.length > 0) {
                         $bodyChatUnreadMessageCount.before(newUnreadMessageIcon);
-                        $(".ui-li-message-count").each(function(){
-                            $(this).css("marginRight","-"+($(this).width()+8).toString()+"px");
-                            $(this).css("right",($(this).width()+18).toString()+"px");
-                        })
+                        // $(".ui-li-message-count").each(function(){
+                        //     $(this).css("marginRight","-"+($(this).width()+8).toString()+"px");
+                        //     $(this).css("right",($(this).width()+18).toString()+"px");
+                        // })
                         $bodyChatUnreadMessageCount.remove();
                     } else {
                         element.prepend(newUnreadMessageIcon);
