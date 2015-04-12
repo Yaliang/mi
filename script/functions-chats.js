@@ -122,7 +122,7 @@ function createGroupChat() {
             });
         }
     };
-    if (newGroupChatMemberArray.prevNum > 2) {
+    if (object.get("isGroupChat")) {
         // when it was a group chat and add new participant(s)
         // only change the current group
         ParseAddGroupMember({
@@ -185,7 +185,30 @@ function pullMyChat(){
                     var memberId = object.get("memberId");
                     var groupId = object.id;
                     var groupName = object.get("groupName");
-                    if (memberId.length == 2) {
+                    if (object.get("isGroupChat")) {
+                        // this is a group chat
+                        if (typeof(groupName) == "undefined") {
+                            for (j=0; j<memberId.length; j++) {
+                                updateChatTitle(memberId[j], "body-chat-"+data.chatId+"> .chat-list-title");
+                            }
+                        } else {
+                            $("#body-chat-"+data.chatId+"> .chat-list-title").html(groupName);
+                        }
+                        $("#body-chat-"+data.chatId).css("backgroundImage", "url(./content/png/Taylor_Swift_-_Red.png)").unbind("click").on("click",function(){
+                            $("#body-chat-"+data.chatId+"> .ui-li-message-count").remove();
+                            startGroupChat(groupId);
+
+                        });
+                        // .on("taphold",function() {
+                        //     $("#body-bottom-hiding-chat-confirm").on("click", function (){
+                        //         removeChat(data.chatId);
+                        //     });
+                        //     $("#body-bottom-hiding-chat-cancel").on("click", function (){
+                        //         hideHidingChatMoreOption(data.chatId);
+                        //     });
+                        //     displayHidingChatMoreOption(data.chatId);
+                        // });
+                    } else {
                         // this is a private chat
                         for (var j=0; j<memberId.length; j++) {
                             if (memberId[j] != Parse.User.current().id) {
@@ -204,40 +227,31 @@ function pullMyChat(){
                                     $("#body-chat-"+data.chatId+"> .ui-li-message-count").remove();
                                     startPrivateChat(data.friendId);
 
-                                }).on("taphold",function() {
-                                    $("#body-bottom-hiding-chat-confirm").on("click", function (){
-                                        removeChat(data.chatId);
-                                    });
-                                    $("#body-bottom-hiding-chat-cancel").on("click", function (){
-                                        hideHidingChatMoreOption(data.chatId);
-                                    });
-                                    displayHidingChatMoreOption(data.chatId);
                                 });
+                                // .on("taphold",function() {
+                                //     $("#body-bottom-hiding-chat-confirm").on("click", function (){
+                                //         removeChat(data.chatId);
+                                //     });
+                                //     $("#body-bottom-hiding-chat-cancel").on("click", function (){
+                                //         hideHidingChatMoreOption(data.chatId);
+                                //     });
+                                //     displayHidingChatMoreOption(data.chatId);
+                                // });
                             }
                         }
-                    } else {
-                        // this is a group chat
-                        if (typeof(groupName) == "undefined") {
-                            for (j=0; j<memberId.length; j++) {
-                                updateChatTitle(memberId[j], "body-chat-"+data.chatId+"> .chat-list-title");
-                            }
-                        } else {
-                            $("#body-chat-"+data.chatId+"> .chat-list-title").html(groupName);
-                        }
-                        $("#body-chat-"+data.chatId).css("backgroundImage", "url(./content/png/Taylor_Swift_-_Red.png)").unbind("click").on("click",function(){
-                            $("#body-chat-"+data.chatId+"> .ui-li-message-count").remove();
-                            startGroupChat(groupId);
-
-                        }).on("taphold",function() {
-                            $("#body-bottom-hiding-chat-confirm").on("click", function (){
-                                removeChat(data.chatId);
-                            });
-                            $("#body-bottom-hiding-chat-cancel").on("click", function (){
-                                hideHidingChatMoreOption(data.chatId);
-                            });
-                            displayHidingChatMoreOption(data.chatId);
-                        });
                     }
+
+                    // bind hide chat event
+                    $("#body-chat-"+data.chatId).on("taphold",function() {
+                        $("#body-bottom-hiding-chat-confirm").unbind("click").on("click", function (){
+                            removeChat(data.chatId);
+                        });
+                        $("#body-bottom-hiding-chat-cancel").unbind("click").on("click", function (){
+                            hideHidingChatMoreOption(data.chatId);
+                        });
+                        displayHidingChatMoreOption(data.chatId);
+                    });
+
                 };
                 CacheGetGroupMember(groupId, successFunction, data);
                 updateLastMessage(groupId, data);
@@ -302,7 +316,7 @@ function pullMyChat(){
 function updateLastMessage(groupId, data){
     var isGroup = false;
     var displayFunction = function(object){  // single cacheGroup[i] object
-        isGroup = object.get("memberNum") > 2;
+        isGroup = object.get("isGroupChat");
         if (($("#body-chat-"+data.chatId+"> .ui-li-message-count").length == 0) && (typeof(data.parse) == "undefined")) {
             displayFunction = function(object, data){  // object: single cacheMessage[i] object
                 if (object != null) {
@@ -433,26 +447,24 @@ function sendMessage(){
         CacheSetGroupMemberChatObjectReadFalse(senderId, groupId, text, notificationFunction);
 
         var chatType = false;
-        var displayFunction1 = function(object){  // single cacheGroup[i] object
-            chatType = object.get("memberNum") > 2;
+        var displayFunction1 = function(object, data){  // single cacheGroup[i] object
+            chatType = object.get("isGroupChat");
+            var newElement = buildElementInChatMessagesPage(data.message_object, chatType);
+            $("#page-chat-messages > .ui-content").append(newElement);
+            var displayFunction3 = function(object, data){
+                var photo120 = object.get("profilePhoto120");
+                if (typeof(photo120) == "undefined") {
+                    photo120 = "./content/png/Taylor-Swift.png";
+                }
+                $("#body-message-"+data.messageId).css("backgroundImage","url('"+photo120+"')");
+            };
+            CacheGetProfilePhotoByUserId(data.message_object.get("senderId"), displayFunction3, {messageId : data.message_object.id});
         };
-        CacheGetGroupMember(object.get("groupId"), displayFunction1);
-
-        var newElement = buildElementInChatMessagesPage(object, chatType);
-        $("#page-chat-messages > .ui-content").append(newElement);
-
-        var displayFunction3 = function(object, data){
-            var photo120 = object.get("profilePhoto120");
-            if (typeof(photo120) == "undefined") {
-                photo120 = "./content/png/Taylor-Swift.png";
-            }
-            $("#body-message-"+data.messageId).css("backgroundImage","url('"+photo120+"')");
-        };
-        CacheGetProfilePhotoByUserId(senderId, displayFunction3, {messageId : messageId});
+        CacheGetGroupMember(object.get("groupId"), displayFunction1,{message_object:object});
         
         $("html body").animate({ scrollTop: $(document).height().toString()+"px" }, {
             duration: 750,
-            complete : function(){
+            complete : function(){data.message_object
             }
         });
 
@@ -546,7 +558,7 @@ function updateChatMessage(object){
             if ($("#body-message-"+objects[i].id).length == 0) {
                 var displayFunction1 = function(object, data){  // single cacheGroup[i] object
                     var currentId = Parse.User.current().id;
-                    var isGroup = object.get("memberNum") > 2;
+                    var isGroup = object.get("isGroupChat");
                     var newElement = buildElementInChatMessagesPage(objects[i], isGroup);
                     $("#page-chat-messages > .ui-content").append(newElement);
                     var displayFunction2 = function(object, data) { // object: single cachePhoto[i] object
@@ -586,18 +598,18 @@ function displayChatMessageMoreOption(){
 
     var displayFunction = function(object, data) {  // object: single cacheGroup[i] object
         var memberId = object.get("memberId");
-        var memberNum = memberId.length;
-        if (memberNum == 2) {
-            var $bodyBottomPrivateChatMessageMoreOption = $("#body-bottom-private-chat-message-more-option");
-            $bodyBottomPrivateChatMessageMoreOption.css("position","fixed")
-            .css("bottom",(-$bodyBottomPrivateChatMessageMoreOption.height()).toString()+"px").show().animate({
-                bottom: "0px"
-            },300);
-
-        } else {
+        if (object.get("isGroupChat")) {
+            // this is a group chat
             var $bodyBottomGroupChatMessageMoreOption = $("#body-bottom-group-chat-message-more-option");
             $bodyBottomGroupChatMessageMoreOption.css("position","fixed")
             .css("bottom",(-$bodyBottomGroupChatMessageMoreOption.height()).toString()+"px").show().animate({
+                bottom: "0px"
+            },300);
+        } else {
+            // this is a private chat
+            var $bodyBottomPrivateChatMessageMoreOption = $("#body-bottom-private-chat-message-more-option");
+            $bodyBottomPrivateChatMessageMoreOption.css("position","fixed")
+            .css("bottom",(-$bodyBottomPrivateChatMessageMoreOption.height()).toString()+"px").show().animate({
                 bottom: "0px"
             },300);
         }
@@ -617,20 +629,21 @@ function hideChatMessageMoreOption(){
 
     var displayFunction = function(object, data) {  // object: single cacheGroup[i] object
         var memberId = object.get("memberId");
-        var memberNum = memberId.length;
-        if (memberNum == 2) {
-            var $bodyBottomPrivateChatMessageMoreOption = $("#body-bottom-private-chat-message-more-option");
-            $bodyBottomPrivateChatMessageMoreOption.animate({
-                bottom: (-$bodyBottomPrivateChatMessageMoreOption.height()).toString()+"px"
-            },300,function(){
-                $("#body-bottom-private-chat-message-more-option").hide();
-            });
-        } else {
+        if (object.get("isGroupChat")) {
+            // this is a group chat
             var $bodyBottomGroupChatMessageMoreOption = $("#body-bottom-group-chat-message-more-option");
             $bodyBottomGroupChatMessageMoreOption.animate({
                 bottom: (-$bodyBottomGroupChatMessageMoreOption.height()).toString()+"px"
             },300,function(){
                 $("#body-bottom-group-chat-message-more-option").hide();
+            });
+        } else {
+            // this is a private chat
+            var $bodyBottomPrivateChatMessageMoreOption = $("#body-bottom-private-chat-message-more-option");
+            $bodyBottomPrivateChatMessageMoreOption.animate({
+                bottom: (-$bodyBottomPrivateChatMessageMoreOption.height()).toString()+"px"
+            },300,function(){
+                $("#body-bottom-private-chat-message-more-option").hide();
             });
         }
         
