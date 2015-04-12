@@ -871,7 +871,7 @@ function ParseGetGroupId(memberId, successFunction){
     var Group = Parse.Object.extend("Group");
     var query = new Parse.Query(Group);
     query.containsAll("memberId",memberId);
-    query.equalTo("memberNum",memberId.length);
+    // query.equalTo("memberNum",memberId.length);
 
     // query.first method will return a single Group object to be found
     query.first({
@@ -879,7 +879,7 @@ function ParseGetGroupId(memberId, successFunction){
             if (typeof(object) == "undefined") {
                 var group = new Group;
                 group.set("memberId",memberId);
-                group.set("memberNum",memberId.length);
+                // group.set("memberNum",memberId.length);
                 if (memberId.length > 2) {
                     group.set("isGroupChat",true);
                 } else {
@@ -997,7 +997,7 @@ function ParseAddGroupMember(obj){
             for (var i=0; i<obj.newMemberList.length; i++) {
                 object.addUnique("memberId",obj.newMemberList[i]);
             }
-            object.increment("memberNum", obj.newMemberList.length);
+            // object.increment("memberNum", obj.newMemberList.length);
             object.set("isGroupChat",true);
             object.save(null,{
                 success: function(object){
@@ -1024,7 +1024,7 @@ function ParseRemoveGroupMember(obj){
             for (var i=0; i<obj.removeMemberList.length; i++) {
                 object.remove("memberId",obj.removeMemberList[i]);
             }
-            object.increment("memberNum", -obj.removeMemberList.length);
+            // object.increment("memberNum", -obj.removeMemberList.length);
             object.save(null,{
                 success: function(object){
                     obj.successFunction(object, obj.data);
