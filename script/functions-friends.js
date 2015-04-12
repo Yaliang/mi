@@ -464,6 +464,7 @@ function pullFriendListForAddingParticipants(){
             newGroupChatMemberArray.memberId = $.merge([], memberId);
             newGroupChatMemberArray.prevNum = memberId.length;
             newGroupChatMemberArray.newNum = 0;
+            newGroupChatMemberArray.newMemberList = [];
             for (var i=0; i<memberId.length; i++) {
                 $("#body-add-participants-list-"+memberId[i]).unbind("click");
                 $("#body-add-participants-people-"+memberId[i]).removeClass("ui-add-participant-unchecked").addClass("ui-add-participant-checked");

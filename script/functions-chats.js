@@ -125,9 +125,9 @@ function createGroupChat() {
     if (newGroupChatMemberArray.prevNum > 2) {
         // when it was a group chat and add new participant(s)
         // only change the current group
-        ParseChangeGroupMember({
+        ParseAddGroupMember({
             groupId:newGroupChatMemberArray.groupId,
-            memberId:newGroupChatMemberArray.memberId,
+            newMemberList:newGroupChatMemberArray.newMemberList,
             successFunction:successFunction
         });
     } else {
@@ -689,7 +689,7 @@ function hideHidingChatMoreOption(chatId){
  */
 function selectANewParticipant(event) {
     var id = event.data.id;
-    newGroupChatMemberArray.memberId.push(id);
+    newGroupChatMemberArray.newMemberList.push(id);
     newGroupChatMemberArray.newNum++;
     $("#header-add-participant-for-group-chat").html("OK("+newGroupChatMemberArray.newNum+")").unbind("click").click(createGroupChat);
     $("#body-add-participants-list-"+id).children(".ui-add-participant-unchecked")
@@ -701,7 +701,7 @@ function selectANewParticipant(event) {
  */
 function removeANewParticipant(event) {
     var id = event.data.id;
-    newGroupChatMemberArray.memberId = jQuery.grep(newGroupChatMemberArray, function(value) {
+    newGroupChatMemberArray.newMemberList = jQuery.grep(newGroupChatMemberArray, function(value) {
       return value != id;
     });
     newGroupChatMemberArray.newNum--;
@@ -788,4 +788,28 @@ function removeChat(chatObjectId) {
     };
 
     ParseHideChat(chatObjectId, null, null, displayFunction);
+}
+
+/* This function is designed to delete chat object and remove member from a group chat.
+ *
+ */ 
+function leaveGroup() {
+    var groupId = $("#footer-bar-group-id-label").html();
+    var removeMemberId = Parse.User.current().id;
+    var successFunction =  function(object){ // object: single Chat object
+        var chatId = object.id;
+        var memberId = object.get("ownerId");
+        var groupId = object.get("groupId");
+        var successFunction1 = function(object, data){ // object: single Group object
+            var chatId = data.chatId;
+            $("#body-chat-"+chatId).remove();
+        }
+        ParseRemoveGroupMember({
+            groupId : groupId,
+            removeMemberList : [memberId],
+            successFunction : successFunction1,
+            data: {chatId: chatId}
+        });
+    }
+    ParseDeleteChat(null, removeMemberId, groupId, successFunction);
 }
