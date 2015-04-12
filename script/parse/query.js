@@ -977,11 +977,63 @@ function ParseSetChatObjectAsRead(ownerId, groupId, count, successFunction){
     });
 }
 
+/* This gunction is designed to add memebers to a group
+ * The obj include (groupId, newMemberList and successFunction)
+ * Create By Yaliang
+ */
+function ParseAddGroupMember(obj){
+    //obj = {groupId:groupId, memeberId: newMemberList}
+    var Group = Parse.Object.extend("Group");
+    var query = new Parse.Query(Group);
+
+    // query.get method will return a single Group object to be got
+    query.get(obj.groupId,{
+        success: function(object){
+            for (var i=0; i<obj.newMemberList.length; i++) {
+                object.addUnique("memberId",obj.newMemberList[i]);
+            }
+            object.increment("memberNum", obj.newMemberList.length);
+            object.save(null,{
+                success: function(object){
+                    obj.successFunction(object);
+                    CacheUpdateGroup(object);
+                }
+            });
+        }
+    });
+}
+
+/* This gunction is designed to remove some memebers of a group
+ * The obj include (groupId, removeMemberList and successFunction)
+ * Create By Yaliang
+ */
+function ParseRemoveGroupMember(obj){
+    //obj = {groupId:groupId, memeberId: removeMemberList}
+    var Group = Parse.Object.extend("Group");
+    var query = new Parse.Query(Group);
+
+    // query.get method will return a single Group object to be got
+    query.get(obj.groupId,{
+        success: function(object){
+            for (var i=0; i<obj.removeMemberList.length; i++) {
+                object.remove("memberId",obj.removeMemberList[i]);
+            }
+            object.increment("memberNum", -obj.removeMemberList.length);
+            object.save(null,{
+                success: function(object){
+                    obj.successFunction(object, obj.data);
+                    CacheUpdateGroup(object);
+                }
+            });
+        }
+    });
+}
+
 /* This function is designed to initialize a chatting message by calling Parse API "first" (instance method of
  * Parse.Query object, which is performed on Chat object. Chat is a customer-defined subclass of Parse.Object)
  */
 function ParseInitializeChatObjectInGroup(obj){
-    //obj = {groupId:groupId, ownerId:memberId[i]});
+    //obj = {groupId:groupId, ownerId:memberId[i]}
     var Chat = Parse.Object.extend("Chat");
     var query = new Parse.Query(Chat);
     query.equalTo("ownerId",obj.ownerId);
@@ -1230,28 +1282,27 @@ function ParseHideChat(chatObjectId, ownerId, groupId, displayFunction) {
  */
 
 /****************************************/
-/* This function need to be rewritten beacuse when destorying a chat object,
-/* the corresponding group object need to be update
+/* Modified by Yaliang 
 /****************************************/
 function ParseDeleteChat(chatObjectId, ownerId, groupId, displayFunction) {
     var Chat = Parse.Object.extend("Chat");
-    var query = new Parse.Query(chat);
+    var query = new Parse.Query(Chat);
 
     if (chatObjectId != null) {
         query.equalTo("objectId", chatObjectId);
     } else {
-        query.equalTo("ownerId", ownerUd);
+        query.equalTo("ownerId", ownerId);
         query.equalTo("groupId", groupId);
     }
 
     // query.first method will return a single Chat object to be found
     query.first({
         success:function(object){
-            CacheDeteleChat(object);
             object.destroy({
-                 success:function(object){
-                     displayFunction();
-                 }
+                success:function(object){
+                    CacheDeleteChat(object);
+                    displayFunction(object);
+                }
             });
         }
     });
