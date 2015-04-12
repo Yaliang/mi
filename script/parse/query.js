@@ -880,6 +880,11 @@ function ParseGetGroupId(memberId, successFunction){
                 var group = new Group;
                 group.set("memberId",memberId);
                 group.set("memberNum",memberId.length);
+                if (memberId.length > 2) {
+                    group.set("isGroupChat",true);
+                } else {
+                    group.set("isGroupChat",false);
+                }
                 group.save(null,{
                     success: function(object){
                         successFunction(object);
@@ -993,6 +998,7 @@ function ParseAddGroupMember(obj){
                 object.addUnique("memberId",obj.newMemberList[i]);
             }
             object.increment("memberNum", obj.newMemberList.length);
+            object.set("isGroupChat",true);
             object.save(null,{
                 success: function(object){
                     obj.successFunction(object);
