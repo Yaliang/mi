@@ -330,7 +330,7 @@ function displayUserProfile(userId){
     CacheGetProfilePhotoByUserId(userId, displayFunction, {userId: userId});
 }
 
-/* This variable...
+/* This variable denotes the created time of the last event displayed in the user event list
  */
 var currentLastEvent;
 

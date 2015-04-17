@@ -1,9 +1,12 @@
+// this variable denotes the previous time shown in the message
+var previousTimeShown;
+
 /* This function is designed to start a private chat with a friend with id = friendId.
  */
 function startPrivateChat(friendId){
     $("#page-chat-messages > .ui-content").html("");
     $("#header-chat-message-title").html("");
-    $("#footer-bar-input-message-content").val("");    
+    $("#footer-bar-input-message-content").val("");
     
     var memberId = [];
     memberId.push(friendId);
@@ -18,8 +21,20 @@ function startPrivateChat(friendId){
             var descendingOrderKey = "createdAt";
             var displayFunction = function(objects, data){ // objects: an array of Message objects
                 for (var i=objects.length-1; i>=0; i--) {
+                    if (i == objects.length-1) {
+                        previousTimeShown = new Date(objects[i].createdAt).getTime();
+                    } else {
+                        var createdTime = new Date(objects[i].createdAt);
+                        if (createdTime.getTime() - previousTimeShown >= 180000) {
+                            $("#page-chat-messages > .ui-content").append("<div class='chat-message-time'>"
+                            + convertTimeFormatToHourMinute(createdTime) + "</div>");
+                            previousTimeShown = createdTime.getTime();
+                        }
+                    }
+
                     var newElement = buildElementInChatMessagesPage(objects[i]);
                     $("#page-chat-messages > .ui-content").append(newElement);
+
                     var displayFunction1 = function(object, data) { // object: single cachePhoto[i] object
                         var photo120 = object.get("profilePhoto120");
                         if (typeof(photo120) == "undefined") {
@@ -68,6 +83,17 @@ function startGroupChat(groupId){
             var descendingOrderKey = "createdAt";
             var displayFunction = function(objects, data){  // objects: an array of Message objects
                 for (var i=objects.length-1; i>=0; i--) {
+                    if (i == objects.length-1) {
+                        previousTimeShown = new Date(objects[i].createdAt).getTime();
+                    } else {
+                        var createdTime = new Date(objects[i].createdAt);
+                        if (createdTime.getTime() - previousTimeShown >= 180000) {
+                            $("#page-chat-messages > .ui-content").append("<div class='chat-message-time'>"
+                            + convertTimeFormatToHourMinute(createdTime) + "</div>");
+                            previousTimeShown = createdTime.getTime();
+                        }
+                    }
+
                     var newElement = buildElementInChatMessagesPage(objects[i], true);
                     $("#page-chat-messages > .ui-content").append(newElement);
 
@@ -197,17 +223,8 @@ function pullMyChat(){
                         $("#body-chat-"+data.chatId).css("backgroundImage", "url(./content/png/Taylor_Swift_-_Red.png)").unbind("click").on("click",function(){
                             $("#body-chat-"+data.chatId+"> .ui-li-message-count").remove();
                             startGroupChat(groupId);
-
                         });
-                        // .on("taphold",function() {
-                        //     $("#body-bottom-hiding-chat-confirm").on("click", function (){
-                        //         removeChat(data.chatId);
-                        //     });
-                        //     $("#body-bottom-hiding-chat-cancel").on("click", function (){
-                        //         hideHidingChatMoreOption(data.chatId);
-                        //     });
-                        //     displayHidingChatMoreOption(data.chatId);
-                        // });
+
                     } else {
                         // this is a private chat
                         for (var j=0; j<memberId.length; j++) {
@@ -226,22 +243,12 @@ function pullMyChat(){
                                 $("#body-chat-"+data.chatId).unbind("click").on("click",function(){
                                     $("#body-chat-"+data.chatId+"> .ui-li-message-count").remove();
                                     startPrivateChat(data.friendId);
-
                                 });
-                                // .on("taphold",function() {
-                                //     $("#body-bottom-hiding-chat-confirm").on("click", function (){
-                                //         removeChat(data.chatId);
-                                //     });
-                                //     $("#body-bottom-hiding-chat-cancel").on("click", function (){
-                                //         hideHidingChatMoreOption(data.chatId);
-                                //     });
-                                //     displayHidingChatMoreOption(data.chatId);
-                                // });
                             }
                         }
                     }
 
-                    // bind hide chat event
+                    // bind hiding chat event
                     $("#body-chat-"+data.chatId).on("taphold",function() {
                         $("#body-bottom-hiding-chat-confirm").unbind("click").on("click", function (){
                             removeChat(data.chatId);
@@ -251,7 +258,6 @@ function pullMyChat(){
                         });
                         displayHidingChatMoreOption(data.chatId);
                     });
-
                 };
                 CacheGetGroupMember(groupId, successFunction, data);
                 updateLastMessage(groupId, data);
@@ -266,7 +272,7 @@ function pullMyChat(){
                 $("#page-chat > .ui-content").prepend(element);
 
                 // update group name
-                var successFunction = function(object, data){ // object: single cacheGroup[i] object
+                successFunction = function(object, data){ // object: single cacheGroup[i] object
                     var memberId = object.get("memberId");
                     var groupId = object.id;
                     var groupName = object.get("groupName");
@@ -276,7 +282,7 @@ function pullMyChat(){
                             updateChatTitle(memberId[j], "body-chat-"+data.chatId+"> .chat-list-title");
                         }
                     }
-                }
+                };
                 CacheGetGroupMember(groupId, successFunction, data);
 
                 // update unread number icon and last message
@@ -448,6 +454,13 @@ function sendMessage(){
 
         var chatType = false;
         var displayFunction1 = function(object, data){  // single cacheGroup[i] object
+            var createdTime = new Date(data.message_object.createdAt);
+            if (createdTime.getTime() - previousTimeShown >= 180000) {
+                $("#page-chat-messages > .ui-content").append("<div class='chat-message-time'>"
+                                       + convertTimeFormatToHourMinute(createdTime) + "</div>");
+                previousTimeShown = createdTime.getTime();
+            }
+
             chatType = object.get("isGroupChat");
             var newElement = buildElementInChatMessagesPage(data.message_object, chatType);
             $("#page-chat-messages > .ui-content").append(newElement);
@@ -464,8 +477,7 @@ function sendMessage(){
         
         $("html body").animate({ scrollTop: $(document).height().toString()+"px" }, {
             duration: 750,
-            complete : function(){data.message_object
-            }
+            complete : function(){}
         });
 
         var $footerBarSendMessage = $("#footer-bar-send-message");
@@ -487,7 +499,6 @@ function updateChatTitle(friendId, elementId, option){
             // user with friendId is a friend of current user
             var alias = object.get("alias");
             var $elementId = $("#"+elementId);
-
             if (typeof(alias) == "undefined") {
                 var displayFunction1 = function(user){  // user: single cacheUser[i] object
                     var title = "";
@@ -504,7 +515,6 @@ function updateChatTitle(friendId, elementId, option){
                     $elementId.html(title);
                 };
                 CacheGetProfileByUserId(friendId, displayFunction1)
-
             } else {
                 var title = "";
                 if ((option)&&(option == 2)) {
@@ -517,14 +527,12 @@ function updateChatTitle(friendId, elementId, option){
                         title += alias;
                     }
                 }
-
                 $elementId.html(title);
             }
         } else {
             // user with friendId is not a friend of current user
-            var $elementId = $("#"+elementId);
-
-            var displayFunction1 = function(user){  // user: single cacheUser[i] object
+            $elementId = $("#"+elementId);
+            displayFunction1 = function(user){  // user: single cacheUser[i] object
                 var title = "";
                 if ((option)&&(option == 2)) {
                     title = user.get("name");

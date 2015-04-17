@@ -480,6 +480,42 @@ function convertTimeFormat(rawTime) {
     return showTime;
 }
 
+/* This function is designed to convert ISO time format to
+ * weekday | month | date | year | hour: minute format.
+ * It's mainly used in the chat message to show when the message
+ * was sent.
+ */
+function convertTimeFormatToHourMinute(time) {
+    var hour = time.getHours();
+    var minute = time.getMinutes();
+    var day = time.getDay();
+
+    var currTime = new Date();    // the date of today
+    var currYear = currTime.getFullYear();
+    var currMonth = currTime.getMonth();
+    var currDate = currTime.getDate();
+
+    var currStartTime = new Date(currYear, currMonth, currDate, 0, 0, 0, 0);  // starting time of today
+
+    var showTime = "";
+
+    var difference = currStartTime.getTime() - time.getTime();  // in milliseconds
+    var oneDay = 24 * 60 * 60 * 1000;  // in milliseconds
+
+    var hourAndMinute = (hour < 10 ? "0" + hour : hour) + ":" + (minute < 10 ? "0" + minute : minute);
+    if (difference <= 0) {
+        showTime = hourAndMinute;
+    } else if (Math.floor(difference / oneDay) <= 1) {
+        showTime = "Yesterday " + hourAndMinute;
+    }  else if (Math.floor(difference / oneDay) <= 3) {
+        showTime = DAYOFWEEK[day] + " " + hourAndMinute;
+    } else {
+        showTime = time.toDateString() + " " + hourAndMinute;
+    }
+
+    return showTime;
+}
+
 /* This function is designed to ...
  */
 function sendToolbarActiveKeyboard(object){
