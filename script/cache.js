@@ -20,7 +20,7 @@ var cacheFriend = [];
 var cacheChat = [];
 var cacheMessage = [];
 var cacheGroup = [];
-var cacheVersion = "1.0.2";
+var cacheVersion = "1.0.3";
 
 /* This function is designed to convert the raw data in the local storage to a more readable format so they can be
  * stored in the cache we defined above.
