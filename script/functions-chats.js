@@ -599,7 +599,7 @@ function updateChatMessage(object){
             $footerBarSendMessage.css("bottom", ($("body").height()-$("#page-chat-messages").height()-44).toString()+"px");
         }
     };
-    ParsePullChatMessage(groupId, limitNum, descendingOrderKey, beforeAt, displayFunction, null);
+    ParsePullChatMessage(groupId, limitNum, descendingOrderKey, beforeAt, displayFunction, {});
 }
 
 /* This function is designed to show hidden options for chatting messages.
