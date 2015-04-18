@@ -412,7 +412,7 @@ function CacheSetGroupMemberChatObjectReadFalse(senderId, groupId, text, notific
 function CacheGetGroupId(memberId, successFunction){
     var cached = false;
     for (var i = 0; i < cacheGroup.length; i++) {
-        if (cacheGroup[i].get("memberNum") == memberId.length) {
+        if (cacheGroup[i].get("memberId").length == memberId.length) {
             cached = true;
             var GroupMemberId = cacheGroup[i].get("memberId");
             for (var j = 0; j < memberId.length; j++) {
