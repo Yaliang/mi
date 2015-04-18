@@ -407,12 +407,13 @@ function CacheSetGroupMemberChatObjectReadFalse(senderId, groupId, text, notific
     }
 }
 
-/* This function is designed to get the cached group Id by its member Id.
+/* This function is designed to get the cached group of private chat Id by its member Id.
+ * Modified by Yaliang. 4/18/2015
  */
-function CacheGetGroupId(memberId, successFunction){
+function CacheGetGroupIdInPrivateChat(memberId, successFunction){
     var cached = false;
     for (var i = 0; i < cacheGroup.length; i++) {
-        if (cacheGroup[i].get("memberNum") == memberId.length) {
+        if ((cacheGroup[i].get("memberId").length == memberId.length) && (!cacheGroup[i].get("isGroup"))) {
             cached = true;
             var GroupMemberId = cacheGroup[i].get("memberId");
             for (var j = 0; j < memberId.length; j++) {
@@ -430,7 +431,7 @@ function CacheGetGroupId(memberId, successFunction){
 
     if (!cached) {
         //console.log("Group miss: "+memberId);
-        ParseGetGroupId(memberId, successFunction);
+        ParseGetGroupIdInPrivateChat(memberId, successFunction);
     }
 }
 

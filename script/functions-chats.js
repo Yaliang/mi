@@ -52,7 +52,7 @@ function startPrivateChat(friendId){
         };
         ParseSetChatObjectAsRead(currentId, groupId, null, successFunction1);
     };
-    CacheGetGroupId(memberId,successFunction);
+    CacheGetGroupIdInPrivateChat(memberId,successFunction);
     updateChatTitle(friendId, "header-chat-message-title");
 }
 
@@ -118,7 +118,7 @@ function startGroupChat(groupId){
         ParseSetChatObjectAsRead(currentId, groupId, null, successFunction1);
     };
     CacheGetGroupMember(groupId,successFunction);
-    // CacheGetGroupId(newGroupChatMemberArray.memberId,successFunction);
+    // CacheGetGroupIdInPrivateChat(newGroupChatMemberArray.memberId,successFunction);
 }
 
 /* This variable will be initialized with the total number of users in a group chat
@@ -163,7 +163,7 @@ function createGroupChat() {
     } else {
         // when it was a private chat and add new participant(s)
         // create a new group
-        CacheGetGroupId(newGroupChatMemberArray.memberId,successFunction);
+        ParseCreateNewGroup(newGroupChatMemberArray.memberId,successFunction);
     }
 }
 
