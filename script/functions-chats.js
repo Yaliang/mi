@@ -21,13 +21,15 @@ function startPrivateChat(friendId){
             var descendingOrderKey = "createdAt";
             var displayFunction = function(objects, data){ // objects: an array of Message objects
                 for (var i=objects.length-1; i>=0; i--) {
+                    var createdTime = new Date(objects[i].createdAt);
                     if (i == objects.length-1) {
-                        previousTimeShown = new Date(objects[i].createdAt).getTime();
+                        previousTimeShown = createdTime.getTime();
+                        $("#page-chat-messages > .ui-content").append("<div class='chat-message-time'>"
+                                               + convertTimeFormatToHourMinute(createdTime) + "</div>");
                     } else {
-                        var createdTime = new Date(objects[i].createdAt);
                         if (createdTime.getTime() - previousTimeShown >= 180000) {
                             $("#page-chat-messages > .ui-content").append("<div class='chat-message-time'>"
-                            + convertTimeFormatToHourMinute(createdTime) + "</div>");
+                                                  + convertTimeFormatToHourMinute(createdTime) + "</div>");
                             previousTimeShown = createdTime.getTime();
                         }
                     }
@@ -83,10 +85,12 @@ function startGroupChat(groupId){
             var descendingOrderKey = "createdAt";
             var displayFunction = function(objects, data){  // objects: an array of Message objects
                 for (var i=objects.length-1; i>=0; i--) {
+                    var createdTime = new Date(objects[i].createdAt);
                     if (i == objects.length-1) {
-                        previousTimeShown = new Date(objects[i].createdAt).getTime();
+                        previousTimeShown = createdTime.getTime();
+                        $("#page-chat-messages > .ui-content").append("<div class='chat-message-time'>"
+                        + convertTimeFormatToHourMinute(createdTime) + "</div>");
                     } else {
-                        var createdTime = new Date(objects[i].createdAt);
                         if (createdTime.getTime() - previousTimeShown >= 180000) {
                             $("#page-chat-messages > .ui-content").append("<div class='chat-message-time'>"
                             + convertTimeFormatToHourMinute(createdTime) + "</div>");
