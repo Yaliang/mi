@@ -29,9 +29,9 @@ function startPrivateChat(friendId){
                     } else {
                         if (createdTime.getTime() - previousTimeShown >= 180000) {
                             $("#page-chat-messages > .ui-content").append("<div class='chat-message-time'>"
-                                                  + convertTimeFormatToHourMinute(createdTime) + "</div>");
-                            previousTimeShown = createdTime.getTime();
+                                                   + convertTimeFormatToHourMinute(createdTime) + "</div>");
                         }
+                        previousTimeShown = createdTime.getTime();
                     }
 
                     var newElement = buildElementInChatMessagesPage(objects[i]);
@@ -89,13 +89,13 @@ function startGroupChat(groupId){
                     if (i == objects.length-1) {
                         previousTimeShown = createdTime.getTime();
                         $("#page-chat-messages > .ui-content").append("<div class='chat-message-time'>"
-                        + convertTimeFormatToHourMinute(createdTime) + "</div>");
+                                               + convertTimeFormatToHourMinute(createdTime) + "</div>");
                     } else {
                         if (createdTime.getTime() - previousTimeShown >= 180000) {
                             $("#page-chat-messages > .ui-content").append("<div class='chat-message-time'>"
-                            + convertTimeFormatToHourMinute(createdTime) + "</div>");
-                            previousTimeShown = createdTime.getTime();
+                                                   + convertTimeFormatToHourMinute(createdTime) + "</div>");
                         }
+                        previousTimeShown = createdTime.getTime();
                     }
 
                     var newElement = buildElementInChatMessagesPage(objects[i], true);
@@ -462,8 +462,8 @@ function sendMessage(){
             if (createdTime.getTime() - previousTimeShown >= 180000) {
                 $("#page-chat-messages > .ui-content").append("<div class='chat-message-time'>"
                                        + convertTimeFormatToHourMinute(createdTime) + "</div>");
-                previousTimeShown = createdTime.getTime();
             }
+            previousTimeShown = createdTime.getTime();
 
             chatType = object.get("isGroupChat");
             var newElement = buildElementInChatMessagesPage(data.message_object, chatType);
