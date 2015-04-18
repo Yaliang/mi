@@ -867,10 +867,11 @@ function ParseSetRequestRead(objectId){
 /* This function is designed to get the group Id by calling Parse API "first" (instance method of
  * Parse.Query object, which is performed on Group object. Group is a customer-defined subclass of Parse.Object)
  */
-function ParseGetGroupId(memberId, successFunction){
+function ParseGetGroupIdInPrivateChat(memberId, successFunction){
     var Group = Parse.Object.extend("Group");
     var query = new Parse.Query(Group);
     query.containsAll("memberId",memberId);
+    query.equalTo("isGroup", false);
     // query.equalTo("memberNum",memberId.length);
 
     // query.first method will return a single Group object to be found
@@ -897,6 +898,41 @@ function ParseGetGroupId(memberId, successFunction){
             }
         }
     });
+}
+
+/* This function is designed to create a new group.
+ * important !!! only create a new group(isGroup == true) for group chat, not a private chat
+ * Create by Yaliang, 4/18/2015
+ */
+function ParseCreateNewGroup(memberId, successFunction){
+    var Group = Parse.Object.extend("Group");
+    var group = new Group;
+
+    group.set("memberId",memberId);
+    if (memberId.length > 2) {
+        group.set("isGroupChat",true);
+    } else {
+        group.set("isGroupChat",false);
+    }
+    group.save(null, {
+        success: function(object){
+            if (object.get("isGroupChat")) {
+                var Chat = Parse.Object.extend("Chat");
+                var chat = new Chat;
+                chat.set("ownerId",Parse.User.current().id);
+                chat.set("groupId",object.get("groupId"));
+                chat.set("hidden",false);
+                chat.set("unreadNum",0);
+                chat.save(null, {
+                    success: function(object){
+                        CacheUpdateChat(object);
+                    }
+                });
+            }
+            successFunction(object);
+            CacheUpdateGroup(object);
+        }
+    })
 }
 
 /* This function is designed to get the group members by calling Parse API "get" (instance method of
