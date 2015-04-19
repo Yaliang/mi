@@ -334,9 +334,22 @@ function displayUserProfile(userId){
  */
 var currentLastEvent;
 
-/* This function is designed to pull up the user event for Activities page(id="page-event").
+/* This function is designed to pull up the user event for the Activities page(id="page-event").
+ *
+ * Parameters annotation:
+ * beforeAt -- corresponding to the "createdAt" attribute of UserEvent;
+ * filterMode -- mode used to display user events;
+ *
+ * beforeAt is used to show more activities;
+ * filterMode is used to display activities according to the following rules:
+ * filterMode absent or filterMode = 0 == all events (no filter);
+ * filterMode = 1 -- time-based display;
+ * filterMode = 2 -- location based display;
+ * filterMode = 3 -- customized display.
+ *
+ * Modified by Renpeng @ 12:30 4/19/2015
  */
-function pullUserEvent(beforeAt){
+function pullUserEvent(beforeAt, filterMode){
     currentLastEvent = new Date;
     pullLastItem = -1;
     var limitNumber = 15;
@@ -349,6 +362,7 @@ function pullUserEvent(beforeAt){
             }
         },350); 
     }
+
     var displayFunction = function(objects){  // objects: an array of UserEvent objects
         var currentUser = Parse.User.current();
         var owner = currentUser.getUsername();
@@ -395,15 +409,25 @@ function pullUserEvent(beforeAt){
         }
     };
 
-    ParsePullEvent({
+    var obj = {
         // owner: owner,
+        // eventId: null,
         limitNumber: limitNumber,
-        descendingOrderKey:descendingOrderKey,
+        descendingOrderKey: descendingOrderKey,
         accessibility: "public",
         beforeAt: beforeAt,
+        filterMode: filterMode,
+        currentTimeInMilliseconds: new Date().getTime(),
         displayFunction: displayFunction
-        // eventId: null
-    });
+    };
+
+    if (navigator.geolocation){
+       navigator.geolocation.getCurrentPosition(function(position) {
+           obj.currentLocation = [position.coords.latitude, position.coords.longitude];
+       });
+    }
+
+    ParsePullEvent(obj);
 }
 
 /* This variable...
@@ -521,22 +545,26 @@ function deleteDescriptionPreviewPhoto(e){
     listenKeyup = true;
 }
 
-/* This function is designed to display hidden options for the event page
+/* This function is designed to display more options for the event page
  */
 function displayEventMoreOption(){
-    var headerCreateNewEventOption = $("#header-create-new-event-option");
-    var headerListMyEvent = $("#header-list-my-event-option");
+    var $headerCreateNewEventOption = $("#header-create-new-event-option");
+    var $headerListMyEventOption = $("#header-list-my-event-option");
 
-    headerCreateNewEventOption.unbind("click");
-    headerListMyEvent.unbind("click");
+    $headerCreateNewEventOption.unbind("click");
+    $headerListMyEventOption.unbind("click");
 
     $("#header-event-more-option").removeClass("ui-header-more-option").addClass("ui-header-more-option-active");
     $(window).unbind("scroll");
 
-    headerCreateNewEventOption.on("click",function(){
-        var date = new Date().toISOString();
-        var timeRes = date.split(":");
-        time = timeRes[0]+":"+timeRes[1];
+    $headerCreateNewEventOption.on("click",function(){
+        var date = new Date();
+        var timeISO = date.toISOString().split(":");
+        var timeLocal = timeISO[0].split("T");
+        var timeLocalHour = date.getHours();
+        timeLocal[1] = timeLocalHour < 10 ? "0" + timeLocalHour : timeLocalHour;
+
+        time = timeLocal[0] + "T" + timeLocal[1] +":"+timeISO[1];
         $("#body-input-create-event-startTime").val(time);
         $("#body-input-create-event-endTime").val(time);
 
@@ -546,19 +574,19 @@ function displayEventMoreOption(){
         hiddenEventMoreOption();
     });
 
-    headerListMyEvent.on("click",function(){
+    $headerListMyEventOption.on("click",function(){
         pullMyEvent();
         hiddenEventMoreOption();
     });
 
-    var optionHiddenCoverLayer = $(".options-hidden-cover-layer");
-    optionHiddenCoverLayer.show();
+    var $$optionHiddenCoverLayer = $(".options-hidden-cover-layer");
+    $$optionHiddenCoverLayer.show();
     $(".page-right-top-options").fadeIn("fast");
-    optionHiddenCoverLayer.on("click",hiddenEventMoreOption).on("swipeleft",hiddenEventMoreOption).on("swiperight",hiddenEventMoreOption);
+    $$optionHiddenCoverLayer.on("click",hiddenEventMoreOption).on("swipeleft",hiddenEventMoreOption).on("swiperight",hiddenEventMoreOption);
     $(window).scroll(hiddenEventMoreOption);
 }
 
-/* This function is designed to hide unnecessary options for the event page
+/* This function is designed to hide more options for the event page
  */
 function hiddenEventMoreOption(){
     $("#header-create-new-event-option").unbind("click");
@@ -567,6 +595,38 @@ function hiddenEventMoreOption(){
     $(window).unbind("scroll");
     $(".options-hidden-cover-layer").hide();
     $(".page-right-top-options").fadeOut("fast");
+}
+
+/* This function is designed to display event filter modes for the event page
+ */
+function displayEventFilterModeMoreOption(){
+    var $bodyBottomHidingEventFilterMoreOption = $("#body-bottom-hiding-event-filter-more-option");
+    $bodyBottomHidingEventFilterMoreOption.css("position","fixed").css("bottom",(-$bodyBottomHidingEventFilterMoreOption.height()).toString()+"px").show();
+
+    $("body").append("<div class='ui-gray-cover' style='position:fixed; width:100%; height:100%; opacity:0; background-color:#000; z-index:1001' onclick='hiddenEventFilterModeMoreOption()'><div>");
+    $bodyBottomHidingEventFilterMoreOption.animate({
+        bottom: "0px"
+    },300);
+    $(".ui-gray-cover").animate({
+        opacity: 0.15
+    },300);
+}
+
+/* This function is designed to hide event filter modes for the event page
+ */
+function hiddenEventFilterModeMoreOption(){
+    var $bodyBottomHidingEventFilterMoreOption = $("#body-bottom-hiding-event-filter-more-option");
+    $bodyBottomHidingEventFilterMoreOption.animate({
+        bottom: (-$bodyBottomHidingEventFilterMoreOption.height()).toString()+"px"
+    },300,function(){
+        $bodyBottomHidingEventFilterMoreOption.hide();
+    });
+
+    $(".ui-gray-cover").animate({
+        opacity: 0
+    },300, function(){
+        $(".ui-gray-cover").remove();
+    });
 }
 
 /* This function is designed to create user events.
@@ -579,22 +639,23 @@ function createUserEvent(){
     var location = $("#body-input-create-event-location").val();
     var startTime = $("#body-input-create-event-startTime").val().replace("T", " ");
     var endTime = $("#body-input-create-event-endTime").val().replace("T", " ");
-
+    var startTimeInMilliseconds = new Date($("#body-input-create-event-startTime").val()).getTime();
+    var endTimeInMilliseconds = new Date($("#body-input-create-event-endTime").val()).getTime();
     var errorHandler = function(item) {
-        var bodyInputCreateEvent = $("#body-input-create-event-" + item);
-        bodyInputCreateEvent.focus().parent().addClass("ui-custom-event-create-focus");
+        var $bodyInputCreateEvent = $("#body-input-create-event-" + item);
+        $bodyInputCreateEvent.focus().parent().addClass("ui-custom-event-create-focus");
 
         if ($("#body-input-create-event-" + item + "-alert").length == 0) {
-            bodyInputCreateEvent.parent().after("<p id='body-input-create-event-" + item + "-alert' class='event-create-alert'>*Field required</p>");
+            $bodyInputCreateEvent.parent().after("<p id='body-input-create-event-" + item + "-alert' class='event-create-alert'>*Field required</p>");
         }
 
         setTimeout(function(){
-            bodyInputCreateEvent.focus().parent().removeClass("ui-custom-event-create-focus");
+            $bodyInputCreateEvent.focus().parent().removeClass("ui-custom-event-create-focus");
         }, 500);
 
-        bodyInputCreateEvent.change(function(){
+        $bodyInputCreateEvent.change(function(){
             $("#body-input-create-event-" + item + "-alert").remove();
-            bodyInputCreateEvent.unbind("change");
+            $bodyInputCreateEvent.unbind("change");
         });
     };
 
@@ -655,7 +716,7 @@ function createUserEvent(){
 
         pullUserEventHolderInfo(holder, id); // display event owner's name, not the username (which is an email address)
     };
-    ParseEventCreate(owner, title, location, time, visibility, description, errorObject, destID, displayFunction);
+    ParseEventCreate(owner, title, location, time, startTimeInMilliseconds, endTimeInMilliseconds, visibility, description, errorObject, destID, displayFunction);
 }
 
 /* This function is designed to build up the comment elements when displaying event details..
@@ -789,7 +850,7 @@ function displayEventDetailMoreOption(){
         bottom: "0px"
     },300);
     $(".ui-gray-cover").animate({
-        opacity: 0.3
+        opacity: 0.2
     },300);
 }
 
@@ -1023,7 +1084,7 @@ function deleteMyEvent(eventId){
 /* This function is designed to edit my event.
  */
 function editMyEvent(eventId){
-    var display = function(objects){ // objects: an array of UserEvent objects
+    var displayFunction = function(objects){ // objects: an array of UserEvent objects
         $("#body-input-edit-event-title").val(objects[0].get("title"));
         $("#body-input-edit-event-location").val(objects[0].get("location"));
         var time = objects[0].get("time").split(" -- ");
@@ -1037,7 +1098,7 @@ function editMyEvent(eventId){
             editSaveUserEvent(eventId);
         });
     };
-    ParsePullEvent({eventId: eventId, displayFunction: display});
+    ParsePullEvent({eventId: eventId, displayFunction: displayFunction});
 }
 
 /* This function is designed to save my event after editing.
@@ -1050,6 +1111,8 @@ function editSaveUserEvent(eventId){
     var location = $("#body-input-edit-event-location").val();
     var startTime = $("#body-input-edit-event-startTime").val().replace("T", " ");
     var endTime = $("#body-input-edit-event-endTime").val().replace("T", " ");
+    var startTimeInMilliseconds = new Date($("#body-input-edit-event-startTime").val()).getTime();
+    var endTimeInMilliseconds = new Date($("#body-input-edit-event-endTime").val()).getTime();
 
     var errorHandler = function(item) {
         var $bodyInputEventEdit = $("#body-input-event-edit-" + item);
@@ -1154,7 +1217,7 @@ function editSaveUserEvent(eventId){
             pushNotificationToDeviceByUserId(goingUsrId, Parse.User.current().get("name")+" updated the activity \'" +title+ "\'.");
         }
     };
-    ParseEventEditSave(owner, title, location, time, visibility, description, errorObject, destID, displayFunction, eventId);
+    ParseEventEditSave(owner, title, location, time, startTimeInMilliseconds, endTimeInMilliseconds, visibility, description, errorObject, destID, displayFunction, eventId);
 }
 
 /* This function is designed to share user event by email.

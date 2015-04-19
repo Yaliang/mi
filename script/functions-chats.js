@@ -675,13 +675,12 @@ function hideChatMessageMoreOption(){
  */
 function displayHidingChatMoreOption(chatId){
     $("#body-chat-" + chatId).addClass("chat-message-selected").removeClass("chat-message-deselected");
-    //console.log("selected");
+
     var $bodyBottomHidingChatMoreOption = $("#body-bottom-hiding-chat-more-option");
     $bodyBottomHidingChatMoreOption.css("position","fixed").css("bottom",(-$bodyBottomHidingChatMoreOption.height()).toString()+"px").show();
 
     $("body").append("<div class='ui-gray-cover' style='position:fixed; width:100%; height:100%; opacity:0; background-color:#000; z-index:4'><div>");
     $(".ui-gray-cover").on("click", function(){
-        console.log("cancel");
         hideHidingChatMoreOption(chatId);
     }).animate({
         opacity: 0.0
@@ -847,21 +846,21 @@ function leaveGroup() {
  * Modified by Yaliang @ 23:45 4/18/2015
  */
 function displayChatMoreOption(){
-    var headerStartGroupChatOption = $("#header-start-group-chat-option");
-    headerStartGroupChatOption.unbind("click");
+    var $headerStartGroupChatOption = $("#header-start-group-chat-option");
+    $headerStartGroupChatOption.unbind("click");
 
     $("#header-chat-more-option").removeClass("ui-header-more-option").addClass("ui-header-more-option-active");
     $(window).unbind("scroll");
 
-    headerStartGroupChatOption.on("click",function(){
+    $headerStartGroupChatOption.on("click",function(){
         // pullFriendListForAddingParticipants(); Please wait me to design a function adaptable for this task
         hiddenChatMoreOption();
     });
 
-    var optionHiddenCoverLayer = $(".options-hidden-cover-layer");
-    optionHiddenCoverLayer.show();
+    var $optionHiddenCoverLayer = $(".options-hidden-cover-layer");
+    $optionHiddenCoverLayer.show();
     $(".page-right-top-options").fadeIn("fast");
-    optionHiddenCoverLayer.on("click",hiddenChatMoreOption).on("swipeleft",hiddenChatMoreOption).on("swiperight",hiddenChatMoreOption);
+    $optionHiddenCoverLayer.on("click",hiddenChatMoreOption).on("swipeleft",hiddenChatMoreOption).on("swiperight",hiddenChatMoreOption);
     $(window).scroll(hiddenChatMoreOption);
 }
 

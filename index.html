@@ -182,6 +182,8 @@
             <h1>Activities</h1>
             <a class="ui-btn-right ui-btn ui-btn-inline ui-corner-all ui-header-more-option" id="header-event-more-option" href="#"
                onclick="displayEventMoreOption();"></a>
+            <a class="ui-btn-left ui-btn ui-btn-inline ui-corner-all" id="header-event-filter-option" href="#"
+               onclick="displayEventFilterModeMoreOption();">Filter Mode</a>
         </div><!-- /header -->
 
         <div  class="ui-content" id="body-event-content-list" role="main">
@@ -215,6 +217,13 @@
         </ul>
 
         <div class="options-hidden-cover-layer" style="display: none;"></div>
+
+        <div class="ui-page-more-option-bottom" id="body-bottom-hiding-event-filter-more-option">
+            <a class="ui-btn share-btn ui-more-option-first-btn" id="body-bottom-hiding-event-filter-time" data-transition="slideup" href="">Time Based</a>
+            <a class="ui-btn share-btn ui-more-option-first-btn" id="body-bottom-hiding-event-filter-location" data-transition="slideup" href="">Location Based</a>
+            <a class="ui-btn share-btn ui-more-option-first-btn" id="body-bottom-hiding-event-filter-custom" data-transition="slideup" href="">Customized</a>
+            <div class="ui-btn ui-more-option-cancel-btn" id="body-bottom-hiding-event-filter-cancel" onclick="hiddenEventFilterModeMoreOption()">Cancel</div>
+        </div>
 
     </div><!-- /page -->
 
@@ -490,11 +499,6 @@
 
         <div class="ui-content" role="main"></div><!-- /content -->
 
-        <div class="ui-page-more-option-bottom" id="body-bottom-hiding-chat-more-option">
-            <a class="ui-btn report-btn ui-more-option-first-btn" id="body-bottom-hiding-chat-confirm" data-transition="slideup" href="">Delete</a>
-            <div class="ui-btn ui-more-option-cancel-btn" id="body-bottom-hiding-chat-cancel">Cancel</div>
-        </div>
-
         <div class="nav-glyphish-example" data-role="footer" data-position="fixed" data-tap-toggle="false">
             <div class="nav-glyphish-example" data-role="navbar" data-grid="c">
                 <ul>
@@ -512,6 +516,11 @@
                 </ul>
             </div>
         </div><!-- /footer -->
+
+        <div class="ui-page-more-option-bottom" id="body-bottom-hiding-chat-more-option">
+            <a class="ui-btn report-btn ui-more-option-first-btn" id="body-bottom-hiding-chat-confirm" data-transition="slideup" href="">Delete</a>
+            <div class="ui-btn ui-more-option-cancel-btn" id="body-bottom-hiding-chat-cancel">Cancel</div>
+        </div>
 
         <ul class="page-right-top-options" style="display: none;">
             <li><a id="header-start-group-chat-option" href="#page-add-participants">Start Group Chat</a></li>

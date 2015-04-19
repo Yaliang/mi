@@ -152,7 +152,7 @@ function ParseUpdateCurrentUser(successFunction, errorFunction) {
 /* This function is designed to create and save user activities by calling Parse API "set" and "save"
  * (instance methods of UserEvent object. UserEvent is a customer-defined subclass of Parse.Object)
  */
-function ParseEventCreate(owner, title, location, time, visibility, description, errorObject, destID, displayFunction) {
+function ParseEventCreate(owner, title, location, time, startTimeInMilliseconds, endTimeInMilliseconds, visibility, description, errorObject, destID, displayFunction) {
     var UserEvent = Parse.Object.extend("UserEvent");
     var userEvent = new UserEvent();
 
@@ -160,6 +160,8 @@ function ParseEventCreate(owner, title, location, time, visibility, description,
     userEvent.set("title",title);
     userEvent.set("location",location);
     userEvent.set("time",time);
+    userEvent.set("startTimeInMilliseconds", startTimeInMilliseconds);
+    userEvent.set("endTimeInMilliseconds", endTimeInMilliseconds);
     userEvent.set("visibility",visibility);
     userEvent.set("description",description);
     userEvent.set("commentNumber",0);
@@ -179,7 +181,7 @@ function ParseEventCreate(owner, title, location, time, visibility, description,
 /* This function is designed to edit and save existing user activities by calling Parse API "set" and "save"
  * (instance methods of UserEvent object. UserEvent is a customer-defined subclass of Parse.Object)
  */
-function ParseEventEditSave(owner, title, location, time, visibility, description, errorObject, destID, displayFunction, eventId) {
+function ParseEventEditSave(owner, title, location, time, startTimeInMilliseconds, endTimeInMilliseconds, visibility, description, errorObject, destID, displayFunction, eventId) {
     var UserEvent = Parse.Object.extend("UserEvent");
     var query = new Parse.Query(UserEvent);
 
@@ -190,6 +192,8 @@ function ParseEventEditSave(owner, title, location, time, visibility, descriptio
             userEvent.set("title",title);
             userEvent.set("location",location);
             userEvent.set("time",time);
+            userEvent.set("startTimeInMilliseconds", startTimeInMilliseconds);
+            userEvent.set("endTimeInMilliseconds", endTimeInMilliseconds);
             userEvent.set("visibility",visibility);
             userEvent.set("description",description);
 
@@ -235,20 +239,24 @@ function ParsePullEvent(obj) {
     //owner, limitNumber, descendingOrderKey, accessibility, beforeAt, displayFunction
     var UserEvent = Parse.Object.extend("UserEvent");
     var query = new Parse.Query(UserEvent);
+
     if (("owner" in obj) && (obj.owner != null)) {
         query.equalTo("owner",obj.owner);
     }else{
         query.lessThan("reportNum", 11);
         query.notEqualTo("reportUserId", Parse.User.current().id);
     }
+
     if (("limitNumber" in obj) && (obj.limitNumber != null)) {
         query.limit(obj.limitNumber);
     }
+
     if (("accessibility" in obj) && (obj.accessibility != null)) {
         if (obj.accessibility == "public") {
             query.equalTo("visibility",true);
         }
     }
+
     if (("descendingOrderKey" in obj) && (obj.descendingOrderKey != null)) {
         query.descending(obj.descendingOrderKey);
     }
@@ -256,6 +264,18 @@ function ParsePullEvent(obj) {
     if (("beforeAt" in obj) && (typeof(obj.beforeAt) != "undefined") && (obj.beforeAt != null)) {
         query.lessThan("createdAt",obj.beforeAt);
     }
+
+    // Note this part needs further consideration
+    //if (("filterMode" in obj) && (typeof(obj.filterMode) != "undefined") && (obj.filterMode != null)) {
+    //    if (filterMode == 1) {
+    //
+    //    } else if (filterMode == 2) {
+    //
+    //    } else if (filterMode == 3) {
+    //
+    //    }
+    //}
+
     if(("eventId" in obj) && obj.eventId != null){
         query.equalTo("objectId", obj.eventId);
     }
