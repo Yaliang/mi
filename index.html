@@ -180,7 +180,7 @@
 
         <div data-role="header" data-position="fixed" data-tap-toggle="false" >
             <h1>Activities</h1>
-            <a class="ui-btn-right ui-btn ui-btn-inline ui-corner-all ui-header-event-more-option" id="header-event-more-option" href="#"
+            <a class="ui-btn-right ui-btn ui-btn-inline ui-corner-all ui-header-more-option" id="header-event-more-option" href="#"
                onclick="displayEventMoreOption();"></a>
         </div><!-- /header -->
 
@@ -206,11 +206,11 @@
             </div>
         </div><!-- /footer -->
 
-        <ul class="event-page-right-top-options" style="display: none;">
+        <ul class="page-right-top-options" style="display: none;">
             <li><a id="header-create-new-event-option" href="#page-event-create"
                    onclick="setCurrLocationHash('#page-event-create')">Create</a></li>
 
-            <li><a id="header-list-my-event" href="#page-event-my-event"
+            <li><a id="header-list-my-event-option" href="#page-event-my-event"
                    onclick="setCurrLocationHash('#page-event-my-event')">My Activities</a></li>
         </ul>
 
@@ -326,14 +326,14 @@
             <h1>Activity Detail</h1>
             <a class="ui-btn-left ui-btn ui-btn-inline ui-corner-all" data-rel="back" href="#page-event"
                onclick="$('#footer-bar-send-comment').fadeOut(); setCurrLocationHash('#page-event')">Back</a>
-            <a class="ui-btn-right ui-btn ui-btn-inline ui-corner-all ui-header-event-more-option" id="header-event-detail-more-option" href="#"
+            <a class="ui-btn-right ui-btn ui-btn-inline ui-corner-all ui-header-more-option" id="header-event-detail-more-option" href="#"
                onclick="displayEventDetailMoreOption()"></a>
         </div><!-- /header -->
 
         <div class="ui-content" id="body-content-event-detail" role="main"></div><!-- /content -->
 
         <div class="ui-page-more-option-bottom" id="body-bottom-event-detail-more-option">
-            <a class="ui-btn share-btn" href="" onclick = "hideEventDetailMoreOption()">Share via Email</a>
+            <a class="ui-btn share-btn ui-more-option-first-btn" href="" onclick = "hideEventDetailMoreOption()">Share via Email</a>
             <a class="ui-btn report-btn" data-transition="slideup" href="#page-event-report"
                onclick="hideEventDetailMoreOption()">Report Abuse</a>
             <div class="ui-btn ui-more-option-cancel-btn" onclick="hideEventDetailMoreOption()">Cancel</div>
@@ -484,12 +484,14 @@
 
         <div data-role="header" data-position="fixed" data-tap-toggle="false">
             <h1>Chats</h1>
+            <a class="ui-btn-right ui-btn ui-btn-inline ui-corner-all ui-header-more-option" id="header-chat-more-option" href="#"
+               onclick="displayChatMoreOption();"></a>
         </div><!-- /header -->
 
         <div class="ui-content" role="main"></div><!-- /content -->
 
         <div class="ui-page-more-option-bottom" id="body-bottom-hiding-chat-more-option">
-            <a class="ui-btn report-btn" id="body-bottom-hiding-chat-confirm" data-transition="slideup" href="">Delete</a>
+            <a class="ui-btn report-btn ui-more-option-first-btn" id="body-bottom-hiding-chat-confirm" data-transition="slideup" href="">Delete</a>
             <div class="ui-btn ui-more-option-cancel-btn" id="body-bottom-hiding-chat-cancel">Cancel</div>
         </div>
 
@@ -511,6 +513,12 @@
             </div>
         </div><!-- /footer -->
 
+        <ul class="page-right-top-options" style="display: none;">
+            <li><a id="header-start-group-chat-option" href="#page-add-participants">Start Group Chat</a></li>
+        </ul>
+
+        <div class="options-hidden-cover-layer" style="display: none;"></div>
+
     </div><!-- /page -->
 
     <!-- Page for displaying the messages of a chat -->
@@ -527,13 +535,13 @@
         <div class="ui-content" style="margin-bottom:100px" role="main"></div><!-- /content -->
 
         <div class="ui-page-more-option-bottom" id="body-bottom-private-chat-message-more-option">
-            <a class="ui-btn" data-transition="slideup" href="#page-add-participants"
+            <a class="ui-btn ui-more-option-first-btn" data-transition="slideup" href="#page-add-participants"
                onclick="hideChatMessageMoreOption();pullFriendListForAddingParticipants();">Add Participants</a>
             <div class="ui-btn ui-more-option-cancel-btn" onclick="hideChatMessageMoreOption()">Cancel</div>
         </div>
 
         <div class="ui-page-more-option-bottom" id="body-bottom-group-chat-message-more-option">
-            <a class="ui-btn" data-transition="slideup" href="#page-add-participants"
+            <a class="ui-btn ui-more-option-first-btn" data-transition="slideup" href="#page-add-participants"
                onclick="hideChatMessageMoreOption();pullFriendListForAddingParticipants();">Add Participants</a>
             <a class="ui-btn" data-transition="slideup" href="#page-group-profile"
                onclick="hideChatMessageMoreOption();pullGroupProfile();">Group Profile</a>

@@ -525,13 +525,12 @@ function deleteDescriptionPreviewPhoto(e){
  */
 function displayEventMoreOption(){
     var headerCreateNewEventOption = $("#header-create-new-event-option");
-    var headerListMyEvent = $("#header-list-my-event");
+    var headerListMyEvent = $("#header-list-my-event-option");
 
     headerCreateNewEventOption.unbind("click");
     headerListMyEvent.unbind("click");
 
-    $("#header-event-more-option").removeClass("ui-header-event-more-option").addClass("ui-header-event-more-option-active");
-
+    $("#header-event-more-option").removeClass("ui-header-more-option").addClass("ui-header-more-option-active");
     $(window).unbind("scroll");
 
     headerCreateNewEventOption.on("click",function(){
@@ -554,20 +553,20 @@ function displayEventMoreOption(){
 
     var optionHiddenCoverLayer = $(".options-hidden-cover-layer");
     optionHiddenCoverLayer.show();
-    $(".event-page-right-top-options").fadeIn("fast");
+    $(".page-right-top-options").fadeIn("fast");
     optionHiddenCoverLayer.on("click",hiddenEventMoreOption).on("swipeleft",hiddenEventMoreOption).on("swiperight",hiddenEventMoreOption);
-    $(window).scroll(hiddenEventMoreOption)
+    $(window).scroll(hiddenEventMoreOption);
 }
 
 /* This function is designed to hide unnecessary options for the event page
  */
 function hiddenEventMoreOption(){
     $("#header-create-new-event-option").unbind("click");
-    $("#header-list-my-event").unbind("click");
-    $("#header-event-more-option").removeClass("ui-header-event-more-option-active").addClass("ui-header-event-more-option");
+    $("#header-list-my-event-option").unbind("click");
+    $("#header-event-more-option").removeClass("ui-header-more-option-active").addClass("ui-header-more-option");
     $(window).unbind("scroll");
     $(".options-hidden-cover-layer").hide();
-    $(".event-page-right-top-options").fadeOut("fast");
+    $(".page-right-top-options").fadeOut("fast");
 }
 
 /* This function is designed to create user events.
@@ -780,7 +779,7 @@ function updateEventDetail(id){
 /* This function is designed to display the hidden options on event detail page.
  */
 function displayEventDetailMoreOption(){
-    $("#header-event-detail-more-option").removeClass("ui-header-event-more-option").addClass("ui-header-event-more-option-active");
+    $("#header-event-detail-more-option").removeClass("ui-header-more-option").addClass("ui-header-more-option-active");
 
     var $bodyBottomEventDetailMoreOption = $("#body-bottom-event-detail-more-option");
     $bodyBottomEventDetailMoreOption.css("position","fixed").css("bottom",(-$bodyBottomEventDetailMoreOption.height()).toString()+"px").show();
@@ -797,7 +796,7 @@ function displayEventDetailMoreOption(){
 /* This function is designed to hide unnecessary options on event detail page.
  */
 function hideEventDetailMoreOption(){
-    $("#header-event-detail-more-option").addClass("ui-header-event-more-option").removeClass("ui-header-event-more-option-active");
+    $("#header-event-detail-more-option").addClass("ui-header-more-option").removeClass("ui-header-more-option-active");
 
     var $bodyBottomEventDetailMoreOption = $("#body-bottom-event-detail-more-option");
     $bodyBottomEventDetailMoreOption.animate({

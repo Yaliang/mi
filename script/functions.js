@@ -274,7 +274,7 @@ function pullNotification(){
     ParsePullUnreadFriendRequest(currentUser.id, displayFunction);
 
     // check new chatting messages
-    displayFunction = function(objects){  // objects: Chat objects
+    displayFunction = function(objects){  // objects: an array of Chat objects
         if ((typeof(objects)!="undefined")&&(objects.length > 0)) {
             $(".footer-navigation-bar-chat").each(function(){
                 $(this).addClass("chat-notification-custom");

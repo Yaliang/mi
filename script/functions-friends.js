@@ -414,9 +414,14 @@ function pullMyFriendList() {
 
 /* This variable holds an array of temporary users for creating or adding users to a group chat.
  */
-var newGroupChatMemberArray = {memberId:[], prevNum:0, newNum:0};
+var newGroupChatMemberArray = {groupId:null, memberId:[], prevNum:0, newNum:0, newMemberList:[]};
 
 /* This function is designed to pull up my friend list for adding them in a group chat.
+ * Modified by Renpeng @ 19:30 4/18/2015
+ * Modified by Yaliang @ 11:37 4/18/2015
+ * ! important note: !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+ * only design for adding participant to existing group. It use $("#footer-bar-group-id-label") to get the group Id.
+ * That html content will not be removed when leaving page-chat-message
  */
 function pullFriendListForAddingParticipants(){
     $("#body-add-participants-list").html("");
@@ -426,8 +431,7 @@ function pullFriendListForAddingParticipants(){
     // pull the friend list
     var descendingOrderKey = "createdAt";
     var displayFunction = function(objects){  // objects: an array of Friend objects
-        // sort user list
-        objects.sort(function(a, b){return a.get("name") - b.get("name")});
+        objects.sort(function(a, b){return a.get("name") - b.get("name")});  // sort user list
 
         // display them
         for (var i=0; i<objects.length; i++) {
@@ -454,13 +458,14 @@ function pullFriendListForAddingParticipants(){
             CacheGetProfileByUserId(friendId, displayFunction1, {friendObject:objects[i]});
         }
 
-        // check if them have been in the group
+        // check if they have been in the group
         // get the current users in chat
         var groupId = $("#footer-bar-group-id-label").html();
         var successFunction = function(object, data){  // object: single cacheGroup[i] object
             var memberId = object.get("memberId");
             //console.log(memberId);
             newGroupChatMemberArray.groupId = object.id;
+            newGroupChatMemberArray.isGroupChat = object.get("isGroupChat");
             newGroupChatMemberArray.memberId = $.merge([], memberId);
             newGroupChatMemberArray.prevNum = memberId.length;
             newGroupChatMemberArray.newNum = 0;

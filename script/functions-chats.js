@@ -29,9 +29,9 @@ function startPrivateChat(friendId){
                     } else {
                         if (createdTime.getTime() - previousTimeShown >= 180000) {
                             $("#page-chat-messages > .ui-content").append("<div class='chat-message-time'>"
-                                                  + convertTimeFormatToHourMinute(createdTime) + "</div>");
-                            previousTimeShown = createdTime.getTime();
+                                                   + convertTimeFormatToHourMinute(createdTime) + "</div>");
                         }
+                        previousTimeShown = createdTime.getTime();
                     }
 
                     var newElement = buildElementInChatMessagesPage(objects[i]);
@@ -89,13 +89,13 @@ function startGroupChat(groupId){
                     if (i == objects.length-1) {
                         previousTimeShown = createdTime.getTime();
                         $("#page-chat-messages > .ui-content").append("<div class='chat-message-time'>"
-                        + convertTimeFormatToHourMinute(createdTime) + "</div>");
+                                               + convertTimeFormatToHourMinute(createdTime) + "</div>");
                     } else {
                         if (createdTime.getTime() - previousTimeShown >= 180000) {
                             $("#page-chat-messages > .ui-content").append("<div class='chat-message-time'>"
-                            + convertTimeFormatToHourMinute(createdTime) + "</div>");
-                            previousTimeShown = createdTime.getTime();
+                                                   + convertTimeFormatToHourMinute(createdTime) + "</div>");
                         }
+                        previousTimeShown = createdTime.getTime();
                     }
 
                     var newElement = buildElementInChatMessagesPage(objects[i], true);
@@ -128,7 +128,8 @@ function startGroupChat(groupId){
 var chatsInitializationNumber = 0;
 
 /* This function is designed to create a group chat.
- * modified by Yaliang at 4/11/2015
+ * Modified by Yaliang at 4/11/2015
+ * Modified by Renpeng @ 19:32 4/18/2015
  */
 function createGroupChat() {
     var successFunction = function(object){  // object: single cacheGroup[i] object
@@ -152,7 +153,8 @@ function createGroupChat() {
             });
         }
     };
-    if (object.get("isGroupChat")) {
+
+    if (newGroupChatMemberArray.isGroupChat) {
         // when it was a group chat and add new participant(s)
         // only change the current group
         ParseAddGroupMember({
@@ -163,7 +165,7 @@ function createGroupChat() {
     } else {
         // when it was a private chat and add new participant(s)
         // create a new group
-        ParseCreateNewGroup(newGroupChatMemberArray.memberId,successFunction);
+        ParseCreateNewGroup($.merge(newGroupChatMemberArray.memberId, newGroupChatMemberArray.newMemberList), successFunction);
     }
 }
 
@@ -462,8 +464,8 @@ function sendMessage(){
             if (createdTime.getTime() - previousTimeShown >= 180000) {
                 $("#page-chat-messages > .ui-content").append("<div class='chat-message-time'>"
                                        + convertTimeFormatToHourMinute(createdTime) + "</div>");
-                previousTimeShown = createdTime.getTime();
             }
+            previousTimeShown = createdTime.getTime();
 
             chatType = object.get("isGroupChat");
             var newElement = buildElementInChatMessagesPage(data.message_object, chatType);
@@ -599,7 +601,7 @@ function updateChatMessage(object){
             $footerBarSendMessage.css("bottom", ($("body").height()-$("#page-chat-messages").height()-44).toString()+"px");
         }
     };
-    ParsePullChatMessage(groupId, limitNum, descendingOrderKey, beforeAt, displayFunction, null);
+    ParsePullChatMessage(groupId, limitNum, descendingOrderKey, beforeAt, displayFunction, {});
 }
 
 /* This function is designed to show hidden options for chatting messages.
@@ -711,18 +713,20 @@ function hideHidingChatMoreOption(chatId){
 }
 
 /* This function is designed to add new users to a group chat.
+ * Modified by Renpeng @ 19:33 4/18/2015
+ * Modified by Yaliang 11:27 4/18/2015
  */
 function selectANewParticipant(event) {
     var id = event.data.id;
     newGroupChatMemberArray.newMemberList.push(id);
     newGroupChatMemberArray.newNum++;
     $("#header-add-participant-for-group-chat").html("OK("+newGroupChatMemberArray.newNum+")").unbind("click").click(createGroupChat);
-    $("#body-add-participants-list-"+id).children(".ui-add-participant-unchecked")
-        .removeClass("ui-add-participant-unchecked").addClass("ui-add-participant-checked")
-        .unbind("click").click({id: id},removeANewParticipant);
+    $("#body-add-participants-list-"+id).children(".ui-add-participant-unchecked").removeClass("ui-add-participant-unchecked").addClass("ui-add-participant-checked");
+    $("#body-add-participants-list-"+id).unbind("click").click({id: id},removeANewParticipant);
 }
 
 /* This function is designed to remove selected users from a group chat.
+ * Modified by Yaliang 11:27 4/18/2015
  */
 function removeANewParticipant(event) {
     var id = event.data.id;
@@ -735,9 +739,8 @@ function removeANewParticipant(event) {
     } else {
         $("#header-add-participant-for-group-chat").html("OK").unbind("click");
     }
-    $("#body-add-participants-list-"+id).children(".ui-add-participant-checked")
-        .removeClass("ui-add-participant-checked").addClass("ui-add-participant-unchecked")
-        .unbind("click").click({id: id},selectANewParticipant);
+    $("#body-add-participants-list-"+id).children(".ui-add-participant-checked").removeClass("ui-add-participant-checked").addClass("ui-add-participant-unchecked")
+    $("#body-add-participants-list-"+id).unbind("click").click({id: id},selectANewParticipant);
 }
 
 /* This function is designed to pull up the profile for a group.
@@ -837,4 +840,38 @@ function leaveGroup() {
         });
     }
     ParseDeleteChat(null, removeMemberId, groupId, successFunction);
+}
+
+/* This function is designed to display hidden options for the Chat page
+ * Created by Renpeng @ 17:48 4/18/2015
+ * Modified by Yaliang @ 23:45 4/18/2015
+ */
+function displayChatMoreOption(){
+    var headerStartGroupChatOption = $("#header-start-group-chat-option");
+    headerStartGroupChatOption.unbind("click");
+
+    $("#header-chat-more-option").removeClass("ui-header-more-option").addClass("ui-header-more-option-active");
+    $(window).unbind("scroll");
+
+    headerStartGroupChatOption.on("click",function(){
+        // pullFriendListForAddingParticipants(); Please wait me to design a function adaptable for this task
+        hiddenChatMoreOption();
+    });
+
+    var optionHiddenCoverLayer = $(".options-hidden-cover-layer");
+    optionHiddenCoverLayer.show();
+    $(".page-right-top-options").fadeIn("fast");
+    optionHiddenCoverLayer.on("click",hiddenChatMoreOption).on("swipeleft",hiddenChatMoreOption).on("swiperight",hiddenChatMoreOption);
+    $(window).scroll(hiddenChatMoreOption);
+}
+
+/* This function is designed to hide unnecessary options for the Chat page
+ * Modified by Renpeng @ 17:57 4/18/2015
+ */
+function hiddenChatMoreOption(){
+    $("#header-start-group-chat-option").unbind("click");
+    $("#header-chat-more-option").removeClass("ui-header-more-option-active").addClass("ui-header-more-option");
+    $(window).unbind("scroll");
+    $(".options-hidden-cover-layer").hide();
+    $(".page-right-top-options").fadeOut("fast");
 }
