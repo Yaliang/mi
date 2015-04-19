@@ -933,11 +933,13 @@ textarea {
 .ui-user-profile-list{
     clear: both;
     line-height: 2em;
+    font-size: 0.8em;
     font-family: "Open Sans";
-    padding-top: 0.6em;
-    padding-bottom: 0.6em;
+    padding-top: 0.3em;
+    padding-bottom: 0.3em;
     padding-left: 1em;
     background-color: #FFFFFF;
+    border-bottom: 1px solid #ddd;
 }
 
 .ui-user-profile-gender{
@@ -961,7 +963,7 @@ textarea {
 
 .ui-profile-label{
     float: left;
-    width: 110px;
+    width: 80px;
     color: #979797;
     font-weight: 300;
     padding-left: 0.3em;
@@ -997,6 +999,10 @@ textarea {
 
 .ui-more-option-cancel-btn {
     margin-bottom: 0
+}
+
+.ui-more-option-first-btn {
+    margin-top: 0
 }
 
  /*iPad retina portrait startup image */
