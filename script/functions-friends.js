@@ -418,8 +418,12 @@ var newGroupChatMemberArray = {groupId:null, memberId:[], prevNum:0, newNum:0, n
 
 /* This function is designed to pull up my friend list for adding them in a group chat.
  * Modified by Renpeng @ 19:30 4/18/2015
+ * Modified by Yaliang @ 11:37 4/18/2015
+ * ! important note: !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+ * only design for adding participant to existing group. It use $("#footer-bar-group-id-label") to get the group Id.
+ * That html content will not be removed when leaving page-chat-message
  */
-function pullFriendListForAddingParticipants(isGroupChat){
+function pullFriendListForAddingParticipants(){
     $("#body-add-participants-list").html("");
     $("#header-add-participant-for-group-chat").html("OK").unbind("click");
     var groupId = $("#footer-bar-group-id-label").html();
@@ -434,9 +438,7 @@ function pullFriendListForAddingParticipants(isGroupChat){
             var friendId = objects[i].get("friend");
             var objectId = objects[i].id;
             $("#body-add-participants-list").append("<li id='body-add-participants-list-"+friendId+"' class='ui-friend-list-line'></li>");
-            $("#body-add-participants-list-"+friendId).click({id: friendId},function(event) {
-                selectANewParticipant(event, isGroupChat);
-            });
+            $("#body-add-participants-list-"+friendId).click({id: friendId},selectANewParticipant);
             var displayFunction1 = function(userObject, data) { // userObject: single cacheUser[i] object
                 var newElement = buildUserListElement(userObject, "body-add-participants-people-", null, null, "add-participant-list");
                 var objectId = data.friendObject.id;
@@ -463,6 +465,7 @@ function pullFriendListForAddingParticipants(isGroupChat){
             var memberId = object.get("memberId");
             //console.log(memberId);
             newGroupChatMemberArray.groupId = object.id;
+            newGroupChatMemberArray.isGroupChat = object.get("isGroupChat");
             newGroupChatMemberArray.memberId = $.merge([], memberId);
             newGroupChatMemberArray.prevNum = memberId.length;
             newGroupChatMemberArray.newNum = 0;

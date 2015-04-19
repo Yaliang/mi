@@ -131,7 +131,7 @@ var chatsInitializationNumber = 0;
  * Modified by Yaliang at 4/11/2015
  * Modified by Renpeng @ 19:32 4/18/2015
  */
-function createGroupChat(isGroupChat) {
+function createGroupChat() {
     var successFunction = function(object){  // object: single cacheGroup[i] object
         var groupId = object.id;
         var memberId = object.get("memberId");
@@ -154,7 +154,7 @@ function createGroupChat(isGroupChat) {
         }
     };
 
-    if (isGroupChat) {
+    if (newGroupChatMemberArray.isGroupChat) {
         // when it was a group chat and add new participant(s)
         // only change the current group
         ParseAddGroupMember({
@@ -165,7 +165,7 @@ function createGroupChat(isGroupChat) {
     } else {
         // when it was a private chat and add new participant(s)
         // create a new group
-        ParseCreateNewGroup(newGroupChatMemberArray.memberId,successFunction);
+        ParseCreateNewGroup($.merge(newGroupChatMemberArray.memberId, newGroupChatMemberArray.newMemberList), successFunction);
     }
 }
 
@@ -714,20 +714,19 @@ function hideHidingChatMoreOption(chatId){
 
 /* This function is designed to add new users to a group chat.
  * Modified by Renpeng @ 19:33 4/18/2015
+ * Modified by Yaliang 11:27 4/18/2015
  */
-function selectANewParticipant(event, isGroupChat) {
+function selectANewParticipant(event) {
     var id = event.data.id;
     newGroupChatMemberArray.newMemberList.push(id);
     newGroupChatMemberArray.newNum++;
-    $("#header-add-participant-for-group-chat").html("OK("+newGroupChatMemberArray.newNum+")").unbind("click").click(function() {
-        createGroupChat(isGroupChat);
-    });
-    $("#body-add-participants-list-"+id).children(".ui-add-participant-unchecked")
-        .removeClass("ui-add-participant-unchecked").addClass("ui-add-participant-checked")
-        .unbind("click").click({id: id},removeANewParticipant);
+    $("#header-add-participant-for-group-chat").html("OK("+newGroupChatMemberArray.newNum+")").unbind("click").click(createGroupChat);
+    $("#body-add-participants-list-"+id).children(".ui-add-participant-unchecked").removeClass("ui-add-participant-unchecked").addClass("ui-add-participant-checked");
+    $("#body-add-participants-list-"+id).unbind("click").click({id: id},removeANewParticipant);
 }
 
 /* This function is designed to remove selected users from a group chat.
+ * Modified by Yaliang 11:27 4/18/2015
  */
 function removeANewParticipant(event) {
     var id = event.data.id;
@@ -740,9 +739,8 @@ function removeANewParticipant(event) {
     } else {
         $("#header-add-participant-for-group-chat").html("OK").unbind("click");
     }
-    $("#body-add-participants-list-"+id).children(".ui-add-participant-checked")
-        .removeClass("ui-add-participant-checked").addClass("ui-add-participant-unchecked")
-        .unbind("click").click({id: id},selectANewParticipant);
+    $("#body-add-participants-list-"+id).children(".ui-add-participant-checked").removeClass("ui-add-participant-checked").addClass("ui-add-participant-unchecked")
+    $("#body-add-participants-list-"+id).unbind("click").click({id: id},selectANewParticipant);
 }
 
 /* This function is designed to pull up the profile for a group.
@@ -845,7 +843,8 @@ function leaveGroup() {
 }
 
 /* This function is designed to display hidden options for the Chat page
- * Modified by Renpeng @ 17:48 4/18/2015
+ * Created by Renpeng @ 17:48 4/18/2015
+ * Modified by Yaliang @ 23:45 4/18/2015
  */
 function displayChatMoreOption(){
     var headerStartGroupChatOption = $("#header-start-group-chat-option");
@@ -855,7 +854,7 @@ function displayChatMoreOption(){
     $(window).unbind("scroll");
 
     headerStartGroupChatOption.on("click",function(){
-        pullFriendListForAddingParticipants(false);
+        // pullFriendListForAddingParticipants(); Please wait me to design a function adaptable for this task
         hiddenChatMoreOption();
     });
 
