@@ -916,19 +916,6 @@ function ParseCreateNewGroup(memberId, successFunction){
     }
     group.save(null, {
         success: function(object){
-            if (object.get("isGroupChat")) {
-                var Chat = Parse.Object.extend("Chat");
-                var chat = new Chat;
-                chat.set("ownerId",Parse.User.current().id);
-                chat.set("groupId",object.get("groupId"));
-                chat.set("hidden",false);
-                chat.set("unreadNum",0);
-                chat.save(null, {
-                    success: function(object){
-                        CacheUpdateChat(object);
-                    }
-                });
-            }
             successFunction(object);
             CacheUpdateGroup(object);
         }
