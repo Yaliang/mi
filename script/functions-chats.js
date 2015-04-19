@@ -128,9 +128,10 @@ function startGroupChat(groupId){
 var chatsInitializationNumber = 0;
 
 /* This function is designed to create a group chat.
- * modified by Yaliang at 4/11/2015
+ * Modified by Yaliang at 4/11/2015
+ * Modified by Renpeng @ 19:32 4/18/2015
  */
-function createGroupChat() {
+function createGroupChat(isGroupChat) {
     var successFunction = function(object){  // object: single cacheGroup[i] object
         var groupId = object.id;
         var memberId = object.get("memberId");
@@ -152,7 +153,8 @@ function createGroupChat() {
             });
         }
     };
-    if (object.get("isGroupChat")) {
+
+    if (isGroupChat) {
         // when it was a group chat and add new participant(s)
         // only change the current group
         ParseAddGroupMember({
@@ -711,12 +713,15 @@ function hideHidingChatMoreOption(chatId){
 }
 
 /* This function is designed to add new users to a group chat.
+ * Modified by Renpeng @ 19:33 4/18/2015
  */
-function selectANewParticipant(event) {
+function selectANewParticipant(event, isGroupChat) {
     var id = event.data.id;
     newGroupChatMemberArray.newMemberList.push(id);
     newGroupChatMemberArray.newNum++;
-    $("#header-add-participant-for-group-chat").html("OK("+newGroupChatMemberArray.newNum+")").unbind("click").click(createGroupChat);
+    $("#header-add-participant-for-group-chat").html("OK("+newGroupChatMemberArray.newNum+")").unbind("click").click(function() {
+        createGroupChat(isGroupChat);
+    });
     $("#body-add-participants-list-"+id).children(".ui-add-participant-unchecked")
         .removeClass("ui-add-participant-unchecked").addClass("ui-add-participant-checked")
         .unbind("click").click({id: id},removeANewParticipant);
@@ -837,4 +842,37 @@ function leaveGroup() {
         });
     }
     ParseDeleteChat(null, removeMemberId, groupId, successFunction);
+}
+
+/* This function is designed to display hidden options for the Chat page
+ * Modified by Renpeng @ 17:48 4/18/2015
+ */
+function displayChatMoreOption(){
+    var headerStartGroupChatOption = $("#header-start-group-chat-option");
+    headerStartGroupChatOption.unbind("click");
+
+    $("#header-chat-more-option").removeClass("ui-header-more-option").addClass("ui-header-more-option-active");
+    $(window).unbind("scroll");
+
+    headerStartGroupChatOption.on("click",function(){
+        pullFriendListForAddingParticipants(false);
+        hiddenChatMoreOption();
+    });
+
+    var optionHiddenCoverLayer = $(".options-hidden-cover-layer");
+    optionHiddenCoverLayer.show();
+    $(".page-right-top-options").fadeIn("fast");
+    optionHiddenCoverLayer.on("click",hiddenChatMoreOption).on("swipeleft",hiddenChatMoreOption).on("swiperight",hiddenChatMoreOption);
+    $(window).scroll(hiddenChatMoreOption);
+}
+
+/* This function is designed to hide unnecessary options for the Chat page
+ * Modified by Renpeng @ 17:57 4/18/2015
+ */
+function hiddenChatMoreOption(){
+    $("#header-start-group-chat-option").unbind("click");
+    $("#header-chat-more-option").removeClass("ui-header-more-option-active").addClass("ui-header-more-option");
+    $(window).unbind("scroll");
+    $(".options-hidden-cover-layer").hide();
+    $(".page-right-top-options").fadeOut("fast");
 }

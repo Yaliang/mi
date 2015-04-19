@@ -932,7 +932,7 @@ function ParseCreateNewGroup(memberId, successFunction){
             successFunction(object);
             CacheUpdateGroup(object);
         }
-    })
+    });
 }
 
 /* This function is designed to get the group members by calling Parse API "get" (instance method of
