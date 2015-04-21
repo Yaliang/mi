@@ -285,16 +285,17 @@ function showPeopleNearByListError(error){
     }
 }
 
-/* This function is designed to bind...
+/* This function is designed to auto-show the search results when searching for
+ * users with name/email keywords.
  */
 function bindSearchAutocomplete(){
     $("#body-list-search-user").on("filterablebeforefilter", function(e, data) {
         var $ul = $(this);
         var $input = $(data.input);
         var value = $input.val();
-        $ul.html( "" );
+        $ul.html("");
         if (value && value.length > 0) {
-            var limitNumber = 15;
+            var limitNumber = 30;
             var displayFunction = function(objects){  // objects: an array of User objects
                 var html = "";
                 for (var i=0; i<objects.length; i++) {
@@ -317,7 +318,7 @@ function bindSearchAutocomplete(){
     });
 }
 
-/* This function is designed to unbind...
+/* This function is designed to cancel the auto-showing of user search results.
  */
 function unbindSearchAutocomplete(){
     $( "#body-list-search-user" ).unbind("filterablebeforefilter").html("");

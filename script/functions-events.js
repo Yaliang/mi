@@ -343,9 +343,9 @@ var currentLastEvent;
  * beforeAt is used to show more activities;
  * filterMode is used to display activities according to the following rules:
  * filterMode absent or filterMode = 0 == all events (no filter);
- * filterMode = 1 -- time-based display;
- * filterMode = 2 -- location based display;
- * filterMode = 3 -- customized display.
+ * filterMode = 1 -- filter by time;
+ * filterMode = 2 -- filter by location;
+ * filterMode = 3 -- customized filter.
  *
  * Modified by Renpeng @ 12:30 4/19/2015
  */

@@ -234,6 +234,8 @@ function ParseUpdateReport(id, hiddenUserEvent){
 
 /* This function is designed to pull up user activities by calling Parse API "find" (instance method of Parse.Query
  * object, which is performed on UserEvent object. UserEvent is a customer-defined subclass of Parse.Object)
+ *
+ * Modified by Renpeng @ 17:00 4/19/2015
  */
 function ParsePullEvent(obj) {
     //owner, limitNumber, descendingOrderKey, accessibility, beforeAt, displayFunction
