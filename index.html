@@ -186,6 +186,11 @@
                onclick="displayEventFilterModeMoreOption();">Filter Mode</a>
         </div><!-- /header -->
 
+        <form id="body-event-search-from" class="ui-filterable">
+            <label for="body-input-event-search"></label>
+            <input id="body-input-event-search" type="search" placeholder="Search for events..."/>
+        </form>
+
         <div  class="ui-content" id="body-event-content-list" role="main">
             <div class="ui-load-more-activity" onclick="pullUserEvent(currentLastEvent)">More Activities</div>
         </div><!-- /content -->
@@ -219,9 +224,9 @@
         <div class="options-hidden-cover-layer" style="display: none;"></div>
 
         <div class="ui-page-more-option-bottom" id="body-bottom-hiding-event-filter-more-option">
-            <a class="ui-btn share-btn ui-more-option-first-btn" id="body-bottom-hiding-event-filter-time" data-transition="slideup" href="">Time Based</a>
-            <a class="ui-btn share-btn ui-more-option-first-btn" id="body-bottom-hiding-event-filter-location" data-transition="slideup" href="">Location Based</a>
-            <a class="ui-btn share-btn ui-more-option-first-btn" id="body-bottom-hiding-event-filter-custom" data-transition="slideup" href="">Customized</a>
+            <a class="ui-btn share-btn ui-more-option-first-btn" id="body-bottom-hiding-event-filter-time" data-transition="slideup" href="">Filter By Time</a>
+            <a class="ui-btn share-btn ui-more-option-first-btn" id="body-bottom-hiding-event-filter-location" data-transition="slideup" href="">Filter By Location Based</a>
+            <a class="ui-btn share-btn ui-more-option-first-btn" id="body-bottom-hiding-event-filter-custom" data-transition="slideup" href="">Customized Filter</a>
             <div class="ui-btn ui-more-option-cancel-btn" id="body-bottom-hiding-event-filter-cancel" onclick="hiddenEventFilterModeMoreOption()">Cancel</div>
         </div>
 
@@ -252,7 +257,7 @@
         <div class="ui-content" role="main" >
             <form id="body-form-create-event" style="padding: 1em">
                 <label for="body-input-create-event-title">Title:</label>
-                <input id="body-input-create-event-title" data-clear-btn="true" type="text" name="eventtitle" value="">
+                <input id="body-input-create-event-title" data-clear-btn="true" type="text" name="eventtitle" value="" placeholder='e.g. "Weekend Moive", "New Year Party"...'>
                 <label for="body-input-create-event-location">Location:</label>
                 <input id="body-input-create-event-location" data-clear-btn="ture" type="text" name="eventlocation" value="">
                 <label for="body-input-create-event-startTime">Start Time:</label>
@@ -261,7 +266,7 @@
                 <input id="body-input-create-event-endTime" data-clear-btn="ture" type="datetime-local" name="eventendtime" value="">
                 <label for="body-input-create-event-visibility">Visibility:</label>
                 <select id="body-input-create-event-visibility" name="eventvisibility"
-                        data-role="flipswitch" data-wrapper-class="custom-size-flipswitch-body-input-create-event-visibility" checked="">
+                        data-role="flipswitch" data-wrapper-class="custom-size-flipswitch-body-input-create-event-visibility">
                     <option value="off">Friends</option>
                     <option value="on" selected="">Public</option>
                 </select>
@@ -431,7 +436,7 @@
     </div><!-- /page -->
 
     <!-- Page for displaying other user's profile -->
-    <div data-role="page" id="page-display-user-profile" data-title="Yueme">
+    <div id="page-display-user-profile" data-role="page" data-title="Yueme">
 
         <div data-role="header">
             <h1>Profile</h1>
