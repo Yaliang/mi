@@ -1,14 +1,3 @@
-/* This function call does the preparation work after the web document is loaded.
- * initialElementEventSetting:  initialization for certain elements, see the function for details;
- * cacheInitialization:  initialization of the cache, see the function for details;
- * loginByLocalStorage:  try to log into user session using the local storage, see the function for details.
- */
-$(document).ready(function (){
-    initialElementEventSetting();
-    cacheInitialization();
-    loginByLocalStorage();
-});
-
 /* This variable keeps track of the location hash of current page.
  */
 var currLocationHash = "#page-loading";
@@ -182,6 +171,7 @@ function loginByLocalStorage(){
 
     if (currentUser) {
         var successFunction = function() {
+            registerNotificationId();
             setCurrLocationHash("#page-event");
             $.mobile.changePage("#page-event");
             $.mobile.loading("show");
@@ -303,9 +293,13 @@ function pullNotification(){
         loginByLocalStorage();
     }
 
-    setTimeout(function(){
-        pullNotification();
-    }, 2000)
+    if (pullNotificationEnable == true) {
+        setTimeout(function(){
+            pullNotification();
+        }, 2000);
+    } else {
+        pullNotificationRunning = false;
+    }
 }
 
 /* This function is designed to sign up new users with username, email and password. If successful, it will login and
@@ -318,6 +312,7 @@ function signup(){
     var errorObject = $("#body-signup-error");
     var destID = "#page-event";
     var customFunction = function(object){
+        registerNotificationId();
         $("#body-input-signup-password").val("");
         pullUserEvent();
         if (!pullNotificationRunning) {
@@ -355,6 +350,7 @@ function login(){
     var errorObject = $("#body-login-error");
     var destID = "#page-event";
     var customFunction = function(){
+        registerNotificationId();
         $("#body-input-login-password").val("");
         pullUserEvent();
         if (!pullNotificationRunning) {
@@ -385,6 +381,7 @@ function logout(){
     $("#page-chat > .ui-content").html("");
     var destID = "#page-login";
     ParseLogout(destID);
+    unregisterNotificationId();
 }
 
 /* This function is designed to convert ISO time to relative time.
