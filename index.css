@@ -606,7 +606,6 @@ a {
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
-    text-shadow: 1px 0 0 #2C2C2C;
 }
 
 .chat-last-message {
