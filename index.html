@@ -182,7 +182,14 @@
             <h1>Activities</h1>
             <a class="ui-btn-right ui-btn ui-btn-inline ui-corner-all ui-header-more-option" id="header-event-more-option" href="#"
                onclick="displayEventMoreOption();"></a>
+            <a class="ui-btn-left ui-btn ui-btn-inline ui-corner-all ui-hidden-accessible" id="header-event-filter-option" href="#"
+               onclick="displayEventFilterModeMoreOption();">Filter Mode</a>
         </div><!-- /header -->
+
+        <form id="body-event-search-from" class="ui-filterable ui-hidden-accessible" style="margin-bottom: -1em;">
+            <label for="body-input-event-search"></label>
+            <input id="body-input-event-search" type="search" placeholder="Search for events..."/>
+        </form>
 
         <div  class="ui-content" id="body-event-content-list" role="main">
             <div class="ui-load-more-activity" onclick="pullUserEvent(currentLastEvent)">More Activities</div>
@@ -216,6 +223,13 @@
 
         <div class="options-hidden-cover-layer" style="display: none;"></div>
 
+        <div class="ui-page-more-option-bottom" id="body-bottom-hiding-event-filter-more-option">
+            <a class="ui-btn share-btn ui-more-option-first-btn" id="body-bottom-hiding-event-filter-time" data-transition="slideup" href="">Filter By Time</a>
+            <a class="ui-btn share-btn ui-more-option-first-btn" id="body-bottom-hiding-event-filter-location" data-transition="slideup" href="">Filter By Location Based</a>
+            <a class="ui-btn share-btn ui-more-option-first-btn" id="body-bottom-hiding-event-filter-custom" data-transition="slideup" href="">Customized Filter</a>
+            <div class="ui-btn ui-more-option-cancel-btn" id="body-bottom-hiding-event-filter-cancel" onclick="hiddenEventFilterModeMoreOption()">Cancel</div>
+        </div>
+
     </div><!-- /page -->
 
     <!-- Page for displaying the list of my events -->
@@ -243,7 +257,7 @@
         <div class="ui-content" role="main" >
             <form id="body-form-create-event" style="padding: 1em">
                 <label for="body-input-create-event-title">Title:</label>
-                <input id="body-input-create-event-title" data-clear-btn="true" type="text" name="eventtitle" value="">
+                <input id="body-input-create-event-title" data-clear-btn="true" type="text" name="eventtitle" value="" placeholder='e.g. "Weekend Moive", "New Year Party"...'>
                 <label for="body-input-create-event-location">Location:</label>
                 <input id="body-input-create-event-location" data-clear-btn="ture" type="text" name="eventlocation" value="">
                 <label for="body-input-create-event-startTime">Start Time:</label>
@@ -252,15 +266,15 @@
                 <input id="body-input-create-event-endTime" data-clear-btn="ture" type="datetime-local" name="eventendtime" value="">
                 <label for="body-input-create-event-visibility">Visibility:</label>
                 <select id="body-input-create-event-visibility" name="eventvisibility"
-                        data-role="flipswitch" data-wrapper-class="custom-size-flipswitch-body-input-create-event-visibility" checked="">
+                        data-role="flipswitch" data-wrapper-class="custom-size-flipswitch-body-input-create-event-visibility">
                     <option value="off">Friends</option>
                     <option value="on" selected="">Public</option>
                 </select>
                 <label for="body-input-create-event-description">Description:</label>
                 <textarea id="body-input-create-event-description" name="eventdescription"></textarea>
-                <div class="ui-btn ui-icon-custom-add-image" id="body-create-event-description-insert-image"></div>
-                <input id="body-input-insert-description-photo" name="descriptionphoto" data-clear-btn="false" type="file"
-                       onclick="insertDescriptionPreviewPhoto();" value="">
+                <div class="ui-btn ui-icon-custom-add-image ui-hidden-accessible" id="body-create-event-description-insert-image"></div>
+                <!-- <input class="ui-hidden-accessible" id="body-input-insert-description-photo" name="descriptionphoto" data-clear-btn="false" type="file"
+                       onclick="insertDescriptionPreviewPhoto();" value=""> -->
             </form>
 
             <div id="body-create-event-preview"></div>
@@ -422,7 +436,7 @@
     </div><!-- /page -->
 
     <!-- Page for displaying other user's profile -->
-    <div data-role="page" id="page-display-user-profile" data-title="Yueme">
+    <div id="page-display-user-profile" data-role="page" data-title="Yueme">
 
         <div data-role="header">
             <h1>Profile</h1>
@@ -490,11 +504,6 @@
 
         <div class="ui-content" role="main"></div><!-- /content -->
 
-        <div class="ui-page-more-option-bottom" id="body-bottom-hiding-chat-more-option">
-            <a class="ui-btn report-btn ui-more-option-first-btn" id="body-bottom-hiding-chat-confirm" data-transition="slideup" href="">Delete</a>
-            <div class="ui-btn ui-more-option-cancel-btn" id="body-bottom-hiding-chat-cancel">Cancel</div>
-        </div>
-
         <div class="nav-glyphish-example" data-role="footer" data-position="fixed" data-tap-toggle="false">
             <div class="nav-glyphish-example" data-role="navbar" data-grid="c">
                 <ul>
@@ -513,8 +522,13 @@
             </div>
         </div><!-- /footer -->
 
+        <div class="ui-page-more-option-bottom" id="body-bottom-hiding-chat-more-option">
+            <a class="ui-btn report-btn ui-more-option-first-btn" id="body-bottom-hiding-chat-confirm" data-transition="slideup" href="">Delete</a>
+            <div class="ui-btn ui-more-option-cancel-btn" id="body-bottom-hiding-chat-cancel">Cancel</div>
+        </div>
+
         <ul class="page-right-top-options" style="display: none;">
-            <li><a id="header-start-group-chat-option" href="#page-add-participants">Start Group Chat</a></li>
+            <li><a id="header-start-group-chat-option" href="#page-add-participants">New Group</a></li>
         </ul>
 
         <div class="options-hidden-cover-layer" style="display: none;"></div>

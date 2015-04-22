@@ -154,18 +154,28 @@ function createGroupChat() {
         }
     };
 
-    if (newGroupChatMemberArray.isGroupChat) {
-        // when it was a group chat and add new participant(s)
-        // only change the current group
-        ParseAddGroupMember({
-            groupId:newGroupChatMemberArray.groupId,
-            newMemberList:newGroupChatMemberArray.newMemberList,
-            successFunction:successFunction
-        });
+    if (newGroupChatMemberArray.prevNum == 0) {
+        if (newGroupChatMemberArray.newNum == 1) {
+            startPrivateChat(newGroupChatMemberArray.newMemberList[0]);
+        } else {
+            newGroupChatMemberArray.newMemberList.push(Parse.User.current().id);
+            newGroupChatMemberArray.newNum++;
+            ParseCreateNewGroup(newGroupChatMemberArray.newMemberList, successFunction);
+        }
     } else {
-        // when it was a private chat and add new participant(s)
-        // create a new group
-        ParseCreateNewGroup($.merge(newGroupChatMemberArray.memberId, newGroupChatMemberArray.newMemberList), successFunction);
+        if (newGroupChatMemberArray.isGroupChat) {
+            // when it was a group chat and add new participant(s)
+            // only change the current group
+            ParseAddGroupMember({
+                groupId:newGroupChatMemberArray.groupId,
+                newMemberList:newGroupChatMemberArray.newMemberList,
+                successFunction:successFunction
+            });
+        } else {
+            // when it was a private chat and add new participant(s)
+            // create a new group
+            ParseCreateNewGroup($.merge(newGroupChatMemberArray.memberId, newGroupChatMemberArray.newMemberList), successFunction);
+        }
     }
 }
 
@@ -675,13 +685,12 @@ function hideChatMessageMoreOption(){
  */
 function displayHidingChatMoreOption(chatId){
     $("#body-chat-" + chatId).addClass("chat-message-selected").removeClass("chat-message-deselected");
-    //console.log("selected");
+
     var $bodyBottomHidingChatMoreOption = $("#body-bottom-hiding-chat-more-option");
     $bodyBottomHidingChatMoreOption.css("position","fixed").css("bottom",(-$bodyBottomHidingChatMoreOption.height()).toString()+"px").show();
 
     $("body").append("<div class='ui-gray-cover' style='position:fixed; width:100%; height:100%; opacity:0; background-color:#000; z-index:4'><div>");
     $(".ui-gray-cover").on("click", function(){
-        console.log("cancel");
         hideHidingChatMoreOption(chatId);
     }).animate({
         opacity: 0.0
@@ -845,23 +854,24 @@ function leaveGroup() {
 /* This function is designed to display hidden options for the Chat page
  * Created by Renpeng @ 17:48 4/18/2015
  * Modified by Yaliang @ 23:45 4/18/2015
+ * Modified by Yaliang @11:45 4/22/2015
  */
 function displayChatMoreOption(){
-    var headerStartGroupChatOption = $("#header-start-group-chat-option");
-    headerStartGroupChatOption.unbind("click");
+    var $headerStartGroupChatOption = $("#header-start-group-chat-option");
+    $headerStartGroupChatOption.unbind("click");
 
     $("#header-chat-more-option").removeClass("ui-header-more-option").addClass("ui-header-more-option-active");
     $(window).unbind("scroll");
 
-    headerStartGroupChatOption.on("click",function(){
-        // pullFriendListForAddingParticipants(); Please wait me to design a function adaptable for this task
+    $headerStartGroupChatOption.on("click",function(){
+        pullFriendListForSelectingParticipantsInNewGroup();
         hiddenChatMoreOption();
     });
 
-    var optionHiddenCoverLayer = $(".options-hidden-cover-layer");
-    optionHiddenCoverLayer.show();
+    var $optionHiddenCoverLayer = $(".options-hidden-cover-layer");
+    $optionHiddenCoverLayer.show();
     $(".page-right-top-options").fadeIn("fast");
-    optionHiddenCoverLayer.on("click",hiddenChatMoreOption).on("swipeleft",hiddenChatMoreOption).on("swiperight",hiddenChatMoreOption);
+    $optionHiddenCoverLayer.on("click",hiddenChatMoreOption).on("swipeleft",hiddenChatMoreOption).on("swiperight",hiddenChatMoreOption);
     $(window).scroll(hiddenChatMoreOption);
 }
 

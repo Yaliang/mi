@@ -285,16 +285,17 @@ function showPeopleNearByListError(error){
     }
 }
 
-/* This function is designed to bind...
+/* This function is designed to auto-show the search results when searching for
+ * users with name/email keywords.
  */
 function bindSearchAutocomplete(){
     $("#body-list-search-user").on("filterablebeforefilter", function(e, data) {
         var $ul = $(this);
         var $input = $(data.input);
         var value = $input.val();
-        $ul.html( "" );
+        $ul.html("");
         if (value && value.length > 0) {
-            var limitNumber = 15;
+            var limitNumber = 30;
             var displayFunction = function(objects){  // objects: an array of User objects
                 var html = "";
                 for (var i=0; i<objects.length; i++) {
@@ -317,7 +318,7 @@ function bindSearchAutocomplete(){
     });
 }
 
-/* This function is designed to unbind...
+/* This function is designed to cancel the auto-showing of user search results.
  */
 function unbindSearchAutocomplete(){
     $( "#body-list-search-user" ).unbind("filterablebeforefilter").html("");
@@ -476,6 +477,47 @@ function pullFriendListForAddingParticipants(){
             }
         };
         CacheGetGroupMember(groupId, successFunction, {});
+    };
+
+    CachePullMyFriend(Parse.User.current().id, descendingOrderKey, displayFunction);
+}
+
+function pullFriendListForSelectingParticipantsInNewGroup(){
+    $("#body-add-participants-list").html("");
+    $("#header-add-participant-for-group-chat").html("OK").unbind("click");
+    newGroupChatMemberArray.prevNum = 0;
+    newGroupChatMemberArray.newNum = 0;
+    newGroupChatMemberArray.newMemberList = [];
+
+    // pull the friend list
+    var descendingOrderKey = "createdAt";
+    var displayFunction = function(objects){  // objects: an array of Friend objects
+        objects.sort(function(a, b){return a.get("name") - b.get("name")});  // sort user list
+
+        // display them
+        for (var i=0; i<objects.length; i++) {
+            var friendId = objects[i].get("friend");
+            var objectId = objects[i].id;
+            $("#body-add-participants-list").append("<li id='body-add-participants-list-"+friendId+"' class='ui-friend-list-line'></li>");
+            $("#body-add-participants-list-"+friendId).click({id: friendId},selectANewParticipant);
+            var displayFunction1 = function(userObject, data) { // userObject: single cacheUser[i] object
+                var newElement = buildUserListElement(userObject, "body-add-participants-people-", null, null, "add-participant-list");
+                var objectId = data.friendObject.id;
+                var friendId = data.friendObject.get("friend");
+                $( "#body-add-participants-list-"+userObject.id ).append(newElement);
+                var displayFunction2 = function(object, data){  // object: single cachePhoto[i] object
+                    var photo120 = object.get("profilePhoto120");
+                    if (typeof(photo120) == "undefined") {
+                        photo120 = "./content/png/Taylor-Swift.png";
+                    }
+                    $("#body-add-participants-people-"+data.friendId+">.custom-people-in-friend-list").css("backgroundImage","url('"+photo120+"')");
+                };
+                CacheGetProfilePhotoByUserId(friendId, displayFunction2, {friendId : friendId});
+                prefixForGetFriendOptionsButton="body-add-participants-list-";
+                //getFriendOptionsButton(friendId, 3);
+            };
+            CacheGetProfileByUserId(friendId, displayFunction1, {friendObject:objects[i]});
+        }
     };
 
     CachePullMyFriend(Parse.User.current().id, descendingOrderKey, displayFunction);
