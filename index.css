@@ -435,7 +435,7 @@ a {
 .ui-custom-event-title {
     color: #000000;
     font-weight: 400;
-    font-size: 15px;
+    font-size: 18px;
     margin: 0 0 0.5em 0;
 }
 
@@ -466,7 +466,7 @@ a {
 
 .ui-custom-event-description {
     font-weight: 400;
-    font-size: 12px;
+    font-size: 13px;
     clear: both;
 }
 
@@ -554,7 +554,7 @@ a {
     margin-left: 1em;
     font-family: 'Open Sans';
     font-weight: 300!important;
-    font-size: 15px;
+    font-size: 14px;
     word-break: break-all;
 }
 
@@ -577,6 +577,7 @@ a {
     padding-top: 0.4em;
     padding-bottom: 0.4em;
     padding-right: 0.5em;
+    font-size: 12px;
 }
 
 .ui-load-more-activity {
