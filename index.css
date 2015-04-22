@@ -139,7 +139,8 @@
 
 textarea.ui-input-text, .ui-input-text input, .ui-input-search input {
     font-family: 'Open Sans'!important;
-    font-weight: 400!important;
+    font-weight: 300!important;
+    font-size: 13px!important;
 }
 
 .ui-btn {
@@ -434,30 +435,30 @@ a {
 .ui-custom-event-title {
     color: #000000;
     font-weight: 400;
-    font-size: 20px;
+    font-size: 15px;
     margin: 0 0 0.5em 0;
 }
 
 .ui-custom-event-location {
     font-weight: 400;
-    font-size: 15px;
-    padding-left: 20px;
+    font-size: 10px;
+    padding-left: 15px;
     background: url("./content/material-design/png/compass106-solid-pink-20.png") 0 0 no-repeat;
-    background-size: 15px 15px;
+    background-size: 10px 10px;
     float: left;
-    line-height: 15px;
-    margin: 0 15px 15px 0;
+    line-height: 10px;
+    margin: 0 10px 10px 0;
 }
 
 .ui-custom-event-time {
     font-weight: 400;
-    font-size: 15px;
-    padding-left: 20px;
+    font-size: 10px;
+    padding-left: 15px;
     background: url("./content/material-design/png/clock100-solid-pink-20.png") 0 0 no-repeat;
-    background-size: 15px 15px;
+    background-size: 10px 10px;
     float: left;
-    line-height: 15px;
-    margin: 0 15px 15px 0;
+    line-height: 10px;
+    margin: 0 10px 10px 0;
 }
 
 .ui-custom-event-description-less-margin {
@@ -465,7 +466,7 @@ a {
 
 .ui-custom-event-description {
     font-weight: 400;
-    font-size: 18px;
+    font-size: 12px;
     clear: both;
 }
 
