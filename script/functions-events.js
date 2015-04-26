@@ -1257,7 +1257,18 @@ function shareEvents(object){
     var mailbody = "Please join us!\n\nEvent: " + object.get("title") + "\nDate: " + date + " \nTime: " + hour;
         mailbody += "\nSee detail on this link:\n\n" + eventLink;
     var mail = "mailto:?subject=There is a fantastic activity : " + object.get("title") + "&body="+ encodeURI(mailbody);
-    $(".share-btn").attr("href", mail);
+    $(".share-btn .share-via-mail").attr("href", mail);
+    var smsbody = "Check out this event on Yueme:\n\n" + eventLink;
+    var sms = "sms:";
+    if ((deviceIsIOS) && (deviceIOSVersion == 8)) {
+        sms += "&"
+    } else if (deviceIsIOS) {
+        sms += ";"
+    } else {
+        sms += "?"
+    }
+    sms += encodeURI(smsbody)
+    $(".share-btn .share-via-sms").attr("href", sms);
 
     // hideEventDetailMoreOption();
 }

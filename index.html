@@ -225,9 +225,9 @@
         <div class="options-hidden-cover-layer" style="display: none;"></div>
 
         <div class="ui-page-more-option-bottom" id="body-bottom-hiding-event-filter-more-option">
-            <a class="ui-btn share-btn ui-more-option-first-btn" id="body-bottom-hiding-event-filter-time" data-transition="slideup" href="">Filter By Time</a>
-            <a class="ui-btn share-btn ui-more-option-first-btn" id="body-bottom-hiding-event-filter-location" data-transition="slideup" href="">Filter By Location Based</a>
-            <a class="ui-btn share-btn ui-more-option-first-btn" id="body-bottom-hiding-event-filter-custom" data-transition="slideup" href="">Customized Filter</a>
+            <a class="ui-btn ui-more-option-first-btn" id="body-bottom-hiding-event-filter-time" data-transition="slideup" href="">Filter By Time</a>
+            <a class="ui-btn" id="body-bottom-hiding-event-filter-location" data-transition="slideup" href="">Filter By Location Based</a>
+            <a class="ui-btn" id="body-bottom-hiding-event-filter-custom" data-transition="slideup" href="">Customized Filter</a>
             <div class="ui-btn ui-more-option-cancel-btn" id="body-bottom-hiding-event-filter-cancel" onclick="hiddenEventFilterModeMoreOption()">Cancel</div>
         </div>
 
@@ -348,7 +348,8 @@
         <div class="ui-content" id="body-content-event-detail" role="main"></div><!-- /content -->
 
         <div class="ui-page-more-option-bottom" id="body-bottom-event-detail-more-option">
-            <a class="ui-btn share-btn ui-more-option-first-btn" href="" onclick = "hideEventDetailMoreOption()">Share via Email</a>
+            <a class="ui-btn share-btn share-via-mail ui-more-option-first-btn" href="" onclick = "hideEventDetailMoreOption()">Share via Email</a>
+            <a class="ui-btn share-btn share-via-sms ui-more-option-first-btn" href="" onclick = "hideEventDetailMoreOption()">Share via SMS</a>
             <a class="ui-btn report-btn" data-transition="slideup" href="#page-event-report"
                onclick="hideEventDetailMoreOption()">Report Abuse</a>
             <div class="ui-btn ui-more-option-cancel-btn" onclick="hideEventDetailMoreOption()">Cancel</div>
