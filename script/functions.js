@@ -23,7 +23,7 @@ function initialElementEventSetting(){
     // set comment and message send bar disable
     var $footerBarInputCommentContent = $("#footer-bar-input-comment-content");
     $footerBarInputCommentContent.on("blur",function(){
-        $footerBarInputCommentContent.prop("disabled", true);
+        // $footerBarInputCommentContent.prop("disabled", true);
         $("#footer-bar-send-comment").css("position","fixed").css("bottom","0");
         if ($footerBarInputCommentContent.val().length == 0) {
             $("#footer-bar-input-comment-content").attr("placeholder","comment...");
@@ -33,12 +33,12 @@ function initialElementEventSetting(){
 
     var $footerBarInputMessageContent = $("#footer-bar-input-message-content");
     $footerBarInputMessageContent.on("blur",function(){
-        $footerBarInputMessageContent.prop("disabled", true);
+        // $footerBarInputMessageContent.prop("disabled", true);
         $("#footer-bar-send-message").css("position","fixed").css("bottom","0");
     });
 
-    $footerBarInputCommentContent.prop("disabled", true);
-    $footerBarInputMessageContent.prop("disabled", true);
+    // $footerBarInputCommentContent.prop("disabled", true);
+    // $footerBarInputMessageContent.prop("disabled", true);
 
     $("#footer-bar-form-message-chat").submit(function(event){
         event.preventDefault();
@@ -117,6 +117,7 @@ function initialElementEventSetting(){
             duration: 500,
             complete : function(){
                 $(window).on("swiperight",function(){
+                    pullMyChat();
                     window.history.back();
                     setCurrLocationHash("#page-event");
                     $(window).unbind("swiperight");
@@ -519,9 +520,9 @@ function sendToolbarActiveKeyboard(object){
     $("html body").animate({ scrollTop: $(document).height().toString()+"px" }, {
         duration: 300,
         complete : function(){
-            $(object.id).prop("disabled", false);
             $(object.bar).css("position","absolute");
             $(object.bar).css("bottom",($("body").height() - $(object.base).height()+object.bias).toString()+"px");
+            // $(object.id).prop("disabled", false);
             $(object.id).trigger("focus");
         }
     });
