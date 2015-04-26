@@ -40,16 +40,15 @@
 
         <div data-role="header">
             <h1>Activity Detail</h1>
-
-
-            <a class="ui-btn-right ui-btn ui-btn-inline ui-corner-all ui-header-event-more-option" id="header-event-detail-more-option" href="#"
+            <a class="ui-btn-right ui-btn ui-btn-inline ui-corner-all ui-header-more-option" id="header-event-detail-more-option" href="#"
                onclick="displayEventDetailMoreOption()"></a>
         </div><!-- /header -->
 
         <div class="ui-content" id="body-content-event-detail" role="main"></div><!-- /content -->
 
         <div class="ui-page-detail-more-option-bottom" id="body-bottom-event-detail-more-option">
-            <a class="ui-btn share-btn" data-transition="slideup" >Share via Email</a>
+            <a class="ui-btn share-btn share-via-mail ui-more-option-first-btn" href="" onclick = "hideEventDetailMoreOption()">Share via Email</a>
+            <a class="ui-btn share-btn share-via-sms" href="" onclick = "hideEventDetailMoreOption()">Share via SMS</a>
             <a class="ui-btn report-btn" data-transition="slideup" href="#page-event-report"
                onclick="hideEventDetailMoreOption()">Report Abuse</a>
             <div class="ui-btn ui-more-option-cancel-btn" onclick="hideEventDetailMoreOption()">Cancel</div>
