@@ -1,6 +1,7 @@
 $(document).ready(function() {
     initialElementEventSetting();
     cacheInitialization();
+    getDeviceInfo();
     var eventid = getUrlParameter("id");
 
     var currentUser = Parse.User.current();
@@ -13,6 +14,30 @@ $(document).ready(function() {
         pullEventDetailWithoutLogin(eventid);
     }
 });
+
+/*****************************************************
+ * get the system version and device platform
+ * created by Yaliang 4/25/2015
+ ****************************************************
+ */
+function getDeviceInfo(){
+    devicePlatform = navigator.platform;
+    deviceVersion = navigator.appVersion;
+    deviceIsIOS = (devicePlatform == "iPhone") || (devicePlatform == "iPad") || (devicePlatform == "iPod");
+    if (deviceIsIOS) {
+        if (deviceVersion.indexOf("OS 8") != -1) {
+            deviceIOSVersion = 8
+        } else if (deviceVersion.indexOf("OS 7") != -1) {
+            deviceIOSVersion = 7
+        } else if (deviceVersion.indexOf("OS 6") != -1) {
+            deviceIOSVersion = 6
+        } else if (deviceVersion.indexOf("OS 5") != -1) {
+            deviceIOSVersion = 5
+        } else {
+            deviceIOSVersion = 4 // iOS version <= 4
+        }
+    }
+}
 
 function getUrlParameter(sParam) {
     var sPageURL = window.location.search.substring(1);
