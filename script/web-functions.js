@@ -7,8 +7,7 @@ $(document).ready(function (){
     initialElementEventSetting();
     cacheInitialization();
     loginByLocalStorage();
-
-
+    getDeviceInfo();
 });
 
 /* Enable Pull Notifications*/
