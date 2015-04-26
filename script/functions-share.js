@@ -107,16 +107,23 @@ function buildEventWithoutLogin(object){
 
 
 function pullEventDetailWithoutLogin(eventid){
+    currentEarliestComment = new Date;
     $("#body-content-event-detail").html("");
     $("#footer-bar-event-id-label").html(eventid);
 
     // display the UserEvent object info
     var descendingOrderKey = "createdAt";
+    var limitNumber = 5;
     var displayFunction = function(objects){  // objects: an array of UserEvent objects
         shareEvents(objects[0]);
         var id = objects[0].id;
         var holder = objects[0].get("owner");
-        $("#body-content-event-detail").prepend(buildEventWithoutLogin(objects[0]));
+        var commentNum = objects[0].get("commentNumber");
+        var eventDetailElement = buildEventWithoutLogin(objects[0]);
+        if (commentNum > 5) {
+            eventDetailElement += "<div class='ui-custom-earlier-comment-btn ui-btn' onclick='loadMoreEventComment()'><font style='font-weight:bold'>load more comments</font></div>";
+        }
+        $("#body-content-event-detail").prepend(eventDetailElement);
         pullUserEventHolderInfo(holder, "detail-"+id); // display event owner's name, not the username (which is an email address)
 
         /************************************************************************/
@@ -134,9 +141,15 @@ function pullEventDetailWithoutLogin(eventid){
     displayFunction = function(objects) { // objects: an array of Comment objects
         $("#body-content-event-detail").append("<div id='body-content-bottom-event-comments-list' class='ui-custom-comment-container'></div>");
         for (var i=0; i<=objects.length-1; i++) {
+            // added by Yaliang 4/26/2015
+            // update earliset comment time
+            if (Date.parse(currentEarliestComment) > Date.parse(objects[i].createdAt)) {
+                currentEarliestComment = objects[i].createdAt;
+            }
+
             // build the comment content
             var newElement = buildCommentInEventDetail(objects[i]);
-            $("#body-content-bottom-event-comments-list").append(newElement);
+            $("#body-content-bottom-event-comments-list").prepend(newElement);
 
             // build the user's profile photo
             var displayFunction1 = function(object, data) {  // object: single cachePhoto[i] object
@@ -149,7 +162,12 @@ function pullEventDetailWithoutLogin(eventid){
             CacheGetProfilePhotoByUserId(objects[i].get("owner"), displayFunction1, {commentId: objects[i].id});
         }
     };
-    ParsePullEventComment(eventid, descendingOrderKey, displayFunction);
+    ParsePullEventComment({
+        eventId: eventid,
+        descendingOrderKey: descendingOrderKey, 
+        limitNumber: limitNumber, 
+        displayFunction: displayFunction
+    });
 }
 
 /* This function is designed to initialize certain elements in the document, such as attaching events handlers,
