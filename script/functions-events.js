@@ -802,7 +802,6 @@ function updateEventDetail(id){
     $("#body-content-event-detail").html("");
     $("#footer-bar-event-id-label").html(id);
 
-
     // display the UserEvent object info
     var descendingOrderKey = "createdAt";
     var limitNumber = 5;
@@ -811,7 +810,6 @@ function updateEventDetail(id){
         var id = objects[0].id;
         var holder = objects[0].get("owner");
         var commentNum = objects[0].get("commentNumber");
-        console.log(commentNum);
         var eventDetailElement = buildEventDetailElement(objects[0]);
         if (commentNum > 5) {
             eventDetailElement += "<div class='ui-custom-earlier-comment-btn ui-btn' onclick='loadMoreEventComment()'><font style='font-weight:bold'>load more comments</font></div>";
@@ -830,6 +828,7 @@ function updateEventDetail(id){
     displayFunction = function(objects) { // objects: an array of Comment objects
         $("#body-content-event-detail").append("<div id='body-content-bottom-event-comments-list' class='ui-custom-comment-container'></div>");
         for (var i=0; i<=objects.length-1; i++) {
+            // added by Yaliang 4/26/2015
             // update earliset comment time
             if (Date.parse(currentEarliestComment) > Date.parse(objects[i].createdAt)) {
                 currentEarliestComment = objects[i].createdAt;
@@ -849,7 +848,12 @@ function updateEventDetail(id){
             CacheGetProfilePhotoByUserId(objects[i].get("owner"), displayFunction1, {commentId: objects[i].id});
         }
     };
-    ParsePullEventComment({eventId: id, descendingOrderKey: descendingOrderKey, limitNumber: limitNumber, displayFunction: displayFunction});
+    ParsePullEventComment({
+        eventId: id,
+        descendingOrderKey: descendingOrderKey, 
+        limitNumber: limitNumber, 
+        displayFunction: displayFunction
+    });
 }
 
 /* This function is designed to load more comment in event detail.
