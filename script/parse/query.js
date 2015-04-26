@@ -347,6 +347,7 @@ function ParseAddEventComment(eventId, owner, content, option) {
     }
     comment.save(null, {
         success: function(comment) {
+            option.displayNewComment(comment);
             ParseUpdateEventCommentNumber(1, eventId, option);
         },
         error: function(comment, error){

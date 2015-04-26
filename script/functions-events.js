@@ -996,7 +996,7 @@ function sendComment(){
         var ownerName = object.get("owner");
         var replyToUserId = option.replyToUserId;
         var commentNumber = object.get("commentNumber");
-        updateEventDetail(eventId);
+        // updateEventDetail(eventId);
         $(".comment-statistics-"+eventId).each(function(){
             $(this).html(commentNumber.toString()+" Comments");
         });
@@ -1021,14 +1021,37 @@ function sendComment(){
         };
         CacheGetProfileByUsername(ownerName, displayFunction, {replyToUserId: replyToUserId});
 
-        $("#footer-bar-input-comment-content").blur();
     };
 
     if (replyToUserId.length == 0) {
         replyToUserId = null;
     }
 
+    var displayNewCommentFunction = function(object) {
+        // added by Yaliang 4/26/2015
+        // update earliset comment time
+        if (Date.parse(currentEarliestComment) > Date.parse(object.createdAt)) {
+            currentEarliestComment = object.createdAt;
+        }
+        // build the comment content
+        var newElement = buildCommentInEventDetail(object);
+        $("#body-content-bottom-event-comments-list").append(newElement);
+        
+        // build the user's profile photo
+        var displayFunction1 = function(object, data) {  // object: single cachePhoto[i] object
+            var photo120 = object.get("profilePhoto120");
+            if (typeof(photo120) == "undefined") {
+                photo120 = "./content/png/Taylor-Swift.png";
+            }
+            $("#comment-"+data.commentId).css("backgroundImage", "url("+photo120+")")
+        };
+        CacheGetProfilePhotoByUserId(object.get("owner"), displayFunction1, {commentId: object.id});
+
+        $("#footer-bar-input-comment-content").blur();
+    }
+
     ParseAddEventComment(eventId, owner, content, {
+        displayNewComment: displayNewCommentFunction,
         replyToUserId: replyToUserId,
         errorFunction: errorFunction, 
         successFunction: successFunction
