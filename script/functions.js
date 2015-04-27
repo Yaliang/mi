@@ -19,6 +19,8 @@ function setCurrLocationHash(locationHash){
 touch = {
     touchInitialize: function(selector) {
         this.selector = selector;
+        $(this.selector).stop();
+        this.stop = true;
         $(this.selector).unbind("touchstart").bind("touchstart", function(event){
             touch.touchStartEventHandler(event);
         });
@@ -31,6 +33,7 @@ touch = {
     },
     touchStartEventHandler: function(event) {
         $(this.selector).stop();
+        this.stop = true;
         this.currentY = event.originalEvent.touches[0].clientY;
         this.moveStartY = this.currentY;
         this.moveStartTime = new Date;
@@ -55,19 +58,21 @@ touch = {
             return;
         }
         this.moveEndTime = new Date;
-        this.moveRate = (this.currentY-this.moveStartY) / (this.moveEndTime-this.moveStartTime) * 40;
-        this.decresingRate = this.moveRate / 100;
+        this.moveRate = (this.currentY-this.moveStartY) / (this.moveEndTime-this.moveStartTime) * 50;
+        this.stop = false;
         this.touchEndAnimate();
     },
     touchEndAnimate: function() {
-        this.moveRate = this.moveRate - this.decresingRate;
-        if (this.decresingRate*this.moveRate <= 0) {
+        this.moveRate = this.moveRate * 29/30;
+        if (Math.abs(this.moveRate) <= 0.1) {
             return;
         }
         $(this.selector).scrollTop($(this.selector).scrollTop() - this.moveRate);
         setTimeout(function(){
-            touch.touchEndAnimate();
-        }, 20);
+            if (!touch.stop) {
+                touch.touchEndAnimate();
+            }
+        }, 13);
         // console.log(this.moveRate);
     }
 }
