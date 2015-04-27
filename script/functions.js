@@ -13,6 +13,70 @@ function setCurrLocationHash(locationHash){
     currLocationHash = locationHash;
 }
 
+/* This object is a class to handle custom touch event
+ * create by Yaliang, 4/27/2015
+ */
+touch = {
+    touchInitialize: function(selector) {
+        this.selector = selector;
+        $(this.selector).stop();
+        this.stop = true;
+        $(this.selector).unbind("touchstart").bind("touchstart", function(event){
+            touch.touchStartEventHandler(event);
+        });
+        $(this.selector).unbind("touchmove").bind("touchmove", function(event){
+            touch.touchMoveEventHandler(event);
+        });
+        $(this.selector).unbind("touchend").bind("touchend", function(event){
+            touch.touchEndEventHandler(event);
+        })
+    },
+    touchStartEventHandler: function(event) {
+        $(this.selector).stop();
+        this.stop = true;
+        this.currentY = event.originalEvent.touches[0].clientY;
+        this.moveStartY = this.currentY;
+        this.moveStartTime = new Date;
+        this.moveSlowCircle = 0;
+    },
+    touchMoveEventHandler: function(event) {
+        event.preventDefault();
+        this.lastY = this.currentY;
+        this.currentY = event.originalEvent.touches[0].clientY;
+        this.moveRate = (1+Math.round(Math.abs(this.currentY-this.lastY) / 10));
+        if (this.moveRate > 1) {
+            this.moveSlowCircle = 0;
+        } else {
+            this.moveSlowCircle += 1;
+        }
+        var newTop = $(this.selector).scrollTop() - (this.currentY-this.lastY);
+        $(this.selector).scrollTop(newTop);
+        // console.log(this.moveRate);
+    },
+    touchEndEventHandler: function(event) {
+        if (this.moveSlowCircle > 5) {
+            return;
+        }
+        this.moveEndTime = new Date;
+        this.moveRate = (this.currentY-this.moveStartY) / (this.moveEndTime-this.moveStartTime) * 50;
+        this.stop = false;
+        this.touchEndAnimate();
+    },
+    touchEndAnimate: function() {
+        this.moveRate = this.moveRate * 29/30;
+        if (Math.abs(this.moveRate) <= 0.1) {
+            return;
+        }
+        $(this.selector).scrollTop($(this.selector).scrollTop() - this.moveRate);
+        setTimeout(function(){
+            if (!touch.stop) {
+                touch.touchEndAnimate();
+            }
+        }, 13);
+        // console.log(this.moveRate);
+    }
+}
+
 /* This function is designed to initialize certain elements in the document, such as attaching events handlers,
  * preventing default events, showing default display, etc.
  */
@@ -167,6 +231,7 @@ function initialElementEventSetting(){
         var head_height = $("#page-event > .ui-header").outerHeight();
         var foot_height = $("#page-event > .ui-footer").outerHeight();
         $("#page-event > .ui-content").css("height",(window_height - head_height - foot_height).toString() + "px");
+        touch.touchInitialize("#page-event > .ui-content");
     });
 
     // fix the content height(page-firend)
@@ -175,6 +240,7 @@ function initialElementEventSetting(){
         var head_height = $("#page-friend > .ui-header").outerHeight();
         var foot_height = $("#page-friend > .ui-footer").outerHeight();
         $("#page-friend > .ui-content").css("height",(window_height - head_height - foot_height).toString() + "px");
+        touch.touchInitialize("#page-friend > .ui-content");
     });
 
     // fix the content height(page-people-near-by)
@@ -182,6 +248,7 @@ function initialElementEventSetting(){
         var window_height = $(window).height();
         var head_height = $("#page-people-near-by > .ui-header").outerHeight();
         $("#page-people-near-by > .ui-content").css("height",(window_height - head_height).toString() + "px");
+        touch.touchInitialize("#page-people-near-by > .ui-content");
     });
 
     // fix the content height(page-people-search)
@@ -189,6 +256,7 @@ function initialElementEventSetting(){
         var window_height = $(window).height();
         var head_height = $("#page-people-search > .ui-header").outerHeight();
         $("#page-people-search > .ui-content").css("height",(window_height - head_height).toString() + "px");
+        touch.touchInitialize("#page-people-search > .ui-content");
     });
 
     // fix the content height(page-chat)
@@ -197,6 +265,7 @@ function initialElementEventSetting(){
         var head_height = $("#page-chat > .ui-header").outerHeight();
         var foot_height = $("#page-chat > .ui-footer").outerHeight();
         $("#page-chat > .ui-content").css("height",(window_height - head_height - foot_height).toString() + "px");
+        touch.touchInitialize("#page-chat > .ui-content");
     });
 
     // fix the content height(page-setting)
@@ -205,6 +274,7 @@ function initialElementEventSetting(){
         var head_height = $("#page-setting > .ui-header").outerHeight();
         var foot_height = $("#page-setting > .ui-footer").outerHeight();
         $("#page-setting > .ui-content").css("height",(window_height - head_height - foot_height).toString() + "px");
+        touch.touchInitialize("#page-setting > .ui-content");
     });
 }
 
