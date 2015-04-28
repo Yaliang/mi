@@ -1,8 +1,18 @@
 // this variable denotes the previous time shown in the message
 var previousTimeShown;
-
+var refreshPreviewPhotoChat = false;
 /* This function is designed to start a private chat with a friend with id = friendId.
  */
+function refreshPreviewCanvasChat(){
+    profilePhotoCropChat("body-group-preview-canvas1");
+    profilePhotoCropChat("body-group-preview-canvas2");
+    if (refreshPreviewPhotoChat) {
+        setTimeout(function(){
+            refreshPreviewCanvasChat();
+        },1500);
+    }
+}
+
 function startPrivateChat(friendId){
     $("#page-chat-messages > .ui-content").html("");
     $("#header-chat-message-title").html("");
@@ -136,6 +146,7 @@ function createGroupChat() {
         var groupId = object.id;
         var memberId = object.get("memberId");
         chatsInitializationNumber = memberId.length;
+        ParseCreateGroupPhotoObject(groupId);
 
         var successFunction1 = function(object) {  // object: single Chat object
             var groupId = object.get("groupId");
@@ -161,6 +172,7 @@ function createGroupChat() {
             newGroupChatMemberArray.newMemberList.push(Parse.User.current().id);
             newGroupChatMemberArray.newNum++;
             ParseCreateNewGroup(newGroupChatMemberArray.newMemberList, successFunction);
+            
         }
     } else {
         if (newGroupChatMemberArray.isGroupChat) {
@@ -768,6 +780,7 @@ function pullGroupProfile(){
         } else {
             $("#body-input-set-group-name").val(groupName);
         }
+        $("#body-group-photo").html("<font style='padding-right:1em; color:#333'> Change Group Photo</font><font style='color:#AAA'></font>");
         $("#body-group-name").html("<font style='padding-right:1em; color:#333'>Group Name:</font><font style='color:#AAA'>"+groupName+"</font>");
     };
     CacheGetGroupMember(groupId,displayFunction);
@@ -884,4 +897,100 @@ function hiddenChatMoreOption(){
     $(window).unbind("scroll");
     $(".options-hidden-cover-layer").hide();
     $(".page-right-top-options").fadeOut("fast");
+}
+function profilePhotoCropChat(str){
+    var fileUploadControl = $("#body-input-edit-group-photo")[0];
+    var file = fileUploadControl.files[0];
+    if (typeof(file) == "undefined") {
+        return;
+    }
+
+    var reader = new FileReader();
+    reader.onload = function(e) {
+        var image = new Image();
+        var canvas = document.getElementById(str);
+        var context = canvas.getContext("2d");
+        image.src = e.target.result;
+        var sourceX=0;
+        var sourceY=0;
+        var sourceWidth = image.width;
+        var sourceHeight = image.height;
+        var destWidth = canvas.width;
+        var destHeight = canvas.height;
+        var destX=0;
+        var destY=0;
+        if (sourceHeight < sourceWidth) {
+            destWidth = sourceWidth*(destHeight/sourceHeight);
+            destX = (canvas.width - destWidth)/2;
+        } else if (sourceHeight > sourceWidth) {
+            destHeight = sourceHeight*(destWidth/sourceWidth);
+            destY = (canvas.height - destHeight)/2;
+        }
+        var orientation = parseInt($("#photo-orientation").html());
+        context.drawImage(image, sourceX, sourceY, sourceWidth, sourceHeight, destX, destY, destWidth, destHeight);
+        switch(orientation){
+            case 8:
+                context.drawImage(image, sourceX, sourceY, sourceWidth, sourceHeight, destX-canvas.width/2, destY-canvas.height/2, destWidth, destHeight);
+                context.rotate(90*Math.PI/180);
+                context.translate(-canvas.width/2,-canvas.height/2);
+                break;
+            case 3:
+                context.drawImage(image, sourceX, sourceY, sourceWidth, sourceHeight, destX-canvas.width/2, destY-canvas.height/2, destWidth, destHeight);
+                context.rotate(-180*Math.PI/180);
+                context.translate(-canvas.width/2,-canvas.height/2);
+                break;
+            case 6:
+                context.drawImage(image, sourceX, sourceY, sourceWidth, sourceHeight, destX-canvas.width/2, destY-canvas.height/2, destWidth, destHeight);
+                context.rotate(-90*Math.PI/180);
+                context.translate(-canvas.width/2,-canvas.height/2);
+                break;
+            default:
+                context.drawImage(image, sourceX, sourceY, sourceWidth, sourceHeight, destX, destY, destWidth, destHeight);
+        }
+    };
+
+    loadImage.parseMetaData(file,function (data) {
+        if (typeof(data.exif) != "undefined"){
+            var orientation = data.exif.get("Orientation");
+            //console.log(orientation);
+            var canvas = document.getElementById("str");
+            var context = canvas.getContext("2d");
+            switch(orientation){
+                case 8:
+                    context.translate(canvas.width/2,canvas.height/2);
+                    context.rotate(-90*Math.PI/180);
+                    break;
+                case 3:
+                    context.translate(canvas.width/2,canvas.height/2);
+                    context.rotate(180*Math.PI/180);
+                    break;
+                case 6:
+                    context.translate(canvas.width/2,canvas.height/2);
+                    context.rotate(90*Math.PI/180);
+                    break;
+            }
+            $("#photo-orientation").html(orientation.toString());
+            reader.readAsDataURL(file);
+        } else {
+            reader.readAsDataURL(file);
+        }
+    },{});
+}
+function saveGroupPhoto(){
+    refreshPreviewPhotoChat = false;
+    $("body-group-photo-btn-done").unbind("click");
+    var groupId = $("#footer-bar-group-id-label").html();
+    console.log(groupId);
+
+    var fileUploadControl = $("#body-input-edit-group-photo")[0];
+    if (fileUploadControl.files.length > 0) {
+        var canvas = document.getElementById("body-group-preview-canvas1");
+        var photo120 = canvas.toDataURL();
+        var photo = fileUploadControl.files[0];
+    } else {
+        photo120 = null;
+        photo = null;
+    }
+    ParseSaveGroupPhoto(groupId, photo, photo120, function(object){});
+    $.mobile.back();
 }

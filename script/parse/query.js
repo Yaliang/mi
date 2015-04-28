@@ -47,6 +47,13 @@ function ParseCreateProfilePhotoObject(userId){
     photo.save();
 }
 
+function ParseCreateGroupPhotoObject(groupId){
+    var Photo = Parse.Object.extend("Photo");
+    var photo = new Photo;
+    photo.set("groupId",groupId);
+    photo.save();
+}
+
 /* This function is designed to login to user account by calling
  * Parse API "logIn" (class method of Parse.User class)
  */
@@ -556,6 +563,33 @@ function ParseSaveProfilePhoto(id, photo, photo120, displayFunction) {
         }
     });
 }
+function ParseSaveGroupPhoto(groupId, photo, photo120, displayFunction) {
+    var Photo = Parse.Object.extend("Photo");
+    var query = new Parse.Query(Photo);
+
+    if (photo == null)
+        return;
+    query.equalTo("groupId",groupId);
+
+    // query.first method will return a single Photo object to be found
+    query.first({
+        success: function(photoObject) {
+            photoObject.set("profilePhoto120",photo120);
+            var parseFile = new Parse.File(photo.name, photo);
+            parseFile.save().then(function(object) {
+                photoObject.set("profilePhoto",object.url());
+                photoObject.save(null,{
+                    success: function(object){
+                        displayFunction(object);
+                        CacheUpdatePhoto(object);
+                    }
+                });
+            }, function(error) {
+                
+            });
+        }
+    });
+}
 
 /* This function is designed to get user profile photo according to their Id by calling Parse API "first" (instance
  * method of Parse.Query object, which is performed on Photo object. Photo is a customer-defined subclass of Parse.Object)
@@ -940,6 +974,7 @@ function ParseCreateNewGroup(memberId, successFunction){
         success: function(object){
             successFunction(object);
             CacheUpdateGroup(object);
+
         }
     });
 }

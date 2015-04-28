@@ -595,10 +595,36 @@
         <div role="main" class="ui-content">
             <a class="ui-btn" id="body-group-participants-list-toggle" style="margin-bottom:0" onclick="groupParticipantsListToggle()">Collapse List</a>
             <ul class="ui-custom-listview ui-listview ui-listview-inset ui-corner-all ui-shadow" id="body-group-participants-list" style="margin-top:0"></ul>
+            <!-- make an invisible input-->
+            <div style="visibility: hidden" width="0px" height="0px" margin="0px" padding ="0px">
+            <input id="body-input-edit-group-photo" class="ui-hidden-accessible" name="groupprofilephoto" data-clear-btn="false" type="file"
+               onclick="refreshPreviewPhotoChat = true; refreshPreviewCanvasChat();" onchange="$.mobile.changePage('#page-set-group-photo')" value="">
+            </div>
+
+            <!-- Group Name click trigger above input onchange()-->
+            <a class="ui-btn ui-btn-group-photo" id="body-group-photo" style="color:#AAA" onclick="$('#body-input-edit-group-photo').trigger('click')"></a>
             <a class="ui-btn" id="body-group-name" style="color:#AAA" data-transition="slideup" href="#page-set-group-name"></a>
             <a class="ui-btn ui-custom-btn-red-large-gap-top" data-transition="slideup" href="#page-chat" onclick="leaveGroup()">Delete and Leave</a>
         </div><!-- /content -->
 
+    </div>
+
+    <div id="page-set-group-photo" data-role="page" data-title="Yueme">
+        <div data-role="header" data-position="fixed" data-tap-toggle="false">
+          <h1>Edit Group Photo</h1>
+            <a class="ui-btn-right ui-btn ui-btn-inline ui-corner-all" href="#"
+               onclick="$.mobile.back()">Cancel</a>
+        </div>
+        <canvas class="group-photo-preview" id="body-group-preview-canvas1" style="display: none" width="120px" height="120px"></canvas>
+        <canvas class="group-photo-preview" id="body-group-preview-canvas2" width="500px" height="500px"></canvas>
+
+        <div data-role="footer" data-position="fixed" data-tap-toggle="false">
+          <h1></h1>
+          <a class="ui-btn-left ui-btn ui-btn-inline ui-corner-all" id="body-group-photo-btn-retake" href="#"
+               onclick="saveGroupName()">Retake</a>
+            <a class="ui-btn-right ui-btn ui-btn-inline ui-corner-all" id="body-group-photo-btn-done" href="#"
+               onclick="saveGroupPhoto()">Done</a>
+        </div>
     </div>
 
     <!-- Page for setting group name-->
