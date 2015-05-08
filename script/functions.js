@@ -2,6 +2,8 @@
  */
 var currLocationHash = "#page-loading";
 
+var alerttime = 0;
+
 /* This variable indicates whether the "pullNotification" function is running or not.
  */
 var pullNotificationRunning = false;
@@ -50,7 +52,8 @@ function initialElementEventSetting(){
 
     $("#body-input-edit-profile-photo").on("click", function() {
         $("#body-input-edit-profile-photo").on("change",function(){
-            alert("fired!");
+            alerttime += 1;
+            alert("fired!"+alerttime.toString());
             $("#body-input-edit-profile-photo").unbind("change");
             if (('canvas_ready' in profilePreview) && (profilePreview.canvas_ready == false)) {
                 return;
