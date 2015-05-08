@@ -53,7 +53,7 @@ function initialElementEventSetting(){
     $("#body-input-edit-profile-photo").on("click", function() {
         $("#body-input-edit-profile-photo").on("change",function(){
             alerttime += 1;
-            alert("fired!"+alerttime.toString());
+            // alert("fired!"+alerttime.toString());
             $("#body-input-edit-profile-photo").unbind("change");
             if (('canvas_ready' in profilePreview) && (profilePreview.canvas_ready == false)) {
                 return;
