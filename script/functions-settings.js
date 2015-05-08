@@ -1,17 +1,18 @@
 /* This variable ...
  */
-var refreshPreviewPhoto = false;
+// var refreshPreviewPhoto = false;
+var profilePreview;
 
 /* This function is designed to refresh the preview of user's profile photo every 1.5 seconds.
  */
-function refreshPreviewCanvas(){
-    profilePhotoCrop();
-    if (refreshPreviewPhoto) {
-        setTimeout(function(){
-            refreshPreviewCanvas();
-        },1500);
-    }
-}
+// function refreshPreviewCanvas(){
+//     profilePhotoCrop();
+//     if (refreshPreviewPhoto) {
+//         setTimeout(function(){
+//             refreshPreviewCanvas();
+//         },1500);
+//     }
+// }
 
 /* This function is designed to get my profile.
  */
@@ -62,12 +63,14 @@ function getMyProfile(){
         image.src = photo120;        
     };
     CacheGetProfilePhotoByUserId(userId, displayFunction, {});
+
+    profilePreview = loadedImage("#body-input-edit-profile-photo");
 }
 
 /* This function is designed to save my profile.
  */
 function saveProfile(){
-    refreshPreviewPhoto = false;
+    // refreshPreviewPhoto = false;
     $("#body-bottom-profile-save-btn").unbind("click");
     var currentUser = Parse.User.current();
     var owner = currentUser.getUsername();
@@ -102,84 +105,84 @@ function saveProfile(){
 
 /* This function is designed to crop my profile photo.
  */
-function profilePhotoCrop(){
-    var fileUploadControl = $("#body-input-edit-profile-photo")[0];
-    var file = fileUploadControl.files[0];
-    if (typeof(file) == "undefined") {
-        return;
-    }
+// function profilePhotoCrop(){
+//     var fileUploadControl = $("#body-input-edit-profile-photo")[0];
+//     var file = fileUploadControl.files[0];
+//     if (typeof(file) == "undefined") {
+//         return;
+//     }
 
-    var reader = new FileReader();
-    reader.onload = function(e) {
-        var image = new Image();
-        var canvas = document.getElementById("body-profile-photo-preview-canvas");
-        var context = canvas.getContext("2d");
-        image.src = e.target.result;
-        var sourceX=0;
-        var sourceY=0;
-        var sourceWidth = image.width;
-        var sourceHeight = image.height;
-        var destWidth = canvas.width;
-        var destHeight = canvas.height;
-        var destX=0;
-        var destY=0;
-        if (sourceHeight < sourceWidth) {
-            destWidth = sourceWidth*(destHeight/sourceHeight);
-            destX = (canvas.width - destWidth)/2;
-        } else if (sourceHeight > sourceWidth) {
-            destHeight = sourceHeight*(destWidth/sourceWidth);
-            destY = (canvas.height - destHeight)/2;
-        }
-        var orientation = parseInt($("#photo-orientation").html());
-        context.drawImage(image, sourceX, sourceY, sourceWidth, sourceHeight, destX, destY, destWidth, destHeight);
-        switch(orientation){
-            case 8:
-                context.drawImage(image, sourceX, sourceY, sourceWidth, sourceHeight, destX-canvas.width/2, destY-canvas.height/2, destWidth, destHeight);
-                context.rotate(90*Math.PI/180);
-                context.translate(-canvas.width/2,-canvas.height/2);
-                break;
-            case 3:
-                context.drawImage(image, sourceX, sourceY, sourceWidth, sourceHeight, destX-canvas.width/2, destY-canvas.height/2, destWidth, destHeight);
-                context.rotate(-180*Math.PI/180);
-                context.translate(-canvas.width/2,-canvas.height/2);
-                break;
-            case 6:
-                context.drawImage(image, sourceX, sourceY, sourceWidth, sourceHeight, destX-canvas.width/2, destY-canvas.height/2, destWidth, destHeight);
-                context.rotate(-90*Math.PI/180);
-                context.translate(-canvas.width/2,-canvas.height/2);
-                break;
-            default:
-                context.drawImage(image, sourceX, sourceY, sourceWidth, sourceHeight, destX, destY, destWidth, destHeight);
-        }
-    };
+//     var reader = new FileReader();
+//     reader.onload = function(e) {
+//         var image = new Image();
+//         var canvas = document.getElementById("body-profile-photo-preview-canvas");
+//         var context = canvas.getContext("2d");
+//         image.src = e.target.result;
+//         var sourceX=0;
+//         var sourceY=0;
+//         var sourceWidth = image.width;
+//         var sourceHeight = image.height;
+//         var destWidth = canvas.width;
+//         var destHeight = canvas.height;
+//         var destX=0;
+//         var destY=0;
+//         if (sourceHeight < sourceWidth) {
+//             destWidth = sourceWidth*(destHeight/sourceHeight);
+//             destX = (canvas.width - destWidth)/2;
+//         } else if (sourceHeight > sourceWidth) {
+//             destHeight = sourceHeight*(destWidth/sourceWidth);
+//             destY = (canvas.height - destHeight)/2;
+//         }
+//         var orientation = parseInt($("#photo-orientation").html());
+//         context.drawImage(image, sourceX, sourceY, sourceWidth, sourceHeight, destX, destY, destWidth, destHeight);
+//         switch(orientation){
+//             case 8:
+//                 context.drawImage(image, sourceX, sourceY, sourceWidth, sourceHeight, destX-canvas.width/2, destY-canvas.height/2, destWidth, destHeight);
+//                 context.rotate(90*Math.PI/180);
+//                 context.translate(-canvas.width/2,-canvas.height/2);
+//                 break;
+//             case 3:
+//                 context.drawImage(image, sourceX, sourceY, sourceWidth, sourceHeight, destX-canvas.width/2, destY-canvas.height/2, destWidth, destHeight);
+//                 context.rotate(-180*Math.PI/180);
+//                 context.translate(-canvas.width/2,-canvas.height/2);
+//                 break;
+//             case 6:
+//                 context.drawImage(image, sourceX, sourceY, sourceWidth, sourceHeight, destX-canvas.width/2, destY-canvas.height/2, destWidth, destHeight);
+//                 context.rotate(-90*Math.PI/180);
+//                 context.translate(-canvas.width/2,-canvas.height/2);
+//                 break;
+//             default:
+//                 context.drawImage(image, sourceX, sourceY, sourceWidth, sourceHeight, destX, destY, destWidth, destHeight);
+//         }
+//     };
 
-    loadImage.parseMetaData(file,function (data) {
-        if (typeof(data.exif) != "undefined"){
-            var orientation = data.exif.get("Orientation");
-            //console.log(orientation);
-            var canvas = document.getElementById("body-profile-photo-preview-canvas");
-            var context = canvas.getContext("2d");
-            switch(orientation){
-                case 8:
-                    context.translate(canvas.width/2,canvas.height/2);
-                    context.rotate(-90*Math.PI/180);
-                    break;
-                case 3:
-                    context.translate(canvas.width/2,canvas.height/2);
-                    context.rotate(180*Math.PI/180);
-                    break;
-                case 6:
-                    context.translate(canvas.width/2,canvas.height/2);
-                    context.rotate(90*Math.PI/180);
-                    break;
-            }
-            $("#photo-orientation").html(orientation.toString());
-            reader.readAsDataURL(file);
-        } else {
-            reader.readAsDataURL(file);
-        }
-    },{});
-}
+//     loadImage.parseMetaData(file,function (data) {
+//         if (typeof(data.exif) != "undefined"){
+//             var orientation = data.exif.get("Orientation");
+//             //console.log(orientation);
+//             var canvas = document.getElementById("body-profile-photo-preview-canvas");
+//             var context = canvas.getContext("2d");
+//             switch(orientation){
+//                 case 8:
+//                     context.translate(canvas.width/2,canvas.height/2);
+//                     context.rotate(-90*Math.PI/180);
+//                     break;
+//                 case 3:
+//                     context.translate(canvas.width/2,canvas.height/2);
+//                     context.rotate(180*Math.PI/180);
+//                     break;
+//                 case 6:
+//                     context.translate(canvas.width/2,canvas.height/2);
+//                     context.rotate(90*Math.PI/180);
+//                     break;
+//             }
+//             $("#photo-orientation").html(orientation.toString());
+//             reader.readAsDataURL(file);
+//         } else {
+//             reader.readAsDataURL(file);
+//         }
+//     },{});
+// }
 
 /* This function is designed to change my account password.
  */
