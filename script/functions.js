@@ -52,9 +52,12 @@ function initialElementEventSetting(){
         $("#body-input-edit-profile-photo").on("change",function(){
             alert("fired!");
             $("#body-input-edit-profile-photo").unbind("change");
+            if (('canvas_ready' in profilePreview) && (profilePreview.canvas_ready == false)) {
+                return;
+            }
             profilePreview.crop_into_canvas_and_image({width:120, height:120});
             prefilePreviewWaiting = setInterval(function(){
-                if (profilePreview.canvas_ready) {
+                if (('canvas_ready' in profilePreview) && (profilePreview.canvas_ready)) {
                     var canvas = document.getElementById("body-profile-photo-preview-canvas");
                     var context = canvas.getContext("2d");
                     context.drawImage(profilePreview.cropped_image, 0, 0);

@@ -117,13 +117,14 @@ function loadedImage(selector,file_index) {
             }
 
             root.canvas = canvas;
-            root.canvas_ready = true;
 
             var cropped_image = new Image();
             cropped_image.src = canvas.toDataURL();
             cropped_image.width = data.width;
             cropped_image.height = data.height;
             root.cropped_image = cropped_image;
+
+            root.canvas_ready = true;
         }
         
         this.parseEXIFdata(callback, data);
