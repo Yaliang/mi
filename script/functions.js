@@ -49,6 +49,7 @@ function initialElementEventSetting(){
     });
 
     $("#body-input-edit-profile-photo").on("blur change",function(){
+        alert("fired!");
         profilePreview.crop_into_canvas_and_image({width:120, height:120});
         prefilePreviewWaiting = setInterval(function(){
             if (profilePreview.canvas_ready) {
