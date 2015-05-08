@@ -65,6 +65,7 @@ function getMyProfile(){
     CacheGetProfilePhotoByUserId(userId, displayFunction, {});
 
     profilePreview = loadedImage("#body-input-edit-profile-photo");
+    
 }
 
 /* This function is designed to save my profile.
