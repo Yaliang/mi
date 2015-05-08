@@ -48,19 +48,22 @@ function initialElementEventSetting(){
         event.preventDefault();
     });
 
-    $("#body-input-edit-profile-photo").on("blur change",function(){
-        alert("fired!");
-        profilePreview.crop_into_canvas_and_image({width:120, height:120});
-        prefilePreviewWaiting = setInterval(function(){
-            if (profilePreview.canvas_ready) {
-                var canvas = document.getElementById("body-profile-photo-preview-canvas");
-                var context = canvas.getContext("2d");
-                context.drawImage(profilePreview.cropped_image, 0, 0);
-                clearInterval(prefilePreviewWaiting);
-            }
-        },1000)
-        // profilePhotoCrop();
-    });
+    $("#body-input-edit-profile-photo").on("click", function() {
+        $("#body-input-edit-profile-photo").on("change",function(){
+            alert("fired!");
+            $("#body-input-edit-profile-photo").unbind("change");
+            profilePreview.crop_into_canvas_and_image({width:120, height:120});
+            prefilePreviewWaiting = setInterval(function(){
+                if (profilePreview.canvas_ready) {
+                    var canvas = document.getElementById("body-profile-photo-preview-canvas");
+                    var context = canvas.getContext("2d");
+                    context.drawImage(profilePreview.cropped_image, 0, 0);
+                    clearInterval(prefilePreviewWaiting);
+                }
+            },1000)
+            // profilePhotoCrop();
+        });
+    })
 
     $("#body-form-confirm-password").submit(function(event) {
         event.preventDefault();
