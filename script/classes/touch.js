@@ -68,7 +68,7 @@ touch = {
             if (!touch.stop) {
                 touch.touchEndAnimate();
             }
-        }, 40);
+        }, 20);
         // console.log(this.moveRate);
     },
     touchShowScrollBar: function() {
