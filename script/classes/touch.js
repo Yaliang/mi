@@ -6,11 +6,19 @@ touch = {
         this.selector = selector;
         $(this.selector).stop();
         this.stop = true;
+        if ($(this.selector).children(".touch-scroll-bar").length == 0) {
+            $(this.selector).prepend("<div class='touch-scroll-bar'></div>");
+        }
+        this.scrollBarElement = $(this.selector).children(".touch-scroll-bar");
+        this.touchHideScrollBar();
         $(this.selector).unbind("touchstart").bind("touchstart", function(event){
             touch.touchStartEventHandler(event);
+            touch.touchShowScrollBar();
+            touch.touchUpdateScrollBar();
         });
         $(this.selector).unbind("touchmove").bind("touchmove", function(event){
             touch.touchMoveEventHandler(event);
+            touch.touchUpdateScrollBar();
         });
         $(this.selector).unbind("touchend").bind("touchend", function(event){
             touch.touchEndEventHandler(event);
@@ -40,6 +48,7 @@ touch = {
     },
     touchEndEventHandler: function(event) {
         if (this.moveSlowCircle > 5) {
+            touch.touchHideScrollBar();
             return;
         }
         this.moveEndTime = new Date;
@@ -50,14 +59,37 @@ touch = {
     touchEndAnimate: function() {
         this.moveRate = this.moveRate * 29/30;
         if (Math.abs(this.moveRate) <= 0.1) {
+            touch.touchHideScrollBar();
             return;
         }
         $(this.selector).scrollTop($(this.selector).scrollTop() - this.moveRate);
+        this.touchUpdateScrollBar();
         setTimeout(function(){
             if (!touch.stop) {
                 touch.touchEndAnimate();
             }
-        }, 13);
+        }, 40);
         // console.log(this.moveRate);
+    },
+    touchShowScrollBar: function() {
+        var scrollHeight = $(this.selector)[0].scrollHeight;
+        var clippedHeight = $(this.selector).height();
+        if (scrollHeight > clippedHeight) {
+            this.scrollBarElement.fadeIn();
+        }
+    },
+    touchHideScrollBar: function() {
+        this.scrollBarElement.fadeOut();
+    },
+    touchDestroyScollBar: function() {
+        this.scrollBarElement.remove();
+    },
+    touchUpdateScrollBar: function() {
+        var scrollHeight = $(this.selector)[0].scrollHeight;
+        var clippedHeight = $(this.selector).height();
+        var scrollTop = $(this.selector).scrollTop();
+        var offsetTop = $(this.selector).offset().top + Math.round(1.0*scrollTop/scrollHeight * clippedHeight);
+        this.scrollBarElement.height(Math.round(1.0*clippedHeight*clippedHeight/scrollHeight));
+        this.scrollBarElement.offset({top: offsetTop,right:10});
     }
 }
