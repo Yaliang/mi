@@ -11,6 +11,9 @@ CACHE MANIFEST
 http://fonts.googleapis.com/css?family=Open+Sans:400,300,700
 ./script/jquery/mobile/jquery.mobile-1.4.5.min.css
 ./script/exif/load-image.all.min.js
+./script/classes/loadedImage.js
+./script/classes/touch.js
+./script/exif/exif-custom.js
 ./index.css
 ./script/parse/query.js
 ./script/cache.js 
