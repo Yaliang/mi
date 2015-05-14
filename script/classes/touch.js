@@ -52,17 +52,17 @@ touch = {
             return;
         }
         this.moveEndTime = new Date;
-        this.moveRate = (this.currentY-this.moveStartY) / (this.moveEndTime-this.moveStartTime) * 50;
+        this.moveRate = 1.0 * (this.currentY-this.moveStartY) / (this.moveEndTime-this.moveStartTime) * 30;
         this.stop = false;
         this.touchEndAnimate();
     },
     touchEndAnimate: function() {
-        this.moveRate = this.moveRate * 29/30;
-        if (Math.abs(this.moveRate) <= 0.1) {
+        this.moveRate = this.moveRate * 19/20;
+        if (Math.abs(this.moveRate) < 1) {
             touch.touchHideScrollBar();
             return;
         }
-        $(this.selector).scrollTop($(this.selector).scrollTop() - this.moveRate);
+        $(this.selector).scrollTop(1.0 * $(this.selector).scrollTop() - this.moveRate);
         this.touchUpdateScrollBar();
         setTimeout(function(){
             if (!touch.stop) {
