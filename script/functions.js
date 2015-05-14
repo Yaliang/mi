@@ -59,14 +59,14 @@ function initialElementEventSetting(){
                 return;
             }
             profilePreview.crop_into_canvas_and_image({width:120, height:120});
-            prefilePreviewWaiting = setInterval(function(){
+            profilePreviewWaiting = setInterval(function(){
                 if (('canvas_ready' in profilePreview) && (profilePreview.canvas_ready)) {
                     var canvas = document.getElementById("body-profile-photo-preview-canvas");
                     var context = canvas.getContext("2d");
                     context.drawImage(profilePreview.cropped_image, 0, 0);
-                    clearInterval(prefilePreviewWaiting);
+                    clearInterval(profilePreviewWaiting);
                 }
-            },1000)
+            },500)
             // profilePhotoCrop();
         });
     })
@@ -102,10 +102,36 @@ function initialElementEventSetting(){
         insertDescriptionPreviewPhoto();
     });
 
-    $("#body-input-create-event-description").on("keyup keypress",function(e){
-        if(listenKeyup)
-            deleteDescriptionPreviewPhoto(e);
+    // $("#body-input-create-event-description").on("keyup keypress",function(e){
+    //     if(listenKeyup)
+    //         deleteDescriptionPreviewPhoto(e);
+    // });
+
+    $("#body-input-create-event-description").on("focus", function(){
+        // $("#body-input-create-event-insert-photo").parent().attr("position", "fixed");
+        // $("#body-input-create-event-insert-photo").parent().offset({top:100});
+        // $("#body-input-create-event-insert-photo").parent().attr("zIndex",100);
+
     });
+
+    $("#body-input-create-event-description").on("blur", function(){
+        $("#body-input-create-event-insert-photo").parent().removeAttr("style");
+    });
+
+    $("#body-input-create-event-insert-photo").on("change", function(){
+        if (('canvas_ready' in eventPhotoPreview) && (eventPhotoPreview.canvas_ready == false)) {
+            return;
+        }
+        eventPhotoPreview.crop_into_canvas_and_image({width:200, height:120});
+        eventPhotoPreviewWaiting = setInterval(function(){
+            if (('canvas_ready' in eventPhotoPreview) && (eventPhotoPreview.canvas_ready)) {
+                $("#body-input-create-event-description").append(eventPhotoPreview.cropped_image)
+                $("#body-input-create-event-insert-photo").val("");
+                clearInterval(eventPhotoPreviewWaiting);
+            }
+        },500)
+    })
+    
 
     $("#body-form-set-group-name").submit(function(event){
         event.preventDefault();
@@ -230,6 +256,10 @@ function initialElementEventSetting(){
         var foot_height = $("#page-setting > .ui-footer").outerHeight();
         $("#page-setting > .ui-content").css("height",(window_height - head_height - foot_height).toString() + "px");
         touch.touchInitialize("#page-setting > .ui-content");
+    });
+
+    $(document).on("pageshow", "#page-event-create", function(){
+        eventPhotoPreview = loadedImage("#body-input-create-event-insert-photo");
     });
 }
 

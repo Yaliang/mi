@@ -696,7 +696,7 @@ function createUserEvent(){
     var time = startTime + " -- " + endTime;
 
     var visibility = $("#body-input-create-event-visibility").val()=="on";
-    var description = $("#body-input-create-event-description").val();
+    var description = $("#body-input-create-event-description").html();
     var errorObject = $("#body-create-event-error");
     var destID = "#page-event";
 
@@ -705,7 +705,7 @@ function createUserEvent(){
         $("#body-input-create-event-location").val("");
         $("#body-input-create-event-startTime").val("");
         $("#body-input-create-event-endTime").val("");
-        $("#body-input-create-event-description").val("");
+        $("#body-input-create-event-description").html("");
         $("#body-input-create-event-visibility").val("on").flipswitch("refresh");
         $("#body-create-event-error").html("");
 
