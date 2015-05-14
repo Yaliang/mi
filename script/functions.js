@@ -118,7 +118,7 @@ function initialElementEventSetting(){
         $("#body-input-create-event-insert-photo").parent().removeAttr("style");
     });
 
-    $("#body-input-create-event-insert-photo").on("change", function(){
+    document.getElementById("body-input-create-event-insert-photo").onchange = function(){
         if (('canvas_ready' in eventPhotoPreview) && (eventPhotoPreview.canvas_ready == false)) {
             return;
         }
@@ -130,7 +130,7 @@ function initialElementEventSetting(){
                 clearInterval(eventPhotoPreviewWaiting);
             }
         },500)
-    })
+    };
     
 
     $("#body-form-set-group-name").submit(function(event){
