@@ -130,6 +130,8 @@ function initialElementEventSetting(){
                 $("#body-input-create-event-description").append(eventPhotoPreview.cropped_image)
                 $("#body-input-create-event-insert-photo").val("");
                 clearInterval(eventPhotoPreviewWaiting);
+            } else {
+                $("#body-input-create-event-description").append(eventPhotoPreview.canvas_ready);
             }
         },500)
     };
