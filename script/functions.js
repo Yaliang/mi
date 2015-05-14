@@ -119,10 +119,12 @@ function initialElementEventSetting(){
     });
 
     document.getElementById("body-input-create-event-insert-photo").onchange = function(){
+        $("#body-input-create-event-description").append("onchanged</br>");
         if (('canvas_ready' in eventPhotoPreview) && (eventPhotoPreview.canvas_ready == false)) {
             return;
         }
         eventPhotoPreview.crop_into_canvas_and_image({width:200, height:120});
+        $("#body-input-create-event-description").append("cropping</br>");
         eventPhotoPreviewWaiting = setInterval(function(){
             if (('canvas_ready' in eventPhotoPreview) && (eventPhotoPreview.canvas_ready)) {
                 $("#body-input-create-event-description").append(eventPhotoPreview.cropped_image)
