@@ -54,7 +54,7 @@ touch = {
         }
         var newTop = $(this.selector).scrollTop() - (this.currentY-this.lastY);
         $(this.selector).scrollTop(newTop);
-        if (this.pullTopEnable) {
+        if (($(this.selector).scrollTop() == 0) && (this.pullTopEnable)) {
             this.topOverPixel = Math.max(0,this.topOverPixel + Math.round(1.0/(1.0*this.topOverPixel/20+1)*(this.currentY-this.lastY))) ;
             $(this.selector).children(".touch-top-pull-bar").height(Math.min(this.topOverPixel,60));
             if (this.topOverPixel >= 40) {
