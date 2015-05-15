@@ -1368,6 +1368,15 @@ function ParseDeleteChat(chatObjectId, ownerId, groupId, displayFunction) {
     });
 }
 
+function ParseUploadImages(imgElement){
+    var data = imgElement.src;
+    var file = new Parse.File("event_photo", {base64: data});
+
+    file.save().then(function(object){
+        imgElement.src = object.url();
+    });
+}
+
 /* This function is designed to update the local cache by calling Parse API "find" (instance method of
  * Parse.Query object, which is performed on customer-defined subclass of Parse.Object)
  */
