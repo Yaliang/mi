@@ -26,6 +26,13 @@
     z-index: 100;
 }
 
+.touch-top-pull-bar {
+    height: 0px;
+    font-family: 'Open Sans';
+    line-height: 40px;
+    overflow-y: hidden;
+    text-align: center;
+}
 .custom-size-flipswitch-body-input-create-event-visibility.ui-flipswitch .ui-btn.ui-flipswitch-on {
     text-indent: -3.8em;
 }

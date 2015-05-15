@@ -216,7 +216,7 @@ function initialElementEventSetting(){
         var head_height = $("#page-event > .ui-header").outerHeight();
         var foot_height = $("#page-event > .ui-footer").outerHeight();
         $("#page-event > .ui-content").css("height",(window_height - head_height - foot_height).toString() + "px");
-        touch.touchInitialize("#page-event > .ui-content");
+        touch.touchInitialize("#page-event > .ui-content", function(){pullUserEvent({afterAt:currentFirstEvent});console.log("pulltopfunction called")});
     });
 
     // fix the content height(page-firend)

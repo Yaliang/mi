@@ -332,7 +332,8 @@ function displayUserProfile(userId){
 
 /* This variable denotes the created time of the last event displayed in the user event list
  */
-var currentLastEvent;
+var currentLastEvent = new Date;
+var currentFirstEvent = new Date(0);
 
 /* This function is designed to pull up the user event for the Activities page(id="page-event").
  *
@@ -349,35 +350,42 @@ var currentLastEvent;
  *
  * Modified by Renpeng @ 12:30 4/19/2015
  */
-function pullUserEvent(beforeAt, filterMode){
-    currentLastEvent = new Date;
+function pullUserEvent(options){
     pullLastItem = -1;
     var limitNumber = 15;
     var descendingOrderKey = "createdAt";
-    if (typeof(beforeAt) == "undefined") {
+    if (typeof(options) == "undefined") {
         $("#body-event-content-list").addClass("ui-hidden-accessible");
         setTimeout(function(){
             if (pullLastItem != 0) {
                 $.mobile.loading("show");
             }
-        },350); 
+        },350);
     }
 
     var displayFunction = function(objects){  // objects: an array of UserEvent objects
         var currentUser = Parse.User.current();
         var owner = currentUser.getUsername();
         pullLastItem = 2 * objects.length;
-        if (objects.length < limitNumber)
-            $(".ui-load-more-activity").html("No More Activities");
+        
         for (var i=0; i <= objects.length-1; i++) {
-            if (Date.parse(currentLastEvent) > Date.parse(objects[i].createdAt))
-                currentLastEvent = objects[i].createdAt;
+            
             if ($("#body-event-"+objects[i].id).length == 0) {
                 var id = objects[i].id;
                 var holder = objects[i].get("owner");
                 var newElement = buildUserEventElement(objects[i]);
-                $(".ui-load-more-activity").before(newElement);
-
+                if (Date.parse(currentLastEvent) > Date.parse(objects[i].createdAt)) {
+                    currentLastEvent = objects[i].createdAt;
+                    $(".ui-load-more-activity").before(newElement);
+                    if (objects.length < limitNumber)
+                        $(".ui-load-more-activity").html("No More Activities");
+                    if (Date.parse(currentFirstEvent) < Date.parse(objects[i].createdAt)) {
+                        currentFirstEvent = objects[i].createdAt;
+                    }
+                }else if (Date.parse(currentFirstEvent) < Date.parse(objects[i].createdAt)) {
+                    currentFirstEvent = objects[i].createdAt;
+                    $(".ui-load-event-head").after(newElement);
+                }
                 pullUserEventHolderInfo(holder, id); // display event owner's name, not the username (which is an email address)
 
             } else {
@@ -409,6 +417,20 @@ function pullUserEvent(beforeAt, filterMode){
         }
     };
 
+    var beforeAt = undefined;
+    var afterAt = undefined;
+    var filterMode = undefined;
+    if (typeof(options) != "undefined") {
+        if (("beforeAt" in options)&&(typeof(options.beforeAt) != "undefined")) {
+            beforeAt = options.beforeAt;
+        }
+        if (("afterAt" in options)&&(typeof(options.afterAt) != "undefined")) {
+            afterAt = options.afterAt;
+        }
+        if (("filterMode" in options)&&(typeof(options.filterMode) != "undefined")) {
+            filterMode = options.filterMode;
+        }
+    }
     var obj = {
         // owner: owner,
         // eventId: null,
@@ -416,6 +438,7 @@ function pullUserEvent(beforeAt, filterMode){
         descendingOrderKey: descendingOrderKey,
         accessibility: "public",
         beforeAt: beforeAt,
+        afterAt: afterAt,
         filterMode: filterMode,
         currentTimeInMilliseconds: new Date().getTime(),
         displayFunction: displayFunction

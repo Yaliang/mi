@@ -196,7 +196,8 @@
         </form> -->
 
         <div  class="ui-content" id="body-event-content-list" role="main">
-            <div class="ui-load-more-activity" onclick="pullUserEvent(currentLastEvent)">More Activities</div>
+            <div class="ui-load-event-head"></div>
+            <div class="ui-load-more-activity" onclick="pullUserEvent({beforeAt:currentLastEvent})">More Activities</div>
         </div><!-- /content -->
 
         <div class="nav-glyphish-example" data-role="footer" data-position="fixed" data-tap-toggle="false">

@@ -2,7 +2,8 @@
  * create by Yaliang, 4/27/2015
  */
 touch = {
-    touchInitialize: function(selector) {
+    touchInitialize: function(selector, pullTopFunc) {
+        this.topOverPixel = 0;
         this.selector = selector;
         $(this.selector).stop();
         this.stop = true;
@@ -22,7 +23,16 @@ touch = {
         });
         $(this.selector).unbind("touchend").bind("touchend", function(event){
             touch.touchEndEventHandler(event);
-        })
+        });
+        if (typeof(pullTopFunc) != "undefined") {
+            this.pullTopFunc = pullTopFunc;
+            this.pullTopEnable = true;
+            if ($(this.selector).children(".touch-top-pull-bar").length == 0) {
+                $(this.selector).prepend("<div class='touch-top-pull-bar'>Release to refresh</div>");
+            }
+        } else {
+            this.pullTopEnable = false;
+        }
     },
     touchStartEventHandler: function(event) {
         $(this.selector).stop();
@@ -44,9 +54,19 @@ touch = {
         }
         var newTop = $(this.selector).scrollTop() - (this.currentY-this.lastY);
         $(this.selector).scrollTop(newTop);
+        if (this.pullTopEnable) {
+            this.topOverPixel = Math.max(0,this.topOverPixel + Math.round(1.0/(1.0*this.topOverPixel/20+1)*(this.currentY-this.lastY))) ;
+            $(this.selector).children(".touch-top-pull-bar").height(Math.min(this.topOverPixel,60));
+        }
+        
         // console.log(this.moveRate);
     },
     touchEndEventHandler: function(event) {
+        if ((this.pullTopEnable) && (this.topOverPixel >= 40)) {
+            this.pullTopFunc();
+        }
+        this.topOverPixel = 0;
+        $(this.selector).children(".touch-top-pull-bar").height(0);
         if (this.moveSlowCircle > 5) {
             touch.touchHideScrollBar();
             return;
@@ -89,7 +109,7 @@ touch = {
         var clippedHeight = $(this.selector).height();
         var scrollTop = $(this.selector).scrollTop();
         var offsetTop = $(this.selector).offset().top + Math.round(1.0*scrollTop/scrollHeight * clippedHeight);
-        this.scrollBarElement.height(Math.round(1.0*clippedHeight*clippedHeight/scrollHeight));
+        this.scrollBarElement.height(Math.round(1.0*clippedHeight*clippedHeight/scrollHeight - this.topOverPixel));
         this.scrollBarElement.offset({top: offsetTop,right:10});
-    }
+    },
 }
