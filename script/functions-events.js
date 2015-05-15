@@ -629,9 +629,47 @@ function hiddenEventFilterModeMoreOption(){
     });
 }
 
+/* This function is designed to upload images and replace src of imageList
+ */
+function waitingUploadImages(imageList) {
+    var waiting = false;
+    for (i = 0; i < imageList.length; i++) {
+        var imageSrc = imageList[i].src;
+        if (imageSrc.substring(0, 4).toLowerCase() != "http") {
+            ParseUploadImages(imageList[i]);
+            waiting = true;
+        }
+    }
+
+    return waiting
+}
+
+function startCheckUploaded(imageList) {
+    waitingImageUploading = setInterval(function(){
+        for (i =0; i < imageList.length; i++) {
+            var imageSrc = imageList[i].src;
+            if (imageSrc.substring(0, 4).toLowerCase() != "http") {
+                return
+            }
+        }
+        clearInterval(waitingImageUploading);
+        createUserEvent();
+    }, 100);
+}
+
 /* This function is designed to create user events.
  */
 function createUserEvent(){
+    $.mobile.loading("show");
+    
+    var imageList = $("#body-input-create-event-description").find("img");
+    if (imageList.length > 0){
+        if (waitingUploadImages(imageList)) {
+            startCheckUploaded(imageList);
+            return;
+        }
+    }
+
     var currentUser = Parse.User.current();
     var owner = currentUser.getUsername();
 
