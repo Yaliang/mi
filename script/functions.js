@@ -123,12 +123,12 @@ function initialElementEventSetting(){
         if (('canvas_ready' in eventPhotoPreview) && (eventPhotoPreview.canvas_ready == false)) {
             return;
         }
-        eventPhotoPreview.crop_into_canvas_and_image({width:200, height:120});
+        eventPhotoPreview.parseEXIFdata();
         $("#body-input-create-event-description").append("cropping</br>");
         eventPhotoPreviewWaiting = setInterval(function(){
-            $("#body-input-create-event-description").append("test</br>");
-            if (('canvas_ready' in eventPhotoPreview) && (eventPhotoPreview.canvas_ready)) {
-                $("#body-input-create-event-description").append(eventPhotoPreview.cropped_image)
+            if (('image_ready' in eventPhotoPreview) && (eventPhotoPreview.image_ready)) {
+                eventPhotoPreview.image.width = $("#body-input-create-event-description").width();
+                $("#body-input-create-event-description").append(eventPhotoPreview.image)
                 $("#body-input-create-event-insert-photo").val("");
                 clearInterval(eventPhotoPreviewWaiting);
             }
