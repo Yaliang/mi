@@ -119,16 +119,17 @@ function initialElementEventSetting(){
     });
 
     document.getElementById("body-input-create-event-insert-photo").onchange = function(){
-        $("#body-input-create-event-description").append("onchanged</br>");
+        // $("#body-input-create-event-description").append("onchanged</br>");
         if (('canvas_ready' in eventPhotoPreview) && (eventPhotoPreview.canvas_ready == false)) {
             return;
         }
         eventPhotoPreview.parseEXIFdata();
-        $("#body-input-create-event-description").append("cropping</br>");
+        // $("#body-input-create-event-description").append("cropping</br>");
         eventPhotoPreviewWaiting = setInterval(function(){
             if (('image_ready' in eventPhotoPreview) && (eventPhotoPreview.image_ready)) {
-                eventPhotoPreview.image.width = $("#body-input-create-event-description").width();
+                eventPhotoPreview.image.style.width = "100%";
                 $("#body-input-create-event-description").append(eventPhotoPreview.image)
+                $("#body-input-create-event-description").append("</br>")
                 $("#body-input-create-event-insert-photo").val("");
                 clearInterval(eventPhotoPreviewWaiting);
             }
