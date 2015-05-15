@@ -475,6 +475,7 @@ a {
 }
 
 .ui-custom-event-description {
+    margin-bottom: 10px;
     font-weight: 400;
     font-size: 13px;
     clear: both;
