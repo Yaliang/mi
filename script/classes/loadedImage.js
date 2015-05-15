@@ -28,6 +28,7 @@ function loadedImage(selector,file_index) {
         if (!this.get_file()) {
             return false
         }
+        this.image_ready = false;
         // define onload callback function 
         // ref: http://stackoverflow.com/questions/27254735/filereader-onload-with-result-and-parameter
         this.reader.onload = (function(root, callback, data){
@@ -39,6 +40,7 @@ function loadedImage(selector,file_index) {
                 var image = new Image;
                 image.src = e.target.result;
                 root.image = image;
+                root.image_ready = true;
                 root.src = image.src;
                 image_with_exif = EXIF.getData(image, function() {});
                 root.exifdata = image_with_exif.exifdata;
@@ -61,6 +63,7 @@ function loadedImage(selector,file_index) {
             return false;
         }
         this.canvas_ready = false;
+        $("#body-input-create-event-description").append("canvas_ready set false</br>");
 
         var callback = function(callback_data) {
             var root = callback_data.self;
