@@ -28,7 +28,7 @@ touch = {
             this.pullTopFunc = pullTopFunc;
             this.pullTopEnable = true;
             if ($(this.selector).children(".touch-top-pull-bar").length == 0) {
-                $(this.selector).prepend("<div class='touch-top-pull-bar'>Release to load</div>");
+                $(this.selector).prepend("<div class='touch-top-pull-bar'>Pull to load</div>");
             }
         } else {
             this.pullTopEnable = false;
@@ -57,6 +57,9 @@ touch = {
         if (this.pullTopEnable) {
             this.topOverPixel = Math.max(0,this.topOverPixel + Math.round(1.0/(1.0*this.topOverPixel/20+1)*(this.currentY-this.lastY))) ;
             $(this.selector).children(".touch-top-pull-bar").height(Math.min(this.topOverPixel,60));
+            if (this.topOverPixel >= 40) {
+                $(this.selector).children(".touch-top-pull-bar").html("Release to load");
+            }
         }
         
         // console.log(this.moveRate);
@@ -70,7 +73,7 @@ touch = {
         } else {
             this.topOverPixel = 0;
             $(this.selector).children(".touch-top-pull-bar").animate({height:0},300);
-            $(this.selector).children(".touch-top-pull-bar").html("Release to load");
+            $(this.selector).children(".touch-top-pull-bar").html("Pull to load");
         }
         if (this.moveSlowCircle > 5) {
             touch.touchHideScrollBar();
@@ -120,7 +123,7 @@ touch = {
     touchHideTopLoadingBar: function() {
         this.topOverPixel = 0;
         $(this.selector).children(".touch-top-pull-bar").animate({height:0},300,function(){
-            $(touch.selector).children(".touch-top-pull-bar").html("Release to load");
+            $(touch.selector).children(".touch-top-pull-bar").html("Pull to load");
         });
     }
 }
