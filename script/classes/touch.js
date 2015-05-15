@@ -28,7 +28,7 @@ touch = {
             this.pullTopFunc = pullTopFunc;
             this.pullTopEnable = true;
             if ($(this.selector).children(".touch-top-pull-bar").length == 0) {
-                $(this.selector).prepend("<div class='touch-top-pull-bar'>Release to refresh</div>");
+                $(this.selector).prepend("<div class='touch-top-pull-bar'>Release to load</div>");
             }
         } else {
             this.pullTopEnable = false;
@@ -64,9 +64,14 @@ touch = {
     touchEndEventHandler: function(event) {
         if ((this.pullTopEnable) && (this.topOverPixel >= 40)) {
             this.pullTopFunc();
+            this.topOverPixel = 30;
+            $(this.selector).children(".touch-top-pull-bar").animate({height:30},300);
+            $(this.selector).children(".touch-top-pull-bar").html("Loading");
+        } else {
+            this.topOverPixel = 0;
+            $(this.selector).children(".touch-top-pull-bar").animate({height:0},300);
+            $(this.selector).children(".touch-top-pull-bar").html("Release to load");
         }
-        this.topOverPixel = 0;
-        $(this.selector).children(".touch-top-pull-bar").height(0);
         if (this.moveSlowCircle > 5) {
             touch.touchHideScrollBar();
             return;
@@ -112,4 +117,10 @@ touch = {
         this.scrollBarElement.height(Math.round(1.0*clippedHeight*clippedHeight/scrollHeight - this.topOverPixel));
         this.scrollBarElement.offset({top: offsetTop,right:10});
     },
+    touchHideTopLoadingBar: function() {
+        this.topOverPixel = 0;
+        $(this.selector).children(".touch-top-pull-bar").animate({height:0},300,function(){
+            $(touch.selector).children(".touch-top-pull-bar").html("Release to load");
+        });
+    }
 }

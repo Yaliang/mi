@@ -127,6 +127,7 @@ function pullUserEventHolderInfo(holder, elementIdBase){
         if (pullLastItem == 0) {
             $("#body-event-content-list").removeClass("ui-hidden-accessible");
             $.mobile.loading("hide");
+            touch.touchHideTopLoadingBar();
         }
 
         var displayFunction = function(object, data){  // object: single cachePhoto[i] object
@@ -139,6 +140,7 @@ function pullUserEventHolderInfo(holder, elementIdBase){
             if (pullLastItem == 0) {
                 $("#body-event-content-list").removeClass("ui-hidden-accessible");
                 $.mobile.loading("hide");
+                touch.touchHideTopLoadingBar();
             }
         };
         CacheGetProfilePhotoByUserId(userId, displayFunction, data);
@@ -368,6 +370,12 @@ function pullUserEvent(options){
         var owner = currentUser.getUsername();
         pullLastItem = 2 * objects.length;
         
+        if (pullLastItem == 0) {
+            $("#body-event-content-list").removeClass("ui-hidden-accessible");
+            $.mobile.loading("hide");
+            touch.touchHideTopLoadingBar();
+        }
+
         for (var i=0; i <= objects.length-1; i++) {
             
             if ($("#body-event-"+objects[i].id).length == 0) {
