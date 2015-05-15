@@ -177,9 +177,9 @@ function buildUserEventElement(object){
     newElement = newElement + "<div class='ui-body ui-body-a' style='cursor:pointer' onclick=\"$.mobile.changePage(\'#page-event-detail\');updateEventDetail('"+id+"')\">";
     newElement = newElement + "<p class='ui-custom-event-title'>" + title + "</p>";
     if (description.length == 0) {
-        newElement = newElement + "<p class='ui-custom-event-description-less-margin'></br></p>";
+        newElement = newElement + "<div class='ui-custom-event-description-less-margin'></br></div>";
     } else {
-        newElement = newElement + "<p class='ui-custom-event-description'>" +  description.replace("\n","</br>") + "</p>";
+        newElement = newElement + "<div class='ui-custom-event-description'>" +  description.replace("\n","</br>") + "</div>";
     }
     newElement = newElement + "<p class='ui-custom-event-location'>" + location + "</p>";
     newElement = newElement + "<p class='ui-custom-event-time'>" + time + "</p>";
@@ -661,7 +661,7 @@ function startCheckUploaded(imageList) {
  */
 function createUserEvent(){
     $.mobile.loading("show");
-    
+
     var imageList = $("#body-input-create-event-description").find("img");
     if (imageList.length > 0){
         if (waitingUploadImages(imageList)) {
@@ -680,6 +680,7 @@ function createUserEvent(){
     var startTimeInMilliseconds = new Date($("#body-input-create-event-startTime").val()).getTime();
     var endTimeInMilliseconds = new Date($("#body-input-create-event-endTime").val()).getTime();
     var errorHandler = function(item) {
+        $.mobile.loading("hide");
         var $bodyInputCreateEvent = $("#body-input-create-event-" + item);
         $bodyInputCreateEvent.focus().parent().addClass("ui-custom-event-create-focus");
 
