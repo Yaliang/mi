@@ -1139,9 +1139,9 @@ function buildMyUserEventElement(object){
         newElement += "<p class='ui-custom-event-time'>" + time + "</p>";
     }
     if ((location.length == 0) && (time.length == 0)) {
-        newElement += "<p class='ui-custom-event-description-less-margin'>" + description.replace("\n","</br>") + "</p>";
+        newElement += "<div class='ui-custom-event-description-less-margin'>" + description.replace("\n","</br>") + "</div>";
     } else {
-        newElement += "<p class='ui-custom-event-description'>" + description.replace("\n","</br>") + "</p>";
+        newElement += "<div class='ui-custom-event-description'>" + description.replace("\n","</br>") + "</div>";
     }
     newElement += "<div class='event-statistics comment-statistics-"+id+"'>" + commentNumber + " Comments</div><div class='event-statistics interest-statistics-"+id+"'>" + interestNumber + " Interests</div><div class='event-statistics going-statistics-"+id+"'>" + goingNumber + " Goings</div>";
     newElement += "</div>";
@@ -1320,7 +1320,7 @@ function editSaveUserEvent(eventId){
         // rebuild element in page-event-my-event
         var id = object.id;
         var newElement = buildMyUserEventElement(object);
-        var oldElement = $("#body-my-event"+id);
+        var oldElement = $("#body-my-event-"+id);
         oldElement.before(newElement);
         oldElement.remove();
 
@@ -1328,7 +1328,7 @@ function editSaveUserEvent(eventId){
         id = object.id;
         var holder = object.get("owner");
         newElement = buildUserEventElement(object);
-        oldElement = $("#body-event"+id);
+        oldElement = $("#body-event-"+id);
         oldElement.before(newElement);
         oldElement.remove();
 
