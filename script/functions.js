@@ -654,6 +654,13 @@ function pushNotificationToDevice(platform,regId,message) {
     });
 }
 
+function pushNotificationThroughWebSocket(userid, message) {
+    ws.noti_sender({
+        userid: userid,
+        message: message
+    })
+}
+
 /* This function is designed to send notifications to users' devices by user name
  */
 function pushNotificationToDeviceByUsername(username, message) {
@@ -668,6 +675,11 @@ function pushNotificationToDeviceByUsername(username, message) {
         if (typeof(obj.get("APNId")) != "undefined") {
             regId = obj.get("APNId");
             pushNotificationToDevice("apn",regId, data.message);
+        }
+        console.log(ws.ready)
+        if (ws.ready) {
+            regId = obj.id;
+            pushNotificationThroughWebSocket(regId, data.message);
         }
     }, {message: message});
 }
@@ -686,6 +698,11 @@ function pushNotificationToDeviceByUserId(userid, message) {
         if (typeof(obj.get("APNId")) != "undefined") {
             regId = obj.get("APNId");
             pushNotificationToDevice("apn",regId, data.message);
+        }
+        console.log(ws.ready)
+        if (ws.ready) {
+            regId = obj.id;
+            pushNotificationThroughWebSocket(regId, data.message);
         }
     }, {message: message});
 }

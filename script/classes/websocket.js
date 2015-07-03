@@ -10,10 +10,12 @@ ws = {
 		this.connection = new WebSocket(this.host)
 		this.connection.onopen = function(event) {
 			$(document).trigger("ws:ready")
+			ws.ready = true
 		}
 		this.connection.onclose = function(event) {
 			console.log("WebSocket Reconnecting")
-			pullNotification = true
+			pullNotificationEnable = true
+			ws.ready = false
 			ws.connect()
 		}
 	},
@@ -69,6 +71,19 @@ ws = {
 		if (typeof(this.lastPull) == "undefined" || this.lastPull < data.date) {
 			this.lastPull = Date.now()
 			pullNotification()
+		}
+	},
+	noti_sender: function(obj) {
+		if (typeof(this.userid) != "undefined" && typeof(this.token) != "undefined") {
+			var msg = {
+                type: "notification", 
+                to_userid: obj.userid,
+                userid: ws.userid,
+                message: obj.message,
+                token: ws.token,
+                date: Date.now()
+            }
+            ws.connection.send(JSON.stringify(msg))
 		}
 	},
 	logout: function() {
