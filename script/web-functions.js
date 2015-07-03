@@ -4,22 +4,42 @@
  * loginByLocalStorage:  try to log into user session using the local storage, see the function for details.
  */
 $(document).ready(function (){
+    /* Enable Pull Notifications*/
+    pullNotificationEnable = true;
     initialElementEventSetting();
     cacheInitialization();
     loginByLocalStorage();
     getDeviceInfo();
 });
 
-/* Enable Pull Notifications*/
-var pullNotificationEnable = true;
 
-/* Empty function. Just wanna make convert from web to native more streightforword
+
+/* Empty function. Just wanna make convert from web to native more straightforward
  */ 
-function registerNotificationId(){
+function registerNotificationId(key){
+    // register WebSocket:
+    ws.init()
+    $(document).on("ws:ready", function(){
+        var currentUser = Parse.User.current();
 
+        if (currentUser != null || typeof(key) != "undefined"){
+            ws.login({
+                callback: function() {
+                    console.log("login successfully")
+                    pullNotificationEnable = false;
+                },
+                errorHandler: function(data) {
+                    console.log("login error")
+                    console.log(data)
+                    logout()
+                },
+                key: key
+            })
+        }
+    })
 }
 
-/* Empty function. Just wanna make convert from web to native more streightforword
+/* Empty function. Just wanna make convert from web to native more straightforward
  */ 
 function unregisterNotificationId(){
 

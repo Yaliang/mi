@@ -216,7 +216,8 @@ function initialElementEventSetting(){
         var head_height = $("#page-event > .ui-header").outerHeight();
         var foot_height = $("#page-event > .ui-footer").outerHeight();
         $("#page-event > .ui-content").css("height",(window_height - head_height - foot_height).toString() + "px");
-        touch.touchInitialize("#page-event > .ui-content", function(){pullUserEvent({afterAt:currentFirstEvent});console.log("pulltopfunction called")});
+        $("#page-event > .ui-content").css("overflowY","scroll");
+        // touch.touchInitialize("#page-event > .ui-content", function(){pullUserEvent({afterAt:currentFirstEvent});console.log("pulltopfunction called")});
     });
 
     // fix the content height(page-firend)
@@ -418,7 +419,13 @@ function signup(){
     var errorObject = $("#body-signup-error");
     var destID = "#page-event";
     var customFunction = function(object){
-        registerNotificationId();
+        var username = $("#body-input-signup-email").val();
+        var password = $("#body-input-signup-password").val();
+        var key = {
+            username: username,
+            password: password
+        }
+        registerNotificationId(key);
         $("#body-input-signup-password").val("");
         pullUserEvent();
         if (!pullNotificationRunning) {
@@ -456,7 +463,13 @@ function login(){
     var errorObject = $("#body-login-error");
     var destID = "#page-event";
     var customFunction = function(){
-        registerNotificationId();
+        var username = $("#body-input-login-email").val();
+        var password = $("#body-input-login-password").val();
+        var key = {
+            username: username,
+            password: password
+        }
+        registerNotificationId(key);
         $("#body-input-login-password").val("");
         pullUserEvent();
         if (!pullNotificationRunning) {
@@ -641,6 +654,13 @@ function pushNotificationToDevice(platform,regId,message) {
     });
 }
 
+function pushNotificationThroughWebSocket(userid, message) {
+    ws.noti_sender({
+        userid: userid,
+        message: message
+    })
+}
+
 /* This function is designed to send notifications to users' devices by user name
  */
 function pushNotificationToDeviceByUsername(username, message) {
@@ -655,6 +675,11 @@ function pushNotificationToDeviceByUsername(username, message) {
         if (typeof(obj.get("APNId")) != "undefined") {
             regId = obj.get("APNId");
             pushNotificationToDevice("apn",regId, data.message);
+        }
+        console.log(ws.ready)
+        if (ws.ready) {
+            regId = obj.id;
+            pushNotificationThroughWebSocket(regId, data.message);
         }
     }, {message: message});
 }
@@ -673,6 +698,11 @@ function pushNotificationToDeviceByUserId(userid, message) {
         if (typeof(obj.get("APNId")) != "undefined") {
             regId = obj.get("APNId");
             pushNotificationToDevice("apn",regId, data.message);
+        }
+        console.log(ws.ready)
+        if (ws.ready) {
+            regId = obj.id;
+            pushNotificationThroughWebSocket(regId, data.message);
         }
     }, {message: message});
 }

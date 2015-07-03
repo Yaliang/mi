@@ -448,20 +448,7 @@ function sendMessage(){
         var text = object.get("text");
         var notificationFunction = function(senderId,text,receiverId){
             var displayFunction1 = function(object,data){
-                if (typeof(object.get("GCMId")) != "undefined") {
-                    data.GCMId = object.get("GCMId");
-                }
-                if (typeof(object.get("APNId")) != "undefined") {
-                    data.APNId = object.get("APNId");
-                }
-                var displayFunction2 = function(object,data){
-                    var message = object.get("name")+": " + data.message;
-                    if ("GCMId" in data)
-                        pushNotificationToDevice("gcm",data.GCMId,message);
-                    if ("APNId" in data)
-                        pushNotificationToDevice("apn",data.APNId,message);
-                };
-                CacheGetProfileByUserId(data.senderId, displayFunction2, data);
+                pushNotificationToDeviceByUserId(object.id, data.message)
             };
             var data = {senderId : senderId, message: text};
             CacheGetProfileByUserId(receiverId, displayFunction1, data);
