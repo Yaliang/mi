@@ -1,0 +1,365 @@
+<!DOCTYPE html> 
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1 user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="mobile-web-app-capable" content="yes">
+    <title>scenario</title>
+    <link rel="icon" sizes="192x192" href="./content/material-design/png/m-192.png">
+    <link rel="apple-touch-icon" href="./content/material-design/png/m-192.png">
+    <script src="./script/jquery/jquery-1.11.1.min.js"></script>
+    <script src="./script/parse/parse-1.3.2.min.js"></script>
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="./script/bootstrap/bootstrap-3.3.5-dist/css/bootstrap.min.css">
+    <!-- Latest compiled and minified JavaScript -->
+    <script src="./script/bootstrap/bootstrap-3.3.5-dist/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="./scenario.css">
+</head>
+
+<body>
+    <div class="navbar-wrapper">
+        <div class="container">
+            <nav class="navbar navbar-inverse navbar-static-top">
+                <div class="container">
+                    <div class="navbar-header">
+                        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+                            <span class="sr-only">Toggle navigation</span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                        </button>
+
+                        <a class="navbar-brand" href="#">Scenario</a>
+                        
+                    </div>
+                    <div id="navbar" class="navbar-collapse collapse">
+                        <ul class="nav navbar-nav navbar-right">
+                            <li><a class="navbar-login" href="#">Unsigned in</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </nav>
+        </div>
+    </div>
+
+    <div class="container" id="introduction">
+        <hr class="featurette-divider">
+        <h1>Crowd Sourcing Application Design</h1>
+        <h4><small>Rate or Build the best scenario for activity-based social application and Win Amazon Gift Card.</small></h4>
+        <button type="button" class="btn btn-primary" id="browser-scenarios">Browser Scenarios</button>
+        <button type="button" class="btn btn-success" id="open-new-scenario">Create new Scenario</button>
+    </div>
+
+    <div class="container hidden" id="new-scenario">
+        <hr class="featurette-divider">
+
+        <form class="form-horizontal form-body">
+            <div class="form-group">
+                <label for="inputname" class="col-sm-1 control-label">名字</label>
+                <div class="col-sm-11">
+                    <input type="text" class="form-control" id="inputname" aria-describedby="inputnameStatus" placeholder="name">
+                    <span class="glyphicon glyphicon-remove form-control-feedback hidden" aria-hidden="true"></span>
+                    <span id="inputnameStatus" class="sr-only hidden">(required)</span>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="inputage" class="col-sm-1 control-label">年龄</label>
+                <div class="col-sm-11">
+                    <input type="text" class="form-control" id="inputage" aria-describedby="inputageStatus" placeholder="age">
+                    <span class="glyphicon glyphicon-remove form-control-feedback hidden" aria-hidden="true"></span>
+                    <span id="inputageStatus" class="sr-only hidden">(required)</span>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="inputcircle" class="col-sm-1 control-label">圈子</label>
+                <div class="col-sm-11">
+                    <input type="text" class="form-control" id="inputcircle" aria-describedby="inputcircleStatus" placeholder="circle">
+                    <span class="glyphicon glyphicon-remove form-control-feedback hidden" aria-hidden="true"></span>
+                    <span id="inputcircleStatus" class="sr-only hidden">(required)</span>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="inputtarget" class="col-sm-1 control-label">目标</label>
+                <div class="col-sm-11">
+                    <input type="text" class="form-control" id="inputtarget" aria-describedby="inputtargetStatus" placeholder="target">
+                    <span class="glyphicon glyphicon-remove form-control-feedback hidden" aria-hidden="true"></span>
+                    <span id="inputtargetStatus" class="sr-only hidden">(required)</span>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="inputscenario" class="col-sm-1 control-label">情景</label>
+                <div class="col-sm-11">
+                    <textarea class="form-control" id="inputscenario" rows="4" aria-describedby="inputscenarioStatus" placeholder="Scenario"></textarea>
+                    <span class="glyphicon glyphicon-remove form-control-feedback hidden" aria-hidden="true"></span>
+                    <span id="inputscenarioStatus" class="sr-only hidden">(required)</span>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-offset-1 col-sm-11">
+                    <button type="button" class="btn btn-primary" id="form-submit">Submit</button>
+                    <button type="button" class="btn btn-default" id="form-cancel">Cancel</button>
+                </div>
+            </div>
+
+        </form>
+    </div>
+
+    <script type="text/javascript">
+    Parse.initialize("wb1H99PhI78oFUQPzGPtPVj8rgna6KRTYwoKc9wJ", "sQz8t99tZ0FbUzVkFmZpFY8EB2vnP8xLkP9B8j6T");
+
+
+    parse = {
+        signup: function(obj) {
+            var user = new Parse.User();
+            var username = Math.random().toString();
+            var password = Math.random().toString();
+            localStorage.user = JSON.stringify({
+                username: username,
+                password: password,
+            })
+            user.set("username", username);
+            user.set("password", Math.random.toString());
+            user.signUp(null, {
+                success: function(user) {
+                    if ("success" in obj) {
+                        obj.success(user)
+                    }
+                },
+                error: function(user, error) {
+                    if ("error" in obj) {
+                        obj.error(user, error)
+                    }
+                    console.log("Error: "+error.code+" "+error.message)
+                }
+            })
+        },
+        toppost: function(obj) {
+            var LikeCounter = Parse.Object.extend("LikeCounter")
+            var query = new Parse.Query(LikeCounter)
+            var limNum = 10
+            if ("limit" in obj) {
+                limNum = obj.limit
+            }
+            query.limit(limNum)
+            query.descending("likeNum")
+            query.find({
+                success: function(likeCounters) {
+                    if ("success" in obj) {
+                        obj.success(likeCounters)
+                    }
+                },
+                error: function(likeCounters, error) {
+                    if ("error" in obj) {
+                        obj.error(likeCounters, error)
+                    }
+                    console.log("Error: "+error.code+" "+error.message)
+                }
+            })
+        },
+        addpost: function(obj) {
+            // create a post which include the content of the scenario
+            if ("button" in obj) {
+                obj.button.html("Submitting")
+            }
+            var Post = Parse.Object.extend("Post")
+            var post = new Post()
+            var acl = new Parse.ACL()
+            acl.setPublicReadAccess(true)
+            acl.setWriteAccess(Parse.User.current().id, true)
+            post.set("name",obj.name)
+            post.set("age",obj.age)
+            post.set("createdBy", Parse.User.current())
+            post.set("circle", obj.circle)
+            post.set("target", obj.target)
+            post.set("scenario", obj.scenario)
+            post.setACL(acl)
+            post.save(null,{
+                success: function(post) {
+                    obj.post = post
+                    // create a like counter for the post just build
+                    if ("button" in obj) {
+                        obj.button.html("Creating")
+                    }
+                    var LikeCounter = Parse.Object.extend("LikeCounter")
+                    var likeCounter = new LikeCounter()
+                    likeCounter.set("post", post)
+                    likeCounter.set("likeNum",0)
+                    likeCounter.set("dislikeNum",0)
+                    likeCounter.save(null, {
+                        success: function(likeCounter) {
+                            obj.likeCounter = likeCounter
+                            // link the like counter with the post
+                            if ("button" in obj) {
+                                obj.button.html("Binding")
+                            }
+                            obj.post.set("likeCounter", likeCounter)
+                            obj.post.save(null, {
+                                success: function(post) {
+                                    obj.post = post
+                                    if ("success" in obj) {
+                                        obj.success(post)
+                                    }
+                                },
+                                error: function(post, error) {
+                                    if ("error" in obj) {
+                                        obj.error(post, error)
+                                    }
+                                    console.log("Error: "+error.code+" "+error.message)
+                                }
+                            })
+                        },
+                        error: function(likeCounter) {
+                            if ("error" in obj) {
+                                obj.error(likeCounter, error)
+                            }
+                            console.log("Error: "+error.code+" "+error.message)
+                        }
+                    })
+                },
+                error: function(post, error) {
+                    if ("error" in obj) {
+                        obj.error(post, error)
+                    }
+                    console.log("Error: "+error.code+" "+error.message)
+                }
+            })
+        },
+        editpost: function(obj) {
+            var Post = Parse.Object.extend("Post")
+            var query = new Parse.Query(Post)
+
+            query.get(obj.postid, {
+                success: function(post) {
+                    post.set("name", obj.name)
+                    post.set("age", obj.age)
+                    post.set("circle", obj.circle)
+                    post.set("target", obj.target)
+                    post.set("scenario", obj.scenario)
+                    post.save(null, {
+                        success: function(post) {
+                            if ("success" in obj) {
+                                obj.success(post)
+                            }
+                        },
+                        error: function(post, error) {
+                            if ("error" in obj) {
+                                obj.error(post, error)
+                            }
+                            console.log("Error: "+error.code+" "+error.message)
+                        }
+                    })
+                }
+            })
+        }
+    }
+
+    user = {
+        init: function(){
+            if (Parse.User.current() == null) {
+                console.log("no user setup")
+                parse.signup({
+                    success: function(user) {
+                        console.log("logged in")
+                        $(".navbar-login").html("Signed in")
+                        user.signed = true
+                    }
+                })
+            } else {
+                console.log("user setup")
+                $(".navbar-login").html("Signed in")
+                user.signed = true
+            }
+        }
+    }
+
+    form = {
+        init: function(obj) {
+            if (typeof(obj) == "undefined") {
+                $("#new-scenario").removeClass("hidden")
+                $("#introduction").addClass("hidden")
+            }
+        },
+        check: function() {
+            var ids = ["#inputname", "#inputage", "#inputcircle", "#inputtarget", "#inputscenario"]
+            for (var i=0; i<ids.length; i++) {
+                var id = ids[i]
+                var val = $(id).val()
+                if (val.length == 0) {
+                    $(id).parent().parent().addClass("has-error has-feedback")
+                    $(id).next().removeClass("hidden")
+                    $(id).next().next().removeClass("hidden")
+                    $(id).keyup(function(){
+                        $(id).parent().parent().removeClass("has-error has-feedback")
+                        $(id).next().addClass("hidden")
+                        $(id).next().addClass("hidden")
+                        $(id).unbind("keyup")
+                    })
+                    return false
+                }
+            }
+            return true
+        },
+        submit: function() {
+            if (!this.check()) {
+                return false
+            }
+            var obj = {}
+            obj.name = $("#inputname").val()
+            obj.age = $("#inputage").val()
+            obj.circle = $("#inputcircle").val()
+            obj.target = $("#inputtarget").val()
+            obj.scenario = $("#inputscenario").val()
+            obj.success = function() {
+                $("#form-submit").html("Submitted")
+                setTimeout(function() {
+                    form.blocking = false
+                    form.clear()
+                    form.cancel()
+                }, 2000)
+            }
+            obj.error = function() {
+                form.blocking = false
+            }
+            obj.button = $("#form-submit")
+            form.blocking = true
+            parse.addpost(obj)
+        },
+        cancel: function() {
+            $("#new-scenario").addClass("hidden")
+            $("#introduction").removeClass("hidden")
+        },
+        clear: function() {
+            var ids = ["#inputname", "#inputage", "#inputcircle", "#inputtarget", "#inputscenario"]
+            for (var i=0; i< ids.length; i++) {
+                var id = ids[i]
+                $(id).val("")
+            }
+        }
+    }
+
+    user.init()
+    $("#browser-scenarios").click(function(){
+        $("#browser-scenarios").html("Whoops, 程序员在睡觉")
+    })
+    $("#open-new-scenario").click(function(){
+        form.init()
+    })
+    $("#form-submit").click(function(){
+        if (form.blocking) {
+            return false
+        }
+        form.submit()
+    })
+    $("#form-cancel").click(function(){
+        if (form.blocking) {
+            return false
+        }
+        form.clear()
+        form.cancel()
+    })
+
+    </script>
+</body>
+</html>
