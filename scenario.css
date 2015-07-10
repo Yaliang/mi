@@ -68,7 +68,7 @@
 
 }
 
-@media (max-width: 369px) {
+@media (max-width: 768px) {
     .btn-margin {
         width: 100%;
     }
