@@ -72,11 +72,27 @@
                 </div>
             </div>
             <div class="form-group">
+                <label for="inputgender" class="col-sm-2 control-label">性别</label>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" id="inputgender" aria-describedby="inputgenderStatus" placeholder="gender">
+                    <span class="glyphicon glyphicon-remove form-control-feedback hidden" aria-hidden="true"></span>
+                    <span id="inputgenderStatus" class="sr-only hidden">(required)</span>
+                </div>
+            </div>
+            <div class="form-group">
                 <label for="inputage" class="col-sm-2 control-label">年龄</label>
                 <div class="col-sm-10">
                     <input type="text" class="form-control" id="inputage" aria-describedby="inputageStatus" placeholder="age">
                     <span class="glyphicon glyphicon-remove form-control-feedback hidden" aria-hidden="true"></span>
                     <span id="inputageStatus" class="sr-only hidden">(required)</span>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="inputinterest" class="col-sm-2 control-label">爱好</label>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" id="inputinterest" aria-describedby="inputinterestStatus" placeholder="interests">
+                    <span class="glyphicon glyphicon-remove form-control-feedback hidden" aria-hidden="true"></span>
+                    <span id="inputinterestStatus" class="sr-only hidden">(required)</span>
                 </div>
             </div>
             <div class="form-group">
@@ -195,9 +211,11 @@
             var acl = new Parse.ACL()
             acl.setPublicReadAccess(true)
             acl.setWriteAccess(Parse.User.current().id, true)
-            post.set("name",obj.name)
-            post.set("age",obj.age)
             post.set("createdBy", Parse.User.current())
+            post.set("name",obj.name)
+            post.set("gender",obj.gender)
+            post.set("age",obj.age)
+            post.set("interest",obj.interest)
             post.set("circle", obj.circle)
             post.set("target", obj.target)
             post.set("scenario", obj.scenario)
@@ -259,8 +277,10 @@
 
             query.get(obj.postid, {
                 success: function(post) {
-                    post.set("name", obj.name)
-                    post.set("age", obj.age)
+                    post.set("name",obj.name)
+                    post.set("gender",obj.gender)
+                    post.set("age",obj.age)
+                    post.set("interest",obj.interest)
                     post.set("circle", obj.circle)
                     post.set("target", obj.target)
                     post.set("scenario", obj.scenario)
@@ -310,7 +330,7 @@
             }
         },
         check: function() {
-            var ids = ["#inputname", "#inputage", "#inputcircle", "#inputtarget", "#inputscenario"]
+            var ids = ["#inputname", "#inputgender", "#inputage", "#inputinterest", "#inputcircle", "#inputtarget", "#inputscenario"]
             for (var i=0; i<ids.length; i++) {
                 var id = ids[i]
                 var val = $(id).val()
@@ -335,7 +355,9 @@
             }
             var obj = {}
             obj.name = $("#inputname").val()
+            obj.gender = $("#inputgender").val()
             obj.age = $("#inputage").val()
+            obj.interest = $("#inputinterest").val()
             obj.circle = $("#inputcircle").val()
             obj.target = $("#inputtarget").val()
             obj.scenario = $("#inputscenario").val()
@@ -359,7 +381,7 @@
             $("#introduction").removeClass("hidden")
         },
         clear: function() {
-            var ids = ["#inputname", "#inputage", "#inputcircle", "#inputtarget", "#inputscenario"]
+            var ids = ["#inputname", "#inputgender", "#inputage", "#inputinterest", "#inputcircle", "#inputtarget", "#inputscenario"]
             for (var i=0; i< ids.length; i++) {
                 var id = ids[i]
                 $(id).val("")
@@ -411,7 +433,7 @@
             postobj.id = obj.get("post").id
             postobj.success = function(post) {
                 var eleid = "#list-media-"+post.id
-                var eleBody = "<small>名称: "+post.get("name")+"</br>年龄: "+post.get("age")+"</br>圈子: "+post.get("circle")+"</br>目标: "+post.get("target")+"</br>情境: "+post.get("scenario")+"</small>"
+                var eleBody = "<small>名称: "+post.get("name")+"</br>性别: "+post.get("gender")+"</br>年龄: "+post.get("age")+"</br>兴趣: "+post.get("interest")+"</br>圈子: "+post.get("circle")+"</br>目标: "+post.get("target")+"</br>情境: "+post.get("scenario").replace("\n","</br>")+"</small>"
                 $(eleid+" > .media-body").html(eleBody)
                 list.blocking -= 1
             }
