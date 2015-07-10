@@ -42,6 +42,10 @@
     display: none;
 }
 
+.btn-margin {
+    margin-top: 3px;
+}
+
 @media (min-width: 768px) {
     /* Navbar positioning foo */
     
@@ -60,5 +64,12 @@
     
     .navbar-wrapper .navbar {
         border-radius: 4px;
+    }
+
+}
+
+@media (max-width: 369px) {
+    .btn-margin {
+        width: 100%;
     }
 }
