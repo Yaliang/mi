@@ -48,8 +48,15 @@
         <hr class="featurette-divider">
         <h1>Crowd Sourcing Application Design</h1>
         <h4><small>Rate or Build the best scenario for activity-based social application and Win Amazon Gift Card.</small></h4>
-        <button type="button" class="btn btn-primary" id="browser-scenarios">Browser Scenarios</button>
-        <button type="button" class="btn btn-success" id="open-new-scenario">Create new Scenario</button>
+        <button type="button" class="btn btn-primary btn-margin" id="browser-scenarios">Browser Scenarios</button>
+        <button type="button" class="btn btn-success btn-margin" id="open-new-scenario">Create new Scenario</button>
+        <button type="button" class="btn btn-default btn-margin" id="my-scenario">My Scenarios</button>
+    </div>
+
+    <div class="container hidden" style="overflow-y: scroll; height: 100vh;" id="list-scenario">
+        <hr class="featurette-divider">
+        <button type="button" class="btn btn-success btn-margin hidden" id="open-new-scenario-2">Whoops! No more Scenario! Create a new Scenario</button>
+        <hr id="list-bottom">
     </div>
 
     <div class="container hidden" id="new-scenario">
@@ -57,47 +64,47 @@
 
         <form class="form-horizontal form-body">
             <div class="form-group">
-                <label for="inputname" class="col-sm-1 control-label">名字</label>
-                <div class="col-sm-11">
+                <label for="inputname" class="col-sm-2 control-label">主人公名称</label>
+                <div class="col-sm-10">
                     <input type="text" class="form-control" id="inputname" aria-describedby="inputnameStatus" placeholder="name">
                     <span class="glyphicon glyphicon-remove form-control-feedback hidden" aria-hidden="true"></span>
                     <span id="inputnameStatus" class="sr-only hidden">(required)</span>
                 </div>
             </div>
             <div class="form-group">
-                <label for="inputage" class="col-sm-1 control-label">年龄</label>
-                <div class="col-sm-11">
+                <label for="inputage" class="col-sm-2 control-label">年龄</label>
+                <div class="col-sm-10">
                     <input type="text" class="form-control" id="inputage" aria-describedby="inputageStatus" placeholder="age">
                     <span class="glyphicon glyphicon-remove form-control-feedback hidden" aria-hidden="true"></span>
                     <span id="inputageStatus" class="sr-only hidden">(required)</span>
                 </div>
             </div>
             <div class="form-group">
-                <label for="inputcircle" class="col-sm-1 control-label">圈子</label>
-                <div class="col-sm-11">
+                <label for="inputcircle" class="col-sm-2 control-label">圈子</label>
+                <div class="col-sm-10">
                     <input type="text" class="form-control" id="inputcircle" aria-describedby="inputcircleStatus" placeholder="circle">
                     <span class="glyphicon glyphicon-remove form-control-feedback hidden" aria-hidden="true"></span>
                     <span id="inputcircleStatus" class="sr-only hidden">(required)</span>
                 </div>
             </div>
             <div class="form-group">
-                <label for="inputtarget" class="col-sm-1 control-label">目标</label>
-                <div class="col-sm-11">
+                <label for="inputtarget" class="col-sm-2 control-label">目标</label>
+                <div class="col-sm-10">
                     <input type="text" class="form-control" id="inputtarget" aria-describedby="inputtargetStatus" placeholder="target">
                     <span class="glyphicon glyphicon-remove form-control-feedback hidden" aria-hidden="true"></span>
                     <span id="inputtargetStatus" class="sr-only hidden">(required)</span>
                 </div>
             </div>
             <div class="form-group">
-                <label for="inputscenario" class="col-sm-1 control-label">情景</label>
-                <div class="col-sm-11">
+                <label for="inputscenario" class="col-sm-2 control-label">应用情景</label>
+                <div class="col-sm-10">
                     <textarea class="form-control" id="inputscenario" rows="4" aria-describedby="inputscenarioStatus" placeholder="Scenario"></textarea>
                     <span class="glyphicon glyphicon-remove form-control-feedback hidden" aria-hidden="true"></span>
                     <span id="inputscenarioStatus" class="sr-only hidden">(required)</span>
                 </div>
             </div>
             <div class="form-group">
-                <div class="col-sm-offset-1 col-sm-11">
+                <div class="col-sm-offset-2 col-sm-10">
                     <button type="button" class="btn btn-primary" id="form-submit">Submit</button>
                     <button type="button" class="btn btn-default" id="form-cancel">Cancel</button>
                 </div>
@@ -135,6 +142,23 @@
                 }
             })
         },
+        getpost: function(obj) {
+            var Post = Parse.Object.extend("Post")
+            var query = new Parse.Query(Post)
+            query.get(obj.id, {
+                success: function(post) {
+                    if ("success" in obj) {
+                        obj.success(post)
+                    }
+                },
+                error: function(post, error) {
+                    if ("error" in obj) {
+                        obj.error(post, error)
+                    }
+                    console.log("Error: "+error.code+" "+error.message)
+                }
+            })
+        },
         toppost: function(obj) {
             var LikeCounter = Parse.Object.extend("LikeCounter")
             var query = new Parse.Query(LikeCounter)
@@ -143,6 +167,9 @@
                 limNum = obj.limit
             }
             query.limit(limNum)
+            if ("skip" in obj) {
+                query.skip(obj.skip)
+            }
             query.descending("likeNum")
             query.find({
                 success: function(likeCounters) {
@@ -279,6 +306,7 @@
             if (typeof(obj) == "undefined") {
                 $("#new-scenario").removeClass("hidden")
                 $("#introduction").addClass("hidden")
+                $("#list-scenario").addClass("hidden")
             }
         },
         check: function() {
@@ -335,17 +363,107 @@
             for (var i=0; i< ids.length; i++) {
                 var id = ids[i]
                 $(id).val("")
+                $(id).parent().parent().removeClass("has-error has-feedback")
+                $(id).next().addClass("hidden")
+                $(id).next().addClass("hidden")
+                $(id).unbind("keyup")
             }
+            $("#form-submit").html("Submit")
+        }
+    }
+
+    list = {
+        init: function(){
+            window.history.pushState(null,"scenario","#scenario-list")
+            window.onpopstate = (function(event) {
+                list.back()
+            })
+            list.blocking = 0
+            list.skipNum = 0
+            $("#list-scenario").removeClass("hidden")
+            $("#new-scenario").addClass("hidden")
+            $("#introduction").addClass("hidden")
+            $("#open-new-scenario-2").addClass("hidden")
+            $("#list-scenario").html("<hr class='featurette-divider'><div id='list-bottom'><button type='button' class='btn btn-success btn-margin hidden' id='open-new-scenario-2'>Whoops! No more Scenario! Create a new Scenario</button><hr></div>")
+            $("#open-new-scenario-2").click(function(){
+                list.back()
+                form.init()
+            })
+            $("#list-scenario").scroll(function(){
+                // console.log($("#list-scenario").scrollTop())
+                var ele = $("#list-scenario")
+                var remind = ele[0].scrollHeight - ele.scrollTop() - ele.height()
+                console.log(remind)
+                if (remind < 100) {
+                    list.listBuild(10)
+                }
+            })
+        },
+        itemBuild: function(obj){
+            var newItem = "<div class='media' id='list-media-"+obj.get("post").id+"'></div><hr>"
+            $("#list-bottom").before(newItem)
+            var id = "#list-media-"+obj.get("post").id
+            $(id).append("<div class='media-left'></div>")
+            $(id).append("<div class='media-body'>loading...</div>")
+            $(id+" > .media-left").append("<button class='btn btn-success' type='button'><span class='glyphicon glyphicon-chevron-up' aria-hidden='true'></span><span class='badge'>"+obj.get("likeNum")+"</span></button>")
+            $(id+" > .media-left").append("<button class='btn btn-margin' type='button'><span class='glyphicon glyphicon-chevron-down' aria-hidden='true'></span><span class='badge'>"+obj.get("dislikeNum")+"</span></button>")
+            var postobj = {}
+            postobj.id = obj.get("post").id
+            postobj.success = function(post) {
+                var eleid = "#list-media-"+post.id
+                var eleBody = "<small>名称: "+post.get("name")+"</br>年龄: "+post.get("age")+"</br>圈子: "+post.get("circle")+"</br>目标: "+post.get("target")+"</br>情境: "+post.get("scenario")+"</small>"
+                $(eleid+" > .media-body").html(eleBody)
+                list.blocking -= 1
+            }
+            postobj.error = function() {
+                list.blocking -= 1
+            }
+            parse.getpost(postobj)
+        },
+        listBuild: function(num){
+            if (list.blocking > 0) {
+                return false
+            }
+            list.blocking = 1
+            var obj = {limit: num}
+            if ("skipNum" in list) {
+                obj.skip = list.skipNum
+            }
+            obj.success = function(objs) {
+                if (!("skipNum" in list)) {
+                    list.skipNum = objs.length
+                } else {
+                    list.skipNum += objs.length
+                }
+                if (objs.length == 0) {
+                    console.log("No more")
+                    $("#open-new-scenario-2").removeClass("hidden")
+                }
+                list.blocking = objs.length
+                for (var i=0; i<objs.length; i++) {
+                    list.itemBuild(objs[i])
+                }
+            }
+            parse.toppost(obj)
+        },
+        back: function(){
+            $("#list-scenario").addClass("hidden")
+            $("#new-scenario").addClass("hidden")
+            $("#introduction").removeClass("hidden")
+            $("#list-scenario").unbind("scroll")
         }
     }
 
     user.init()
     $("#browser-scenarios").click(function(){
-        $("#browser-scenarios").html("Whoops, 程序员在睡觉")
+        // $("#browser-scenarios").html("Whoops, 程序员在睡觉")
+        list.init()
+        list.listBuild(10)
     })
     $("#open-new-scenario").click(function(){
         form.init()
     })
+
     $("#form-submit").click(function(){
         if (form.blocking) {
             return false
