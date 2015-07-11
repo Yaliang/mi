@@ -135,28 +135,82 @@
 
     parse = {
         signup: function(obj) {
-            var user = new Parse.User();
-            var username = Math.random().toString();
-            var password = Math.random().toString();
-            localStorage.user = JSON.stringify({
-                username: username,
-                password: password,
-            })
-            user.set("username", username);
-            user.set("password", Math.random.toString());
-            user.signUp(null, {
-                success: function(user) {
-                    if ("success" in obj) {
-                        obj.success(user)
+            if ("user" in localStorage) {
+                var localuser = JSON.parse(localStorage.user)
+                Parse.User.logIn(localuser.username, localuser.password, {
+                    success: function(userobj) {
+                        if ("success" in obj) {
+                            obj.success(userobj)
+                        }
+                    },
+                    error: function(userobj, error) {
+                        if ("error" in obj) {
+                            obj.error(userobj, error)
+                        }
+                        console.log("Error: "+error.code+" "+error.message)
                     }
-                },
-                error: function(user, error) {
-                    if ("error" in obj) {
-                        obj.error(user, error)
+                });
+            } else {
+                var newuser = new Parse.User();
+                var username = Math.random().toString();
+                var password = Math.random().toString();
+                localStorage.user = JSON.stringify({
+                    username: username,
+                    password: password,
+                })
+                newuser.set("username", username)
+                newuser.set("password", password)
+                newuser.set("times",1)
+                newuser.signUp(null, {
+                    success: function(userobj) {
+                        if ("success" in obj) {
+                            obj.success(userobj)
+                        }
+                    },
+                    error: function(userobj, error) {
+                        if ("error" in obj) {
+                            obj.error(userobj, error)
+                        }
+                        console.log("Error: "+error.code+" "+error.message)
                     }
-                    console.log("Error: "+error.code+" "+error.message)
-                }
-            })
+                })
+            }
+        },
+        login: function(obj) {
+            if ("user" in localStorage) {
+                var localuser = JSON.parse(localStorage.user)
+                console.log(localuser.username+" "+localuser.password)
+                Parse.User.logIn(localuser.username, localuser.password, {
+                    success: function(userobj) {
+                        userobj.increment("times",1)
+                        userobj.save(null,{
+                            success: function(userobj) {
+                                if ("success" in obj) {
+                                    obj.success(userobj)
+                                }
+                            },
+                            error: function(userobj, error) {
+                                if ("error" in obj) {
+                                    obj.error(userobj, error)
+                                }
+                                console.log("Error: "+error.code+" "+error.message)
+                            }
+                        })
+                        
+                    },
+                    error: function(userobj, error) {
+                        if ("error" in obj) {
+                            obj.error(userobj, error)
+                        }
+                        console.log("Error: "+error.code+" "+error.message)
+                    }
+                });
+            } else {
+                parse.signup(obj)
+            }
+        },
+        logout: function() {
+            Parse.User.logOut()
         },
         getpost: function(obj) {
             var Post = Parse.Object.extend("Post")
@@ -181,6 +235,9 @@
             var limNum = 10
             if ("limit" in obj) {
                 limNum = obj.limit
+            }
+            if ("createdBy" in obj) {
+                query.equalTo("createdBy", Parse.User.current())
             }
             query.limit(limNum)
             if ("skip" in obj) {
@@ -232,6 +289,7 @@
                     likeCounter.set("post", post)
                     likeCounter.set("likeNum",0)
                     likeCounter.set("dislikeNum",0)
+                    likeCounter.set("createdBy", Parse.User.current())
                     likeCounter.save(null, {
                         success: function(likeCounter) {
                             obj.likeCounter = likeCounter
@@ -317,6 +375,8 @@
                 console.log("user setup")
                 $(".navbar-login").html("Signed in")
                 user.signed = true
+                var obj = {id: Parse.User.current().id}
+                parse.login(obj)
             }
         }
     }
@@ -395,7 +455,7 @@
     }
 
     list = {
-        init: function(){
+        init: function(conobj){
             window.history.pushState(null,"scenario","#scenario-list")
             window.onpopstate = (function(event) {
                 list.back()
@@ -417,7 +477,7 @@
                 var remind = ele[0].scrollHeight - ele.scrollTop() - ele.height()
                 console.log(remind)
                 if (remind < 100) {
-                    list.listBuild(10)
+                    list.listBuild(conobj)
                 }
             })
         },
@@ -442,12 +502,18 @@
             }
             parse.getpost(postobj)
         },
-        listBuild: function(num){
+        listBuild: function(conobj){
             if (list.blocking > 0) {
                 return false
             }
             list.blocking = 1
-            var obj = {limit: num}
+            var obj = {limit: 10}
+            if ("limit" in conobj) {
+                obj.limit = conobj.limit
+            }
+            if ("createdBy" in conobj) {
+                obj.createdBy = conobj.createdBy
+            }
             if ("skipNum" in list) {
                 obj.skip = list.skipNum
             }
@@ -476,12 +542,39 @@
         }
     }
 
+    app = {
+        version: "0.1.3",
+        init: function() {
+            if (("appversion" in localStorage) && (localStorage.appversion == app.version)) {
+
+            } else {
+                localStorage.removeItem("user")
+                parse.logout()
+                localStorage.appversion = app.version
+            }
+        }
+    }
+    app.init()
     user.init()
     $("#browser-scenarios").click(function(){
-        // $("#browser-scenarios").html("Whoops, 程序员在睡觉")
-        list.init()
-        list.listBuild(10)
+        list.init({
+            limit: 10
+        })
+        list.listBuild({
+            limit: 10
+        })
     })
+    $("#my-scenario").click(function(){
+        list.init({
+            limit: 10,
+            createdBy: Parse.User.current()
+        })
+        list.listBuild({
+            limit: 10,
+            createdBy: Parse.User.current()
+        })
+    })
+
     $("#open-new-scenario").click(function(){
         form.init()
     })
