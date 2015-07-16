@@ -287,8 +287,8 @@
                     var LikeCounter = Parse.Object.extend("LikeCounter")
                     var likeCounter = new LikeCounter()
                     likeCounter.set("post", post)
-                    likeCounter.set("likeNum",0)
-                    likeCounter.set("dislikeNum",0)
+                    likeCounter.set("like",[])
+                    likeCounter.set("dislike",[])
                     likeCounter.set("createdBy", Parse.User.current())
                     likeCounter.save(null, {
                         success: function(likeCounter) {
@@ -357,29 +357,69 @@
                     })
                 }
             })
+        },
+        likepost: function(obj) {
+            var LikeCounter = Parse.Object.extend("LikeCounter")
+            var query = new Parse.Query(LikeCounter)
+
+            query.get(obj.likeid, {
+                success: function(likeCounter) {
+                    likeCounter.addUnique("like", Parse.User.current().id)
+                    likeCounter.remove("dislike", Parse.User.current().id)
+                    likeCounter.save(null, {
+                        success: function(likeCounter) {
+                            if ("success" in obj) {
+                                obj.success(likeCounter)
+                            }
+                        },
+                        error: function(likeCounter, error) {
+                            if ("error" in obj) {
+                                obj.error(likeCounter, error)
+                            }
+                            console.log("Error: "+error.code+" "+error.message)
+                        }
+                    })
+                },
+                error: function(likeCounter, error) {
+                    if ("error" in obj) {
+                        obj.error(likeCounter, error)
+                    }
+                    console.log("Error: "+error.code+" "+error.message)
+                }
+            })
+        },
+        dislikepost: function(obj) {
+            var LikeCounter = Parse.Object.extend("LikeCounter")
+            var query = new Parse.Query(LikeCounter)
+
+            query.get(obj.likeid, {
+                success: function(likeCounter) {
+                    likeCounter.addUnique("dislike", Parse.User.current().id)
+                    likeCounter.remove("like", Parse.User.current().id)
+                    likeCounter.save(null, {
+                        success: function(likeCounter) {
+                            if ("success" in obj) {
+                                obj.success(likeCounter)
+                            }
+                        },
+                        error: function(likeCounter, error) {
+                            if ("error" in obj) {
+                                obj.error(likeCounter, error)
+                            }
+                            console.log("Error: "+error.code+" "+error.message)
+                        }
+                    })
+                },
+                error: function(likeCounter, error) {
+                    if ("error" in obj) {
+                        obj.error(likeCounter, error)
+                    }
+                    console.log("Error: "+error.code+" "+error.message)
+                }
+            })
         }
     }
 
-    user = {
-        init: function(){
-            if (Parse.User.current() == null) {
-                console.log("no user setup")
-                parse.signup({
-                    success: function(user) {
-                        console.log("logged in")
-                        $(".navbar-login").html("Signed in")
-                        user.signed = true
-                    }
-                })
-            } else {
-                console.log("user setup")
-                $(".navbar-login").html("Signed in")
-                user.signed = true
-                var obj = {id: Parse.User.current().id}
-                parse.login(obj)
-            }
-        }
-    }
 
     form = {
         init: function(obj) {
@@ -475,20 +515,70 @@
                 // console.log($("#list-scenario").scrollTop())
                 var ele = $("#list-scenario")
                 var remind = ele[0].scrollHeight - ele.scrollTop() - ele.height()
-                console.log(remind)
+                // console.log(remind)
                 if (remind < 100) {
                     list.listBuild(conobj)
                 }
             })
         },
         itemBuild: function(obj){
-            var newItem = "<div class='media' id='list-media-"+obj.get("post").id+"'></div><hr>"
-            $("#list-bottom").before(newItem)
             var id = "#list-media-"+obj.get("post").id
+            if ($(id).length == 0) {
+                var newItem = "<div class='media' id='list-media-"+obj.get("post").id+"'></div><hr>"
+                $("#list-bottom").before(newItem)
+            } else {
+                $(id).html("")
+            }
+            var likeid = obj.id
+            var postid = obj.get("post").id
+            var likeids = obj.get("like")
+            var dislikeids = obj.get("dislike")
+            var likeNum = likeids.length
+            var dislikeNum = dislikeids.length
+            // console.log(likeids)
+            // console.log(dislikeids)
             $(id).append("<div class='media-left'></div>")
             $(id).append("<div class='media-body'>loading...</div>")
-            $(id+" > .media-left").append("<button class='btn btn-success' type='button'><span class='glyphicon glyphicon-chevron-up' aria-hidden='true'></span><span class='badge'>"+obj.get("likeNum")+"</span></button>")
-            $(id+" > .media-left").append("<button class='btn btn-margin' type='button'><span class='glyphicon glyphicon-chevron-down' aria-hidden='true'></span><span class='badge'>"+obj.get("dislikeNum")+"</span></button>")
+            $(id+" > .media-left").append("<button class='btn btn-success' type='button'><span class='glyphicon glyphicon-chevron-up' aria-hidden='true'></span><span class='badge'>"+likeNum+"</span></button>")
+            $(id+" > .media-left").append("<button class='btn btn-margin' type='button'><span class='glyphicon glyphicon-chevron-down' aria-hidden='true'></span><span class='badge'>"+dislikeNum+"</span></button>")
+            if (jQuery.inArray(Parse.User.current().id, likeids) == -1) {
+                $(id+" > .media-left > .btn-success").bind('click', {likeid: likeid}, function(event){
+                    if (list.blocking > 0) {
+                        return false
+                    }
+                    var data = event.data
+                    console.log("top it: "+data.likeid)
+                    list.blocking += 1
+                    parse.likepost({
+                        likeid: data.likeid,
+                        success: function(likeCounter) {
+                            list.itemBuild(likeCounter)
+                        }
+                    })
+
+                })
+            } else {
+                $(id+" > .media-left > .btn-success").removeClass("btn-success").addClass("btn-primary")
+            }
+            if (jQuery.inArray(Parse.User.current().id, dislikeids) == -1) {
+                $(id+" > .media-left > .btn-margin").bind('click', {likeid: likeid}, function(event){
+                    if (list.blocking > 0) {
+                        return false
+                    }
+                    var data = event.data
+                    console.log("bottom it: "+data.likeid)
+                    list.blocking += 1
+                    parse.dislikepost({
+                        likeid: data.likeid,
+                        success: function(likeCounter) {
+                            list.itemBuild(likeCounter)
+                        }
+                    })
+
+                })
+            } else {
+                $(id+" > .media-left > .btn-margin").addClass("btn-primary")
+            }
             var postobj = {}
             postobj.id = obj.get("post").id
             postobj.success = function(post) {
@@ -542,6 +632,77 @@
         }
     }
 
+    eventBinder = {
+        init: function() {
+            $("#browser-scenarios").unbind("click")
+            $("#browser-scenarios").click(function(){
+                list.init({
+                    limit: 10
+                })
+                list.listBuild({
+                    limit: 10
+                })
+            })
+            $("#my-scenario").unbind("click")
+            $("#my-scenario").click(function(){
+                list.init({
+                    limit: 10,
+                    createdBy: Parse.User.current()
+                })
+                list.listBuild({
+                    limit: 10,
+                    createdBy: Parse.User.current()
+                })
+            })
+            $("#open-new-scenario").unbind("click")
+            $("#open-new-scenario").click(function(){
+                form.init()
+            })
+            $("#form-submit").unbind("click")
+            $("#form-submit").click(function(){
+                if (form.blocking) {
+                    return false
+                }
+                form.submit()
+            })
+            $("#form-cancel").unbind("click")
+            $("#form-cancel").click(function(){
+                if (form.blocking) {
+                    return false
+                }
+                form.clear()
+                form.cancel()
+            })
+        }
+    }
+
+    user = {
+        init: function(){
+            if ("user" in localStorage) {
+                console.log("has user setup")
+                parse.login({
+                    success: function(user) {
+                        console.log("logged in")
+                        $(".navbar-login").html("Signed in")
+                        user.signed = true
+                        eventBinder.init()
+                    }
+                })
+            } else {
+                console.log("no user setup")
+                parse.signup({
+                    success: function(user) {
+                        console.log("logged in")
+                        $(".navbar-login").html("Signed in")
+                        user.signed = true
+                        eventBinder.init()
+                    }
+                })
+            }
+        }
+    }
+
+
     app = {
         version: "0.1.3",
         init: function() {
@@ -552,46 +713,13 @@
                 parse.logout()
                 localStorage.appversion = app.version
             }
+            user.init()
         }
     }
+
     app.init()
-    user.init()
-    $("#browser-scenarios").click(function(){
-        list.init({
-            limit: 10
-        })
-        list.listBuild({
-            limit: 10
-        })
-    })
-    $("#my-scenario").click(function(){
-        list.init({
-            limit: 10,
-            createdBy: Parse.User.current()
-        })
-        list.listBuild({
-            limit: 10,
-            createdBy: Parse.User.current()
-        })
-    })
 
-    $("#open-new-scenario").click(function(){
-        form.init()
-    })
-
-    $("#form-submit").click(function(){
-        if (form.blocking) {
-            return false
-        }
-        form.submit()
-    })
-    $("#form-cancel").click(function(){
-        if (form.blocking) {
-            return false
-        }
-        form.clear()
-        form.cancel()
-    })
+    
 
     </script>
 </body>
