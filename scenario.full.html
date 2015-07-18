@@ -1,0 +1,730 @@
+<!DOCTYPE html> 
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1 user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="mobile-web-app-capable" content="yes">
+    <title>scenario</title>
+    <link rel="icon" sizes="192x192" href="./content/material-design/png/m-192.png">
+    <link rel="apple-touch-icon" href="./content/material-design/png/m-192.png">
+    <script src="./script/jquery/jquery-1.11.1.min.js"></script>
+    <script src="./script/parse/parse-1.3.2.min.js"></script>
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="./script/bootstrap/bootstrap-3.3.5-dist/css/bootstrap.min.css">
+    <!-- Latest compiled and minified JavaScript -->
+    <script src="./script/bootstrap/bootstrap-3.3.5-dist/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="./scenario.css">
+</head>
+
+<body>
+    <div class="navbar-wrapper">
+        <div class="container">
+            <nav class="navbar navbar-inverse navbar-static-top">
+                <div class="container">
+                    <div class="navbar-header">
+                        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+                            <span class="sr-only">Toggle navigation</span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                        </button>
+
+                        <a class="navbar-brand" href="#">Scenario</a>
+                        
+                    </div>
+                    <div id="navbar" class="navbar-collapse collapse">
+                        <ul class="nav navbar-nav navbar-right">
+                            <li><a class="navbar-login" href="#">Unsigned in</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </nav>
+        </div>
+    </div>
+
+    <div class="container" id="introduction">
+        <hr class="featurette-divider">
+        <h2>众包应用设计</h2>
+        <h4><small>程序员哥哥是个十分注重生活品质的人，空余时间喜欢出去玩桌游，吃好吃的等等等等，但有时候实在约不到人，于是想到不如写个应用专门做基于活动的陌生人社交。想到现在用户体验那么重要，用众包的形式来设计应用会比较有效。既然众包，那么每个用户都能成为应用的设计者，所以也想听听使用者们的想法。大家觉得基于活动的陌生人社交应用场景会有哪些呢？</small></h4>
+        <h4><small>你可以在这里提交你设计的应用场景，也可以浏览别人的场景设计并投票，程序员哥哥写了一些代码用来分发一个随机的身份，只要不是隐身模式，每次从相同浏览器打开页面，都能够追踪到你的记录。积极参与的使用者将有机会得到程序员哥哥送出的 Amazon Gift Card，欢迎参与呀~</small></h4>
+        <h4><small>有什么问题请给程序员哥哥Email: yaliangwang2015@u.northwestern.edu</small></h4>
+        <button type="button" class="btn btn-primary btn-margin" id="browser-scenarios">Browser Scenarios</button>
+        <button type="button" class="btn btn-success btn-margin" id="open-new-scenario">Create new Scenario</button>
+        <button type="button" class="btn btn-default btn-margin" id="my-scenario">My Scenarios</button>
+        <hr class="featurette-divider">
+    </div>
+
+    <div class="container hidden" id="list-scenario">
+        <hr class="featurette-divider">
+        <button type="button" class="btn btn-success btn-margin hidden" id="open-new-scenario-2">Whoops! No more Scenario! Create a new Scenario</button>
+        <hr id="list-bottom">
+    </div>
+
+    <div class="container hidden" id="new-scenario">
+        <hr class="featurette-divider">
+
+        <form class="form-horizontal form-body">
+            <div class="form-group">
+                <label for="inputname" class="col-sm-2 control-label">主人公名称</label>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" id="inputname" aria-describedby="inputnameStatus" placeholder="name">
+                    <span class="glyphicon glyphicon-remove form-control-feedback hidden" aria-hidden="true"></span>
+                    <span id="inputnameStatus" class="sr-only hidden">(required)</span>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="inputgender" class="col-sm-2 control-label">性别</label>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" id="inputgender" aria-describedby="inputgenderStatus" placeholder="gender">
+                    <span class="glyphicon glyphicon-remove form-control-feedback hidden" aria-hidden="true"></span>
+                    <span id="inputgenderStatus" class="sr-only hidden">(required)</span>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="inputage" class="col-sm-2 control-label">年龄</label>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" id="inputage" aria-describedby="inputageStatus" placeholder="age">
+                    <span class="glyphicon glyphicon-remove form-control-feedback hidden" aria-hidden="true"></span>
+                    <span id="inputageStatus" class="sr-only hidden">(required)</span>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="inputinterest" class="col-sm-2 control-label">爱好</label>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" id="inputinterest" aria-describedby="inputinterestStatus" placeholder="interests">
+                    <span class="glyphicon glyphicon-remove form-control-feedback hidden" aria-hidden="true"></span>
+                    <span id="inputinterestStatus" class="sr-only hidden">(required)</span>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="inputcircle" class="col-sm-2 control-label">圈子</label>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" id="inputcircle" aria-describedby="inputcircleStatus" placeholder="circle">
+                    <span class="glyphicon glyphicon-remove form-control-feedback hidden" aria-hidden="true"></span>
+                    <span id="inputcircleStatus" class="sr-only hidden">(required)</span>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="inputtarget" class="col-sm-2 control-label">目标</label>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" id="inputtarget" aria-describedby="inputtargetStatus" placeholder="target">
+                    <span class="glyphicon glyphicon-remove form-control-feedback hidden" aria-hidden="true"></span>
+                    <span id="inputtargetStatus" class="sr-only hidden">(required)</span>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="inputscenario" class="col-sm-2 control-label">应用情景</label>
+                <div class="col-sm-10">
+                    <textarea class="form-control" id="inputscenario" rows="4" aria-describedby="inputscenarioStatus" placeholder="Scenario"></textarea>
+                    <span class="glyphicon glyphicon-remove form-control-feedback hidden" aria-hidden="true"></span>
+                    <span id="inputscenarioStatus" class="sr-only hidden">(required)</span>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-offset-2 col-sm-10">
+                    <button type="button" class="btn btn-primary" id="form-submit">Submit</button>
+                    <button type="button" class="btn btn-default" id="form-cancel">Cancel</button>
+                </div>
+            </div>
+
+        </form>
+    </div>
+
+    <script type="text/javascript">
+    Parse.initialize("wb1H99PhI78oFUQPzGPtPVj8rgna6KRTYwoKc9wJ", "sQz8t99tZ0FbUzVkFmZpFY8EB2vnP8xLkP9B8j6T");
+
+
+    parse = {
+        signup: function(obj) {
+            if ("user" in localStorage) {
+                var localuser = JSON.parse(localStorage.user)
+                Parse.User.logIn(localuser.username, localuser.password, {
+                    success: function(userobj) {
+                        if ("success" in obj) {
+                            obj.success(userobj)
+                        }
+                    },
+                    error: function(userobj, error) {
+                        if ("error" in obj) {
+                            obj.error(userobj, error)
+                        }
+                        console.log("Error: "+error.code+" "+error.message)
+                    }
+                });
+            } else {
+                var newuser = new Parse.User();
+                var username = Math.random().toString();
+                var password = Math.random().toString();
+                localStorage.user = JSON.stringify({
+                    username: username,
+                    password: password,
+                })
+                newuser.set("username", username)
+                newuser.set("password", password)
+                newuser.set("times",1)
+                newuser.signUp(null, {
+                    success: function(userobj) {
+                        if ("success" in obj) {
+                            obj.success(userobj)
+                        }
+                    },
+                    error: function(userobj, error) {
+                        if ("error" in obj) {
+                            obj.error(userobj, error)
+                        }
+                        console.log("Error: "+error.code+" "+error.message)
+                    }
+                })
+            }
+        },
+        login: function(obj) {
+            if ("user" in localStorage) {
+                var localuser = JSON.parse(localStorage.user)
+                console.log(localuser.username+" "+localuser.password)
+                Parse.User.logIn(localuser.username, localuser.password, {
+                    success: function(userobj) {
+                        userobj.increment("times",1)
+                        userobj.save(null,{
+                            success: function(userobj) {
+                                if ("success" in obj) {
+                                    obj.success(userobj)
+                                }
+                            },
+                            error: function(userobj, error) {
+                                if ("error" in obj) {
+                                    obj.error(userobj, error)
+                                }
+                                console.log("Error: "+error.code+" "+error.message)
+                            }
+                        })
+                        
+                    },
+                    error: function(userobj, error) {
+                        if ("error" in obj) {
+                            obj.error(userobj, error)
+                        }
+                        console.log("Error: "+error.code+" "+error.message)
+                    }
+                });
+            } else {
+                parse.signup(obj)
+            }
+        },
+        logout: function() {
+            Parse.User.logOut()
+        },
+        getpost: function(obj) {
+            var Post = Parse.Object.extend("Post")
+            var query = new Parse.Query(Post)
+            query.get(obj.id, {
+                success: function(post) {
+                    if ("success" in obj) {
+                        obj.success(post)
+                    }
+                },
+                error: function(post, error) {
+                    if ("error" in obj) {
+                        obj.error(post, error)
+                    }
+                    console.log("Error: "+error.code+" "+error.message)
+                }
+            })
+        },
+        toppost: function(obj) {
+            var LikeCounter = Parse.Object.extend("LikeCounter")
+            var query = new Parse.Query(LikeCounter)
+            var limNum = 10
+            if ("limit" in obj) {
+                limNum = obj.limit
+            }
+            if ("createdBy" in obj) {
+                query.equalTo("createdBy", Parse.User.current())
+            }
+            query.limit(limNum)
+            if ("skip" in obj) {
+                query.skip(obj.skip)
+            }
+            query.descending("likeNum")
+            query.find({
+                success: function(likeCounters) {
+                    if ("success" in obj) {
+                        obj.success(likeCounters)
+                    }
+                },
+                error: function(likeCounters, error) {
+                    if ("error" in obj) {
+                        obj.error(likeCounters, error)
+                    }
+                    console.log("Error: "+error.code+" "+error.message)
+                }
+            })
+        },
+        addpost: function(obj) {
+            // create a post which include the content of the scenario
+            if ("button" in obj) {
+                obj.button.html("Submitting")
+            }
+            var Post = Parse.Object.extend("Post")
+            var post = new Post()
+            var acl = new Parse.ACL()
+            acl.setPublicReadAccess(true)
+            acl.setWriteAccess(Parse.User.current().id, true)
+            post.set("createdBy", Parse.User.current())
+            post.set("name",obj.name)
+            post.set("gender",obj.gender)
+            post.set("age",obj.age)
+            post.set("interest",obj.interest)
+            post.set("circle", obj.circle)
+            post.set("target", obj.target)
+            post.set("scenario", obj.scenario)
+            post.setACL(acl)
+            post.save(null,{
+                success: function(post) {
+                    obj.post = post
+                    // create a like counter for the post just build
+                    if ("button" in obj) {
+                        obj.button.html("Creating")
+                    }
+                    var LikeCounter = Parse.Object.extend("LikeCounter")
+                    var likeCounter = new LikeCounter()
+                    likeCounter.set("post", post)
+                    likeCounter.set("like",[])
+                    likeCounter.set("dislike",[])
+                    likeCounter.set("createdBy", Parse.User.current())
+                    likeCounter.save(null, {
+                        success: function(likeCounter) {
+                            obj.likeCounter = likeCounter
+                            // link the like counter with the post
+                            if ("button" in obj) {
+                                obj.button.html("Binding")
+                            }
+                            obj.post.set("likeCounter", likeCounter)
+                            obj.post.save(null, {
+                                success: function(post) {
+                                    obj.post = post
+                                    if ("success" in obj) {
+                                        obj.success(post)
+                                    }
+                                },
+                                error: function(post, error) {
+                                    if ("error" in obj) {
+                                        obj.error(post, error)
+                                    }
+                                    console.log("Error: "+error.code+" "+error.message)
+                                }
+                            })
+                        },
+                        error: function(likeCounter) {
+                            if ("error" in obj) {
+                                obj.error(likeCounter, error)
+                            }
+                            console.log("Error: "+error.code+" "+error.message)
+                        }
+                    })
+                },
+                error: function(post, error) {
+                    if ("error" in obj) {
+                        obj.error(post, error)
+                    }
+                    console.log("Error: "+error.code+" "+error.message)
+                }
+            })
+        },
+        editpost: function(obj) {
+            var Post = Parse.Object.extend("Post")
+            var query = new Parse.Query(Post)
+
+            query.get(obj.postid, {
+                success: function(post) {
+                    post.set("name",obj.name)
+                    post.set("gender",obj.gender)
+                    post.set("age",obj.age)
+                    post.set("interest",obj.interest)
+                    post.set("circle", obj.circle)
+                    post.set("target", obj.target)
+                    post.set("scenario", obj.scenario)
+                    post.save(null, {
+                        success: function(post) {
+                            if ("success" in obj) {
+                                obj.success(post)
+                            }
+                        },
+                        error: function(post, error) {
+                            if ("error" in obj) {
+                                obj.error(post, error)
+                            }
+                            console.log("Error: "+error.code+" "+error.message)
+                        }
+                    })
+                }
+            })
+        },
+        likepost: function(obj) {
+            var LikeCounter = Parse.Object.extend("LikeCounter")
+            var query = new Parse.Query(LikeCounter)
+
+            query.get(obj.likeid, {
+                success: function(likeCounter) {
+                    likeCounter.addUnique("like", Parse.User.current().id)
+                    likeCounter.remove("dislike", Parse.User.current().id)
+                    likeCounter.save(null, {
+                        success: function(likeCounter) {
+                            if ("success" in obj) {
+                                obj.success(likeCounter)
+                            }
+                        },
+                        error: function(likeCounter, error) {
+                            if ("error" in obj) {
+                                obj.error(likeCounter, error)
+                            }
+                            console.log("Error: "+error.code+" "+error.message)
+                        }
+                    })
+                },
+                error: function(likeCounter, error) {
+                    if ("error" in obj) {
+                        obj.error(likeCounter, error)
+                    }
+                    console.log("Error: "+error.code+" "+error.message)
+                }
+            })
+        },
+        dislikepost: function(obj) {
+            var LikeCounter = Parse.Object.extend("LikeCounter")
+            var query = new Parse.Query(LikeCounter)
+
+            query.get(obj.likeid, {
+                success: function(likeCounter) {
+                    likeCounter.addUnique("dislike", Parse.User.current().id)
+                    likeCounter.remove("like", Parse.User.current().id)
+                    likeCounter.save(null, {
+                        success: function(likeCounter) {
+                            if ("success" in obj) {
+                                obj.success(likeCounter)
+                            }
+                        },
+                        error: function(likeCounter, error) {
+                            if ("error" in obj) {
+                                obj.error(likeCounter, error)
+                            }
+                            console.log("Error: "+error.code+" "+error.message)
+                        }
+                    })
+                },
+                error: function(likeCounter, error) {
+                    if ("error" in obj) {
+                        obj.error(likeCounter, error)
+                    }
+                    console.log("Error: "+error.code+" "+error.message)
+                }
+            })
+        }
+    }
+
+
+    form = {
+        init: function(obj) {
+            if (typeof(obj) == "undefined") {
+                $("#new-scenario").removeClass("hidden")
+                $("#introduction").addClass("hidden")
+                $("#list-scenario").addClass("hidden")
+            }
+        },
+        check: function() {
+            var ids = ["#inputname", "#inputgender", "#inputage", "#inputinterest", "#inputcircle", "#inputtarget", "#inputscenario"]
+            for (var i=0; i<ids.length; i++) {
+                var id = ids[i]
+                var val = $(id).val()
+                if (val.length == 0) {
+                    $(id).parent().parent().addClass("has-error has-feedback")
+                    $(id).next().removeClass("hidden")
+                    $(id).next().next().removeClass("hidden")
+                    $(id).keyup(function(){
+                        $(id).parent().parent().removeClass("has-error has-feedback")
+                        $(id).next().addClass("hidden")
+                        $(id).next().addClass("hidden")
+                        $(id).unbind("keyup")
+                    })
+                    return false
+                }
+            }
+            return true
+        },
+        submit: function() {
+            if (!this.check()) {
+                return false
+            }
+            var obj = {}
+            obj.name = $("#inputname").val()
+            obj.gender = $("#inputgender").val()
+            obj.age = $("#inputage").val()
+            obj.interest = $("#inputinterest").val()
+            obj.circle = $("#inputcircle").val()
+            obj.target = $("#inputtarget").val()
+            obj.scenario = $("#inputscenario").val()
+            obj.success = function() {
+                $("#form-submit").html("Submitted")
+                setTimeout(function() {
+                    form.blocking = false
+                    form.clear()
+                    form.cancel()
+                }, 2000)
+            }
+            obj.error = function() {
+                form.blocking = false
+            }
+            obj.button = $("#form-submit")
+            form.blocking = true
+            parse.addpost(obj)
+        },
+        cancel: function() {
+            $("#new-scenario").addClass("hidden")
+            $("#introduction").removeClass("hidden")
+        },
+        clear: function() {
+            var ids = ["#inputname", "#inputgender", "#inputage", "#inputinterest", "#inputcircle", "#inputtarget", "#inputscenario"]
+            for (var i=0; i< ids.length; i++) {
+                var id = ids[i]
+                $(id).val("")
+                $(id).parent().parent().removeClass("has-error has-feedback")
+                $(id).next().addClass("hidden")
+                $(id).next().addClass("hidden")
+                $(id).unbind("keyup")
+            }
+            $("#form-submit").html("Submit")
+        }
+    }
+
+    list = {
+        init: function(conobj){
+            window.history.pushState(null,"scenario","#scenario-list")
+            window.onpopstate = (function(event) {
+                list.back()
+            })
+            list.blocking = 0
+            list.skipNum = 0
+            $("#list-scenario").removeClass("hidden")
+            $("#new-scenario").addClass("hidden")
+            $("#introduction").addClass("hidden")
+            $("#open-new-scenario-2").addClass("hidden")
+            $("#list-scenario").html("<hr class='featurette-divider'><div id='list-bottom'><button type='button' class='btn btn-success btn-margin hidden' id='open-new-scenario-2'>Whoops! No more Scenario! Create a new Scenario</button><hr></div>")
+            $("#open-new-scenario-2").click(function(){
+                list.back()
+                form.init()
+            })
+            $(window).unbind("scroll")
+            $(window).scroll(function(){
+                // console.log($("#list-scenario").scrollTop())
+                var ele = $("#list-scenario")
+                var remind = $(document).height() - $(document).scrollTop() - $(window).height()
+                // console.log(remind)
+                if (remind < 100) {
+                    list.listBuild(conobj)
+                }
+            })
+        },
+        itemBuild: function(obj){
+            var id = "#list-media-"+obj.get("post").id
+            if ($(id).length == 0) {
+                var newItem = "<div class='media' id='list-media-"+obj.get("post").id+"'></div><hr>"
+                $("#list-bottom").before(newItem)
+            } else {
+                $(id).html("")
+            }
+            var likeid = obj.id
+            var postid = obj.get("post").id
+            var likeids = obj.get("like")
+            var dislikeids = obj.get("dislike")
+            var likeNum = likeids.length
+            var dislikeNum = dislikeids.length
+            // console.log(likeids)
+            // console.log(dislikeids)
+            $(id).append("<div class='media-left'></div>")
+            $(id).append("<div class='media-body'>loading...</div>")
+            $(id+" > .media-left").append("<button class='btn btn-success' type='button'><span class='glyphicon glyphicon-chevron-up' aria-hidden='true'></span><span class='badge'>"+likeNum+"</span></button>")
+            $(id+" > .media-left").append("<button class='btn btn-margin' type='button'><span class='glyphicon glyphicon-chevron-down' aria-hidden='true'></span><span class='badge'>"+dislikeNum+"</span></button>")
+            if (jQuery.inArray(Parse.User.current().id, likeids) == -1) {
+                $(id+" > .media-left > .btn-success").bind('click', {likeid: likeid}, function(event){
+                    if (list.blocking > 0) {
+                        return false
+                    }
+                    var data = event.data
+                    console.log("top it: "+data.likeid)
+                    list.blocking += 1
+                    parse.likepost({
+                        likeid: data.likeid,
+                        success: function(likeCounter) {
+                            list.itemBuild(likeCounter)
+                        }
+                    })
+
+                })
+            } else {
+                $(id+" > .media-left > .btn-success").removeClass("btn-success").addClass("btn-primary")
+            }
+            if (jQuery.inArray(Parse.User.current().id, dislikeids) == -1) {
+                $(id+" > .media-left > .btn-margin").bind('click', {likeid: likeid}, function(event){
+                    if (list.blocking > 0) {
+                        return false
+                    }
+                    var data = event.data
+                    console.log("bottom it: "+data.likeid)
+                    list.blocking += 1
+                    parse.dislikepost({
+                        likeid: data.likeid,
+                        success: function(likeCounter) {
+                            list.itemBuild(likeCounter)
+                        }
+                    })
+
+                })
+            } else {
+                $(id+" > .media-left > .btn-margin").addClass("btn-primary")
+            }
+            var postobj = {}
+            postobj.id = obj.get("post").id
+            postobj.success = function(post) {
+                var eleid = "#list-media-"+post.id
+                var eleBody = "<small><strong>姓名:</strong> "+post.get("name")+"</br><strong>性别:</strong> "+post.get("gender")+"</br><strong>年龄:</strong> "+post.get("age")+"</br><strong>兴趣:</strong> "+post.get("interest")+"</br><strong>圈子:</strong> "+post.get("circle")+"</br><strong>目标:</strong> "+post.get("target")+"</br><strong>情境:</strong> "+post.get("scenario").replace("\n","</br>")+"</small>"
+                $(eleid+" > .media-body").html(eleBody)
+                list.blocking -= 1
+            }
+            postobj.error = function() {
+                list.blocking -= 1
+            }
+            parse.getpost(postobj)
+        },
+        listBuild: function(conobj){
+            if (list.blocking > 0) {
+                return false
+            }
+            list.blocking = 1
+            var obj = {limit: 10}
+            if ("limit" in conobj) {
+                obj.limit = conobj.limit
+            }
+            if ("createdBy" in conobj) {
+                obj.createdBy = conobj.createdBy
+            }
+            if ("skipNum" in list) {
+                obj.skip = list.skipNum
+            }
+            obj.success = function(objs) {
+                if (!("skipNum" in list)) {
+                    list.skipNum = objs.length
+                } else {
+                    list.skipNum += objs.length
+                }
+                if (objs.length == 0) {
+                    console.log("No more")
+                    $("#open-new-scenario-2").removeClass("hidden")
+                }
+                list.blocking = objs.length
+                for (var i=0; i<objs.length; i++) {
+                    list.itemBuild(objs[i])
+                }
+            }
+            parse.toppost(obj)
+        },
+        back: function(){
+            $("#list-scenario").addClass("hidden")
+            $("#new-scenario").addClass("hidden")
+            $("#introduction").removeClass("hidden")
+            $("#list-scenario").unbind("scroll")
+        }
+    }
+
+    eventBinder = {
+        init: function() {
+            $("#browser-scenarios").unbind("click")
+            $("#browser-scenarios").click(function(){
+                list.init({
+                    limit: 10
+                })
+                list.listBuild({
+                    limit: 10
+                })
+            })
+            $("#my-scenario").unbind("click")
+            $("#my-scenario").click(function(){
+                list.init({
+                    limit: 10,
+                    createdBy: Parse.User.current()
+                })
+                list.listBuild({
+                    limit: 10,
+                    createdBy: Parse.User.current()
+                })
+            })
+            $("#open-new-scenario").unbind("click")
+            $("#open-new-scenario").click(function(){
+                form.init()
+            })
+            $("#form-submit").unbind("click")
+            $("#form-submit").click(function(){
+                if (form.blocking) {
+                    return false
+                }
+                form.submit()
+            })
+            $("#form-cancel").unbind("click")
+            $("#form-cancel").click(function(){
+                if (form.blocking) {
+                    return false
+                }
+                form.clear()
+                form.cancel()
+            })
+        }
+    }
+
+    user = {
+        init: function(){
+            if ("user" in localStorage) {
+                console.log("has user setup")
+                parse.login({
+                    success: function(user) {
+                        console.log("logged in")
+                        $(".navbar-login").html("Signed in")
+                        user.signed = true
+                        eventBinder.init()
+                    }
+                })
+            } else {
+                console.log("no user setup")
+                parse.signup({
+                    success: function(user) {
+                        console.log("logged in")
+                        $(".navbar-login").html("Signed in")
+                        user.signed = true
+                        eventBinder.init()
+                    }
+                })
+            }
+        }
+    }
+
+
+    app = {
+        version: "0.1.3",
+        init: function() {
+            if (("appversion" in localStorage) && (localStorage.appversion == app.version)) {
+
+            } else {
+                localStorage.removeItem("user")
+                parse.logout()
+                localStorage.appversion = app.version
+            }
+            user.init()
+        }
+    }
+
+    app.init()
+
+    
+
+    </script>
+</body>
+</html>
