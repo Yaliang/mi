@@ -706,6 +706,46 @@
         }
     }
 
+    wechat = {
+        imgUrl = "",
+        lineLink = "http://yuemeuni.tk/scenario.html",
+        descContent = "O2O社交众包应用：看看你能设计出如何巧妙地场景",
+        shareTitle = "还在用陌陌？不如来设计一个吧",
+        shareFriend = function(){
+            WeixinJSBridge.invoke("sendAppMessage", {
+                "link": wechat.lineLink,
+                "desc": wechat.descContent,
+                "title": wechat.shareTitle,
+            }, function(res){})
+        },
+        shareTimeline = function(){
+            WeixinJSBridge.invoke("shareTimeline", {
+                "link": wechat.lineLink,
+                "desc": wechat.descContent,
+                "title": wechat.shareTitle,
+            }, function(res){})
+        },
+        shareWeibo = function(){
+            WeixinJSBridge.invoke("shareWeibo", {
+                "content": wechat.descContent,
+                "url": wechat.lineLink,
+            }, function(res){})
+        },
+        init = function(){
+            document.addEventListener("WeixinJSBridgeReady", function onBridgeReady() {
+                WeixinJSBridge.on("menu:share:appmessage", function(argv) {
+                    wechat.shareFriend()
+                })
+                WeixinJSBridge.on("menu:share:timeline", function(argv) {
+                    wechat.shareTimeline()
+                })
+                WeixinJSBridge.on("menu:share:weibo", function(argv) {
+                    wechat.shareWeibo()
+                })
+            }, false)
+        }
+    }
+
 
     app = {
         version: "0.1.3",
@@ -718,12 +758,11 @@
                 localStorage.appversion = app.version
             }
             user.init()
+            wechat.init()
         }
     }
 
     app.init()
-
-    
 
     </script>
 </body>
