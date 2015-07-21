@@ -294,7 +294,7 @@
             init: function(e) {
                 window.history.pushState(null, "scenario", "#scenario-list"), window.onpopstate = function(e) {
                     list.back()
-                }, list.blocking = 0, list.skipNum = 0, $("#list-scenario").removeClass("hidden"), $("#new-scenario").addClass("hidden"), $("#introduction").addClass("hidden"), $("#open-new-scenario-2").addClass("hidden"), $("#list-scenario").html("<hr class='featurette-divider'><div id='list-bottom'><button type='button' class='btn btn-success btn-margin hidden' id='open-new-scenario-2'>Whoops! No more Scenario! Create a new Scenario</button><hr></div>"), $("#open-new-scenario-2").click(function() {
+                }, list.blocking = 0, list.skipNum = 0, $(".navbar-brand").html("<span class='glyphicon glyphicon-chevron-left' aria-hidden='true'></span>Back"), $("#list-scenario").removeClass("hidden"), $("#new-scenario").addClass("hidden"), $("#introduction").addClass("hidden"), $("#open-new-scenario-2").addClass("hidden"), $("#list-scenario").html("<hr class='featurette-divider'><div id='list-bottom'><button type='button' class='btn btn-success btn-margin hidden' id='open-new-scenario-2'>Whoops! No more Scenario! Create a new Scenario</button><hr></div>"), $("#open-new-scenario-2").click(function() {
                     list.back(), form.init()
                 }), $(window).unbind("scroll"), $(window).scroll(function() {
                     var n = ($("#list-scenario"), $(document).height() - $(document).scrollTop() - $(window).height());
@@ -312,7 +312,7 @@
                     t = e.get("dislike"),
                     o = r.length,
                     c = t.length;
-                $(n).append("<div class='media-left'></div>"), $(n).append("<div class='media-body'>loading...</div>"), $(n + " > .media-left").append("<button class='btn btn-success' type='button'><span class='glyphicon glyphicon-chevron-up' aria-hidden='true'></span><span class='badge'>" + o + "</span></button>"), $(n + " > .media-left").append("<button class='btn btn-margin' type='button'><span class='glyphicon glyphicon-chevron-down' aria-hidden='true'></span><span class='badge'>" + c + "</span></button>"), -1 == jQuery.inArray(Parse.User.current().id, r) ? $(n + " > .media-left > .btn-success").bind("click", {
+                $(n).append("<div class='media-left'></div>"), $(n).append("<div class='media-body'>loading...</div>"), $(n + " > .media-left").append("<button class='btn btn-xs btn-success' type='button'><span class='glyphicon glyphicon-thumbs-up' aria-hidden='true'></span><span class='badge'>" + o + "</span></button>"), $(n + " > .media-left").append("<button class='btn btn-xs btn-margin' type='button'><span class='glyphicon glyphicon-thumbs-down' aria-hidden='true'></span><span class='badge'>" + c + "</span></button>"), -1 == jQuery.inArray(Parse.User.current().id, r) ? $(n + " > .media-left > .btn-success").bind("click", {
                     likeid: s
                 }, function(e) {
                     if (list.blocking > 0) return !1;
@@ -356,7 +356,7 @@
                 }, parse.toppost(n)
             },
             back: function() {
-                $("#list-scenario").addClass("hidden"), $("#new-scenario").addClass("hidden"), $("#introduction").removeClass("hidden"), $("#list-scenario").unbind("scroll")
+                $("#list-scenario").addClass("hidden"), $("#new-scenario").addClass("hidden"), $("#introduction").removeClass("hidden"), $(window).unbind("scroll"), $(".navbar-brand").html("Scenario")
             }
         }, eventBinder = {
             init: function() {
@@ -387,6 +387,9 @@
                 "user" in localStorage ? (console.log("has user setup"), parse.login({
                     success: function(e) {
                         console.log("logged in"), $(".navbar-login").html("Signed in"), e.signed = !0, eventBinder.init()
+                    },
+                    error: function(e, n) {
+                        209 == n.code && parse.logout()
                     }
                 })) : (console.log("no user setup"), parse.signup({
                     success: function(e) {

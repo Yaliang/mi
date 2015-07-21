@@ -505,6 +505,7 @@
             })
             list.blocking = 0
             list.skipNum = 0
+            $(".navbar-brand").html("<span class='glyphicon glyphicon-chevron-left' aria-hidden='true'></span>Back")
             $("#list-scenario").removeClass("hidden")
             $("#new-scenario").addClass("hidden")
             $("#introduction").addClass("hidden")
@@ -543,8 +544,8 @@
             // console.log(dislikeids)
             $(id).append("<div class='media-left'></div>")
             $(id).append("<div class='media-body'>loading...</div>")
-            $(id+" > .media-left").append("<button class='btn btn-success' type='button'><span class='glyphicon glyphicon-chevron-up' aria-hidden='true'></span><span class='badge'>"+likeNum+"</span></button>")
-            $(id+" > .media-left").append("<button class='btn btn-margin' type='button'><span class='glyphicon glyphicon-chevron-down' aria-hidden='true'></span><span class='badge'>"+dislikeNum+"</span></button>")
+            $(id+" > .media-left").append("<button class='btn btn-xs btn-success' type='button'><span class='glyphicon glyphicon-thumbs-up' aria-hidden='true'></span><span class='badge'>"+likeNum+"</span></button>")
+            $(id+" > .media-left").append("<button class='btn btn-xs btn-margin' type='button'><span class='glyphicon glyphicon-thumbs-down' aria-hidden='true'></span><span class='badge'>"+dislikeNum+"</span></button>")
             if (jQuery.inArray(Parse.User.current().id, likeids) == -1) {
                 $(id+" > .media-left > .btn-success").bind('click', {likeid: likeid}, function(event){
                     if (list.blocking > 0) {
@@ -632,7 +633,8 @@
             $("#list-scenario").addClass("hidden")
             $("#new-scenario").addClass("hidden")
             $("#introduction").removeClass("hidden")
-            $("#list-scenario").unbind("scroll")
+            $(window).unbind("scroll")
+            $(".navbar-brand").html("Scenario")
         }
     }
 
@@ -690,6 +692,11 @@
                         $(".navbar-login").html("Signed in")
                         user.signed = true
                         eventBinder.init()
+                    },
+                    error: function(user, error) {
+                        if (error.code == 209) {
+                            parse.logout()
+                        }
                     }
                 })
             } else {
