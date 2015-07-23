@@ -179,15 +179,12 @@
     </div><!-- /page -->
 
     <script type="text/javascript">
+        FastClick.attach(document.body)
+
         var pages = ["#previous", "#now", "#next"]
         for (var i=0; i<pages.length; i++) {
             var pageid = pages[i]
             // fix the content height
-            $(document).on("pagebeforeshow", pageid, {pageid: pageid}, function(event) {
-                var data = event.data
-                var pageid = data.pageid
-                $(pageid).css("z-index","-1")
-            })
             $(document).on("pageshow", pageid, {pageid: pageid}, function(event){
                 var data = event.data
                 var pageid = data.pageid
@@ -199,17 +196,17 @@
                 $(pageid+" > .ui-content").css("overflowY","scroll");
                 if (pageid == "#now") {
                     touch.init("body",null)
-                    $("#previous").css("display","block").css("transform","scale(0.92,0.92)")
-                    $("body").css("background-color", "black")
-                    touch.previousScale = 0.92
+                    
+                    
                 }
-                $(pageid).css("z-index","1")
             })
             $(document).on("pagebeforehide", pageid, {pageid: pageid}, function(event) {
                 var data = event.data
                 var pageid = data.pageid
                 if (pageid == "#now") {
-                    $("#previous").css("transform","scale(1,1)")
+                    $("#previous").css("transform","scale(1,1)").css("-webkit-transform","scale(1,1)").css("-moz-transform","scale(1,1)")
+                    $("#previous").css("opacity","")
+                    touch.stop()
                 }
                 if (pageid == "#previous") {
                     $("#now").css("left","0px")
@@ -221,6 +218,7 @@
         touch = {
             leftActive: 15,
             initScale: 0.92,
+            initOpac: 0.5,
             init: function(selector, obj){
                 this.selector = selector
                 $(this.selector).unbind("touchstart").bind("touchstart", function(event) {
@@ -240,15 +238,25 @@
             startEventHandler: function(event) {
                 this.startX = event.originalEvent.touches[0].clientX
                 this.currentX = this.startX
+                $("#previous").css("display","block")
+                this.previousScale = this.initScale
+                $("#previous").css("-webkit-transform","scale("+this.previousScale.toString()+","+this.previousScale.toString()+")").css("transform","scale("+this.previousScale.toString()+","+this.previousScale.toString()+")").css("-moz-transform","scale("+this.previousScale.toString()+","+this.previousScale.toString()+")")
+                this.previousOpac = this.initOpac
+                $("#previous").css("opacity",this.previousOpac.toString())
+                $("body").css("background-color", "black")
             },
             moveEventHandler: function(event) {
                 this.currentX = event.originalEvent.touches[0].clientX
                 if (this.startX < this.leftActive) {
                     var distance = this.currentX - this.startX
                     var fullwidth = $("body").width()
+                    $("#now > .ui-content").width(fullwidth)
                     $("#now").css("left",Math.max(distance,0).toString()+"px")
+                    $("#now").css("width",(fullwidth-Math.max(distance,0)).toString()+"px")
                     this.previousScale = this.initScale + (1.0 - this.initScale)*(1.0*this.currentX/fullwidth)
-                    $("#previous").css("transform","scale("+this.previousScale.toString()+","+this.previousScale.toString()+")")
+                    $("#previous").css("transform","scale("+this.previousScale.toString()+","+this.previousScale.toString()+")").css("-webkit-transform","scale("+this.previousScale.toString()+","+this.previousScale.toString()+")").css("-moz-transform","scale("+this.previousScale.toString()+","+this.previousScale.toString()+")")
+                    this.previousOpac = this.initOpac + (1.0 - this.initOpac)*(1.0*this.currentX/fullwidth)
+                    $("#previous").css("opacity",this.previousOpac.toString())
                 }
             },
             endEventHandle: function(event) {
@@ -256,8 +264,9 @@
                     var distance = this.currentX - this.startX
                     var fullwidth = $("body").width()
                     console.log("%d, %d", distance, fullwidth)
+                    $("#now > .ui-content").css("width","")
+                    $("#now").css("width","100%")
                     if (distance >= 0.5*fullwidth) {
-
                         // return back
                         $("#now").animate({
                             "left":fullwidth
@@ -269,9 +278,9 @@
                             "left":0
                         },100)
                         this.previousScale = this.initScale
-                        $("#previous").animate({
-                            "transform":"scale("+this.previousScale.toString()+","+this.previousScale.toString()+")"
-                        },100)
+                        $("#previous").css("transform","scale("+this.previousScale.toString()+","+this.previousScale.toString()+")").css("-webkit-transform","scale("+this.previousScale.toString()+","+this.previousScale.toString()+")").css("-moz-transform","scale("+this.previousScale.toString()+","+this.previousScale.toString()+")")
+                        this.previousOpac = this.initOpac
+                        $("#previous").css("opacity",this.previousOpac.toString())
                     }
 
                 }
