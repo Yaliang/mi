@@ -13,6 +13,7 @@ http://fonts.googleapis.com/css?family=Open+Sans:400,300,700
 ./script/exif/load-image.all.min.js
 ./script/classes/loadedImage.min.js
 ./script/classes/touch.min.js
+./script/classes/websocket.min.js
 ./script/exif/exif-custom.min.js
 ./index.css
 ./script/parse/query.min.js
