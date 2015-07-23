@@ -120,12 +120,15 @@
     <div id="previous" data-role="page" data-title="Yueme">
 
         <div id="previous-header" data-role="header">
+            <h1>Previous</h1>
         </div><!-- header -->
 
         <div class="ui-content" id="previous-content" role="main">
+            <a href="#now">To now</a>
         </div><!-- /content -->
 
         <div id="previous-footer" data-role="footer">
+            <h1>Footer</h1>
         </div><!-- /footer -->
 
     </div><!-- /page -->
@@ -135,7 +138,7 @@
 
         <div id="now-header" data-role="header">
             <h1>Title</h1>
-
+            <a href="#" data-rel="back">Back</a>
         </div><!-- header -->
 
         <div class="ui-content" id="now-content" role="main">
@@ -180,16 +183,105 @@
         for (var i=0; i<pages.length; i++) {
             var pageid = pages[i]
             // fix the content height
+            $(document).on("pagebeforeshow", pageid, {pageid: pageid}, function(event) {
+                var data = event.data
+                var pageid = data.pageid
+                $(pageid).css("z-index","-1")
+            })
             $(document).on("pageshow", pageid, {pageid: pageid}, function(event){
                 var data = event.data
                 var pageid = data.pageid
                 var window_height = $(window).height();
                 var head_height = $(pageid+" > .ui-header").outerHeight();
                 var foot_height = $(pageid+" > .ui-footer").outerHeight();
+                console.log("%d,%d,%d",window_height,head_height, foot_height)
                 $(pageid+" > .ui-content").css("height",(window_height - head_height - foot_height).toString() + "px");
                 $(pageid+" > .ui-content").css("overflowY","scroll");
+                if (pageid == "#now") {
+                    touch.init("body",null)
+                    $("#previous").css("display","block").css("transform","scale(0.92,0.92)")
+                    $("body").css("background-color", "black")
+                    touch.previousScale = 0.92
+                }
+                $(pageid).css("z-index","1")
+            })
+            $(document).on("pagebeforehide", pageid, {pageid: pageid}, function(event) {
+                var data = event.data
+                var pageid = data.pageid
+                if (pageid == "#now") {
+                    $("#previous").css("transform","scale(1,1)")
+                }
+                if (pageid == "#previous") {
+                    $("#now").css("left","0px")
+                    console.log("inti #now left")
+                }
             })
         }
+
+        touch = {
+            leftActive: 15,
+            initScale: 0.92,
+            init: function(selector, obj){
+                this.selector = selector
+                $(this.selector).unbind("touchstart").bind("touchstart", function(event) {
+                    console.log("touchstart happen")
+                    touch.startEventHandler(event)
+                })
+                $(this.selector).unbind("touchmove").bind("touchmove", function(event) {
+                    console.log("touchmove happen")
+
+                    touch.moveEventHandler(event)
+                })
+                $(this.selector).unbind("touchend").bind("touchend", function(event) {
+                    console.log("touchend happen")
+                    touch.endEventHandle(event)
+                })
+            },
+            startEventHandler: function(event) {
+                this.startX = event.originalEvent.touches[0].clientX
+                this.currentX = this.startX
+            },
+            moveEventHandler: function(event) {
+                this.currentX = event.originalEvent.touches[0].clientX
+                if (this.startX < this.leftActive) {
+                    var distance = this.currentX - this.startX
+                    var fullwidth = $("body").width()
+                    $("#now").css("left",Math.max(distance,0).toString()+"px")
+                    this.previousScale = this.initScale + (1.0 - this.initScale)*(1.0*this.currentX/fullwidth)
+                    $("#previous").css("transform","scale("+this.previousScale.toString()+","+this.previousScale.toString()+")")
+                }
+            },
+            endEventHandle: function(event) {
+                if (this.startX < this.leftActive) {
+                    var distance = this.currentX - this.startX
+                    var fullwidth = $("body").width()
+                    console.log("%d, %d", distance, fullwidth)
+                    if (distance >= 0.5*fullwidth) {
+
+                        // return back
+                        $("#now").animate({
+                            "left":fullwidth
+                        },100, function(){
+                            window.history.back()
+                        })
+                    } else {
+                        $("#now").animate({
+                            "left":0
+                        },100)
+                        this.previousScale = this.initScale
+                        $("#previous").animate({
+                            "transform":"scale("+this.previousScale.toString()+","+this.previousScale.toString()+")"
+                        },100)
+                    }
+
+                }
+            },
+            stop: function(){
+                $(this.selector).unbind("touchstart").unbind("touchmove").unbind("touchend")
+            }
+        }
+
+        
     </script>
 
 </body>
