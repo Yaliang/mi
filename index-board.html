@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html manifest="cache.manifest">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="google-site-verification" content="zqi1qvIiwocwoL_b0haed8dM1LCW1J5RgaahmKOngTE" />
+    <!-- Disable automatic phone number detection. -->
+    <meta name="format-detection" content="telephone=no">
+    
+    <!--Name of the web app-->
+    <title>Yueme</title>
+
+    <link rel="icon" sizes="192x192" href="./content/material-design/png/m-192.png">
+    <link rel="apple-touch-icon" href="./content/material-design/png/m-192.png">
+
+    <!-- STARTUP IMAGES -->
+    <!-- iPad retina portrait startup image -->
+    <link href="./content/png/apple-touch-startup-image-1536x2008.png"
+          media="(device-width: 768px) and (device-height: 1024px)
+                 and (-webkit-device-pixel-ratio: 2)
+                 and (orientation: portrait)"
+          rel="apple-touch-startup-image">
+ 
+    <!-- iPad retina landscape startup image -->
+    <link href="./content/png/apple-touch-startup-image-1496x2048.png"
+          media="(device-width: 768px) and (device-height: 1024px)
+                 and (-webkit-device-pixel-ratio: 2)
+                 and (orientation: landscape)"
+          rel="apple-touch-startup-image">
+ 
+    <!-- iPad non-retina portrait startup image -->
+    <link href="./content/png/apple-touch-startup-image-768x1004.png"
+          media="(device-width: 768px) and (device-height: 1024px)
+                 and (-webkit-device-pixel-ratio: 1)
+                 and (orientation: portrait)"
+          rel="apple-touch-startup-image">
+ 
+    <!-- iPad non-retina landscape startup image -->
+    <link href="./content/png/apple-touch-startup-image-748x1024.png"
+          media="(device-width: 768px) and (device-height: 1024px)
+                 and (-webkit-device-pixel-ratio: 1)
+                 and (orientation: landscape)"
+          rel="apple-touch-startup-image">
+ 
+    <!-- iPhone 6 Plus portrait startup image -->
+    <link href="./content/png/apple-touch-startup-image-1242x2148.png"
+          media="(device-width: 414px) and (device-height: 736px)
+                 and (-webkit-device-pixel-ratio: 3)
+                 and (orientation: portrait)"
+          rel="apple-touch-startup-image">
+ 
+    <!-- iPhone 6 Plus landscape startup image -->
+    <link href="./content/png/apple-touch-startup-image-1182x2208.png"
+          media="(device-width: 414px) and (device-height: 736px)
+                 and (-webkit-device-pixel-ratio: 3)
+                 and (orientation: landscape)"
+          rel="apple-touch-startup-image">
+ 
+    <!-- iPhone 6 startup image -->
+    <link href="./content/png/apple-touch-startup-image-750x1294.png"
+          media="(device-width: 375px) and (device-height: 667px)
+                 and (-webkit-device-pixel-ratio: 2)"
+          rel="apple-touch-startup-image">
+ 
+    <!-- iPhone 5 startup image -->
+    <link href="./content/png/apple-touch-startup-image-640x1096.png"
+          media="(device-width: 320px) and (device-height: 568px)
+                 and (-webkit-device-pixel-ratio: 2)"
+          rel="apple-touch-startup-image">
+ 
+    <!-- iPhone < 5 retina startup image -->
+    <link href="./content/png/apple-touch-startup-image-640x920.png"
+          media="(device-width: 320px) and (device-height: 480px)
+                 and (-webkit-device-pixel-ratio: 2)"
+          rel="apple-touch-startup-image">
+ 
+    <!-- iPhone < 5 non-retina startup image -->
+    <link href="./content/png/apple-touch-startup-image-320x460.png"
+          media="(device-width: 320px) and (device-height: 480px)
+                 and (-webkit-device-pixel-ratio: 1)"
+          rel="apple-touch-startup-image">
+    <!-- END OF STARTUP IMAGES -->
+ 
+    <!-- Prevent text size change on orientation change. -->
+    <style>
+      html {
+        -webkit-text-size-adjust: 100%;
+      }
+    </style>
+
+    <link href="http://fonts.googleapis.com/css?family=Open+Sans:400,300,700" rel="stylesheet" type="text/css">
+    <link rel="stylesheet" href="./script/jquery/mobile/jquery.mobile-1.4.5.min.css" />
+    <link rel="stylesheet" href="index.css" />
+
+    <script src="./script/jquery/jquery-1.11.1.min.js"></script>
+    <script src="./script/jquery/mobile/jquery.mobile-1.4.5.min.js"></script>
+    <script src="./script/exif/exif-custom.min.js"></script>
+    <script src="./script/exif/load-image.all.min.js"></script>
+    <script src="./script/classes/loadedImage.min.js"></script>
+    <script src="./script/classes/websocket.min.js"></script>
+    <script src="./script/classes/touch.min.js"></script>
+    <script src="./script/parse/parse-1.3.2.min.js"></script>
+    <script src="./script/parse/query.min.js"></script>
+    <script src="./script/cache.min.js"></script>
+    <script src="./script/functions.min.js"></script>
+    <script src="./script/functions-events.min.js"></script>
+    <script src="./script/functions-friends.min.js"></script>
+    <script src="./script/functions-chats.min.js"></script>
+    <script src="./script/functions-settings.min.js"></script>
+    <script src="./script/fastclick-master/lib/fastclick.js"></script>
+</head>
+
+<body>
+    <!--Page for previous -->
+    <div id="previous" data-role="page" data-title="Yueme">
+
+        <div id="previous-header" data-role="header">
+            <h1>Previous</h1>
+        </div><!-- header -->
+
+        <div class="ui-content" id="previous-content" role="main">
+            <a href="#now">To now</a>
+        </div><!-- /content -->
+
+        <div id="previous-footer" data-role="footer">
+            <h1>Footer</h1>
+        </div><!-- /footer -->
+
+    </div><!-- /page -->
+
+    <!--Page for now -->
+    <div id="now" data-role="page" data-title="Yueme">
+
+        <div id="now-header" data-role="header">
+            <h1>Title</h1>
+            <a href="#" data-rel="back">Back</a>
+        </div><!-- header -->
+
+        <div class="ui-content" id="now-content" role="main">
+            <p>Heore new pages are created by the frame from script</p>
+            <p>Content is the body of the page where is used as the main partial to display the information we want to show on the screen.</p>
+            <p>The content of this partial maybe overflow over the visible region on the screen.</p>
+            <p>We build a touch event to animate the scroll event like the native one</p>
+            <br>
+            <br>
+            <br>
+            <br>
+            <br>
+            <br>
+            <br>
+            <br>
+            <br>
+            <p>Now, we are at bottom. Next line might can not be seen.</p>
+            <p>Whoops</p>
+        </div><!-- /content -->
+
+        <div id="now-footer" data-role="footer">
+            <h1>Footer</h1>
+        </div><!-- /footer -->
+
+    </div><!-- /page -->
+
+    <!-- Page for next -->
+    <div id="next" data-role="page" data-title="Yueme">
+
+        <div id="next-header" data-role="header">
+        </div><!-- /header -->
+
+        <div class="ui-content" id="next-content" role="main">
+        </div><!-- /content -->
+
+        <div id="next-footer" data-role="footer">
+        </div><!-- /footer -->
+    </div><!-- /page -->
+
+    <script type="text/javascript">
+        var pages = ["#previous", "#now", "#next"]
+        for (var i=0; i<pages.length; i++) {
+            var pageid = pages[i]
+            // fix the content height
+            $(document).on("pagebeforeshow", pageid, {pageid: pageid}, function(event) {
+                var data = event.data
+                var pageid = data.pageid
+                $(pageid).css("z-index","-1")
+            })
+            $(document).on("pageshow", pageid, {pageid: pageid}, function(event){
+                var data = event.data
+                var pageid = data.pageid
+                var window_height = $(window).height();
+                var head_height = $(pageid+" > .ui-header").outerHeight();
+                var foot_height = $(pageid+" > .ui-footer").outerHeight();
+                console.log("%d,%d,%d",window_height,head_height, foot_height)
+                $(pageid+" > .ui-content").css("height",(window_height - head_height - foot_height).toString() + "px");
+                $(pageid+" > .ui-content").css("overflowY","scroll");
+                if (pageid == "#now") {
+                    touch.init("body",null)
+                    $("#previous").css("display","block").css("transform","scale(0.92,0.92)")
+                    $("body").css("background-color", "black")
+                    touch.previousScale = 0.92
+                }
+                $(pageid).css("z-index","1")
+            })
+            $(document).on("pagebeforehide", pageid, {pageid: pageid}, function(event) {
+                var data = event.data
+                var pageid = data.pageid
+                if (pageid == "#now") {
+                    $("#previous").css("transform","scale(1,1)")
+                }
+                if (pageid == "#previous") {
+                    $("#now").css("left","0px")
+                    console.log("inti #now left")
+                }
+            })
+        }
+
+        touch = {
+            leftActive: 15,
+            initScale: 0.92,
+            init: function(selector, obj){
+                this.selector = selector
+                $(this.selector).unbind("touchstart").bind("touchstart", function(event) {
+                    console.log("touchstart happen")
+                    touch.startEventHandler(event)
+                })
+                $(this.selector).unbind("touchmove").bind("touchmove", function(event) {
+                    console.log("touchmove happen")
+
+                    touch.moveEventHandler(event)
+                })
+                $(this.selector).unbind("touchend").bind("touchend", function(event) {
+                    console.log("touchend happen")
+                    touch.endEventHandle(event)
+                })
+            },
+            startEventHandler: function(event) {
+                this.startX = event.originalEvent.touches[0].clientX
+                this.currentX = this.startX
+            },
+            moveEventHandler: function(event) {
+                this.currentX = event.originalEvent.touches[0].clientX
+                if (this.startX < this.leftActive) {
+                    var distance = this.currentX - this.startX
+                    var fullwidth = $("body").width()
+                    $("#now").css("left",Math.max(distance,0).toString()+"px")
+                    this.previousScale = this.initScale + (1.0 - this.initScale)*(1.0*this.currentX/fullwidth)
+                    $("#previous").css("transform","scale("+this.previousScale.toString()+","+this.previousScale.toString()+")")
+                }
+            },
+            endEventHandle: function(event) {
+                if (this.startX < this.leftActive) {
+                    var distance = this.currentX - this.startX
+                    var fullwidth = $("body").width()
+                    console.log("%d, %d", distance, fullwidth)
+                    if (distance >= 0.5*fullwidth) {
+
+                        // return back
+                        $("#now").animate({
+                            "left":fullwidth
+                        },100, function(){
+                            window.history.back()
+                        })
+                    } else {
+                        $("#now").animate({
+                            "left":0
+                        },100)
+                        this.previousScale = this.initScale
+                        $("#previous").animate({
+                            "transform":"scale("+this.previousScale.toString()+","+this.previousScale.toString()+")"
+                        },100)
+                    }
+
+                }
+            },
+            stop: function(){
+                $(this.selector).unbind("touchstart").unbind("touchmove").unbind("touchend")
+            }
+        }
+
+        
+    </script>
+
+</body>
+
+</html>

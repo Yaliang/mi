@@ -217,7 +217,7 @@ function initialElementEventSetting(){
         var foot_height = $("#page-event > .ui-footer").outerHeight();
         $("#page-event > .ui-content").css("height",(window_height - head_height - foot_height).toString() + "px");
         $("#page-event > .ui-content").css("overflowY","scroll");
-        // touch.touchInitialize("#page-event > .ui-content", function(){pullUserEvent({afterAt:currentFirstEvent});console.log("pulltopfunction called")});
+        touch.touchInitialize("#page-event > .ui-content", function(){pullUserEvent({afterAt:currentFirstEvent});console.log("pulltopfunction called")});
     });
 
     // fix the content height(page-firend)
